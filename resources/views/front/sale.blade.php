@@ -39,7 +39,7 @@
 
     <!-- Main content -->
     <section class="content">
-      <form action="/buy-sim" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('buy-sim') }}" method="POST" enctype="multipart/form-data">
       @csrf
       <div class="container-fluid">
         <div class="card card-default">
@@ -312,18 +312,18 @@
                     </div>
                   </div>
                 </div>
-              </div>  
+              </div>
             </div>
             <div class="row justify-content-center">
               <div class="col-md-8">
                 <input style="width: 100%" type="submit" value="Buy Now" class="btn btn-success">
               </div>
             </div>
-            <!-- /.row -->            
+            <!-- /.row -->
           </div>
           <!-- /.card-body -->
         </div>
-        <!-- /.card -->  
+        <!-- /.card -->
       </div>
       <!-- /.container-fluid -->
     </form>
@@ -366,7 +366,7 @@ $.ajax({
  headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
          },
- data:{ 
+ data:{
             // _token:'{{ csrf_token() }}',
             id: value,
             sim_id: sim
@@ -449,8 +449,8 @@ $.ajax({
     });
 
   })
-  
- 
+
+
   // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
   var previewNode = document.querySelector("#template")
   previewNode.id = ""
@@ -499,8 +499,8 @@ $.ajax({
   document.querySelector("#actions .cancel").onclick = function() {
     myDropzone.removeAllFiles(true)
   }
-  
-  
+
+
 </script>
 
 @endsection

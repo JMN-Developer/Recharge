@@ -45,7 +45,7 @@ class SimController extends Controller
         }else{
             $show = sim::where('status', 'available')
             ->latest()
-            ->get();  
+            ->get();
             $operator = SimOperator::all();
             $user = User::where('role','user')->get();
             $total = $show->count();
@@ -59,8 +59,10 @@ class SimController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function invoice($id)
-    {   
+    {
+        //file_put_contents('test.txt',$id);
         $data = SimOrder::where('id',$id)->first();
+
         $sim = sim::where('id',$data->sim_id)->first();
         $customer = new Party([
             'name'          => 'Ashley Medina',
@@ -102,7 +104,7 @@ class SimController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { 
+    {
         $create = sim::create([
             'operator' => $request->operator,
             'iccid' => $request->iccid,
@@ -155,7 +157,7 @@ class SimController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function buy(Request $request)
-    { 
+    {
        $sim = sim::where('id', $request->sim_id)->first();
         $path = $request->file->store('sim/uploads', 'public');
         if($request->file2 != null){
@@ -255,7 +257,7 @@ class SimController extends Controller
                 'status' => $request->status
             ]);
         }
-       
+
         return back();
     }
 

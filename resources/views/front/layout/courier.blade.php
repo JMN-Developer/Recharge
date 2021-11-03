@@ -166,7 +166,7 @@
           </a>
         </div>
       </div>
-      
+
       <div class="profile-info mt-3">
         <div class="row">
           <div class="col-6">
@@ -222,7 +222,7 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2 mb-5">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-         
+
           <li class="@if(Route::currentRouteName() == '/') nav-item menu-open @endif nav-item">
             <a href="/" class="@if(Route::currentRouteName() == '/') nav-link active @endif nav-link">
               <i class="fa fa-home" aria-hidden="true"></i>
@@ -250,31 +250,31 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/recharge/recharge-int" class="@if(Route::currentRouteName() == 'recharge-int') nav-link active @endif nav-link">
+                  <a href="{{ route('recharge-int') }}" class="@if(Route::currentRouteName() == 'recharge-int') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>International</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/recharge/recharge-italy" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">
+                  <a href="{{ route('recharge-italy') }}" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Domestic</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/recharge/pin-italy" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">
+                  <a href="{{ route('pin') }}" class="@if(Route::currentRouteName() == 'pin') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pin</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/recharge/all-invoice" class="@if(Route::currentRouteName() == 'recharge-invoice') nav-link active @endif nav-link">
+                  <a href="{{ route('recharge-invoice') }}" class="@if(Route::currentRouteName() == 'recharge-invoice') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>All Invoices</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/pin/all-invoice" class="@if(Route::currentRouteName() == 'pin-invoice') nav-link active @endif nav-link">
+                  <a href="{{ route('pin-invoice') }}" class="@if(Route::currentRouteName() == 'pin-invoice') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pin Invoices</p>
                   </a>
@@ -317,19 +317,19 @@
                 </li>
               @endif
                 <li class="nav-item">
-                  <a href="/sim/sim-activation" class="@if(Route::currentRouteName() == 'sim-activation') nav-link active @endif nav-link">
+                  <a href="{{ route('sim-activation') }}" class="@if(Route::currentRouteName() == 'sim-activation') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>SIM Activation</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/sim/sim-selling" class="@if(Route::currentRouteName() == 'sim-selling') nav-link active @endif nav-link">
+                  <a href="{{ route('sim-selling') }}" class="@if(Route::currentRouteName() == 'sim-selling') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>SIM Selling</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/sim/wi-fi" class="@if(Route::currentRouteName() == 'wi-fi') nav-link active @endif nav-link">
+                  <a href="{{ route('wi-fi') }}" class="@if(Route::currentRouteName() == 'wi-fi') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Offers</p>
                   </a>
@@ -348,19 +348,19 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/cargo/new-order" class="@if(Route::currentRouteName() == 'cargo-new-order') nav-link active @endif nav-link">
+                  <a href="{{ route('cargo-new-order') }}" class="@if(Route::currentRouteName() == 'cargo-new-order') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>New Order</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/cargo/order-list" class="@if(Route::currentRouteName() == 'order-list') nav-link active @endif nav-link">
+                  <a href="{{ route('order-list') }}" class="@if(Route::currentRouteName() == 'order-list') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Order List</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/cargo/order-tracking-view" class="@if(Route::currentRouteName() == 'order-tracking-view') nav-link active @endif nav-link">
+                  <a href="{{ route('order-tracking-view')}}" class="@if(Route::currentRouteName() == 'order-tracking-view') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Tracking</p>
                   </a>
@@ -464,10 +464,10 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- 
+<!--
 =======================
   REQUIRED SCRIPTS
-======================= 
+=======================
 -->
 
   @yield('scripts')

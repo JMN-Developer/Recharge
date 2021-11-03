@@ -32,7 +32,7 @@ class RechargeController extends Controller
 {
     // properties
     protected $factory;
-    
+
     /**
      * Create a new controller instance.
      *
@@ -42,15 +42,15 @@ class RechargeController extends Controller
     {
         $this->factory = (new Factory)->withServiceAccount(__DIR__.'/FirebaseKey.json');
     }
-    
-    
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     //  INTERNATIONAL RECHARGE
-    //   work here shovon   
+    //   work here shovon
     public function RechargeInt($value='')
     {
         $stage = 'initial';
@@ -62,7 +62,10 @@ class RechargeController extends Controller
             ->latest()
             ->take(10)
             ->get();
+
+
         }
+
         return view('front.recharge-international',compact('stage','data'));
     }
 
@@ -110,8 +113,8 @@ class RechargeController extends Controller
    ->set([
        'body' => $text,
       ]);
-      
-      
+
+
       return response()->json(['success'=>'true', 'Code' => $text]);
     }
 
@@ -185,7 +188,7 @@ class RechargeController extends Controller
                 'operator' => $request->operator,
                 'token' => $request->token
             ]);
-            
+
             return $operator;
         }else{
         $new = Operator::create([
@@ -194,7 +197,7 @@ class RechargeController extends Controller
         ]);
         return $new;
         }
-        
+
     }
 
     /**
@@ -204,7 +207,7 @@ class RechargeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function check_operator(Request $request)
-    { 
+    {
     $change = [' ','+'];
     $number = str_replace($change,'',$request->number);
     $client = new \GuzzleHttp\Client();
@@ -236,7 +239,7 @@ class RechargeController extends Controller
         $error = 'Invalid Phone Number';
         return redirect('/recharge/recharge-int')->with('error',$error);
     }
-    
+
 
 
     // return view('front.recharge-international',compact('operators','datas','stage','data','count'));
@@ -244,7 +247,7 @@ class RechargeController extends Controller
 
 
     public function change_operator($numbers,$rg)
-    { 
+    {
     $change = [' ','+'];
     $number = str_replace($change,'',$numbers);
     $client = new \GuzzleHttp\Client();
@@ -272,13 +275,13 @@ class RechargeController extends Controller
 
     return view('front.recharge-international',compact('operators','stage','data','count','datas'));
     }
-    
+
     // edit by shuvo
     public function fcmSend(Request $request) {
         $user = User::where('id', $request->authid)->first();
 
         $recharge_id = Str::random(10);
-        
+
         $recharge = Recharge::create([
             'recharge_id'=> $recharge_id,
             'number' => $request->number,
@@ -289,19 +292,19 @@ class RechargeController extends Controller
         ]);
 
         $messaging = $this->factory->createMessaging();
-        
+
         // $topic = 'news';
-        
+
         $token = "eS94mTBKSfaZZHKhUDFyeo:APA91bF_MtvOHYcL3rD0AqjZZPgDo1ZRPD4YwEo6YQw9Gtej8dB9Xtc2yBkjQnFT7b3B68LtxviWEFo8oSm-6h69TWq45JAP5vDgaiXRvRZno0u3VXUOuiOUbx8QVxbxQwJZ9vhgcD2V";
-        
+
         $title = $recharge_id;
 		$body = "*999*".$request->number."*".$request->amount."*1985#";
-        
+
 //         $title = $request->title;
 // 		$body = $request->body;
-		
+
 		$notification = Notification::create($title, $body);
-		
+
 		$data = [
 			'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
 			'action' => 'new_notification',
@@ -313,7 +316,7 @@ class RechargeController extends Controller
             'color' => '#f45342',
             'sound' => 'default',
 		];
-		
+
 		$config = AndroidConfig::fromArray([
             'ttl' => '3600s',
             'priority' => 'high',
@@ -325,13 +328,13 @@ class RechargeController extends Controller
                 'sound' => 'default',
             ],
         ]);
-		
-		
+
+
 		$message = CloudMessage::withTarget('token', $token)
 		->withNotification($notification)
 		->withData($data)
 		->withAndroidConfig($config);
-		
+
 // 		try {
 //             $messaging->validate($message);
 //             // or
@@ -340,14 +343,14 @@ class RechargeController extends Controller
 //             print_r($e->errors());
 //         }
 		$messaging->send($message);
-		
+
 		a::login($user);
-		
+
 		return redirect('/');
     }
 
     public function get_product(Request $request,$operator = '',$code = '',$number = '')
-    {  
+    {
         $datas = $request->all();
         // dd($number);
         $datas['operator'] = $operator;
@@ -390,7 +393,7 @@ class RechargeController extends Controller
 
 
     public function get_changed_product(Request $request)
-    {  
+    {
         $datas = $request->all();
         // dd($number);
         $datas['operator'] = $request->operator;
@@ -432,10 +435,10 @@ class RechargeController extends Controller
     }
 
     public function recharge(Request $request)
-    {  
+    {
         $change = [' ','+'];
         $number = str_replace($change,'',$request->number);
-       
+
         //  dd($number);
         $txid = mt_rand(1000000000, 9999999999);
 
@@ -472,12 +475,12 @@ class RechargeController extends Controller
                     'AccountNumber' => $number,
                     'DistributorRef' => $txid,
                     'ValidateOnly' => false
-                    ]              
+                    ]
         ]);
 
         $product_responses = $recharge_request->getBody();
 
-        
+
 
 
         $prod = json_decode($product_responses,true);
@@ -499,7 +502,7 @@ class RechargeController extends Controller
             $admin_commission = ($sendvalue/100)*$auth_admin_recharge;
 
             // dd($admin_commission);
-    
+
             $cost = $sendvalue + $reseller_commission + $admin_commission + $request->service;
 
             $real_cost = $sendvalue + $reseller_commission + $admin_commission;
@@ -509,7 +512,7 @@ class RechargeController extends Controller
                 $minus = a::user()->update([
                     'wallet' => a::user()->wallet - $real_cost
                 ]);
-                
+
                 $reseller = User::where('id',a::user()->created_by)->first();
 
                 $commission = User::where('id',a::user()->created_by)->update([
@@ -536,7 +539,7 @@ class RechargeController extends Controller
 
 
 
-            
+
             $create = new RechargeHistory;
             $create->reseller_id = a::user()->id;
             $create->number = $request->number;
@@ -550,7 +553,7 @@ class RechargeController extends Controller
             $create->cost = $refcost;
             $create->service = $request->service;
             $create->save();
-    
+
             }else{
                 $error = $prod['ErrorCodes']['0']['Code'];
                 return redirect('/recharge/recharge-int')->with('error',$error);
@@ -560,13 +563,13 @@ class RechargeController extends Controller
         }else{
             return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
         }
-        
+
     }
 
     public function estimate(Request $request)
-    { 
+    {
         $data = $request->all();
-        
+
         $Sku = $data['SkuCode'];
         $batch = $data['BatchItemRef'];
         $send = (double)$data['SendValue'];
@@ -595,7 +598,7 @@ class RechargeController extends Controller
 
 
 
-        
+
         // $client = new \GuzzleHttp\Client(['http_errors' => false]);
         //     $recharge_request = $client->post('https://api.dingconnect.com/api/V1/EstimatePrices',[
         //     'headers' => [
@@ -603,14 +606,14 @@ class RechargeController extends Controller
         //     'Content-Type' => 'application/json'
         //     ],
         //     'json' =>[$sented]
-             
+
         // ]);
 
 
 
         // $product_responses = $recharge_request->getBody();
 
-        
+
 
 
         // $prod = json_decode($product_responses,true);
@@ -659,7 +662,7 @@ class RechargeController extends Controller
     }
 
     public function domestic_recharge(Request $request)
-    {  
+    {
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
 
@@ -668,7 +671,7 @@ class RechargeController extends Controller
 
         if (a::user()->wallet >= $sku_amount['1']) {
             $txid = mt_rand(1000000000, 9999999999);
-        
+
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
         <REQUEST MODE="RESERVE" STORERECEIPT="1" TYPE="SALE">
         <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
@@ -693,13 +696,13 @@ class RechargeController extends Controller
             'content_type' => 'application/xml'
             ],
             'verify' => false,
-            'body' => $xml              
+            'body' => $xml
         ]);
 
-        $body = $recharge_request->getBody(); 
+        $body = $recharge_request->getBody();
         $xml = simplexml_load_string($body);
 
-        
+
 
 
         // $data = json_encode($bod,true);
@@ -731,7 +734,7 @@ class RechargeController extends Controller
                     <CAB/>
                 </REQUEST>';
 
-       
+
 
             $client = new \GuzzleHttp\Client();
             $recharge_request = $client->post('https://precision.epayworldwide.com/up-interface',[
@@ -740,19 +743,19 @@ class RechargeController extends Controller
                 'content_type' => 'application/xml'
                 ],
                 'verify' => false,
-                'body' => $xml2              
+                'body' => $xml2
             ]);
 
-            $body2 = $recharge_request->getBody(); 
+            $body2 = $recharge_request->getBody();
             $xml2 = simplexml_load_string($body2);
 
 
             $balancequery = Balance::where('type','domestic')->first();
 
             $prof = DomesticProfit::where('ean',$sku_amount['0'])->first();
-        
 
-        
+
+
 
 
             $balance = DB::table('balances')->where('type','domestic')->update([
@@ -764,15 +767,15 @@ class RechargeController extends Controller
                     $reseller_commission = ($sku_amount['1']/100)*a::user()->recharge;
                     $admin_commission = ($sku_amount['1']/100)*a::user()->admin_recharge_commission;
                     $cost = $sku_amount['1'];
-    
+
                     $admin_given_profit = ($prof->commission/100)*a::user()->admin_recharge_commission;
-    
+
                     $minus = a::user()->update([
                         'wallet' => a::user()->wallet - $cost + $admin_given_profit,
                     ]);
-    
+
                     $reseller = User::where('id',a::user()->created_by)->first();
-    
+
                     // $commission = User::where('id',a::user()->created_by)->update([
                     //     'wallet' => $reseller->wallet + $reseller_commission
                     // ]);
@@ -794,19 +797,20 @@ class RechargeController extends Controller
                 $create->status = 'completed';
                 $create->cost = $cost;
                 $create->save();
+                return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
 
             }else {
-                return  Redirect()->back()->with('error','Recharge Incomplete,. Please try again!'); 
+                return  Redirect()->back()->with('error','Recharge Incomplete,. Please try again!');
             }
             return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
         }else{
-            return  Redirect()->back()->with('error','Recharge Incomplete,. Please try again!'); 
+            return  Redirect()->back()->with('error','Recharge Incomplete,. Please try again!');
         }
-         
+        return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
         }else{
-            return  Redirect()->back()->with('error','Insufficient Balance!'); 
+            return  Redirect()->back()->with('error','Insufficient Balance!');
         }
-        
+
     }
 
     public function invoices()

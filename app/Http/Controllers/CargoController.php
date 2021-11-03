@@ -79,12 +79,12 @@ class CargoController extends Controller
 
                 $count = $orders->count();
                 if($count > 0){
-                    $agent = User::where('id', $orders['0']->reseller_id)->first(); 
+                    $agent = User::where('id', $orders['0']->reseller_id)->first();
                 }else {
-                    $agent['nationality'] = null; 
+                    $agent['nationality'] = null;
                 }
             }
-            
+
         }
         return view('front.order-tracking', compact('orders','agent'));
 
@@ -93,7 +93,7 @@ class CargoController extends Controller
     public function OrderInvoice($id)
     {
         $order = Order::where('id', $id)->first();
-        
+
         $agent = User::where('id', $order->reseller_id)->first();
 
         return view('front.cargo-invoice', compact('order','agent'));
@@ -119,7 +119,7 @@ class CargoController extends Controller
 
     public function Orderlabel(Request $request)
     {
-        $request->file('label')->store('public');  
+        $request->file('label')->store('public');
         $labelFileName = $request->label->hashName();
 
         $update = Order::where('id',$request->id)->update([

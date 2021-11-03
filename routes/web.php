@@ -90,7 +90,7 @@ Route::post('check-pins', function(Request $request){
 
     if($request->id == 'EA')
     {
-        $offer_detail = DB::table('domestic_pins')->where('operator', $request->id)->where('type','pin')->get(); 
+        $offer_detail = DB::table('domestic_pins')->where('operator', $request->id)->where('type','pin')->get();
     }else {
         $offer_detail = DB::table('domestic_pins')->where('operator', 'like', '%'.$request->id.'%')->where('type','pin')->get();
     }
@@ -114,32 +114,28 @@ Route::get('/delete-offer/{id}', [OfferController::class,'destroy']);
 
 Route::post('/add-sim', [SimController::class,'store']);
 
-Route::get('/buy-sim/{id}', [SimController::class,'show']);
-
-Route::post('/buy-sim', [SimController::class, 'buy']);
 
 Route::get('/sim-orders', [SimController::class,'orders']);
 
-Route::get('/sim-download/{id}', [SimController::class,'download']);
 
-Route::get('/sim-invoice/{id}', [SimController::class,'invoice']);
+
 
 Route::post('/sim-order/update', [SimController::class,'sim_order_update']);
 
 //  CARGO NEW ORDER
-Route::get('/cargo/new-order', [CargoController::class,'NewOrderView'])->name('cargo-new-order');
-    
+
+
     //  CREATE NEW ORDER
     Route::get('/create-new-order', [CargoController::class,'CreateNewOrder'])->name('create-new-order');
 
     //  SEARCH ORDERS
     Route::get('/cargo/search', [CargoController::class,'Search'])->name('search');
-    
+
     //  TRACK ORDERS
     Route::get('/cargo/track', [CargoController::class,'OrderTracking'])->name('track');
 
     //  ADD NEW ORDER
-    Route::POST('/cargo/add-new-order', [OrderController::class,'AddOrder'])->name('add-new-order');
+
 
     Route::GET('/add-new-pricing', [PricingController::class,'Pricing'])->name('add-new-pricing');
 
@@ -150,7 +146,7 @@ Route::get('/cargo/new-order', [CargoController::class,'NewOrderView'])->name('c
     Route::GET('price-edit/{id}', [PricingController::class,'EditPricing']);
 
     Route::POST('edit-new-pricing-for-real/{id}', [PricingController::class,'EditPricingForReal'])->name('edit-new-pricing-for-real');
-    
+
     Route::GET('price-delete/{id}', [PricingController::class,'DeletePricing'])->name('price-delete');
 
     //  AJAX
@@ -160,9 +156,9 @@ Route::get('/cargo/new-order', [CargoController::class,'NewOrderView'])->name('c
 
 
 //  CARGO VIEW TRACK
-Route::get('/cargo/order-tracking-view', [CargoController::class,'OrderTrackingView'])->name('order-tracking-view');
 
-Route::get('/cargo/order-list', [CargoController::class,'OrderList'])->name('order-list');
+
+
 
 Route::post('/cargo/order-label/update', [CargoController::class,'Orderlabel']);
 
@@ -244,27 +240,69 @@ Route::post('/domestic_product', function (Request $request) {
 
 });
 
-Route::get('/recharge/recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
 
-Route::get('/recharge/all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
+Route::group(['prefix' => 'recharge'], function()
+{
+    Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
+    Route::get('all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
+    Route::get('recharge-italy', [RechargeController::class,'RechargeDom'])->name('recharge-italy');
+    Route::get('pin', [PinController::class,'index'])->name('pin');
+    Route::get('recharge-gift-card', [RechargeController::class,'RechargeGiftCard'])->name('recharge-gift-card');
+    Route::get('recharge-calling-card', [RechargeController::class,'RechargeCallingCard'])->name('recharge-calling-card');
+    Route::get('print-all-invoice', [RechargeController::class,'PrintInvoice'])->name('print-all-invoice');
+    Route::get('pin/all-invoice', [PinController::class,'invoices'])->name('pin-invoice');
+    Route::post('filebytype',[RechargeController::class,'filebytype'])->name('filebytype');
+    Route::get('filebydate/{start}/{end}',[RechargeController::class,'filebydate']);
+    Route::get('pinfilebydate/{start}/{end}',[RechargeController::class,'pinfilebydate']);
+    Route::post('check-operator',[RechargeController::class,'check_operator'])->name('check-operator');
+    Route::get('change-operator/{numbers}/{rg}',[RechargeController::class,'change_operator']);
+    Route::post('get-price',[RechargeController::class,'get_price'])->name('get-price');
+    Route::post('check-product',[RechargeController::class,'get_product'])->name('check-product');
+    Route::post('estimate',[RechargeController::class,'estimate'])->name('estimate');
+    Route::post('check-changed-product',[RechargeController::class,'get_changed_product'])->name('check-changed-product');
+    Route::post('international_recharge',[RechargeController::class,'recharge'])->name('international_recharge');
+    Route::post('estimated',[RechargeController::class,'estimate'])->name('estimated');
+    Route::post('domestic_recharge',[RechargeController::class,'domestic_recharge'])->name('domestic_recharge');
+    Route::get('recharge_invoice/{id}',[RechargeController::class,'invoice']);
 
-Route::get('/pin/all-invoice', [PinController::class,'invoices'])->name('pin-invoice');
+});
 
-Route::post('/filebytype',[RechargeController::class,'filebytype']);
 
-Route::get('/filebydate/{start}/{end}',[RechargeController::class,'filebydate']);
+Route::group(['prefix' => 'sim'], function()
+{
 
-Route::get('/pinfilebydate/{start}/{end}',[RechargeController::class,'pinfilebydate']);
+    Route::get('sim-activation', [SimController::class,'index'])->name('sim-activation');
+    Route::get('sim-selling', [SimController::class,'orders'])->name('sim-selling');
+    Route::get('wi-fi', [SimController::class,'WiFi'])->name('wi-fi');
+    Route::get('buy-sim/{id}', [SimController::class,'show']);
+    Route::post('buy-sim', [SimController::class, 'buy'])->name('buy-sim');
+    Route::get('sim-invoice/{id}', [SimController::class,'invoice']);
+    Route::get('sim-download/{id}', [SimController::class,'download']);
 
-Route::get('/recharge/recharge-italy', [RechargeController::class,'RechargeDom'])->name('recharge-italy');
 
-Route::get('/recharge/pin-italy', [PinController::class,'index']);
+});
 
-Route::get('/recharge/recharge-gift-card', [RechargeController::class,'RechargeGiftCard'])->name('recharge-gift-card');
 
-Route::get('/recharge/recharge-calling-card', [RechargeController::class,'RechargeCallingCard'])->name('recharge-calling-card');
+Route::group(['prefix' => 'cargo'], function()
+{
 
-Route::get('/recharge/print-all-invoice', [RechargeController::class,'PrintInvoice'])->name('print-all-invoice');
+
+    Route::get('new-order', [CargoController::class,'NewOrderView'])->name('cargo-new-order');
+    Route::get('order-list', [CargoController::class,'OrderList'])->name('order-list');
+    Route::get('order-tracking-view', [CargoController::class,'OrderTrackingView'])->name('order-tracking-view');
+    Route::POST('add-new-order', [OrderController::class,'AddOrder'])->name('add-new-order');
+
+});
+
+
+
+
+
+
+
+
+
+
 
 Route::get('changeStatus', [RetailerController::class,'changeStatus']);
 
@@ -283,11 +321,6 @@ Route::get('changePin', [RetailerController::class,'changePin']);
 
 //  SIMS START
 
-Route::get('/sim/sim-activation', [SimController::class,'index'])->name('sim-activation');
-
-Route::get('/sim/sim-selling', [SimController::class,'orders'])->name('sim-selling');
-
-Route::get('/sim/wi-fi', [SimController::class,'WiFi'])->name('wi-fi');
 
 //  SIMS END
 
@@ -311,17 +344,8 @@ Route::get('/logout', function(){
     return redirect('/');
 });
 
-Route::post('/check-operator',[RechargeController::class,'check_operator']);
-Route::get('/change-operator/{numbers}/{rg}',[RechargeController::class,'change_operator']);
-Route::post('/get-price',[RechargeController::class,'get_price']);
-Route::post('/check-product',[RechargeController::class,'get_product']);
-Route::post('/recharge/estimate',[RechargeController::class,'estimate']);
-Route::post('/check-changed-product',[RechargeController::class,'get_changed_product']);
-Route::post('/international_recharge',[RechargeController::class,'recharge']);
-Route::post('/recharge/estimated',[RechargeController::class,'estimate']);
-Route::post('/domestic_recharge',[RechargeController::class,'domestic_recharge']);
 Route::post('/domestic_pin',[PinController::class,'store']);
-Route::get('/recharge_invoice/{id}',[RechargeController::class,'invoice']);
+
 Route::get('/pin_invoice/{id}',[PinController::class,'invoice']);
 // edit by shuvo
 Route::get('/fcm', [RechargeController::class,'fcmSend']);

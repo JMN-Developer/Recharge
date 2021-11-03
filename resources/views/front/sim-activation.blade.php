@@ -33,7 +33,7 @@
                 <h3 class="card-title"><strong>Add to List</strong></h3>
               </div>
               <!-- /.card-header -->
-              <form action="/add-sim" method="POST">
+              <form action="/add-sim" method="POST"></form>
                 @csrf
                 <div class="row px-3 justify-content-center">
                     <div class="col-md-2">
@@ -41,7 +41,7 @@
                         <label>Oparetor</label>
                         <select class="form-control select2" name="operator" style="width: 100%;">
                           @foreach ($operator as $operator)
-                            <option value="{{ $operator->operator }}">{{ $operator->operator }}</option>                          
+                            <option value="{{ $operator->operator }}">{{ $operator->operator }}</option>
                           @endforeach
                         </select>
                       </div>
@@ -125,7 +125,7 @@
                       <td>{{ $item->buy_date }}</td>
                       <td>{{ $item->buy_price }}</td>
                       <td class="text-center">
-                        <a href="/buy-sim/{{ $item->id }}" type="button" class="btn btn-info btn-sm">Sale</a>
+                        <a href="buy-sim/{{ $item->id }}" type="button" class="btn btn-info btn-sm">Sale</a>
                       </td>
                     </tr>
                     @endforeach
@@ -138,7 +138,7 @@
           </div>
         </div>
         <!-- /.row -->
-        
+
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

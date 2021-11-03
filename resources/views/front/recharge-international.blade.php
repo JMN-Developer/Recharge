@@ -33,11 +33,11 @@
                   <div class="row">
                      <div class="col-md-6">
                         @if ($stage == 'check_number')
-                        <form action="/check-changed-product" method="POST">
+                        <form action="{{ route('check-changed-product') }}" method="POST">
                            @elseif($stage == 'get_product')
-                        <form action="/international_recharge" method="POST">
+                        <form action="{{ route('international_recharge') }}" method="POST">
                            @else
-                        <form action="/check-operator" method="POST">
+                        <form action="{{ route('check-operator') }}" method="POST">
                            @endif
                            @csrf
                            <div class="mb-3 receiver_inputs">
@@ -68,14 +68,14 @@
                               </select>
                            </div>
                            @elseif($stage == 'initial')
-                           
+
                            @else
                            <div class="form-group">
                             <label for="selectOparetor">Oparetor</label>
                             <select class="custom-select" name="operator" id="operators" readonly>
                                <option value="{{ $datas['operator'] }}">{{ $datas['operator'] }}</option>
                             </select>
-                            <a class="btn btn-success" href="/change-operator/{{ $datas['number'] ?? '' }}/{{ $rg ?? '' }}"> Change Operator</a>
+                            <a class="btn btn-success" href="change-operator/{{ $datas['number'] ?? '' }}/{{ $rg ?? '' }}"> Change Operator</a>
                          </div>
                          <div class="form-group">
                             <label for="selectPackage">Package Type</label>
@@ -104,9 +104,9 @@
                            <div class="mb-3">
                               <label for="inputAmount" class="form-label">Amount (EUR)</label>
                               <input oninput="cost()" id="amount" type="number" step="any"
-                              min="{{ $prods['0']['Minimum']['SendValue'] + (($prods['0']['Minimum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission) + (($prods['0']['Minimum']['SendValue']/100)*Auth::user()->international_recharge) }}" 
-                              max="{{ $prods['0']['Maximum']['SendValue'] + (($prods['0']['Maximum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission) + (($prods['0']['Maximum']['SendValue']/100)*Auth::user()->international_recharge) }}" 
-                              class="form-control" name="amount" 
+                              min="{{ $prods['0']['Minimum']['SendValue'] + (($prods['0']['Minimum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission) + (($prods['0']['Minimum']['SendValue']/100)*Auth::user()->international_recharge) }}"
+                              max="{{ $prods['0']['Maximum']['SendValue'] + (($prods['0']['Maximum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission) + (($prods['0']['Maximum']['SendValue']/100)*Auth::user()->international_recharge) }}"
+                              class="form-control" name="amount"
                               placeholder="Between Euro {{ $prods['0']['Maximum']['SendValue'] + (($prods['0']['Maximum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission) + (($prods['0']['Maximum']['SendValue']/100)*Auth::user()->international_recharge)}}  -  Euro {{ $prods['0']['Minimum']['SendValue'] + (($prods['0']['Minimum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission) + (($prods['0']['Minimum']['SendValue']/100)*Auth::user()->international_recharge)}}">
                               <input type="hidden" name="Sku_Code" value="{{ $prods['0']['SkuCode'] }}" id="skucode">
                               <input type="hidden" id="admin_com" value="{{ Auth::user()->admin_international_recharge_commission }}">
@@ -347,7 +347,7 @@
                                        <td>{{ $item->operator }}</td>
                                        <td>{{ $item->cost }}</td>
                                        <td><i class="text-primary fas fa-check-square"></i></td>
-                                       <td> <a class="btn btn-success" href="/recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
+                                       <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                                     </tr>
                                     @endforeach
                                  </tbody>
@@ -423,7 +423,7 @@
    }));
 
    $(document).ready(function() {
-       $('.iti__flag-container').click(function() { 
+       $('.iti__flag-container').click(function() {
          var countryCode = $('.iti__selected-flag').attr('title');
          var countryCode = countryCode.replace(/[^0-9]/g,'')
          $('#receiverMobile').val("");

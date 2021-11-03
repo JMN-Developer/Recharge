@@ -80,7 +80,7 @@
                       <td><span class="badge badge-primary">{{ $item->status }}</span></td>
                       @endif
                       @if (Auth::user()->role == 'admin')
-                      <td> 
+                      <td>
                         <form action="/sim-order/update" method="POST">
                           @csrf
 
@@ -94,15 +94,15 @@
                               <option {{$item->status == 'sold' ? 'selected' : '' }} value="sold">Completed</option>
                           </select>
                           <input type="submit" value="Update" class="btn btn-success">
-                          </form>  
+                          </form>
                       </td>
                       @endif
                       <td class="text-center">
                         <div class="btn-group">
-                          <a href="/sim-invoice/{{ $item->id }}" class="btn btn-sm btn-success">
+                          <a href="sim-invoice/{{ $item->id }}" class="btn btn-sm btn-success">
                             <i class="fas fa-print"></i>
                           </a>
-                          <a href="/sim-download/{{ $item->id }}" class="btn btn-sm bg-info">
+                          <a href="sim-download/{{ $item->id }}" class="btn btn-sm bg-info">
                             <i class="fas fa-eye"></i>
                           </a>
                         </div>
@@ -118,7 +118,7 @@
           </div>
         </div>
         <!-- /.row -->
-        
+
       </div>
       <!-- /.container-fluid -->
     </section>
