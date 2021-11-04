@@ -35,6 +35,11 @@ use App\Models\DomesticProfit;
 |
 */
 
+Route::get('error-page', function () {
+
+    return view('error.index');
+});
+
 Route::get('/sign-up',[UserController::class,'index']);
 
 Route::post('/create',[UserController::class,'create'])->name('create');
@@ -183,9 +188,7 @@ Route::get('/cargo/order/cancel/{id}', [CargoController::class,'OrderCancel']);
 
 //  PHONE START
 
-Route::get('/phone/phone-order', [PhoneController::class,'PhoneOrder'])->name('phone-order');
 
-Route::get('/phone/selling-list', [PhoneController::class,'SellingList'])->name('selling-list');
 
 Route::get('/phone/add-phone-view', [PhoneController::class,'AddPhoneView'])->name('add-phone-view');
 
@@ -209,7 +212,6 @@ Route::post('/add-slider', [UserController::class,'slider'])->name('add-slider')
 
 Route::post('/edit-slider', [UserController::class,'updateslider'])->name('edit-slider');
 
-Route::post('/phone/order', [PhoneController::class,'order'])->name('add-order');
 
 Route::post('/phone/update', [PhoneController::class,'updateorder'])->name('update-order');
 
@@ -294,9 +296,26 @@ Route::group(['prefix' => 'cargo'], function()
 
 });
 
+Route::group(['prefix' => 'phone'], function()
+{
+
+    Route::get('phone-order', [PhoneController::class,'PhoneOrder'])->name('phone-order');
+    Route::get('selling-list', [PhoneController::class,'SellingList'])->name('selling-list');
+    Route::post('phone-order', [PhoneController::class,'order'])->name('add-order');
 
 
+});
 
+
+Route::group(['prefix' => 'retailer'], function()
+{
+
+    Route::get('retailer-details', [RetailerController::class,'RetailerDetail'])->name('retailer-details');
+
+    Route::get('retailer-sign-up', [RetailerController::class,'RetailerSignUp'])->name('retailer-sign-up');
+
+
+});
 
 
 
@@ -326,9 +345,7 @@ Route::get('changePin', [RetailerController::class,'changePin']);
 
 //  RETAILER START
 
-Route::get('/retailer/retailer-details', [RetailerController::class,'RetailerDetail'])->name('retailer-details');
 
-Route::get('/retailer/retailer-sign-up', [RetailerController::class,'RetailerSignUp'])->name('retailer-sign-up');
 
 Route::get('/retailer/retailer-action', [RetailerController::class,'RetailerAction'])->name('retailer-action');
 
