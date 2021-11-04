@@ -401,13 +401,13 @@
                 </li>
                 @endif
                 <li class="nav-item">
-                  <a href="/phone/phone-order" class="@if(Route::currentRouteName() == 'phone-order') nav-link active @endif nav-link">
+                  <a href="{{ route('phone-order') }}" class="@if(Route::currentRouteName() == 'phone-order') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Order</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/phone/selling-list" class="@if(Route::currentRouteName() == 'selling-list') nav-link active @endif nav-link">
+                  <a href="{{ route('selling-list') }}" class="@if(Route::currentRouteName() == 'selling-list') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Selling</p>
                   </a>
@@ -425,7 +425,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/retailer/retailer-details" class="@if(Route::currentRouteName() == 'retailer-details') nav-link active @endif nav-link">
+                  <a href="{{ route('retailer-details') }}" class="@if(Route::currentRouteName() == 'retailer-details') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Retailer Details</p>
                   </a>
@@ -440,7 +440,7 @@
                 @endif
                 @if (Auth::user()->reseller_permission == 1)
                 <li class="nav-item">
-                  <a href="/retailer/retailer-sign-up" class="@if(Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
+                  <a href="{{ route('retailer-sign-up') }}" class="@if(Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>New Retailer</p>
                   </a>

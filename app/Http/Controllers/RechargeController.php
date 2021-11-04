@@ -665,7 +665,7 @@ class RechargeController extends Controller
     {
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
-
+        file_put_contents('test.txt',$request->amount);
 
         $sku_amount = explode(',',$request->amount);
 
@@ -802,17 +802,16 @@ class RechargeController extends Controller
             }else {
                 return  Redirect()->back()->with('error','Recharge Incomplete,. Please try again!');
             }
-            return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
+
         }else{
             return  Redirect()->back()->with('error','Recharge Incomplete,. Please try again!');
         }
-        return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
+
         }else{
             return  Redirect()->back()->with('error','Insufficient Balance!');
         }
 
     }
-
     public function invoices()
     {
         if(a::user()->role == 'admin'){
