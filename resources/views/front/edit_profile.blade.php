@@ -14,7 +14,19 @@
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
 <body class="hold-transition register-page">
+
   <div class="register-box">
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+
     <div class="card card-outline card-primary">
         <form action="/reseller/update/{{ $data->id }}" method="POST">
           @csrf
@@ -93,6 +105,15 @@
                     </div>
                 </div>
               </div>
+
+              <div class="input-group mb-3">
+                <input type="password" name="password_confirmation" class="form-control" value="" placeholder="Confirm Password">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                      <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+              </div>
               <div class="input-group mb-3">
                 <select name="gender" class="form-control" value="{{ $data->gender }}">
                 <option {{ ( $data->gender == 'male') ? 'selected' : '' }} value="male">Male</option>
@@ -111,7 +132,7 @@
                 </div>
                 <!-- /.col -->
               </div>
-              
+
         </div>
         <!-- /.form-box -->
         </form>

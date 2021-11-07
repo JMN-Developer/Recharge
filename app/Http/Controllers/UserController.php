@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Slider;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
 
 class UserController extends Controller
 {
@@ -114,8 +116,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProfileRequest $request, $id)
     {
+        // $validatedData = $request->validate([
+        //     'first_name' => 'required',
+
+        // ], [
+        //     'first_name.required' => 'Name is required',
+
+        // ]);
+        //file_put_contents('test.txt','hello');
+
+
         if($request->password != null){
             $password = Hash::make($request->password);
 
@@ -145,6 +157,7 @@ class UserController extends Controller
             ]);
         }
 
+       // return back();
         return redirect('/retailer/retailer-details');
     }
 
@@ -157,7 +170,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         User::where('id', $id)->delete();
-        
+
         return back();
     }
 
@@ -167,7 +180,7 @@ class UserController extends Controller
 
 
         $Phones = new Slider;
-        $Phones->link = $request->input('link');        
+        $Phones->link = $request->input('link');
         $Phones->image = $path;
         $Phones->save();
 
@@ -182,7 +195,7 @@ class UserController extends Controller
         }else{
             $path = $data->image;
         }
-        
+
 
 
         $Phones = Slider::where('id', $request->id)->update([

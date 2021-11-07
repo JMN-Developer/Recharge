@@ -243,7 +243,7 @@ Route::post('/domestic_product', function (Request $request) {
 });
 
 
-Route::group(['prefix' => 'recharge'], function()
+Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 {
     Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
     Route::get('all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
@@ -270,7 +270,7 @@ Route::group(['prefix' => 'recharge'], function()
 });
 
 
-Route::group(['prefix' => 'sim'], function()
+Route::group(['prefix' => 'sim','middleware'=>['auth']], function()
 {
 
     Route::get('sim-activation', [SimController::class,'index'])->name('sim-activation');
@@ -285,7 +285,7 @@ Route::group(['prefix' => 'sim'], function()
 });
 
 
-Route::group(['prefix' => 'cargo'], function()
+Route::group(['prefix' => 'cargo','middleware'=>['auth']], function()
 {
 
 
@@ -296,7 +296,7 @@ Route::group(['prefix' => 'cargo'], function()
 
 });
 
-Route::group(['prefix' => 'phone'], function()
+Route::group(['prefix' => 'phone','middleware'=>['auth']], function()
 {
 
     Route::get('phone-order', [PhoneController::class,'PhoneOrder'])->name('phone-order');
@@ -307,12 +307,24 @@ Route::group(['prefix' => 'phone'], function()
 });
 
 
-Route::group(['prefix' => 'retailer'], function()
+Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
 {
+
 
     Route::get('retailer-details', [RetailerController::class,'RetailerDetail'])->name('retailer-details');
 
     Route::get('retailer-sign-up', [RetailerController::class,'RetailerSignUp'])->name('retailer-sign-up');
+    Route::get('changeStatus', [RetailerController::class,'changeStatus']);
+
+    Route::get('changeSim', [RetailerController::class,'changeSim']);
+
+    Route::get('changeCargo', [RetailerController::class,'changeCargo']);
+
+    Route::get('changePhone', [RetailerController::class,'changePhone']);
+
+    Route::get('changeReseller', [RetailerController::class,'changeReseller']);
+
+    Route::get('changePin', [RetailerController::class,'changePin']);
 
 
 });
@@ -323,17 +335,7 @@ Route::group(['prefix' => 'retailer'], function()
 
 
 
-Route::get('changeStatus', [RetailerController::class,'changeStatus']);
 
-Route::get('changeSim', [RetailerController::class,'changeSim']);
-
-Route::get('changeCargo', [RetailerController::class,'changeCargo']);
-
-Route::get('changePhone', [RetailerController::class,'changePhone']);
-
-Route::get('changeReseller', [RetailerController::class,'changeReseller']);
-
-Route::get('changePin', [RetailerController::class,'changePin']);
 
 
 //  RECHARGES END

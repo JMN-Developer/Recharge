@@ -56,7 +56,7 @@ class PinController extends Controller
 
         if (a::user()->wallet >= $sku_amount['1']) {
             $txid = mt_rand(1000000000, 9999999999);
-        
+
         $xml = '<?xml version="1.0" ?><REQUEST MODE="DIRECT" STORERECEIPT="1" TYPE="SALE">
         <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
         <TXID>'.$txid.'</TXID>
@@ -80,22 +80,22 @@ class PinController extends Controller
             'content_type' => 'application/xml'
             ],
             'verify' => false,
-            'body' => $xml              
+            'body' => $xml
         ]);
 
-        $body = $recharge_request->getBody(); 
+        $body = $recharge_request->getBody();
         $xml = simplexml_load_string($body);
 
 
 
         $pin = $xml->PINCREDENTIALS;
-        
+
         if($xml->RESULT == 0){
 
             $balancequery = Balance::where('type','domestic')->first();
 
             $prof = DomesticProfit::where('ean',$sku_amount['0'])->first();
-        
+
             $noted = json_encode($xml->RECEIPT->LINE);
 
 
@@ -103,7 +103,7 @@ class PinController extends Controller
 
             $note = str_replace($c,'',$noted);
 
-        
+
 
 
             $balance = DB::table('balances')->where('type','domestic')->update([
@@ -171,14 +171,14 @@ class PinController extends Controller
 
 
         }else{
-            return  Redirect()->back()->with('error','Error occured Please try again!'); 
+            return  Redirect()->back()->with('error','Error occured Please try again!');
         }
 
 
         // $data = json_encode($bod,true);
-         
+
         }else{
-            return  Redirect()->back()->with('error','Insufficient Balance!'); 
+            return  Redirect()->back()->with('error','Insufficient Balance!');
         }
     }
 
@@ -233,5 +233,5 @@ class PinController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
+
 }

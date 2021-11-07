@@ -800,11 +800,11 @@ class RechargeController extends Controller
                 return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
 
             }else {
-                return  Redirect()->back()->with('error','Recharge Incomplete,. Please try again!');
+                return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
             }
 
         }else{
-            return  Redirect()->back()->with('error','Recharge Incomplete,. Please try again!');
+            return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
         }
 
         }else{
