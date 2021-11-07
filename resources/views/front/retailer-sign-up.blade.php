@@ -18,6 +18,15 @@
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
 <body class="hold-transition register-page">
 <div class="register-box">
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
   <div class="card card-outline card-primary">
     <form action="{{ route('create') }}" method="POST">
       @csrf
@@ -44,7 +53,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="text" name="company" class="form-control" placeholder="Company Name">
+          <input type="text" name="nationality" class="form-control" placeholder="Nationality">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -90,13 +99,21 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Create Password">
+          <input type="password" name="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
+        <div class="input-group mb-3">
+            <input type="password" name="password_confirmation" class="form-control" placeholder="Confirm Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
         <div class="input-group mb-3">
           <select name="gender" class="form-control" id="">
             <option value="male">Male</option>

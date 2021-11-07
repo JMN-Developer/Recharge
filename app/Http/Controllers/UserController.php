@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Requests\CreateProfileRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Slider;
@@ -28,35 +29,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(CreateProfileRequest $request)
     {
-    //     $this->validate($request, [
-    //     'name' => 'required|min:3|max:50',
-    //     'address' => 'required',
-    //     'email' => 'email',
-    //     'vat_number' => 'max:13',
-    //     'password' => 'required|confirmed|min:6',
-    //     'contact_number' => 'required',
-    //     'codice_fiscale' => 'required',
-    //     'terms' => 'required',
-    // ]);
-        // dd($request->all());
-        // User::create([
-        //     'name' => $request['name'],
-        //     'vat_number' => $request['vat_number'],
-        //     'email' => $request['email'],
-        //     'address' => $request['address'],
-        //     'role' => 'user',
-        //     'contact_number' => $request['contact_number'],
-        //     'codice_fiscale' => $request['codice_fiscale'],
-        //     'wallet' => 0,
-        //     'password' => Hash::make($request['password']),
-        // ]);
+
         $users = new User;
         $users->first_name = $request->input('first_name');
         $users->last_name = $request->input('last_name');
         $users->vat_number = $request->input('vat_number');
-        $users->nationality = $request->input('company');
+        $users->nationality = $request->input('nationality');
         $users->email = $request->input('email');
         $users->address = $request->input('address');
         $users->role = 'user';
@@ -65,7 +45,7 @@ class UserController extends Controller
         $users->contact_number = $request->input('phone');
 
         $users->codice_fiscale = $request->input('codice_fiscale');
-        $users->gender = 1;
+        $users->gender = $request->input('gender');;
         $users->wallet = 0;
         $users->created_by = Auth::user()->id;
         $users->password = Hash::make($request['password']);
