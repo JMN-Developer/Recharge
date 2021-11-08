@@ -448,6 +448,14 @@
                 @endif
               </ul>
             </li>
+            <li class="@if(Route::currentRouteName() == 'setting') nav-item menu-open @endif nav-item">
+                <a href="{{ route('setting') }}" class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
+                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <p>
+                    Settings
+                  </p>
+                </a>
+              </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

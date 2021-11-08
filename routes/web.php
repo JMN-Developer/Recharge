@@ -14,6 +14,7 @@ use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\PricingController;
+use App\Http\Controllers\SettingsController;
 use App\Models\SimOperator;
 use App\Models\sim;
 use App\Models\User;
@@ -38,6 +39,11 @@ use App\Models\DomesticProfit;
 Route::get('error-page', function () {
 
     return view('error.index');
+});
+
+Route::group(['prefix' => 'setting','middleware'=>['auth']], function()
+{
+    Route::get('/',[SettingsController::class,'index'])->name('setting');
 });
 
 Route::get('/sign-up',[UserController::class,'index']);
