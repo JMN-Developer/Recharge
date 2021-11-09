@@ -31,7 +31,7 @@
         <div class="row">
           <div class="col-10 text-center">
             <h2 style="font-weight: 700; color: #bdbcbc;"><img src="images/jm-transparent-logo.png" width="20px">
-              <span class="brand-text"><strong>JM</strong> NATION</span>
+              <span class="brand-text"><strong>JM</strong> NATIONs</span>
             </h2>
           </div>
           <div class="col-2 text-center">
