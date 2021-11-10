@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RechargeController;
+use App\Http\Controllers\ApiTestController;
 use App\Models\Offer;
 
 /*
@@ -31,4 +32,10 @@ Route::post('/response', [RechargeController::class,'response']);
 Route::post('offer-check', function(Request $request){
     $offer_detail = Offer::where('offer',$request->id)->first();
     return response()->json($offer_detail, 200);
+});
+
+
+Route::group(['middleware'=>['auth']], function()
+{
+    Route::get('get_balance',[ApiTestController::class,'get_balance']);
 });
