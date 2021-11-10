@@ -35,7 +35,4 @@ Route::post('offer-check', function(Request $request){
 });
 
 
-Route::group(['middleware'=>['auth']], function()
-{
-    Route::get('get_balance',[ApiTestController::class,'get_balance']);
-});
+Route::get('get_balance',[ApiTestController::class,'get_balance']);
