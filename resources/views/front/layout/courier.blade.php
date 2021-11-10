@@ -169,15 +169,18 @@
 
       <div class="profile-info mt-3">
         <div class="row">
-          <div class="col-6">
-            <p style="color: #b9ff38;"><i class="nav-icon fab fa-rev mr-4"></i>{{ Auth()->user()->wallet }}</p>
+          <div class="col-12">
+            @if (Auth::user()->role != 'admin')
+            <p style="color: #b9ff38;"><b class="mr-2">Wallet</b><span>{{ Auth()->user()->wallet }}</span></p>
+            @endif
           </div>
-          <div class="col-6">
-            <b class="mr-2">Due:</b><span>{{ Auth()->user()->due }}</span>
+          <div class="col-12">
+
+                <p><b class="mr-2">Due: </b><span>{{ Auth()->user()->due }}</span></p>
+                <p><b class="mr-2">Corriere: </b><span>{{ Auth::user()->cargo_due }}</span></p>
+
           </div>
-          <span>
-            <b class="mr-2">Corriere : </b><span> {{ Auth::user()->cargo_due }}&euro;</span>
-          </span><br>
+
         </div>
         @if (Auth::user()->role == 'admin')
           <div class="row">

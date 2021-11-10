@@ -36,3 +36,5 @@ Route::post('offer-check', function(Request $request){
 
 
 Route::get('get_balance',[ApiTestController::class,'get_balance']);
+Route::post('check_operator',[ApiTestController::class,'check_operator']);
+Route::post('get_products',[ApiTestController::class,'get_products']);
