@@ -19,6 +19,7 @@ class ApiTestController extends Controller
         $prod = json_decode($product_responses,true);
 
         $bal = $prod['Balance'];
+        return $prod;
 
     }
 }
