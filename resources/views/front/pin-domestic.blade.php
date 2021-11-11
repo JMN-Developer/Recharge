@@ -35,11 +35,11 @@
               <h3 class="text-center mb-5">Indice Brand Pin</h3>
               <div class="row">
                 <div class="col-md-6">
-                  <form action="/domestic_pin" method="post">
+                  <form action="domestic_pin" method="post">
                     @csrf
                     <div class="form-group">
                       <label>Brand</label>
-                  
+
                       <div class="brand-select-list">
                         <button type="button" class="selected-brand text-left" name="selected_brand" value=""></button>
                         <div class="brandUlLiContainer">
@@ -107,7 +107,7 @@
                     <div class="mt-3">
                       <input type="submit" class="btn btn-info" style="width: 100%;" value="Get Pin">
                     </div>
-                    
+
                   </form>
                 </div>
                 <div class="col-md-6">
@@ -115,7 +115,7 @@
                     <div class="last_recharge_table_head text-center">
                       <h5><strong>Last 10 Recharge</strong></h5>
                     </div>
-                
+
                     <div class="card-body table-responsive p-0">
                       <table class=" table table-sm table-bordered table-hover">
                         <thead>
@@ -144,16 +144,16 @@
                 </div>
               </div>
 
-              
-              
-              
+
+
+
             </div>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
         </div>
         <!-- /.login-box -->
-        
+
       </div>
       <!-- /.container-fluid -->
     </section>
@@ -183,7 +183,7 @@ var table = $('#offer');
 $.ajax({
  type: "POST",
  url: "/check-products", // url to request
- data:{ 
+ data:{
             _token:'{{ csrf_token() }}',
             id: value,
         },
@@ -241,7 +241,7 @@ $.ajax({
       $.ajax({
  type: "POST",
  url: "/check-pins", // url to request
- data:{ 
+ data:{
             _token:'{{ csrf_token() }}',
             id: value,
         },
@@ -270,7 +270,7 @@ $.ajax({
 
     $(".recharge_amount").hide();
 
-    $(document).on('keyup', '.myNumber', function () {      
+    $(document).on('keyup', '.myNumber', function () {
       if ( $(this).val().length >= 10 ) {
         $(".recharge_amount").show();
       }
@@ -278,7 +278,7 @@ $.ajax({
         $(".recharge_amount").hide();
       }
     });
- 
+
 
 </script>
 @endsection

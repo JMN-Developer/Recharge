@@ -24,6 +24,7 @@ use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Kreait\Firebase\Messaging\Notification;
+use Illuminate\Support\Facades\Log;
 use DB;
 
 
@@ -210,6 +211,7 @@ class RechargeController extends Controller
     {
     $change = [' ','+'];
     $number = str_replace($change,'',$request->number);
+
     $client = new \GuzzleHttp\Client();
     $operator_request = $client->get('https://api.dingconnect.com/api/V1/GetProviders?accountNumber='.$number,['headers' => [
         'api_key'     => 'G4ymoFlN97B6PhZgK1yzuY'
