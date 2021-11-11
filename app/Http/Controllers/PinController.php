@@ -167,7 +167,7 @@ class PinController extends Controller
 
 
 
-        return  Redirect('/pin/all-invoice')->with('status','Your Pin Purchase Has Been Sucessfull! Here is your pin '.$pin->PIN);
+        return  Redirect('recharge/pin/all-invoice')->with('status','Your Pin Purchase Has Been Sucessfull! Here is your pin '.$pin->PIN);
 
 
         }else{
