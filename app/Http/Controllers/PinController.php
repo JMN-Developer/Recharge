@@ -22,7 +22,12 @@ class PinController extends Controller
      */
     public function index()
     {
-        return view('front.pin-domestic');
+        if(a::user()->role == 'user'){
+            $data = Pin::where('reseller_id', a::user()->id)->latest()->take(10)->get();
+        }else{
+            $data = Pin::latest()->take(10)->get();
+        }
+        return view('front.pin-domestic',compact('data'));
     }
 
     /**

@@ -120,23 +120,23 @@
                       <table class=" table table-sm table-bordered table-hover">
                         <thead>
                           <tr class="table-danger">
-                            <th>Receiver</th>
+                            <th>Pin</th>
                             <th>Amount</th>
-                            <th>Cost</th>
+                            <th>Operator</th>
                             <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {{-- @foreach ($data as $item)
+                          @foreach ($data as $item)
                           <tr class="bg-ocean">
-                            <td>{{ $item->number }}</td>
+                            <td>{{ $item->pin }}</td>
                             <td>{{ $item->amount }}</td>
-                            <td>{{ $item->cost }}</td>
+                            <td>{{ $item->operator }}</td>
                             <td><i class="text-primary fas fa-check-square"></i></td>
-                            <td> <a class="btn btn-success" href="/recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
+                            <td> <a class="btn btn-success" href="pin_invoice/{{ $item->id }}"> Invoice</a> </td>
                           </tr>
-                          @endforeach --}}
+                          @endforeach
                         </tbody>
                       </table>
                     </div>

@@ -15,6 +15,7 @@ use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ApiTestController;
 use App\Models\SimOperator;
 use App\Models\sim;
 use App\Models\User;
@@ -24,6 +25,7 @@ use App\Models\Phone;
 use App\Models\Order;
 use App\Models\DomesticProduct;
 use App\Models\DomesticProfit;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,8 @@ use App\Models\DomesticProfit;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('test',[ApiTestController::class,'test_token']);
 
 Route::get('error-page', function () {
 
@@ -53,6 +57,7 @@ Route::post('/create',[UserController::class,'create'])->name('create');
 Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
     $data = Phone::where('status', 'available')->get();
     $slider = Slider::latest()->get();
+   
     return view('front.index',compact('data','slider'));
 })->name('/');
 Route::get('/add-reseller', function () {
@@ -273,6 +278,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::post('domestic_recharge',[RechargeController::class,'domestic_recharge'])->name('domestic_recharge');
     Route::get('recharge_invoice/{id}',[RechargeController::class,'invoice']);
     Route::post('domestic_pin',[PinController::class,'store'])->name('domestic-pin');
+    Route::get('pin_invoice/{id}',[PinController::class,'invoice']);
 
 });
 
@@ -372,7 +378,7 @@ Route::get('/logout', function(){
 
 
 
-Route::get('/pin_invoice/{id}',[PinController::class,'invoice']);
+
 // edit by shuvo
 Route::get('/fcm', [RechargeController::class,'fcmSend']);
 

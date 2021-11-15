@@ -1,3 +1,9 @@
+<?php
+  use Carbon\Carbon;
+  $admin_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
+    ->whereMonth('created_at', Carbon::now()->month)
+    ->sum('admin_com');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -188,6 +194,9 @@
               $ding = DB::table('balances')->where('type','ding')->latest()->first();
               $domestic = DB::table('balances')->where('type','domestic')->latest()->first();
             @endphp
+             <div class="col-12">
+              <b class="mr-2">Profit:</b><span>{{ $admin_profit }}&euro;</span>
+            </div>
             <div class="col-12">
               <b class="mr-2">Ding:</b><span>{{ $ding->balance }}&euro;</span>
             </div>
