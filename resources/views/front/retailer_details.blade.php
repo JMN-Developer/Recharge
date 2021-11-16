@@ -33,7 +33,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="d-inline-block">Retailer Details2</h1>
+            <h1 class="d-inline-block">Retailer Details</h1>
             <div class="search-form d-inline-block" style="float: right;">
               {{-- <div class="input-group" data-widget="sidebar-search">
                 <input class="form-control" type="search" placeholder="Search" aria-label="Search">

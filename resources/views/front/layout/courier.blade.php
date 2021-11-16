@@ -4,6 +4,7 @@
     ->whereMonth('created_at', Carbon::now()->month)
     ->sum('admin_com');
   $reseller_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
+    ->where('reseller_id',Auth::user()->id);
     ->whereMonth('created_at', Carbon::now()->month)
     ->sum('reseller_com');
 ?>
