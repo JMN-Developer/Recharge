@@ -3,6 +3,9 @@
   $admin_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
     ->whereMonth('created_at', Carbon::now()->month)
     ->sum('admin_com');
+  $reseller_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
+    ->whereMonth('created_at', Carbon::now()->month)
+    ->sum('reseller_com');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -177,9 +180,11 @@
         <div class="row">
           <div class="col-12">
             @if (Auth::user()->role != 'admin')
-            <p style="color: #b9ff38;"><b class="mr-2">Wallet</b><span>{{ Auth()->user()->wallet }}</span></p>
+            <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span></p>
+            <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p>
             @endif
           </div>
+          
           <div class="col-12">
 
                 <p><b class="mr-2">Due: </b><span>{{ Auth()->user()->due }}</span></p>
@@ -437,10 +442,20 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
+                  @if(auth()->user()->role!='admin')
                   <a href="{{ route('retailer-details') }}" class="@if(Route::currentRouteName() == 'retailer-details') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Retailer Details</p>
                   </a>
+                  @else
+
+                  <a href="{{ route('retailer-details-admin') }}" class="@if(Route::currentRouteName() == 'retailer-details-admin') nav-link active @endif nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Retailer Details</p>
+                  </a>
+
+                  @endif
+
                 </li>
                 @if (Auth::user()->role == 'admin')
                 <li class="nav-item">

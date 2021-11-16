@@ -38,7 +38,7 @@ use App\Models\DomesticProfit;
 |
 */
 
-Route::get("retailer_details",[RetailerController::class,'retailer_details']);
+
 Route::get('test',[ApiTestController::class,'test_token']);
 
 Route::get('error-page', function () {
@@ -340,7 +340,7 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
 
     Route::get('changePin', [RetailerController::class,'changePin']);
     Route::post('add_com',[RetailerController::class,'AddCom'])->name('AddCom');
-
+    Route::get("retailer-details-admin",[RetailerController::class,'retailer_details'])->name('retailer-details-admin');
 
 
 });
