@@ -91,8 +91,12 @@
                               <label for="selectPackage">Select Amount</label>
                               <select class="custom-select" name="amount" id="package">
                                  @foreach ($prods as $item)
+                                 <?php
+                                    $admin_international_com = ($item['Maximum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission;
+                                    $reseller_international_com = ($admin_international_com/100)*Auth::user()->reseller_profit->international_recharge_profit
+                                 ?>
                                  <option value="{{ $item['SkuCode'] }},{{ $item['Maximum']['SendValue']}}">
-                                    {{ $item['Maximum']['SendValue'] + (($item['Maximum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission) + ((($item['Maximum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission)/100)*Auth::user()->reseller_profit->international_recharge_profit+ (($item['Maximum']['SendValue']/100)*Auth::user()->international_recharge) +   }} Euro
+                                    {{ $item['Maximum']['SendValue'] +$admin_international_com + $reseller_international_com }} Euro
                                     <h7 style="font-size: 10px;">({{ $item['Maximum']['ReceiveValueExcludingTax'] }} {{ $item['Maximum']['ReceiveCurrencyIso'] }} will be received)</h7>
                                  </option>
                                  @endforeach
