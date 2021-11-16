@@ -64,4 +64,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+    public function reseller_profit()
+    {
+        return $this->hasOne('App\Models\ResellerProfit','reseller_id','id')->withDefault(['international_rechareg_profit'=>0,'domestic_recharge_profit'=>0]);
+    }
+
 }

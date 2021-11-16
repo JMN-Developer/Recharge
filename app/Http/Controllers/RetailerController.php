@@ -5,10 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\ResellerProfit;
 use Auth;
 
 class RetailerController extends Controller
 {
+    public function retailer_details()
+    {
+        if (Auth::user()->role == 'admin') {
+            $data = User::where('role','user')->get();
+        }else {
+            $data = User::where('role','user')->where('created_by', Auth::user()->id)->get();
+        }
+        // dd($data);
+        return view('front.retailer_details',compact('data'));
+    }
+
     public function RetailerDetail($value='')
     {
         if (Auth::user()->role == 'admin') {
@@ -94,6 +106,13 @@ class RetailerController extends Controller
                 'admin_international_recharge_commission' => $request->international_recharge,
                 'admin_pin_commission' => $request->pin,
             ]);
+
+            $user = ResellerProfit::updateOrCreate([
+                'reseller_id'=>$request->user_id,
+                'international_recharge_profit'=>$request->international_recharge_profit,
+                'domestic_recharge_profit'=>$request->domestic_recharge_profit,
+            ]);
+            
         }else{
             $user = User::where('id', $request->user_id)->update([
                 'mobile' => $request->mobile,

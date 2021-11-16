@@ -497,15 +497,16 @@ class RechargeController extends Controller
 
             $auth_admin_recharge = a::user()->admin_international_recharge_commission;
 
-            $reseller_commission = ($sendvalue/100)*$auth_recharge;
+           // $reseller_commission = ($sendvalue/100)*$auth_recharge;
 
             $admin_commission = ($sendvalue/100)*$auth_admin_recharge;
+            $reseller_commission = ((($sendvalue/100)*$auth_admin_recharge)/100)*a::user()->reseller_profit->international_recharge_profit;
 
             // dd($admin_commission);
 
             $cost = $sendvalue + $reseller_commission + $admin_commission + $request->service;
 
-            $real_cost = $sendvalue + $reseller_commission + $admin_commission;
+            $real_cost = $sendvalue+$admin_commission;
 
 
             if(a::user()->role != 'admin'){
@@ -515,9 +516,9 @@ class RechargeController extends Controller
 
                 $reseller = User::where('id',a::user()->created_by)->first();
 
-                $commission = User::where('id',a::user()->created_by)->update([
-                    'wallet' => $reseller->wallet + $reseller_commission
-                ]);
+                // $commission = User::where('id',a::user()->created_by)->update([
+                //     'wallet' => $reseller->wallet + $reseller_commission
+                // ]);
             }
 
             $client = new \GuzzleHttp\Client();
