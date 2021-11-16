@@ -456,10 +456,12 @@ class RechargeController extends Controller
             $SkuCode = $sku_amount['0'];
             $SendValue = $sku_amount['1'];
             $amount = $sku_amount['1'];
-            $refcost = $sku_amount['1'] + ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission + ($sku_amount['1']/100)*a::user()->international_recharge;
+            $admin_commission = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
+            $refcost = $sku_amount['1'] + $admin_commission + ($admin_commission/100)*a::user()->reseller_profit->international_recharge_profit;
         }else{
             $SkuCode = $datas['Sku_Code'];
-            $SendValue = $datas['amount'] - (($datas['amount']/100)*a::user()->admin_international_recharge_commission) - (($datas['amount']/100)*a::user()->international_recharge);
+            $admin_commission = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
+            $SendValue = $datas['amount'] - $admin_commission  -  ($admin_commission/100)*a::user()->reseller_profit->international_recharge_profit;
             $amount = $datas['amount'];
             $refcost = $datas['amount'];
         }
@@ -500,7 +502,7 @@ class RechargeController extends Controller
            // $reseller_commission = ($sendvalue/100)*$auth_recharge;
 
             $admin_commission = ($sendvalue/100)*$auth_admin_recharge;
-            $reseller_commission = ((($sendvalue/100)*$auth_admin_recharge)/100)*a::user()->reseller_profit->international_recharge_profit;
+            $reseller_commission = ($admin_commission/100)*a::user()->reseller_profit->international_recharge_profit;
 
             // dd($admin_commission);
 
