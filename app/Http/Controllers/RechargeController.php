@@ -460,7 +460,7 @@ class RechargeController extends Controller
             $refcost = $sku_amount['1'] + $admin_commission + ($admin_commission/100)*a::user()->reseller_profit->international_recharge_profit;
         }else{
             $SkuCode = $datas['Sku_Code'];
-            $admin_commission = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
+            $admin_commission =($datas['amount']/100)*a::user()->admin_international_recharge_commission;
             $SendValue = $datas['amount'] - $admin_commission  -  ($admin_commission/100)*a::user()->reseller_profit->international_recharge_profit;
             $amount = $datas['amount'];
             $refcost = $datas['amount'];
