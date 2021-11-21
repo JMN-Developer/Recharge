@@ -2,9 +2,11 @@
   use Carbon\Carbon;
   $admin_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
     ->whereMonth('created_at', Carbon::now()->month)
+    ->where('type','International')
     ->sum('admin_com');
   $reseller_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
     ->where('reseller_id',Auth::user()->id)
+    ->where('type','International')
     ->whereMonth('created_at', Carbon::now()->month)
     ->sum('reseller_com');
 ?>
@@ -185,7 +187,7 @@
             <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p>
             @endif
           </div>
-          
+
           <div class="col-12">
 
                 <p><b class="mr-2">Due: </b><span>{{ Auth()->user()->due }}</span></p>

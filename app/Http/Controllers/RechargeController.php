@@ -814,7 +814,7 @@ class RechargeController extends Controller
                 }else{
                     $reseller_commission = 0;
                     $admin_commission = 0;
-                    $cost = $xml2->AMOUNT;
+                    $cost = ($xml2->AMOUNT)/1000;
                 }
 
                 $create = new RechargeHistory;
