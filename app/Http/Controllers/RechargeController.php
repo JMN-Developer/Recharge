@@ -674,10 +674,10 @@ class RechargeController extends Controller
         $totalDuration = $endTime->diffInMinutes($startTime);
             if($totalDuration>5)
             {
-                return true;
+                return false;
             }
             else{
-                return false;
+                return true;
             }
         }
         else
