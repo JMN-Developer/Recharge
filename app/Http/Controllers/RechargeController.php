@@ -664,8 +664,36 @@ class RechargeController extends Controller
 
     }
 
+    function check_domestic_repeat($number)
+    {
+        $recharge = RechargeHistory::where('number',$number)->first();
+        if($recharge)
+        {
+        $startTime = Carbon::parse($recharge->created_at);
+         $endTime = Carbon::parse(Carbon::now()->toDateTimeString());
+        $totalDuration = $endTime->diffInMinutes($startTime);
+            if($totalDuration>5)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+
     public function domestic_recharge(Request $request)
     {
+        if($this->check_domestic_repeat($request->number))
+        {
+            return  Redirect()->back()->with('error','Recharge Incomplete, You have to wait 5 minutes to recharge in same number!');
+        }
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
        // file_put_contents('test.txt',$request->amount);
@@ -691,6 +719,7 @@ class RechargeController extends Controller
 
         // $req = $client->request(["Content-Type" => "application/xml"])
         //                ->post('https://precision.epayworldwide.com/up-interface', [$xml,'verify' => false]);
+
 
         $client = new \GuzzleHttp\Client();
         $recharge_request = $client->post('https://precision.epayworldwide.com/up-interface',[

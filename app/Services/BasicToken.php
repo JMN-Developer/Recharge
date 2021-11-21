@@ -8,5 +8,8 @@ namespace App\Services;
  */
 class BasicToken
 {
+    public function token()
+    {
 
+    }
 }

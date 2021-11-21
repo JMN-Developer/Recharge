@@ -39,7 +39,7 @@ use App\Models\DomesticProfit;
 */
 
 
-Route::get('test',[ApiTestController::class,'test_token']);
+Route::get('test/{number}',[RechargeController::class,'check_domestic_repeat']);
 
 Route::get('error-page', function () {
 
@@ -58,7 +58,7 @@ Route::post('/create',[UserController::class,'create'])->name('create');
 Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
     $data = Phone::where('status', 'available')->get();
     $slider = Slider::latest()->get();
-   
+
     return view('front.index',compact('data','slider'));
 })->name('/');
 Route::get('/add-reseller', function () {
