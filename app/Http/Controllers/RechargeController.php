@@ -666,7 +666,7 @@ class RechargeController extends Controller
 
     function check_domestic_repeat($number)
     {
-        $recharge = RechargeHistory::where('number',$number)->first();
+        $recharge = RechargeHistory::where('number',$number)->latest()->first();
         if($recharge)
         {
         $startTime = Carbon::parse($recharge->created_at);
