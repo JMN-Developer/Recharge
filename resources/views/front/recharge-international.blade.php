@@ -93,10 +93,10 @@
                                  @foreach ($prods as $item)
                                  <?php
                                     $admin_international_com = ($item['Maximum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission;
-                                    $reseller_international_com = ($admin_international_com/100)*Auth::user()->reseller_profit->international_recharge_profit
+                                   // $reseller_international_com = ($admin_international_com/100)*Auth::user()->reseller_profit->international_recharge_profit
                                  ?>
                                  <option value="{{ $item['SkuCode'] }},{{ $item['Maximum']['SendValue']}}">
-                                    {{ $item['Maximum']['SendValue'] +$admin_international_com + $reseller_international_com }} Euro
+                                    {{ $item['Maximum']['SendValue'] +$admin_international_com }} Euro
                                     <h7 style="font-size: 10px;">({{ $item['Maximum']['ReceiveValueExcludingTax'] }} {{ $item['Maximum']['ReceiveCurrencyIso'] }} will be received)</h7>
                                  </option>
                                  @endforeach
@@ -123,8 +123,8 @@
                            @endif
                            @endif
                            @endif
-                           
-                           
+
+
                            @if ($stage == 'check_number')
                            <input type="submit" class="btn btn-info mt-3" value="Get Products" style="width: 100%;">
                            @elseif($stage == 'get_product')
@@ -146,7 +146,7 @@
                                        <th>Receiver</th>
                                        <th>Operator</th>
                                        <th>Cost</th>
-                                       <th>Status</th>
+                                       <th>Profit</th>
                                        <th>Action</th>
                                     </tr>
                                  </thead>
@@ -156,7 +156,11 @@
                                        <td>{{ $item->number }}</td>
                                        <td>{{ $item->operator }}</td>
                                        <td>{{ $item->cost }}</td>
-                                       <td><i class="text-primary fas fa-check-square"></i></td>
+                                       @if(auth()->user()->role == 'admin')
+                                       <td>{{ $item->admin_com }}</td>
+                                       @else
+                                       <td>{{ $item->reseller_com }}</td>
+                                       @endif
                                        <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                                     </tr>
                                     @endforeach

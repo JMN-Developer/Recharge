@@ -39,7 +39,7 @@ use App\Models\DomesticProfit;
 */
 
 
-Route::get('test/{number}',[RechargeController::class,'check_domestic_repeat']);
+Route::get('test',[RechargeController::class,'data_test']);
 
 Route::get('error-page', function () {
 

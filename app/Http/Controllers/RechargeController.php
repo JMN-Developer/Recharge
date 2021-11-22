@@ -16,6 +16,7 @@ use App\Models\RechargeHistory;
 use App\Models\Pin;
 use App\Models\DomesticProfit;
 use Carbon\Carbon;
+use App\Services\GenerateTransactionId;
 
 // edit by shuvo
 use Kreait\Firebase\Auth;
@@ -39,6 +40,17 @@ class RechargeController extends Controller
      *
      * @return void
      */
+
+    public function data_test()
+    {
+        $transaction =  new GenerateTransactionId(11,10);
+        return $transaction->transaction_id();
+        // $date = date("dmYHis");
+        // $time = date('His');
+        // echo $date;
+
+    }
+
     public function __construct()
     {
         $this->factory = (new Factory)->withServiceAccount(__DIR__.'/FirebaseKey.json');
@@ -442,7 +454,10 @@ class RechargeController extends Controller
         $number = str_replace($change,'',$request->number);
 
         //  dd($number);
-        $txid = mt_rand(1000000000, 9999999999);
+        $transaction =  new GenerateTransactionId(a::user()->id,10);
+        $txid = $transaction->transaction_id();
+
+        //$txid = mt_rand(1000000000, 9999999999);
 
         $datas = $request->all();
         // dd($datas);
@@ -456,12 +471,15 @@ class RechargeController extends Controller
             $SkuCode = $sku_amount['0'];
             $SendValue = $sku_amount['1'];
             $amount = $sku_amount['1'];
-            $admin_commission = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
-            $refcost = $sku_amount['1'] + $admin_commission + ($admin_commission/100)*a::user()->reseller_profit->international_recharge_profit;
+            $admin_commission_main = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
+            $admin_commission = floor($admin_commission_main/2);
+            $reseller_commission = $admin_commission_main-$admin_commission;
+            $refcost = $sku_amount['1'] + $admin_commission_main;
         }else{
             $SkuCode = $datas['Sku_Code'];
-            $admin_commission =($datas['amount']/100)*a::user()->admin_international_recharge_commission;
-            $SendValue = $datas['amount'] - $admin_commission  -  ($admin_commission/100)*a::user()->reseller_profit->international_recharge_profit;
+            $admin_commission_main =($datas['amount']/100)*a::user()->admin_international_recharge_commission;
+            $admin_commission = floor($admin_commission_main/2);
+            $SendValue = $datas['amount'] - $admin_commission_main;
             $amount = $datas['amount'];
             $refcost = $datas['amount'];
         }
@@ -501,14 +519,15 @@ class RechargeController extends Controller
 
            // $reseller_commission = ($sendvalue/100)*$auth_recharge;
 
-            $admin_commission = ($sendvalue/100)*$auth_admin_recharge;
-            $reseller_commission = ($admin_commission/100)*a::user()->reseller_profit->international_recharge_profit;
+            $admin_commission_main = ($sendvalue/100)*$auth_admin_recharge;
+            $admin_commission = floor($admin_commission_main/2);
+            $reseller_commission = $admin_commission_main-$admin_commission;
 
             // dd($admin_commission);
 
-            $cost = $sendvalue + $reseller_commission + $admin_commission + $request->service;
+            $cost = $sendvalue + $admin_commission_main + $request->service;
 
-            $real_cost = $sendvalue+$admin_commission;
+            $real_cost = $sendvalue+$admin_commission_main;
 
 
             if(a::user()->role != 'admin'){
@@ -741,7 +760,9 @@ class RechargeController extends Controller
 
         if($xml->RESULT == 0)
         {
-            $txid2 = mt_rand(1000000000, 9999999999);
+            //$txid2 = mt_rand(1000000000, 9999999999);
+            $transaction =  new GenerateTransactionId(a::user()->id,11);
+            $txid2 = $transaction->transaction_id();
             $xml2 = '<?xml version="1.0" encoding="UTF-8"?>
                 <REQUEST MODE="CAPTURE" STORERECEIPT="1" TYPE="SALE">
                     <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
