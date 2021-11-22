@@ -565,7 +565,7 @@ class RechargeController extends Controller
             $create = new RechargeHistory;
             $create->reseller_id = a::user()->id;
             $create->number = $request->number;
-            $create->amount = $received;
+            $create->amount = $amount;
             $create->reseller_com = $reseller_commission;
             $create->admin_com = $admin_commission;
             $create->txid = $txid;
