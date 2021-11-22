@@ -515,13 +515,13 @@ class RechargeController extends Controller
          if($count == 0){
             $auth_recharge = a::user()->international_recharge;
 
-            $auth_admin_recharge = a::user()->admin_international_recharge_commission;
+            //$auth_admin_recharge = a::user()->admin_international_recharge_commission;
 
            // $reseller_commission = ($sendvalue/100)*$auth_recharge;
 
-            $admin_commission_main = ($sendvalue/100)*$auth_admin_recharge;
-            $admin_commission = floor($admin_commission_main/2);
-            $reseller_commission = $admin_commission_main-$admin_commission;
+            //$admin_commission_main = ($sendvalue/100)*$auth_admin_recharge;
+           // $admin_commission = floor($admin_commission_main/2);
+            //$reseller_commission = $admin_commission_main-$admin_commission;
 
             // dd($admin_commission);
 
