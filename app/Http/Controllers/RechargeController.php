@@ -472,13 +472,29 @@ class RechargeController extends Controller
             $SendValue = $sku_amount['1'];
             $amount = $sku_amount['1'];
             $admin_commission_main = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
-            $admin_commission = floor($admin_commission_main/2);
+            if($admin_commission_main>0)
+            {
+            $admin_commission = $admin_commission_main/2;
             $reseller_commission = $admin_commission_main-$admin_commission;
+            }
+            else
+            {
+                $admin_commission = $admin_commission_main;
+                $reseller_commission = 0;
+            }
             $refcost = $sku_amount['1'] + $admin_commission_main;
         }else{
             $SkuCode = $datas['Sku_Code'];
             $admin_commission_main =($datas['amount']/100)*a::user()->admin_international_recharge_commission;
-            $admin_commission = floor($admin_commission_main/2);
+            if($admin_commission_main>0){
+            $admin_commission = $admin_commission_main/2;
+            $reseller_commission = $admin_commission_main-$admin_commission;
+            }
+            else
+            {
+                $admin_commission = $admin_commission_main;
+                $reseller_commission = 0;
+            }
             $SendValue = $datas['amount'] - $admin_commission_main;
             $amount = $datas['amount'];
             $refcost = $datas['amount'];
@@ -575,13 +591,13 @@ class RechargeController extends Controller
             $create->cost = $refcost;
             $create->service = $request->service;
             $create->save();
-
+            return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
             }else{
                 $error = $prod['ErrorCodes']['0']['Code'];
                 return redirect('/recharge/recharge-int')->with('error',$error);
             }
 
-        return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
+
         }else{
             return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
         }
