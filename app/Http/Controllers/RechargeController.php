@@ -707,7 +707,7 @@ class RechargeController extends Controller
         $startTime = Carbon::parse($recharge->created_at);
          $endTime = Carbon::parse(Carbon::now()->toDateTimeString());
         $totalDuration = $endTime->diffInMinutes($startTime);
-            if($totalDuration>5)
+            if($totalDuration>1)
             {
                 return false;
             }
