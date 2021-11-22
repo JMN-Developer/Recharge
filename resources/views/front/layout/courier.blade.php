@@ -184,7 +184,7 @@
           <div class="col-12">
             @if (Auth::user()->role != 'admin')
             <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span></p>
-            <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p>
+            {{-- <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p> --}}
             @endif
           </div>
 
@@ -202,9 +202,9 @@
               $ding = DB::table('balances')->where('type','ding')->latest()->first();
               $domestic = DB::table('balances')->where('type','domestic')->latest()->first();
             @endphp
-             <div class="col-12">
+             {{-- <div class="col-12">
               <b class="mr-2">Profit:</b><span>{{ $admin_profit }}&euro;</span>
-            </div>
+            </div> --}}
             <div class="col-12">
               <b class="mr-2">Ding:</b><span>{{ $ding->balance }}&euro;</span>
             </div>

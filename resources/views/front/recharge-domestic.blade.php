@@ -98,7 +98,7 @@
                             <th>Receiver</th>
                             <th>Amount</th>
                             <th>Cost</th>
-                            <th>Status</th>
+                            <th>Profit</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -108,7 +108,13 @@
                             <td>{{ $item->number }}</td>
                             <td>{{ $item->amount }}</td>
                             <td>{{ $item->cost }}</td>
-                            <td><i class="text-primary fas fa-check-square"></i></td>
+                            <td>
+                                @if(auth()->user()->role == 'admin')
+                                <td>{{ $item->admin_com }}</td>
+                                @else
+                                <td>{{ $item->reseller_com }}</td>
+                                @endif
+                            </td>
                             <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                           </tr>
                           @endforeach
