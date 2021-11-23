@@ -492,7 +492,7 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-
+  <div id="cover-spin"></div>
   @yield('content')
 
     <!-- Main Footer -->

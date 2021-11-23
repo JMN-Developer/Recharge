@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title>Recharge Italy</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -12,19 +13,25 @@
   <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
+  <link rel="stylesheet" href="{{asset('css/loader/index.css')}}">
+  <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
 
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
-<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
+<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
+
+
+</head>
 
 @endsection
 
 
 @section('content')
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-
     <!-- Main content -->
     <section class="content">
+
       <div class="container-fluid recharge-page">
         <div class="recharge-box">
           <div class="card card-outline card-primary">
@@ -35,7 +42,7 @@
               <h3 class="text-center mb-5">Indice Brand Richriche</h3>
               <div class="row">
                 <div class="col-md-6">
-                  <form action="{{ route('domestic_recharge') }}" method="post">
+                  <form id="domestic_recharge">
                     @csrf
                     <div class="form-group">
                       <label>Brand</label>
@@ -146,6 +153,7 @@
 @section('scripts')
 <!-- jQuery -->
 <script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
 <!-- Bootstrap -->
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <!-- Theme JS -->
@@ -187,6 +195,75 @@ $.ajax({
 });
 </script> --}}
 <script type="text/javascript">
+    $(function(){
+
+    });
+    //Form Submit
+    $( "#domestic_recharge" ).submit(function( event ) {
+        event.preventDefault();
+        var formdata = new FormData();
+        formdata.append('amount',$('#amounts').val());
+        formdata.append('number',$('#inputMobileNumber').val());
+        formdata.append('operator',$('#op').val());
+      $.ajax({
+        processData: false,
+        contentType: false,
+        url: "domestic_recharge",
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formdata,
+        beforeSend: function () {
+            $('#cover-spin').show(0)
+            },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            $('#cover-spin').hide(0)
+            },
+        success:function(response){
+            if(response.status==true)
+            {
+                iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 5000,
+                    title: 'Success',
+                    message: response.message,
+                });
+                console.log(response.message);
+            }
+            else
+            {
+                iziToast.error({
+                    backgroundColor:"#D12C09",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 5000,
+                    title: 'Error',
+                    message: response.message,
+                });
+                console.log(response.message);
+            }
+           //console.log(response.status);
+           //alert('hello')
+
+        },
+       });
+
+    });
+
+
 
     //test for iterating over child elements
     var dropdownArray = [];

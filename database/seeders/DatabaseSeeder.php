@@ -17,7 +17,17 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
        // \App\Models\RechargeHistory::factory(10000)->create();
-      
+       \App\Models\SecretStore::create([
+        'type'=>'international',
+        'company_name'=>'Dingconnect',
+        'content'=>Crypt::encryptString('G4ymoFlN97B6PhZgK1yzuY'),
+       ]);
+
+       \App\Models\SecretStore::create([
+        'type'=>'domestic',
+        'company_name'=>'epay',
+        'content'=>Crypt::encryptString('db2ec37cc93a3525'),
+       ]);
 
     }
 }

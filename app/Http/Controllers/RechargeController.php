@@ -17,6 +17,7 @@ use App\Models\Pin;
 use App\Models\DomesticProfit;
 use Carbon\Carbon;
 use App\Services\GenerateTransactionId;
+use App\Services\SecretProvider;
 
 // edit by shuvo
 use Kreait\Firebase\Auth;
@@ -33,7 +34,7 @@ use DB;
 class RechargeController extends Controller
 {
     // properties
-    protected $factory;
+    protected $factory,$dingconnect,$epay;
 
     /**
      * Create a new controller instance.
@@ -43,8 +44,7 @@ class RechargeController extends Controller
 
     public function data_test()
     {
-        $transaction =  new GenerateTransactionId(11,10);
-        return $transaction->transaction_id();
+        return SecretProvider::get_secret('Dingconnect');
         // $date = date("dmYHis");
         // $time = date('His');
         // echo $date;
@@ -54,6 +54,8 @@ class RechargeController extends Controller
     public function __construct()
     {
         $this->factory = (new Factory)->withServiceAccount(__DIR__.'/FirebaseKey.json');
+        $this->dingconnect = SecretProvider::get_secret('Dingconnect');
+        $this->epay = SecretProvider::get_secret('epay');
     }
 
 
@@ -503,7 +505,7 @@ class RechargeController extends Controller
             $client = new \GuzzleHttp\Client(['http_errors' => false]);
             $recharge_request = $client->post('https://api.dingconnect.com/api/V1/SendTransfer',[
             'headers' => [
-            'api_key'     => 'G4ymoFlN97B6PhZgK1yzuY',
+            'api_key'     => $this->dingconnect,
             'Content-Type' => 'application/json'
             ],
             'verify' => false,
@@ -560,7 +562,7 @@ class RechargeController extends Controller
 
             $client = new \GuzzleHttp\Client();
             $product_request = $client->get('https://api.dingconnect.com/api/V1/GetBalance',['headers' => [
-                'api_key'     => 'G4ymoFlN97B6PhZgK1yzuY'
+                'api_key'     => $this->dingconnect
                 ],'verify' => false]);
             $product_responses = $product_request->getBody();
 
@@ -725,10 +727,7 @@ class RechargeController extends Controller
 
     public function domestic_recharge(Request $request)
     {
-        if($this->check_domestic_repeat($request->number))
-        {
-            return  Redirect()->back()->with('error','Recharge Incomplete, You have to wait 5 minutes to recharge in same number!');
-        }
+
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
        // file_put_contents('test.txt',$request->amount);
@@ -741,7 +740,7 @@ class RechargeController extends Controller
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
         <REQUEST MODE="RESERVE" STORERECEIPT="1" TYPE="SALE">
         <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
-        <PASSWORD>db2ec37cc93a3525</PASSWORD>
+        <PASSWORD>'.$this->epay.'</PASSWORD>
         <RECEIPT><LANGUAGE>ITA</LANGUAGE><CHARSPERLINE>32</CHARSPERLINE><TYPE>FULLTEXT</TYPE></RECEIPT>
         <CURRENCY>978</CURRENCY>
         <AMOUNT>'.$sku_amount['1'].'000</AMOUNT>
@@ -782,7 +781,7 @@ class RechargeController extends Controller
             $xml2 = '<?xml version="1.0" encoding="UTF-8"?>
                 <REQUEST MODE="CAPTURE" STORERECEIPT="1" TYPE="SALE">
                     <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
-                    <PASSWORD>db2ec37cc93a3525</PASSWORD>
+                    <PASSWORD>'.$this->epay.'</PASSWORD>
                     <RECEIPT>
                         <LANGUAGE>ITA</LANGUAGE>
                         <CHARSPERLINE>32</CHARSPERLINE>
@@ -869,18 +868,24 @@ class RechargeController extends Controller
                 $create->status = 'completed';
                 $create->cost = $cost;
                 $create->save();
-                return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
+                return ['status'=>true,'message'=>'Your Recharge Has Been Sucessfull!'];
+                //return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
 
             }else {
-                return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
+                return ['status'=>false,'message'=>"Recharge Incomplete, Please try again!"];
+               // echo "Recharge Incomplete, Please try again!";
+                //return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
             }
 
         }else{
-            return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
+            return ['status'=>false,'message'=>"Recharge Incomplete, Please try again!"];
+            //echo "Recharge Incomplete, Please try again!";
+           // return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
         }
 
         }else{
-            return  Redirect()->back()->with('error','Insufficient Balance!');
+            return ['status'=>false,'message'=>"Insufficient Balance!"];
+            //return  Redirect()->back()->with('error','Insufficient Balance!');
         }
 
     }
