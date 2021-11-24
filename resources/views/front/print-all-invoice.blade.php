@@ -83,8 +83,8 @@
                   <table class="table table-sm table-bordered">
                     <thead class="table-danger">
                       <tr>
-                        <th>Totale</th>
-                        <th>Agent</th>
+                        <th>Total Cost</th>
+                        <th>Total Profit</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -122,10 +122,9 @@
                       <tr>
                         <th style="background: #faaeae;">Requestld</th>
                         <th style="background: #faaeae;">Numero</th>
-                        <th style="background: #faaeae;">Importo</th>
                         <th style="background: #faaeae;">Data</th>
                         <th style="background: #faaeae;">Genere</th>
-
+                        <th style="background: #faaeae;">Importo</th>
                         <th style="background: #faaeae;">Profit</th>
 
                       </tr>
@@ -133,6 +132,20 @@
                     <tbody  id='change'>
 
                     </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">Total</th>
+                            <th scope="col">0</th>
+                            <th scope="col">0</th>
+
+                          </tr>
+
+                    </tfoot>
+
                   </table>
                 </div>
               </div>
@@ -310,16 +323,29 @@ function fetch_table(start_date,end_date)
 
             {data:'txid',name:'txid'},
             {data:'number',name:'number'},
-            {data:'cost',name:'cost'},
             {data:'created_at',name:'created_at'},
             {data:'type',name:'type'},
+            {data:'cost',name:'cost'},
             {data:'profit',name:'profit'},
 
 
   ],
 
+  drawCallback: function () {
+            var api = this.api();
+            datatable_sum(api, false);
+        }
 
-});
+
+    });
+    function datatable_sum(dt_selector, is_calling_first) {
+        //col start from 0
+        $( dt_selector.column(4).footer() ).html(dt_selector.column( 4, {page:'current'} ).data().sum().toFixed(2));
+        $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'current'} ).data().sum().toFixed(2));
+
+
+    }
+
 }
 </script>
 @endsection
