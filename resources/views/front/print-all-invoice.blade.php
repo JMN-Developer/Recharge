@@ -304,7 +304,6 @@ function fetch_table(start_date,end_date)
         serverSide: true,
         order:false,
 
-
         ajax: {
 
             "url":'get_all_invoice',
@@ -323,7 +322,7 @@ function fetch_table(start_date,end_date)
 
             {data:'txid',name:'txid'},
             {data:'number',name:'number'},
-            {data:'created_at',name:'created_at'},
+            {data:'date',name:'date'},
             {data:'type',name:'type'},
             {data:'cost',name:'cost'},
             {data:'profit',name:'profit'},

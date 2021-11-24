@@ -935,6 +935,10 @@ class RechargeController extends Controller
                 }
 
             })
+            ->addColumn('date', function($data){
+               return Carbon::parse($data->created_at)->format('d-m-Y H:i:s');
+
+            })
             ->make(true);
         }
     }
