@@ -236,6 +236,9 @@ $.ajax({
                     timeout: 5000,
                     title: 'Success',
                     message: response.message,
+                    onClosed: function(instance, toast, closedBy){
+                        location.reload();
+                      }
                 });
                 console.log(response.message);
             }
