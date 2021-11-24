@@ -898,18 +898,33 @@ class RechargeController extends Controller
     public function get_all_invoice(Request $request)
     {
 
+
         $start_date = Carbon::parse($request->start_date)->toDateTimeString();
         $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
 
         $type = $request->type;
+        $reseller_id = $request->retailer_id;
         if ($request->ajax()) {
             if(a::user()->role == 'admin'){
+                if($reseller_id)
+                {
+                    //file_put_contents('test.txt',$request->retailer_id);
                 if($type=='all')
-                $data = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                $data = RechargeHistory::where('reseller_id',$reseller_id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
                 elseif($type=='International')
-                $data = RechargeHistory::where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                $data = RechargeHistory::where('reseller_id',$reseller_id)->where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
                 else
-                $data = RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                $data = RechargeHistory::where('reseller_id',$reseller_id)->where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                }
+                else
+                {
+                    if($type=='all')
+                    $data = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                    elseif($type=='International')
+                    $data = RechargeHistory::where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                    else
+                    $data = RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                }
 
             }else{
                 if($type=='all')
@@ -954,7 +969,11 @@ class RechargeController extends Controller
             $profit = $data->sum('reseller_com');
         }
 
-        return view('front.print-all-invoice',compact('data','cost','profit'));
+        $resellers = user::where('role','!=','admin')->get();
+
+
+
+        return view('front.print-all-invoice',compact('data','cost','profit','resellers'));
     }
 
     public function filebydate($start,$end){

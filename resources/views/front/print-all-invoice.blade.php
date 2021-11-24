@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
   <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel='stylesheet'>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
 
@@ -44,18 +45,18 @@
               </div>
 
               <div class="row" style="margin-left:10px;margin-top:20px">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="date_picker_pair mb-3">
                         <label for="inputSearchDate" class="form-label">Select Date</label>
                         <input type="text" class="form-control" name="daterange" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
                         <input type="hidden" class='start_date'>
                         <input type="hidden" class='end_date'>
-                        <input type="hidden" id="user_role" value="{{ auth()->user()->role }}">
+
                         <!-- <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" /> -->
                       </div>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="form-row align-items-center offer_select_option">
                         <label for="inlineFormCustomSelect" style="margin-bottom:14px">Tipo Ricarica</label>
 
@@ -68,6 +69,22 @@
                         </select>
                       </div>
                   </div>
+                  @if(auth()->user()->role == 'admin')
+                  <div class="col-md-3" style="margin-left:15px">
+                    <div class="form-row align-items-center offer_select_option">
+                        <label for="inlineFormCustomSelect" style="margin-bottom:14px">Choose Retailer</label>
+
+                        <select  data-placeholder="Select an Option"  class="custom-select reseller" id="reseller" name="type">
+                            <option></option>
+                         @foreach ( $resellers as $data )
+                             <option value="{{ $data->id }}">{{ $data->first_name." ".$data->last_name." (".$data->id.")" }}</option>
+                         @endforeach
+                          {{-- <option value="offer_table_two">Gift Card</option>
+                          <option value="offer_table_two">Calling Card</option> --}}
+                        </select>
+                      </div>
+                  </div>
+                  @endif
                   <div class="col-md-2">
                     <input type="button"  onclick="filter()" value="Search" class="btn btn-success" style="margin-top:30px">
                   </div>
@@ -166,7 +183,6 @@
     'use strict';
 
 
-
     var TableFilter = (function(Arr) {
 
         var _input;
@@ -210,6 +226,7 @@
 @section('scripts')
 <!-- jQuery -->
 <script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
 <!-- Bootstrap -->
@@ -231,7 +248,23 @@
 
 $(function() {
 
+    $('.reseller').select2({
 
+    placeholder: function(){
+        $(this).data('placeholder');
+    }
+
+    });
+
+    $(".reseller").change(function(){
+        fetch_table($(".start_date").val(),$(".end_date").val())
+
+    });
+
+    $("#ExampleSelect").change(function(){
+        fetch_table($(".start_date").val(),$(".end_date").val())
+
+    });
 
 
     $.ajaxSetup({
@@ -264,6 +297,9 @@ $(function() {
 
      $(".start_date").val(start.format('YYYY-MM-DD'));
      $(".end_date").val(end.format('YYYY-MM-DD'));
+
+     fetch_table($(".start_date").val(),$(".end_date").val());
+
 
    // $('.invoice_table').DataTable().ajax.reload(null,false);
     // $("#start_date").val(start.format('YYYY-MM-DD'));
@@ -311,7 +347,9 @@ function fetch_table(start_date,end_date)
             "data":{
                 'start_date':$(".start_date").val(),
                 'end_date':$(".end_date").val(),
-                'type':$('#ExampleSelect option:selected').val()
+                'type':$('#ExampleSelect option:selected').val(),
+                'retailer_id':$('#reseller option:selected').val()
+
             }
 
 
