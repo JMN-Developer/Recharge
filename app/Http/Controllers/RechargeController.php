@@ -27,6 +27,7 @@ use Kreait\Firebase\Exception\Messaging\InvalidMessage;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Kreait\Firebase\Messaging\Notification;
 use Illuminate\Support\Facades\Log;
+use DataTables;
 use DB;
 
 
@@ -228,7 +229,7 @@ class RechargeController extends Controller
 
     $client = new \GuzzleHttp\Client();
     $operator_request = $client->get('https://api.dingconnect.com/api/V1/GetProviders?accountNumber='.$number,['headers' => [
-        'api_key'     => 'G4ymoFlN97B6PhZgK1yzuY'
+        'api_key'     => $this->dingconnect
         ],'verify' => false]);
     $operator_response = $operator_request->getBody();
     $data = json_decode($operator_response,true);
@@ -253,7 +254,8 @@ class RechargeController extends Controller
      return $pass = $this->get_product($request,$operators['0']['Name'],$operators['0']['ProviderCode'],$number);
     }else{
         $error = 'Invalid Phone Number';
-        return redirect('/recharge/recharge-int')->with('error',$error);
+       // return ['status'=>false,'message'=>$error]
+    return redirect('/recharge/recharge-int')->with('error',$error);
     }
 
 
@@ -420,7 +422,7 @@ class RechargeController extends Controller
         //  dd($number);
         $client = new \GuzzleHttp\Client(['defaults' => [ 'exceptions' => false ]]);
         $product_request = $client->get('https://api.dingconnect.com/api/V1/GetProducts?&providerCodes='.$request->operator,['headers' => [
-            'api_key'     => 'G4ymoFlN97B6PhZgK1yzuY'
+            'api_key'     => $this->dingconnect
             ],'verify' => false]);
         $product_responses = $product_request->getBody();
 
@@ -593,15 +595,18 @@ class RechargeController extends Controller
             $create->cost = $refcost;
             $create->service = $request->service;
             $create->save();
-            return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
+            return ['status'=>true,'message'=>'Recharge Successful!'];
+            //return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
             }else{
                 $error = $prod['ErrorCodes']['0']['Code'];
-                return redirect('/recharge/recharge-int')->with('error',$error);
+                return ['status'=>false,'message'=>$error];
+                //return redirect('/recharge/recharge-int')->with('error',$error);
             }
 
 
         }else{
-            return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
+            return ['status'=>false,'message'=>'Insufficient Balance!'];
+           // return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
         }
 
     }
@@ -888,6 +893,49 @@ class RechargeController extends Controller
             //return  Redirect()->back()->with('error','Insufficient Balance!');
         }
 
+    }
+
+    public function get_all_invoice(Request $request)
+    {
+
+        $start_date = Carbon::parse($request->start_date)->toDateTimeString();
+        $end_date =  Carbon::parse($request->end_date)->toDateTimeString();
+        $type = $request->type;
+        if ($request->ajax()) {
+            if(a::user()->role == 'admin'){
+                if($type=='all')
+                $data = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                elseif($type=='International')
+                $data = RechargeHistory::where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                else
+                $data = RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+
+            }else{
+                if($type=='all')
+                $data = RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                elseif($type=='International')
+                $data = RechargeHistory::where('type','International')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+                else
+                $data = RechargeHistory::where('type','Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
+
+
+            }
+
+            return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('profit', function($data){
+                if(a::user()->role=='admin')
+                {
+                    return $data->admin_com;
+                }
+                else
+                {
+                    return $data->reseller_com;
+                }
+
+            })
+            ->make(true);
+        }
     }
     public function invoices()
     {

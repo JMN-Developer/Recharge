@@ -221,6 +221,7 @@ $.ajax({
             $('#cover-spin').hide(0)
             },
         success:function(response){
+            $('#cover-spin').hide(0)
             if(response.status==true)
             {
                 iziToast.success({
@@ -249,10 +250,14 @@ $.ajax({
                     messageSize:'18',
                     color:'white',
                     position:'topCenter',
-                    timeout: 5000,
+                    timeout: 2000,
                     title: 'Error',
                     message: response.message,
+                    onClosed: function () {
+                      location.reload()
+                    }
                 });
+
                 console.log(response.message);
             }
            //console.log(response.status);

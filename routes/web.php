@@ -258,6 +258,7 @@ Route::post('/domestic_product', function (Request $request) {
 Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 {
     Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
+    Route::post('get_all_invoice',[RechargeController::class,'get_all_invoice'])->name('get_all_invoice');
     Route::get('all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
     Route::get('recharge-italy', [RechargeController::class,'RechargeDom'])->name('recharge-italy');
     Route::get('pin', [PinController::class,'index'])->name('pin');

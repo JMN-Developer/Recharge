@@ -15,6 +15,7 @@
    <link rel="stylesheet" href="{{asset('plugin/intl-tel-input/css/intlTelInput.min.css')}}">
    <meta name="csrf-token" content="{{ csrf_token() }}" />
    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+   <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
 @endsection
 @section('content')
@@ -35,7 +36,7 @@
                         @if ($stage == 'check_number')
                         <form action="{{ route('check-changed-product') }}" method="POST">
                            @elseif($stage == 'get_product')
-                        <form action="{{ route('international_recharge') }}" method="POST">
+                        <form id="international_recharge" action="{{ route('international_recharge') }}" method="POST">
                            @else
                         <form action="{{ route('check-operator') }}" method="POST">
                            @endif
@@ -52,7 +53,7 @@
                            @if ($stage == 'check_number')
                            <div class="form-group">
                               <label for="selectOparetor">Oparetor</label>
-                              <select class="custom-select" name="operator" id="operators">
+                              <select class="custom-select operators" name="operator" id="operators">
                                  <option value="">Select Operator</option>
                                  @foreach ($operators as $item)
                                     @if ( strpos($item['Name'], 'Data') == false)
@@ -72,7 +73,7 @@
                            @else
                            <div class="form-group">
                             <label for="selectOparetor">Oparetor</label>
-                            <select class="custom-select" name="operator" id="operators" readonly>
+                            <select class="custom-select operators" name="operator" id="operators" readonly>
                                <option value="{{ $datas['operator'] }}">{{ $datas['operator'] }}</option>
                             </select>
                             <a class="btn btn-success" href="change-operator/{{ $datas['number'] ?? '' }}/{{ $rg ?? '' }}"> Change Operator</a>
@@ -89,7 +90,7 @@
                            @if ($count > 1)
                            <div class="form-group">
                               <label for="selectPackage">Select Amount</label>
-                              <select class="custom-select" name="amount" id="package">
+                              <select class="custom-select amount" name="amount" id="package">
                                  @foreach ($prods as $item)
                                  <?php
                                     $admin_international_com = ($item['Maximum']['SendValue']/100)*Auth::user()->admin_international_recharge_commission;
@@ -119,7 +120,7 @@
                               <input type="hidden" name="received_amount" id="received_amount">
                            </div>
                            <label class="form-label">Service Charge in EURO</label>
-                           <input type="number" step="any" name="service" class="form-control" placeholder="Enter Service Charge (Optional)">
+                           <input type="number" step="any" id="service" name="service" class="form-control" placeholder="Enter Service Charge (Optional)">
                            @endif
                            @endif
                            @endif
@@ -182,7 +183,73 @@
    <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
 <script>
+    $( "#international_recharge" ).submit(function( event ) {
+        event.preventDefault();
+        var formdata = new FormData();
+        formdata.append('received_amount',$('#received_amount').val());
+        formdata.append('number',$('#receiverMobile').val());
+        formdata.append('amount',$('.amount option:selected').val());
+        formdata.append('Sku_Code',$('#skucode').val());
+        formdata.append('operator',$('.operators option:selected').val());
+        formdata.append('service',$('#service').val());
+      $.ajax({
+        processData: false,
+        contentType: false,
+        url: "international_recharge",
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formdata,
+        beforeSend: function () {
+            $('#cover-spin').show(0)
+            },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            $('#cover-spin').hide(0)
+            },
+        success:function(response){
+            if(response.status==true)
+            {
+                iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 5000,
+                    title: 'Success',
+                    message: response.message,
+                });
+                console.log(response.message);
+            }
+            else
+            {
+                iziToast.error({
+                    backgroundColor:"#D12C09",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 5000,
+                    title: 'Error',
+                    message: response.message,
+                });
+                console.log(response.message);
+            }
+           //console.log(response.status);
+           //alert('hello')
+
+        },
+       });
+    });
    function cost(){
       var amount = document.getElementById('amount').value;
       var admin = document.getElementById('admin_com').value;
