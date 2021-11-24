@@ -595,18 +595,18 @@ class RechargeController extends Controller
             $create->cost = $refcost;
             $create->service = $request->service;
             $create->save();
-            return ['status'=>true,'message'=>'Recharge Successful!'];
-            //return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
+           // return ['status'=>true,'message'=>'Recharge Successful!'];
+            return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
             }else{
                 $error = $prod['ErrorCodes']['0']['Code'];
-                return ['status'=>false,'message'=>$error];
-                //return redirect('/recharge/recharge-int')->with('error',$error);
+                //return ['status'=>false,'message'=>$error];
+                return redirect('/recharge/recharge-int')->with('error',$error);
             }
 
 
         }else{
-            return ['status'=>false,'message'=>'Insufficient Balance!'];
-           // return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
+           // return ['status'=>false,'message'=>'Insufficient Balance!'];
+           return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
         }
 
     }
