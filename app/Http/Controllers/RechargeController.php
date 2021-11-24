@@ -900,7 +900,7 @@ class RechargeController extends Controller
 
         $start_date = Carbon::parse($request->start_date)->toDateTimeString();
         $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
-        file_put_contents('test.txt',$start_date." ".$end_date);
+
         $type = $request->type;
         if ($request->ajax()) {
             if(a::user()->role == 'admin'){
