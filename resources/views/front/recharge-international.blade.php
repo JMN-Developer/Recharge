@@ -36,7 +36,7 @@
                         @if ($stage == 'check_number')
                         <form action="{{ route('check-changed-product') }}" method="POST">
                            @elseif($stage == 'get_product')
-                        <form id="international_recharge" action="{{ route('international_recharge') }}" method="POST">
+                        <form id="international_recharge">
                            @else
                         <form action="{{ route('check-operator') }}" method="POST">
                            @endif
