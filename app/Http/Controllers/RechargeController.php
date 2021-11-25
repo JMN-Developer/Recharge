@@ -731,6 +731,7 @@ class RechargeController extends Controller
 
     public function load_recent_domestice_recharge()
     {
+
         if(a::user()->role == 'user'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->latest()->take(10)->get();
         }else{

@@ -201,9 +201,16 @@ $.ajax({
       let recent_domestic_recharge_url = '{{route("load_recent_domestic_recharge")}}';
 </script>
 <script>
+
+</script>
+<script type="text/javascript">
+    $(function(){
+        load_recent_recharge();
+    });
+
     function load_recent_recharge()
     {
-
+        alert('hello')
         $.ajax({
 
         url: recent_domestic_recharge_url,
@@ -225,11 +232,6 @@ $.ajax({
         });
 
     }
-</script>
-<script type="text/javascript">
-    $(function(){
-        load_recent_recharge();
-    });
     //Form Submit
     $( "#domestic_recharge" ).submit(function( event ) {
         event.preventDefault();
@@ -253,7 +255,7 @@ $.ajax({
             $('#cover-spin').hide(0)
             },
         success:function(response){
-
+            load_recent_recharge();
 
             $('#cover-spin').hide(0)
             $(".phone_number").hide();
@@ -264,7 +266,6 @@ $.ajax({
             $('.selected-brand').attr('value', '');
             $(".recharge_amount").hide();
 
-            load_recent_recharge();
 
 
 
