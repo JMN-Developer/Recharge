@@ -256,6 +256,7 @@ $.ajax({
             $('#cover-spin').hide(0)
             },
         success:function(response){
+            var toast = document.querySelector('.iziToast');
             load_recent_recharge();
 
             $('#cover-spin').hide(0)
@@ -272,6 +273,10 @@ $.ajax({
 
             if(response.status==true)
             {
+                if(toast)
+                {
+                iziToast.hide({}, toast);
+                }
                 iziToast.success({
                     backgroundColor:"Green",
                     messageColor:'white',
@@ -281,7 +286,7 @@ $.ajax({
                     messageSize:'18',
                     color:'white',
                     position:'topCenter',
-                    timeout: 20000,
+                    timeout: 30000,
                     title: 'Success',
                     message: response.message,
 
@@ -290,6 +295,10 @@ $.ajax({
             }
             else
             {
+                if(toast)
+                {
+                iziToast.hide({}, toast);
+                }
                 iziToast.error({
                     backgroundColor:"#D12C09",
                     messageColor:'white',
@@ -299,7 +308,7 @@ $.ajax({
                     messageSize:'18',
                     color:'white',
                     position:'topCenter',
-                    timeout: 3000,
+                    timeout: 30000,
                     title: 'Error',
                     message: response.message,
 
