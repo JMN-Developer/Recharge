@@ -109,8 +109,10 @@
                             <th>Action</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          @foreach ($data as $item)
+                        <tbody id="domestic_recent_recharge">
+
+
+                          {{--  @foreach ($data as $item)
                           <tr class="bg-ocean">
                             <td>{{ $item->number }}</td>
                             <td>{{ $item->amount }}</td>
@@ -124,7 +126,7 @@
 
                             <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                           </tr>
-                          @endforeach
+                          @endforeach  --}}
                         </tbody>
                       </table>
                     </div>
@@ -194,9 +196,37 @@ $.ajax({
 });
 });
 </script> --}}
+<script>
+      let recent_domestic_recharge_url = '{{route("load_recent_domestic_recharge")}}';
+</script>
+<script>
+    function load_recent_recharge()
+    {
+
+        $.ajax({
+        url: recent_domestic_recharge_url,
+        type:"get",
+
+        success:function(response){
+            var item = response;
+            for (var i = 0; i < item.length; i++){
+            added_row = '<tr class="bg-ocean">'
+        + '<td>' + item[i].number +  '</td>'
+        + '<td>' + item[i].amount +  '</td>'
+        + '<td>' + item[i].cost +  '</td>'
+        + '<td>' + item[i].profit +  '</td>'
+        + '<td><a class="btn btn-success" href="recharge_invoice/'+item[i].id+'"> Invoice</a></td>'
+        + '</tr>'
+        $('#domestic_recent_recharge').append(added_row)
+        };
+        }
+        });
+
+    }
+</script>
 <script type="text/javascript">
     $(function(){
-
+        load_recent_recharge();
     });
     //Form Submit
     $( "#domestic_recharge" ).submit(function( event ) {
@@ -221,7 +251,21 @@ $.ajax({
             $('#cover-spin').hide(0)
             },
         success:function(response){
+
+
             $('#cover-spin').hide(0)
+            $(".phone_number").hide();
+            //$(".brandUlLiContainer").toggle();
+            $('#amounts').empty();
+            $('.selected-brand').empty();
+            $('.selected-brand').html('Select Brand');
+            $('.selected-brand').attr('value', '');
+            $(".recharge_amount").hide();
+
+            load_recent_recharge();
+
+
+
             if(response.status==true)
             {
                 iziToast.success({
@@ -233,12 +277,10 @@ $.ajax({
                     messageSize:'18',
                     color:'white',
                     position:'topCenter',
-                    timeout: 5000,
+                    timeout: 20000,
                     title: 'Success',
                     message: response.message,
-                    onClosed: function(instance, toast, closedBy){
-                        location.reload();
-                      }
+
                 });
                 console.log(response.message);
             }
@@ -253,12 +295,10 @@ $.ajax({
                     messageSize:'18',
                     color:'white',
                     position:'topCenter',
-                    timeout: 2000,
+                    timeout: 3000,
                     title: 'Error',
                     message: response.message,
-                    onClosed: function () {
-                      location.reload()
-                    }
+
                 });
 
                 console.log(response.message);

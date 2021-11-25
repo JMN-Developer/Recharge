@@ -729,6 +729,31 @@ class RechargeController extends Controller
 
     }
 
+    public function load_recent_domestice_recharge()
+    {
+        if(a::user()->role == 'user'){
+            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->latest()->take(10)->get();
+        }else{
+            $data = RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
+            ->select('recharge_histories.*','users.nationality')
+            ->latest()
+            ->take(10)
+            ->get();
+        }
+        foreach($data as $item)
+        {
+            if(a::user()->role == 'user')
+            {
+                $item->profit = $item->reseller_com;
+            }
+            else
+            {
+                $item->profit = $item->admin_com;
+            }
+        }
+        return $data;
+    }
+
 
     public function domestic_recharge(Request $request)
     {
@@ -873,16 +898,36 @@ class RechargeController extends Controller
                 $create->status = 'completed';
                 $create->cost = $cost;
                 $create->save();
+
                 return ['status'=>true,'message'=>'Your Recharge Has Been Sucessfull!'];
                 //return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
 
             }else {
+
+                if(a::user()->role == 'user'){
+                    $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->latest()->take(10)->get();
+                }else{
+                    $data = RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
+                    ->select('recharge_histories.*','users.nationality')
+                    ->latest()
+                    ->take(10)
+                    ->get();
+                }
                 return ['status'=>false,'message'=>"Recharge Incomplete, Please try again!"];
                // echo "Recharge Incomplete, Please try again!";
                 //return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
             }
 
         }else{
+            if(a::user()->role == 'user'){
+                $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->latest()->take(10)->get();
+            }else{
+                $data = RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
+                ->select('recharge_histories.*','users.nationality')
+                ->latest()
+                ->take(10)
+                ->get();
+            }
             return ['status'=>false,'message'=>"Recharge Incomplete, Please try again!"];
             //echo "Recharge Incomplete, Please try again!";
            // return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');

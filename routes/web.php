@@ -278,6 +278,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::post('international_recharge',[RechargeController::class,'recharge'])->name('international_recharge');
     Route::post('estimated',[RechargeController::class,'estimate'])->name('estimated');
     Route::post('domestic_recharge',[RechargeController::class,'domestic_recharge'])->name('domestic_recharge');
+    Route::get('load_recent_domestic_recharge',[RechargeController::class,'load_recent_domestice_recharge'])->name('load_recent_domestic_recharge');
     Route::get('recharge_invoice/{id}',[RechargeController::class,'invoice']);
     Route::post('domestic_pin',[PinController::class,'store'])->name('domestic-pin');
     Route::get('pin_invoice/{id}',[PinController::class,'invoice']);
