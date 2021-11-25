@@ -210,7 +210,8 @@ $.ajax({
 
     function load_recent_recharge()
     {
-        alert('hello')
+
+        $('#domestic_recent_recharge').empty();
         $.ajax({
 
         url: recent_domestic_recharge_url,
