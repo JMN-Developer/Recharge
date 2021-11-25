@@ -113,7 +113,7 @@
                         <tbody id="domestic_recent_recharge">
 
 
-                          {{--  @foreach ($data as $item)
+                          @foreach ($data as $item)
                           <tr class="bg-ocean">
                             <td>{{ $item->number }}</td>
                             <td>{{ $item->amount }}</td>
@@ -127,7 +127,7 @@
 
                             <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                           </tr>
-                          @endforeach  --}}
+                          @endforeach
                         </tbody>
                       </table>
                     </div>
@@ -205,7 +205,61 @@ $.ajax({
 </script>
 <script type="text/javascript">
     $(function(){
-        load_recent_recharge();
+        //load_recent_recharge();
+        var toast = document.querySelector('.iziToast');
+        var message = sessionStorage.getItem('message');
+        sessionStorage.removeItem('message');
+
+        if(toast)
+                {
+                iziToast.hide({}, toast);
+                }
+        if ( sessionStorage.getItem('error') ) {
+            sessionStorage.removeItem('error');
+
+                iziToast.error({
+                    backgroundColor:"#D12C09",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 30000,
+                    title: 'Error',
+                    message: message,
+
+
+                });
+
+                //console.log(response.message);
+
+            }
+
+            if ( sessionStorage.getItem('success') ) {
+            sessionStorage.removeItem('success');
+
+
+            iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 30000,
+                    title: 'Success',
+                    message: message,
+
+                });
+                //console.log(response.message);
+
+            }
+
+
     });
 
     function load_recent_recharge()
@@ -256,66 +310,34 @@ $.ajax({
             $('#cover-spin').hide(0)
             },
         success:function(response){
-            var toast = document.querySelector('.iziToast');
-            load_recent_recharge();
+
+            //load_recent_recharge();
 
             $('#cover-spin').hide(0)
-            $(".phone_number").hide();
-            //$(".brandUlLiContainer").toggle();
-            $('#amounts').empty();
-            $('.selected-brand').empty();
-            $('.selected-brand').html('Select Brand');
-            $('.selected-brand').attr('value', '');
-            $(".recharge_amount").hide();
-            $("#inputMobileNumber").val("");
+            // $(".phone_number").hide();
+            // //$(".brandUlLiContainer").toggle();
+            // $('#amounts').empty();
+            // $('.selected-brand').empty();
+            // $('.selected-brand').html('Select Brand');
+            // $('.selected-brand').attr('value', '');
+            // $(".recharge_amount").hide();
+            // $("#inputMobileNumber").val("");
 
 
 
 
             if(response.status==true)
             {
-                if(toast)
-                {
-                iziToast.hide({}, toast);
-                }
-                iziToast.success({
-                    backgroundColor:"Green",
-                    messageColor:'white',
-                    iconColor:'white',
-                    titleColor:'white',
-                    titleSize:'18',
-                    messageSize:'18',
-                    color:'white',
-                    position:'topCenter',
-                    timeout: 30000,
-                    title: 'Success',
-                    message: response.message,
-
-                });
-                console.log(response.message);
+                location.reload();
+                sessionStorage.setItem('success',true);
+                sessionStorage.setItem('message',response.message);
+                //console.log(response.message);
             }
             else
             {
-                if(toast)
-                {
-                iziToast.hide({}, toast);
-                }
-                iziToast.error({
-                    backgroundColor:"#D12C09",
-                    messageColor:'white',
-                    iconColor:'white',
-                    titleColor:'white',
-                    titleSize:'18',
-                    messageSize:'18',
-                    color:'white',
-                    position:'topCenter',
-                    timeout: 30000,
-                    title: 'Error',
-                    message: response.message,
-
-                });
-
-                console.log(response.message);
+                location.reload();
+                sessionStorage.setItem('error',true);
+                sessionStorage.setItem('message',response.message);
             }
            //console.log(response.status);
            //alert('hello')
