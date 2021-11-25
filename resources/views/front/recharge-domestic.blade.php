@@ -267,6 +267,7 @@ $.ajax({
             $('.selected-brand').html('Select Brand');
             $('.selected-brand').attr('value', '');
             $(".recharge_amount").hide();
+            $("#inputMobileNumber").val("");
 
 
 
