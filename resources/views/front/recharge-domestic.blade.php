@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <title>Recharge Italy</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -204,6 +205,7 @@ $.ajax({
     {
 
         $.ajax({
+
         url: recent_domestic_recharge_url,
         type:"get",
 
