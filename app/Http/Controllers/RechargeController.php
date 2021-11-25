@@ -954,6 +954,11 @@ class RechargeController extends Controller
                return Carbon::parse($data->created_at)->format('d-m-Y H:i:s');
 
             })
+            ->addColumn('invoice', function($data){
+                $button = '<a class="btn btn-success" href="recharge_invoice/'.$data->id.'"> Invoice</a>';
+                return $button;
+             })
+             ->rawColumns(['invoice'])
             ->make(true);
         }
     }

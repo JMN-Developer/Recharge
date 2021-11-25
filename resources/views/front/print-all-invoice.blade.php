@@ -22,6 +22,14 @@
     .date_picker_pair {
     width: 90%;
 }
+
+/* .sorting_disabled{
+    display: none !important;
+} */
+table.dataTable thead .sorting_asc{
+    background-image: none !important;
+}
+
 </style>
 
 
@@ -134,15 +142,16 @@
                   </div>
                 </div>
                 <div class="recharge_input_table table-responsive p-0">
-                  <table class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table">
+                  <table class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                     <thead>
                       <tr>
-                        <th style="background: #faaeae;">Requestld</th>
-                        <th style="background: #faaeae;">Numero</th>
-                        <th style="background: #faaeae;">Data</th>
-                        <th style="background: #faaeae;">Genere</th>
-                        <th style="background: #faaeae;">Importo</th>
-                        <th style="background: #faaeae;">Profit</th>
+                        <th style="background-color: black;color:white"  >Requestld</th>
+                        <th style="background-color: black;color:white" >Numero</th>
+                        <th style="background-color: black;color:white">Data</th>
+                        <th style="background-color: black;color:white">Genere</th>
+                        <th  style="background-color: black;color:white">Importo</th>
+                        <th  style="background-color: black;color:white">Profit</th>
+                        <th  style="background-color: black;color:white">Invoice</th>
 
                       </tr>
                     </thead>
@@ -150,7 +159,7 @@
 
                     </tbody>
 
-                    <tfoot>
+                    <tfoot class="thead-dark" style="background-color: black" >
                         <tr>
                             <th scope="col"></th>
                             <th scope="col"></th>
@@ -158,6 +167,8 @@
                             <th scope="col">Total</th>
                             <th scope="col">0</th>
                             <th scope="col">0</th>
+                            <th></th>
+
 
                           </tr>
 
@@ -338,8 +349,15 @@ function fetch_table(start_date,end_date)
 
         processing: true,
         serverSide: true,
-        order:false,
 
+        ordering:false,
+        searchPanes: {
+            orderable: false
+        },
+        dom: 'Plfrtip',
+        columnDefs: [
+    { "orderable": false, "targets": "_all" } // Applies the option to all columns
+  ],
         ajax: {
 
             "url":'get_all_invoice',
@@ -358,12 +376,13 @@ function fetch_table(start_date,end_date)
         columns: [
             //   {data: 'sl_no'},
 
-            {data:'txid',name:'txid'},
+            {data:'txid',name:'txid',orderable:false},
             {data:'number',name:'number'},
             {data:'date',name:'date'},
             {data:'type',name:'type'},
             {data:'cost',name:'cost'},
             {data:'profit',name:'profit'},
+            {data:'invoice',name:'invoice'}
 
 
   ],
