@@ -92,7 +92,7 @@
           </div>
         </div>
         <!-- /.row -->
-        
+
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
@@ -101,10 +101,10 @@
   <script>
   $(function() {
     $('.recharge').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0; 
-        var user_id = $(this).data('id'); 
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var user_id = $(this).data('id');
         console.log('hello');
-         
+
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -120,14 +120,14 @@
   <script>
   $(function() {
     $('.sim').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0; 
-        var user_id = $(this).data('id'); 
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var user_id = $(this).data('id');
         console.log('hello');
-         
+
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: '/changeSim',
+            url: '/retailer/changeSim',
             data: {'status': status, 'user_id': user_id},
             success: function(data){
               console.log(data.success)
@@ -139,14 +139,14 @@
   <script>
   $(function() {
     $('.cargo').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0; 
-        var user_id = $(this).data('id'); 
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var user_id = $(this).data('id');
         console.log('hello');
-         
+
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: '/changeCargo',
+            url: '/retailer/changeCargo',
             data: {'status': status, 'user_id': user_id},
             success: function(data){
               console.log(data.success)
@@ -158,14 +158,14 @@
   <script>
   $(function() {
     $('.phone').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0; 
-        var user_id = $(this).data('id'); 
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var user_id = $(this).data('id');
         console.log('hello');
-         
+
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: '/changePhone',
+            url: '/retailer/changePhone',
             data: {'status': status, 'user_id': user_id},
             success: function(data){
               console.log(data.success)
@@ -177,14 +177,14 @@
   <script>
   $(function() {
     $('.reseller').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0; 
-        var user_id = $(this).data('id'); 
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var user_id = $(this).data('id');
         console.log('hello');
-         
+
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: '/changeReseller',
+            url: '/retailer/changeReseller',
             data: {'status': status, 'user_id': user_id},
             success: function(data){
               console.log(data.success)
@@ -196,10 +196,10 @@
   <script>
     $(function() {
       $('.pin').change(function() {
-          var status = $(this).prop('checked') == true ? 1 : 0; 
-          var user_id = $(this).data('id'); 
+          var status = $(this).prop('checked') == true ? 1 : 0;
+          var user_id = $(this).data('id');
           console.log('hello');
-           
+
           $.ajax({
               type: "GET",
               dataType: "json",
