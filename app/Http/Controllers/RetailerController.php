@@ -21,6 +21,8 @@ class RetailerController extends Controller
         return view('front.retailer_details',compact('data'));
     }
 
+
+
     public function RetailerDetail($value='')
     {
         if (Auth::user()->role == 'admin') {
@@ -51,7 +53,7 @@ class RetailerController extends Controller
         $user = User::find($request->user_id);
         $user->recharge_permission = $request->status;
         $user->save();
-  
+
         return response()->json(['success'=>'Status change successfully.']);
     }
     public function changeSim(Request $request)
@@ -59,7 +61,7 @@ class RetailerController extends Controller
         $user = User::find($request->user_id);
         $user->sim_permission = $request->status;
         $user->save();
-  
+
         return response()->json(['success'=>'Status change successfully.']);
     }
     public function changeCargo(Request $request)
@@ -67,7 +69,7 @@ class RetailerController extends Controller
         $user = User::find($request->user_id);
         $user->cargo_permission = $request->status;
         $user->save();
-  
+
         return response()->json(['success'=>'Status change successfully.']);
     }
     public function changePhone(Request $request)
@@ -75,7 +77,7 @@ class RetailerController extends Controller
         $user = User::find($request->user_id);
         $user->mobile_permission = $request->status;
         $user->save();
-  
+
         return response()->json(['success'=>'Status change successfully.']);
     }
 
@@ -84,7 +86,7 @@ class RetailerController extends Controller
         $user = User::find($request->user_id);
         $user->reseller_permission = $request->status;
         $user->save();
-  
+
         return response()->json(['success'=>'Status change successfully.']);
     }
     public function changePin(Request $request)
@@ -92,7 +94,7 @@ class RetailerController extends Controller
         $user = User::find($request->user_id);
         $user->pin_permission = $request->status;
         $user->save();
-  
+
         return response()->json(['success'=>'Status change successfully.']);
     }
     public function AddCom(Request $request)
@@ -112,7 +114,7 @@ class RetailerController extends Controller
                 'international_recharge_profit'=>$request->international_recharge_profit,
                 'domestic_recharge_profit'=>$request->domestic_recharge_profit,
             ]);
-            
+
         }else{
             $user = User::where('id', $request->user_id)->update([
                 'mobile' => $request->mobile,
@@ -121,9 +123,9 @@ class RetailerController extends Controller
                 'recharge' => $request->recharge,
                 'international_recharge' => $request->international_recharge,
                 'pin' => $request->pin,
-            ]); 
+            ]);
         }
-        
+
         return back()->with('status','Commission Set Suucessfully!');
 
     }

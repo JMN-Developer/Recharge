@@ -275,6 +275,14 @@
                     <p>International</p>
                   </a>
                 </li>
+                {{-- @if (Auth::user()->role == 'admin')
+                <li class="nav-item">
+                  <a href="{{ route('recharge-reloadly') }}" class="@if(Route::currentRouteName() == 'recharge-int') nav-link active @endif nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>International2</p>
+                  </a>
+                </li>
+                @endif --}}
                 <li class="nav-item">
                   <a href="{{ route('recharge-italy') }}" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -486,13 +494,23 @@
                   </p>
                 </a>
               </li>
+              {{-- @if (Auth::user()->role == 'admin')
+              <li class="@if(Route::currentRouteName() == 'setting') nav-item menu-open @endif nav-item">
+                <a href="#" class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
+                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <p>
+                    Api Control
+                  </p>
+                </a>
+              </li>
+              @endif --}}
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
   </aside>
-  <div id="cover-spin"></div>
+  <div class="cover-spin"></div>
   @yield('content')
 
     <!-- Main Footer -->

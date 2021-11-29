@@ -108,7 +108,7 @@
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: '/changeStatus',
+            url: '/retailer/changeStatus',
             data: {'status': status, 'user_id': user_id},
             success: function(data){
               console.log(data.success)

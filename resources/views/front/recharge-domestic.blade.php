@@ -304,16 +304,16 @@ $.ajax({
          },
         data: formdata,
         beforeSend: function () {
-            $('#cover-spin').show(0)
+            $('.cover-spin').show(0)
             },
         complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
-            $('#cover-spin').hide(0)
+            $('.cover-spin').hide(0)
             },
         success:function(response){
 
             //load_recent_recharge();
 
-            $('#cover-spin').hide(0)
+            $('.cover-spin').hide(0)
             // $(".phone_number").hide();
             // //$(".brandUlLiContainer").toggle();
             // $('#amounts').empty();

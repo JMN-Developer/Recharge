@@ -10,7 +10,7 @@ class ApiTestController extends Controller
 {
     //
     use OauthToken;
-    
+
 
     public function test_token()
     {

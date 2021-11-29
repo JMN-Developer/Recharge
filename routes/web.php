@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\RechargeController;
+use App\Http\Controllers\ReloadlyController;
 use App\Http\Controllers\PinController;
 use App\Http\Controllers\SimController;
 use App\Http\Controllers\OperatorController;
@@ -258,6 +259,7 @@ Route::post('/domestic_product', function (Request $request) {
 Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 {
     Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
+    Route::get('recharge-reloadly', [ReloadlyController::class,'index'])->name('recharge-reloadly');
     Route::post('get_all_invoice',[RechargeController::class,'get_all_invoice'])->name('get_all_invoice');
     Route::get('all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
     Route::get('recharge-italy', [RechargeController::class,'RechargeDom'])->name('recharge-italy');
@@ -282,6 +284,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::get('recharge_invoice/{id}',[RechargeController::class,'invoice']);
     Route::post('domestic_pin',[PinController::class,'store'])->name('domestic-pin');
     Route::get('pin_invoice/{id}',[PinController::class,'invoice']);
+    Route::post('reloadly_operator_details',[ReloadlyController::class,'mobile_number_details'])->name('reloadly_operator_details');
 
 });
 
@@ -330,7 +333,9 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
     Route::get('retailer-details', [RetailerController::class,'RetailerDetail'])->name('retailer-details');
 
     Route::get('retailer-sign-up', [RetailerController::class,'RetailerSignUp'])->name('retailer-sign-up');
+
     Route::get('changeStatus', [RetailerController::class,'changeStatus']);
+    Route::get('retailer-action', [RetailerController::class,'RetailerAction'])->name('retailer-action');
 
     Route::get('changeSim', [RetailerController::class,'changeSim']);
 
@@ -367,7 +372,7 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
 
 
 
-Route::get('/retailer/retailer-action', [RetailerController::class,'RetailerAction'])->name('retailer-action');
+
 
 
 //  RETAILER END
