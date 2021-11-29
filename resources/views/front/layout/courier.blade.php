@@ -289,24 +289,28 @@
                     <p>Domestic</p>
                   </a>
                 </li>
+                @if (Auth::user()->pin_permission == 1)
                 <li class="nav-item">
                   <a href="{{ route('pin') }}" class="@if(Route::currentRouteName() == 'pin') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pin</p>
                   </a>
                 </li>
+                @endif
                 <li class="nav-item">
                   <a href="{{ route('recharge-invoice') }}" class="@if(Route::currentRouteName() == 'recharge-invoice') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>All Invoices</p>
                   </a>
                 </li>
+                @if (Auth::user()->pin_permission == 1)
                 <li class="nav-item">
                   <a href="{{ route('pin-invoice') }}" class="@if(Route::currentRouteName() == 'pin-invoice') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Pin Invoices</p>
                   </a>
                 </li>
+                @endif
                 {{-- <li class="nav-item">
                   <a href="/recharge/recharge-gift-card" class="@if(Route::currentRouteName() == 'recharge-gift-card') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
