@@ -90,13 +90,13 @@ class ReloadlyController extends Controller
         ]);
     }
 
-    public function update_balance($balance,$requested_amount)
+    public function update_balance($balance,$requested_amount,$discount)
     {
         Balance::where('type','reloadly')->update(['balance'=>$balance]);
         if(a::user()->role != 'admin')
         {
             $existing_wallet = User::where('id',a::user()->id)->first()->wallet;
-            $new_wallet = $existing_wallet-$requested_amount;
+            $new_wallet = $existing_wallet-$requested_amount-$discount;
             User::where('id',a::user()->id)->update(['wallet'=>$new_wallet]);
 
         }
@@ -115,7 +115,7 @@ class ReloadlyController extends Controller
 
         if($data['status']){
           $this->create_recharge($data['payload']);
-          $this->update_balance($data['payload']->balanceInfo->newBalance,$data['payload']->requestedAmount);
+          $this->update_balance($data['payload']->balanceInfo->newBalance,$data['payload']->requestedAmount,$data['payload']->discount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
     }
     else

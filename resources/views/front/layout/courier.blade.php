@@ -201,6 +201,7 @@
             @php
               $ding = DB::table('balances')->where('type','ding')->latest()->first();
               $domestic = DB::table('balances')->where('type','domestic')->latest()->first();
+              $reloadly = DB::table('balances')->where('type','reloadly')->latest()->first();
             @endphp
              {{-- <div class="col-12">
               <b class="mr-2">Profit:</b><span>{{ $admin_profit }}&euro;</span>
@@ -211,6 +212,10 @@
             <div class="col-12">
               <b class="mr-2">Domestic:</b><span>{{ ($domestic->balance)/100 }}&euro;</span>
             </div>
+            <div class="col-12">
+                <b class="mr-2">Reloadly:</b><span>{{ $reloadly->balance }}&euro;</span>
+              </div>
+
           </div>
         @endif
         {{-- <div class="row">
@@ -275,14 +280,14 @@
                     <p>International</p>
                   </a>
                 </li>
-                {{-- @if (Auth::user()->role == 'admin')
+                @if (Auth::user()->role == 'admin')
                 <li class="nav-item">
                   <a href="{{ route('recharge-reloadly') }}" class="@if(Route::currentRouteName() == 'recharge-int') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>International2</p>
                   </a>
                 </li>
-                @endif --}}
+                @endif
                 <li class="nav-item">
                   <a href="{{ route('recharge-italy') }}" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>

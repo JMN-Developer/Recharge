@@ -252,8 +252,8 @@
                 $("#currency_code").val(response.fx.currencyCode);
                 $("#operator_id").val(response.operatorId);
                 $("#operator_image").attr("src",response.logoUrls[2]);
-                $("#receiverMobile").attr('disabled',true);
-                $('.iti__flag-container').attr('disabled',true);
+                // $("#receiverMobile").attr('disabled',true);
+                // $('.iti__flag-container').attr('disabled',true);
 
             }
             else
@@ -329,6 +329,13 @@
 
    });
 
+   $('#receiverMobile').keydown(function(){
+    $(".amount_input_field").hide();
+    $("#calculation_section").hide();
+    $("#recharge_number").hide();
+    $("#check_number").show();
+
+   });
     $("#amount").keyup(function(){
         //var countryData = intl.getSelectedCountryData();
         var exchange_rate = $('#exchange_rate').val();
