@@ -15,22 +15,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-       // \App\Models\RechargeHistory::factory(10000)->create();
-    //    \App\Models\SecretStore::create([
-    //        'type'=>'international',
-    //        'company_name'=>'Reloadly',
-    //        'content'=>Crypt::encrypt('eBe1xSlwljIVitNBncLXPQhB7TO3D7V0'),
-    //        'secret_type'=>'client_id',
+    //     \App\Models\User::factory(10)->create();
+    //    \App\Models\RechargeHistory::factory(10000)->create();
+       \App\Models\SecretStore::create([
+           'type'=>'international',
+           'company_name'=>'Reloadly',
+           'content'=>Crypt::encrypt('SHILVCMRGJab2DfLIxhaKqCNxlgoLFvv'),
+           'secret_type'=>'client_id',
 
-    //    ]);
-    //    \App\Models\SecretStore::create([
-    //     'type'=>'international',
-    //     'company_name'=>'Reloadly',
-    //     'content'=>Crypt::encrypt('sH5xfDU8aB-ZqkM8dRwo3v750YwZVt-VS4xmYaddjWOE8WSc60Tr3V0qVEtEI0W'),
-    //     'secret_type'=>'client_secret',
+       ]);
+       \App\Models\SecretStore::create([
+        'type'=>'international',
+        'company_name'=>'Reloadly',
+        'content'=>Crypt::encrypt('lQABjKdyr6-DgqqJXW5EVeDs1HoSrP-pvqH1WkEWMeMdnt4nYv9iZl8QCa2KGbz'),
+        'secret_type'=>'client_secret',
 
-    // ]);
+    ]);
 
     }
 }

@@ -12,11 +12,7 @@ class GenerateTransactionId
 
     public function __construct($reseller_id,$service_code)
     {
-        if($reseller_id<10)
-        {
-            $reseller_id = '0'.$reseller_id;
-        }
-        $this->reseller_id = $reseller_id;
+        $this->reseller_id = str_pad($reseller_id, 4, "0", STR_PAD_LEFT);
         $this->service_code = $service_code;
     }
     public function transaction_id()

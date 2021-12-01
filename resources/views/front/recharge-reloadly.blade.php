@@ -33,38 +33,51 @@
                <div class="card-body">
                   <p class="login-box-msg">Mobile Recharge or Offers </p>
                   <div class="row">
-                     <div class="col-md-6">
-                        <div class="mb-3 receiver_inputs">
-                            <label for="inputMobileNumber" class="form-label">Receiver Number</label>
+                     <div class="col-md-12">
 
-                            <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3 receiver_inputs">
+                                    <label for="inputMobileNumber" class="form-label">Receiver Number</label>
 
-                            <button class="btn btn-info mt-3" style="width: 100%;" id="check_number">Check</button>
+                                    <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number">
 
-                            {{-- <button class="btn btn-primary" style="margin-bottom: 6px; float: right;">Verify</button> --}}
-                         </div>
+                                <div class="amount_input_field">
+                                    <label for="inputMobileNumber" class="form-label" style="margin-right: 35px">Amount</label>
 
-                         <div>
+                                    <input type="text" id="amount" class="form-control " name="number" placeholder="Amount" style="width: 84%;"  autocomplete="off">
+                                    <input type="hidden" id="exchange_rate">
+                                    <input type="hidden" id="currency_code">
+                                    <input type="hidden" id="operator_id">
+                                    <div  id="calculation_section" style="padding-top:0px;padding-bottom:1px;background:#C62604;width:84%;padding-left:13px">
+                                        <p id="calculation" style="padding-top:10px;color:white;font-weight:bold;font-size:18px"><p>
+                                    </div>
+                                    <button class="btn btn-info mt-3" id="recharge_number" style="width: 84%;">Recharge</button>
 
-                         </div>
+                                    {{-- <button class="btn btn-primary" style="margin-bottom: 6px; float: right;">Verify</button> --}}
+                                 </div>
+                                 <button class="btn btn-info mt-3" style="width: 84%;" id="check_number">Check</button>
 
-                         <div class="mb-3" id="amount_input_field" >
-                            <div class="text-center" style="padding-top:20px">
-                                <p style="font-weight:bold;color:red;font-size:18px">Minimum Amount: <span id="min_amount">20</span> <span style="padding-left:60px">Max Amount: <span id="max_amount">50</span></span></p>
                             </div>
-                            <label for="inputMobileNumber" class="form-label">Amount</label>
-                            <input type="text" id="amount" class="form-control " name="number" placeholder="Amount" style="width: 84%;">
-                            <input type="hidden" id="exchange_rate">
-                            <input type="hidden" id="currency_code">
-                            <p id="calculation" style="padding-top:10px;color:red;font-weight:bold;"><p>
+                        </div>
+                            <div class="col-md-6 amount_input_field">
+                                <div class="mb-3 text-center">
 
-                            <button class="btn btn-info mt-3" style="width: 100%;">Check</button>
+                                    <img id="operator_image" alt="Operator Logo Not Found">
 
-                            {{-- <button class="btn btn-primary" style="margin-bottom: 6px; float: right;">Verify</button> --}}
-                         </div>
+                                 </div>
+                                <div class="mb-3" >
+                                    <div class="text-center" style="padding-top:10px;padding-bottom:1px;background:#C62604;width:84%;margin-bottom:10px">
+                                        <p style="font-weight:bold;color:white;font-size:18px">Minimum Amount: <span id="min_amount">20</span> <span style="padding-left:60px">Maximum Amount: <span id="max_amount">50</span></span></p>
+                                    </div>
+
+                                 </div>
+                            </div>
+                        </div>
+
                      </div>
 
-                     <div class="col-md-6">
+                     <div class="col-md-12"  style="margin-top: 100px">
                         <div class="last_recharge_table">
                            <div class="last_recharge_table_head text-center">
                               <h5><strong>Last 10 Recharge</strong></h5>
@@ -75,9 +88,12 @@
                                     <tr class="table-danger">
                                        <th>Receiver</th>
                                        <th>Operator</th>
-                                       <th>Cost</th>
+                                       <th>Amount</th>
                                        <th>Profit</th>
                                        <th>Action</th>
+                                       {{-- <th>Cost</th>
+                                       <th>Profit</th>
+                                       <th>Action</th> --}}
                                     </tr>
                                  </thead>
                                  <tbody>
@@ -85,13 +101,16 @@
                                     <tr class="bg-ocean">
                                        <td>{{ $item->number }}</td>
                                        <td>{{ $item->operator }}</td>
-                                       <td>{{ $item->cost }}</td>
+                                       <td>{{ $item->amount }}</td>
                                        @if(auth()->user()->role == 'admin')
                                        <td>{{ $item->admin_com }}</td>
                                        @else
                                        <td>{{ $item->reseller_com }}</td>
                                        @endif
                                        <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
+                                       {{-- <td>{{ $item->cost }}</td>
+
+                                       <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td> --}}
                                     </tr>
                                     @endforeach
                                  </tbody>
@@ -133,7 +152,63 @@
 
 
    $(document).ready(function() {
-      $("#amount_input_field").hide();
+    var toast = document.querySelector('.iziToast');
+        var message = sessionStorage.getItem('message');
+        sessionStorage.removeItem('message');
+
+        if(toast)
+                {
+                iziToast.hide({}, toast);
+                }
+        if ( sessionStorage.getItem('error') ) {
+            sessionStorage.removeItem('error');
+
+                iziToast.error({
+                    backgroundColor:"#D12C09",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 30000,
+                    title: 'Error',
+                    message: message,
+
+
+                });
+
+                //console.log(response.message);
+
+            }
+
+            if ( sessionStorage.getItem('success') ) {
+            sessionStorage.removeItem('success');
+
+
+            iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 30000,
+                    title: 'Success',
+                    message: message,
+
+                });
+                //console.log(response.message);
+
+            }
+
+
+     $(".amount_input_field").hide();
+    $("#calculation_section").hide();
+    $("#recharge_number").hide();
     var input = document.querySelector("#receiverMobile");
   var intl =  window.intlTelInput(input,({
      // options here
@@ -141,8 +216,6 @@
 
    $("#check_number").click(function(){
     event.preventDefault();
-
-
 
     var formdata = new FormData();
     formdata.append('number',$('#receiverMobile').val());
@@ -163,22 +236,89 @@
             $('.cover-spin').hide(0)
             },
         success:function(response){
-            $("#check_number").hide();
-            $("#amount_input_field").show();
-            $('.cover-spin').hide(0);
-            $('#min_amount').text(response.minAmount);
-            $('#max_amount').text(response.maxAmount);
-            $("#exchange_rate").val(response.fx.rate);
-            $("#currency_code").val(response.fx.currencyCode);
+
 
             if(response.status==true)
             {
+                var response = response.data;
+                $("#check_number").hide();
 
+                $(".amount_input_field").show();
+                $("#recharge_number").show();
+                $('.cover-spin').hide(0);
+                $('#min_amount').text(response.minAmount+0.01);
+                $('#max_amount').text(response.maxAmount);
+                $("#exchange_rate").val(response.fx.rate);
+                $("#currency_code").val(response.fx.currencyCode);
+                $("#operator_id").val(response.operatorId);
+                $("#operator_image").attr("src",response.logoUrls[2]);
+                $("#receiverMobile").attr('disabled',true);
+                $('.iti__flag-container').attr('disabled',true);
+
+            }
+            else
+            {
+                location.reload();
+                sessionStorage.setItem('error',true);
+                sessionStorage.setItem('message',response.message);
+            }
+           //console.log(response.status);
+           //alert('hello')
+
+        },
+       });
+
+
+   });
+
+   $("#recharge_number").click(function(){
+    event.preventDefault();
+
+    var formdata = new FormData();
+    formdata.append('number',$('#receiverMobile').val());
+    formdata.append('countryCode', intl.getSelectedCountryData().iso2);
+    formdata.append('operatorId',$('#operator_id').val());
+    formdata.append('amount',$('#amount').val());
+
+
+
+      $.ajax({
+        processData: false,
+        contentType: false,
+        url: "reloadly_recharge",
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formdata,
+        beforeSend: function () {
+            $('.cover-spin').show(0)
+            },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            $('.cover-spin').hide(0)
+            },
+        success:function(response){
+            $('.cover-spin').hide(0);
+            // $("#check_number").hide();
+            // $("#amount_input_field").show();
+
+            // $('#min_amount').text(response.minAmount);
+            // $('#max_amount').text(response.maxAmount);
+            // $("#exchange_rate").val(response.fx.rate);
+            // $("#currency_code").val(response.fx.currencyCode);
+
+            if(response.status==true)
+            {
+                location.reload();
+                sessionStorage.setItem('success',true);
+                sessionStorage.setItem('message',response.message);
                 //console.log(response.message);
             }
             else
             {
-
+                location.reload();
+                sessionStorage.setItem('error',true);
+                sessionStorage.setItem('message',response.message);
             }
            //console.log(response.status);
            //alert('hello')
@@ -193,10 +333,17 @@
         //var countryData = intl.getSelectedCountryData();
         var exchange_rate = $('#exchange_rate').val();
         var value = this.value;
+        if(value)
+        {
         var currencyCode = $("#currency_code").val();
         var calculation_text = (exchange_rate*value).toFixed(3)+" "+currencyCode+" will receive";
         //alert(calculation_text)
+        $("#calculation_section").show();
         $("#calculation").text(calculation_text);
+        }
+        else{
+            $("#calculation_section").hide();
+        }
 
         });
        $('.iti__flag-container').click(function() {

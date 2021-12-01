@@ -547,7 +547,7 @@ class RechargeController extends Controller
 
             $cost = $sendvalue + $admin_commission_main + $request->service;
 
-            $real_cost = $sendvalue+$admin_commission_main;
+            $real_cost = $sendvalue+$admin_commission;
 
 
             if(a::user()->role != 'admin'){

@@ -285,6 +285,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::post('domestic_pin',[PinController::class,'store'])->name('domestic-pin');
     Route::get('pin_invoice/{id}',[PinController::class,'invoice']);
     Route::post('reloadly_operator_details',[ReloadlyController::class,'mobile_number_details'])->name('reloadly_operator_details');
+    Route::post('reloadly_recharge',[ReloadlyController::class,'reloadly_recharge'])->name('reloadly_recharge');
 
 });
 

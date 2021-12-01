@@ -186,7 +186,7 @@
                             <td>
                               @if ($data->type == "International")
                                 <strong class="fs-6">
-                                  Operazione fuori campo IVA ex art.7 sexies comma 1 lettera g del DPR 633/72. I servizi telefonici sono forniti dall'Operatore secondo gli specifici termini e condizioni generali in vigore con il Cliente; restrizioni, tasse e supplementi potrebbero essere applicati. JM Nation non ha alcun controllo e non è responsabile per il servizio di fonia fornito dall'Operatore. In caso di anomalie o reclami contattare il Servizio Clienti dell'Operatore.  
+                                  Operazione fuori campo IVA ex art.7 sexies comma 1 lettera g del DPR 633/72. I servizi telefonici sono forniti dall'Operatore secondo gli specifici termini e condizioni generali in vigore con il Cliente; restrizioni, tasse e supplementi potrebbero essere applicati. JM Nation non ha alcun controllo e non è responsabile per il servizio di fonia fornito dall'Operatore. In caso di anomalie o reclami contattare il Servizio Clienti dell'Operatore.
                                 </strong>
                               @else
                               <strong class="fs-6">
@@ -209,13 +209,13 @@
                   <!-- /.col -->
                 </div>
                 <!-- /.row -->
-              
-                
+
+
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
                   <div class="col-12 text-center">
                     <a href="javascript:void" onclick="window.print()" rel="noopener" class="btn btn-default">
-                      <i class="fas fa-print"></i> 
+                      <i class="fas fa-print"></i>
                       Print
                     </a>
                   </div>
@@ -250,9 +250,9 @@
      window.intlTelInput(input,({
        // options here
      }));
-  
+
      $(document).ready(function() {
-         $('.iti__flag-container').click(function() { 
+         $('.iti__flag-container').click(function() {
            var countryCode = $('.iti__selected-flag').attr('title');
            var countryCode = countryCode.replace(/[^0-9]/g,'')
            $('#receiverMobile').val("");
@@ -261,5 +261,4 @@
      });
    </script>
   @endsection
-  
-  
+
