@@ -343,7 +343,7 @@
         if(value)
         {
         var currencyCode = $("#currency_code").val();
-        var calculation_text = (exchange_rate*value).toFixed(3)+" "+currencyCode+" will receive";
+        var calculation_text = (exchange_rate*value).toFixed(0)+" "+currencyCode+" will receive";
         //alert(calculation_text)
         $("#calculation_section").show();
         $("#calculation").text(calculation_text);
