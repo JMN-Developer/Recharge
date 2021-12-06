@@ -54,6 +54,6 @@ class ApiTestController extends Controller
         $product_responses = $product_request->getBody();
         return $product_responses;
     }
-}+
+}
 
 

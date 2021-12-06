@@ -17,20 +17,23 @@ class DatabaseSeeder extends Seeder
     {
     //     \App\Models\User::factory(10)->create();
     //    \App\Models\RechargeHistory::factory(10000)->create();
-       \App\Models\SecretStore::create([
-           'type'=>'international',
+      \App\Models\ApiList::create([
+           'type'=>'International',
            'company_name'=>'Reloadly',
-           'content'=>Crypt::encrypt('SHILVCMRGJab2DfLIxhaKqCNxlgoLFvv'),
-           'secret_type'=>'client_id',
-
        ]);
-       \App\Models\SecretStore::create([
-        'type'=>'international',
-        'company_name'=>'Reloadly',
-        'content'=>Crypt::encrypt('lQABjKdyr6-DgqqJXW5EVeDs1HoSrP-pvqH1WkEWMeMdnt4nYv9iZl8QCa2KGbz'),
-        'secret_type'=>'client_secret',
-
+       \App\Models\ApiList::create([
+        'type'=>'International',
+        'company_name'=>'Ding Connect',
     ]);
 
+    \App\Models\ApiList::create([
+        'type'=>'Domestic',
+        'company_name'=>'Epay',
+    ]);
+
+    \App\Models\ApiList::create([
+        'type'=>'Domestic',
+        'company_name'=>'Prepay',
+    ]);
     }
 }

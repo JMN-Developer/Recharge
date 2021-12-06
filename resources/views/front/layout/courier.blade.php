@@ -12,7 +12,43 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <style>
+        .notification {
+  background-color: #555;
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
 
+.notification:hover {
+  background: red;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+}
+
+.badge {
+  position: absolute;
+  top: -3px;
+margin-left: 3px;
+  padding: 8px 10px !important;
+  border-radius: 50% !important;
+  background: red;
+  color: white;
+}
+    </style>
+</head>
 @yield('header')
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -183,14 +219,21 @@
         <div class="row">
           <div class="col-12">
             @if (Auth::user()->role != 'admin')
-            <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span></p>
+            <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span>
+                <a href="{{ route('wallet-request') }}" class="notification">
+                    <span>WR</span>
+                    <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
+                  </a>
+
+            </p>
             {{-- <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p> --}}
             @endif
           </div>
 
           <div class="col-12">
 
-                <p><b class="mr-2">Due: </b><span>{{ Auth()->user()->due }}</span></p>
+
+                <p><b class="mr-2">Due: </b><span>{{ Auth()->user()->due }}</span> </p>
                 <p><b class="mr-2">Corriere: </b><span>{{ Auth::user()->cargo_due }}</span></p>
 
           </div>
@@ -503,16 +546,43 @@
                   </p>
                 </a>
               </li>
-              {{-- @if (Auth::user()->role == 'admin')
-              <li class="@if(Route::currentRouteName() == 'setting') nav-item menu-open @endif nav-item">
-                <a href="#" class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
+              @if(auth()->user()->role == 'admin')
+              <li class="@if(Route::currentRouteName() == 'wallet-request') nav-item menu-open @endif nav-item">
+                <a href="{{ route('wallet-request') }}" class="@if(Route::currentRouteName() == 'wallet-request') nav-link active @endif nav-link">
                   <i class="fa fa-cog" aria-hidden="true"></i>
                   <p>
-                    Api Control
+                    Wallet Request<span class="badge wallet_notification_count">3</span>
+
                   </p>
                 </a>
               </li>
-              @endif --}}
+              @endif
+
+
+            @if(auth()->user()->role == 'admin')
+              <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
+                <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>
+                    Api Control
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+
+                    <a href="{{ route('api-activation') }}" class="@if(Route::currentRouteName() == 'api-activation') nav-link active @endif nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Activate</p>
+                    </a>
+
+
+                  </li>
+
+                </ul>
+              </li>
+              @endif
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -537,6 +607,31 @@
 
   @yield('scripts')
   @yield('js')
+  <script src="{{ mix('/js/app.js') }}"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script>
+      $(function(){
+        notification_count();
+      });
+
+        var a = Echo.channel('events')
+            .listen('DueRequest', (e) => {
+                notification_count()
+            });
+
+
+        function notification_count()
+        {
+          $.ajax({
+              type: "GET",
+              dataType: "json",
+              url: '/wallet_notification_count',
+              success: function(data){
+              $('.wallet_notification_count').text(data)
+              }
+          });
+        }
+  </script>
 
 </body>
 </html>

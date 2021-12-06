@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiSettingsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\RechargeController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ApiTestController;
+use App\Http\Controllers\WalletController;
 use App\Models\SimOperator;
 use App\Models\sim;
 use App\Models\User;
@@ -255,6 +257,19 @@ Route::post('/domestic_product', function (Request $request) {
 
 });
 
+// Route::get('test-event', function () {
+//     event(new App\Events\DueRequest('Hello World'));
+//     return "Event has been sent!";
+// });
+
+Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
+Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
+Route::post('amount_request',[WalletController::class,'wallet_request']);
+Route::post('approved_amount',[WalletController::class,'approved_amount']);
+Route::get('get_requested_amount',[WalletController::class,'get_requested_amount']);
+
+Route::get('wallet_notification_count',[WalletController::class,'wallet_notification_count']);
+
 
 Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 {
@@ -349,6 +364,17 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
     Route::get('changePin', [RetailerController::class,'changePin']);
     Route::post('add_com',[RetailerController::class,'AddCom'])->name('AddCom');
     Route::get("retailer-details-admin",[RetailerController::class,'retailer_details'])->name('retailer-details-admin');
+
+
+});
+
+Route::group(['prefix' => 'ApiControl','middleware'=>['auth']], function()
+{
+
+    Route::get('change_status',[ApiSettingsController::class,'change_status'])->name('change_status');
+    Route::get('get_data',[ApiSettingsController::class,'get_data'])->name('get_data');
+    Route::get('api-activation', [ApiSettingsController::class,'ApiActivation'])->name('api-activation');
+
 
 
 });

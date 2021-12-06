@@ -18,6 +18,7 @@
         "laravel/tinker": "^2.5",
         "laraveldaily/laravel-invoices": "2.0",
         "livewire/livewire": "^2.0",
+        "pusher/pusher-php-server": "^7.0",
         "yajra/laravel-datatables": "1.5"
     },
     "require-dev": {
