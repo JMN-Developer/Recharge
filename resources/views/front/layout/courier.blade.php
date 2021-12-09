@@ -15,22 +15,23 @@
 <head>
     <style>
         .notification {
-  background-color: #555;
+  background-color: #76D7C4;
   color: white;
   text-decoration: none;
-  padding: 15px 26px;
+  padding: 6px 26px;
   position: relative;
   display: inline-block;
   border-radius: 2px;
+  margin-left: 10px;
 }
 
 .notification:hover {
-  background: red;
+  background: white;
 }
 
 .notification .badge {
   position: absolute;
-  top: -10px;
+  top: 4px;
   right: -10px;
   padding: 5px 10px;
   border-radius: 50%;
@@ -40,7 +41,7 @@
 
 .badge {
   position: absolute;
-  top: -3px;
+  top: 5px;
 margin-left: 3px;
   padding: 8px 10px !important;
   border-radius: 50% !important;
@@ -221,7 +222,7 @@ margin-left: 3px;
             @if (Auth::user()->role != 'admin')
             <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span>
                 <a href="{{ route('wallet-request') }}" class="notification">
-                    <span>WR</span>
+                    <span style="font-weight:bold;color:black">WR</span>
                     <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
                   </a>
 
@@ -304,6 +305,7 @@ margin-left: 3px;
                           Route::currentRouteName() == 'recharge-italy' ||
                           Route::currentRouteName() == 'recharge-gift-card' ||
                           Route::currentRouteName() == 'recharge-calling-card' ||
+                          Route::currentRouteName() == 'recharge-reloadly' ||
                           Route::currentRouteName() == 'print-all-invoice') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'recharge-int' ||
                           Route::currentRouteName() == 'recharge-italy' ||
@@ -325,11 +327,18 @@ margin-left: 3px;
                 </li>
                 @if (Auth::user()->role == 'admin')
                 <li class="nav-item">
-                  <a href="{{ route('recharge-reloadly') }}" class="@if(Route::currentRouteName() == 'recharge-int') nav-link active @endif nav-link">
+                  <a href="{{ route('recharge-reloadly') }}" class="@if(Route::currentRouteName() == 'recharge-reloadly') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>International2</p>
                   </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('recharge-ppn') }}" class="@if(Route::currentRouteName() == 'recharge-ppn') nav-link active @endif nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>International3</p>
+                    </a>
+                  </li>
                 @endif
                 <li class="nav-item">
                   <a href="{{ route('recharge-italy') }}" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Events\DueRequest;
+use DB;
 
 class WalletController extends Controller
 {
@@ -22,11 +23,11 @@ class WalletController extends Controller
         if(Auth::user()->role != 'admin')
         {
         DueControl::where('reseller_id',Auth::user()->id)->update(['reseller_notification'=>1]);
-        $data = DueControl::where('reseller_id',Auth::user()->id)->orderBy('created_at','DESC')->get();
+        $data = DueControl::where('reseller_id',Auth::user()->id)->orderBy(DB::raw('case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'))->get();
         }
         else{
         DueControl::where('admin_notification',0)->update(['admin_notification'=>1]);
-        $data = DueControl::orderBy('created_at','DESC')->get();
+        $data = DueControl::orderBy(DB::raw('case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'))->get();
         }
         foreach($data as $item)
         {
@@ -63,12 +64,29 @@ class WalletController extends Controller
     {
         $id = $request->id;
         $approved_amount = $request->approved_amount;
-        DueControl::where('id',$id)->update(['approved_amount'=>$approved_amount,'status'=>'approved','admin_notification'=>1,'reseller_notification'=>0]);
+        $admin_message = $request->admin_message;
+        $status = $request->status;
+        $previous_record = DueControl::where('id',$id)->first();
+        if($previous_record->status =='declined')
+        {
+            DueControl::create([
+                'reseller_id'=>$previous_record->reseller_id,
+                'requested_amount'=> $previous_record->requested_amount,
+                'approved_amount'=>$approved_amount,
+                'message'=>$admin_message,
+                'reseller_notification'=>0,
+                'admin_notification'=>1,
+                'status'=>$status,
+            ]);
+        }
+        else{
+        DueControl::where('id',$id)->update(['approved_amount'=>$approved_amount,'status'=>$status,'admin_notification'=>1,'reseller_notification'=>0,'admin_message'=>$admin_message]);
+        }
         event(new DueRequest());
     }
     public function wallet_notification_count()
     {
-        if(Auth::user()->role == 'admin')
+        if(auth()->user()->role == 'admin')
         {
             $data = DueControl::where('admin_notification',0)->get()->count();
         }

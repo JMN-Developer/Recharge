@@ -275,6 +275,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 {
     Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
     Route::get('recharge-reloadly', [ReloadlyController::class,'index'])->name('recharge-reloadly');
+    Route::get('recharge-ppn', [ReloadlyController::class,'index'])->name('recharge-ppn');
     Route::post('get_all_invoice',[RechargeController::class,'get_all_invoice'])->name('get_all_invoice');
     Route::get('all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
     Route::get('recharge-italy', [RechargeController::class,'RechargeDom'])->name('recharge-italy');

@@ -134,15 +134,28 @@
                     <form id="approved_form">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Requested Amount</label>
-                          <input type="text" class="form-control" id="requested_amount" aria-describedby="emailHelp" placeholder="Requested Amount" disabled>
+                         <div class="d-flex">
+                          <input type="text" class="form-control" id="requested_amount" aria-describedby="emailHelp" placeholder="Requested Amount" disabled><button value="accept_direct"  class="btn btn-sm btn-info" style="margin-left: 5px"><i class="fa fa-check"></i></button>
                         </div>
+                        </div>
+
                         <div class="form-group">
                           <label for="exampleInputPassword1">Approved Amount</label>
                           <input type="text" class="form-control" id="approved_amount" placeholder="Approved Amount">
                           <input type="hidden" id="due_id">
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="float: right;">Submit</button>
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Message(Optional)</label>
+                            <textarea id="admin_message" class="form-control" rows="4"> </textarea>
+                        </div>
+
+
+                            <button  value="accept"  type="submit" class="btn btn-primary" style="float: right;margin-left:10px">Accept</button>
+                            <button value="delete" type="submit" class="btn btn-danger" style="float: right;">Decline</button>
+
+
+
                       </form>
                     {{-- <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
                     <input class="form-control" value="{{ $item->wallet }}" type="number" step="0.01" name="balance">
@@ -195,6 +208,7 @@
         var formdata = new FormData();
         formdata.append('amount',$('#amount').val());
         formdata.append('message',$("#message").val());
+
       $.ajax({
         processData: false,
         contentType: false,
@@ -239,8 +253,63 @@
     });
 
     })
+
+    $("#accept_direct").click(function(){
+      alert('hel')
+
+    })
+
+
     $( "#approved_form" ).submit(function( event ) {
-        event.preventDefault();
+      event.preventDefault();
+      var approved_amount = $("#approved_amount").val();
+      var valid = true;
+      var status = 'approved';
+      var button_value = document.activeElement['value'];
+
+      if(button_value == 'accept')
+      {
+        if(!$("#approved_amount").val() )
+        {
+         if($.trim($('#admin_message').val()).length == 0 )
+        {
+          var data = 'Please fillup approved amount filed';
+          valid = false;
+        }
+        else
+        {
+            var data = 'Please click Decline button';
+          valid = false;
+        }
+        }
+      }
+      if(button_value == 'delete')
+      {
+        //alert($("#admin_message").val() );
+        if($.trim($('#admin_message').val()).length == 0 )
+        {
+          var data = 'Please fillup admin message filed';
+          valid = false;
+        }
+        status = 'declined';
+      }
+
+      if(button_value == 'accept_direct')
+      {
+        //alert($("#admin_message").val() );
+
+        approved_amount = $("#requested_amount").val();
+          valid = true;
+
+
+      }
+
+
+
+
+      if(valid )
+      {
+
 
         swal({
   title: "Are you sure?",
@@ -253,7 +322,9 @@
 
     var formdata = new FormData();
         formdata.append('id',$("#due_id").val());
-        formdata.append('approved_amount',$("#approved_amount").val());
+        formdata.append('approved_amount',approved_amount);
+        formdata.append('admin_message',$("#admin_message").val());
+        formdata.append('status',status);
         $.ajax({
         processData: false,
         contentType: false,
@@ -270,17 +341,24 @@
             $('.cover-spin').hide(0)
             },
         success:function(response){
-
-            $("#edit").modal('hide');
             get_data();
+            $("#edit").modal('hide');
+            $("#admin_message").val('');
+            $("#approved_amount").val('');
+            $("#requested_amount").val('');
+
         },
        });
   } else {
 
   }
-});
+  });
 
-
+      }
+      else
+      {
+        swal("Error!",data, "error");
+      }
 
 
     })
@@ -299,62 +377,7 @@
         });
 
     }
-//     function get_data2()
-//     {
 
-//     var table = $('.invoice_table').DataTable();
-//     table.destroy();
-
-//     var table = $('.invoice_table').DataTable({
-
-//         processing: true,
-//         serverSide: true,
-
-//         ordering:false,
-//         searchPanes: {
-//             orderable: false
-//         },
-//         dom: 'Plfrtip',
-//         columnDefs: [
-//     { "orderable": false, "targets": "_all" } // Applies the option to all columns
-//   ],
-//         ajax: {
-
-//             "url":'get_all_invoice',
-//             "type":'POST',
-//             "data":{
-//                 'start_date':$(".start_date").val(),
-//                 'end_date':$(".end_date").val(),
-//                 'type':$('#ExampleSelect option:selected').val(),
-//                 'retailer_id':$('#reseller option:selected').val()
-
-//             }
-
-
-//             },
-//         deferRender: true,
-//         columns: [
-//             //   {data: 'sl_no'},
-
-//             {data:'txid',name:'txid',orderable:false},
-//             {data:'number',name:'number'},
-//             {data:'date',name:'date'},
-//             {data:'type',name:'type'},
-//             {data:'cost',name:'cost'},
-//             {data:'profit',name:'profit'},
-//             {data:'invoice',name:'invoice'}
-
-
-//   ],
-
-//   drawCallback: function () {
-//             var api = this.api();
-//             datatable_sum(api, false);
-//         }
-
-
-//     });
-//     }
 
     function get_data()
     {
@@ -404,10 +427,18 @@
         + '<td>' + item[i].approved_date +  '</td>'
         + '<td class="'+class_name+'" style="font-weight:bold">' + item[i].status +  '</td>'
         ;
-        if(user_role == 'admin' && item[i].status == 'pending')
+        if(user_role == 'admin')
         {
-        added_row+=admin_column
+            if(item[i].status != 'approved')
+            {
+                added_row+=admin_column
+            }
+            else
+            {
+                added_row+='<td></td>';
+            }
         }
+
 
         + '</tr>';
         $('#wallet_data').append(added_row)
