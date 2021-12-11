@@ -411,7 +411,7 @@
             {
                 class_name = 'red';
             }
-            admin_column = '<td class="text-center"><button onclick="approve_amount('+item[i].id+')" class="btn btn-success"  >Edit</button></td>';
+            admin_column = '<td class="text-center"><button onclick="approve_amount('+item[i].id+')" class="btn btn-success" ><i class="fa fa-edit"></i></button><span><button onclick="approve_amount('+item[i].id+')" class="btn btn-info" ><i class="fa fa-check"></i></button></span></td>';
             added_row = '<tr class="bg-ocean">'
         + '<td>' + Number(i+1) +  '</td>'
         ;

@@ -42,20 +42,18 @@
 
                                     <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number">
 
-                                <div class="amount_input_field">
-                                    <label for="inputMobileNumber" class="form-label" style="margin-right: 35px">Amount</label>
+                                    <div class="amount_input_field">
+                                        <label for="inputMobileNumber" class="form-label" style="margin-right: 43px">Amount</label>
+                                            <select class="custom-select amount_list" name="amount" id="package" style="width: 85%">
 
-                                    <input type="text" id="amount" class="form-control " name="number" placeholder="Amount" style="width: 84%;"  autocomplete="off">
-                                    <input type="hidden" id="exchange_rate">
-                                    <input type="hidden" id="currency_code">
-                                    <input type="hidden" id="operator_id">
-                                    <div  id="calculation_section" style="padding-top:0px;padding-bottom:1px;background:#C62604;width:84%;padding-left:13px">
-                                        <p id="calculation" style="padding-top:10px;color:white;font-weight:bold;font-size:18px"><p>
-                                    </div>
-                                    <button class="btn btn-info mt-3" id="recharge_number" style="width: 84%;">Recharge</button>
+                                             </select>
 
-                                    {{-- <button class="btn btn-primary" style="margin-bottom: 6px; float: right;">Verify</button> --}}
-                                 </div>
+                                        <button class="btn btn-info mt-3" id="recharge_number" style="width: 85%;">Recharge</button>
+
+                                        {{-- <button class="btn btn-primary" style="margin-bottom: 6px; float: right;">Verify</button> --}}
+                                     </div>
+
+
                                  <button class="btn btn-info mt-3" style="width: 84%;" id="check_number">Check</button>
 
                             </div>
@@ -63,12 +61,12 @@
                             <div class="col-md-6 amount_input_field">
                                 <div class="mb-3 text-center">
 
-                                    <img id="operator_image" alt="Operator Logo Not Found">
+                                    <img style="height:112px; margin-right:101px" id="operator_image" alt="Operator Logo Not Found" >
 
                                  </div>
                                 <div class="mb-3" >
                                     <div class="text-center" style="padding-top:10px;padding-bottom:1px;background:#C62604;width:84%;margin-bottom:10px">
-                                        <p style="font-weight:bold;color:white;font-size:18px">Minimum Amount: <span id="min_amount">20</span> <span style="padding-left:60px">Maximum Amount: <span id="max_amount">50</span></span></p>
+                                        <p style="font-weight:bold;color:white;font-size:18px">Operator Name: <span id="operator_name"></span> </p>
                                     </div>
 
                                  </div>
@@ -223,7 +221,7 @@
       $.ajax({
         processData: false,
         contentType: false,
-        url: "reloadly_operator_details",
+        url: "ppn_operator_details",
         type:"POST",
         headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -235,23 +233,28 @@
         complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
             $('.cover-spin').hide(0)
             },
-        success:function(response){
+        success:function(responses){
 
-
-            if(response.status==true)
+            if(responses.status==true)
             {
-                var response = response.data;
+                var response = responses.data;
+                var skus = responses.skus;
+                var option_list = '';
+
+
+            for (var i = 0; i < skus.length; i++){
+                option_list+='<option value='+skus[i].skuId+','+skus[i].amount+'>'+skus[i].amount_text+'</option>'
+            }
+            $('.amount_list').append(option_list);
+
                 $("#check_number").hide();
 
                 $(".amount_input_field").show();
                 $("#recharge_number").show();
                 $('.cover-spin').hide(0);
-                $('#min_amount').text(response.minAmount+0.01);
-                $('#max_amount').text(response.maxAmount);
-                $("#exchange_rate").val(response.fx.rate);
-                $("#currency_code").val(response.fx.currencyCode);
-                $("#operator_id").val(response.operatorId);
-                $("#operator_image").attr("src",response.logoUrls[2]);
+                $("#operator_image").attr("src",responses.logo_url);
+                $("#operator_name").text(responses.operator_name);
+
                 // $("#receiverMobile").attr('disabled',true);
                 // $('.iti__flag-container').attr('disabled',true);
 
@@ -273,19 +276,23 @@
 
    $("#recharge_number").click(function(){
     event.preventDefault();
+   var amount_list = $(".amount_list :selected").val();
+   var amount_list = amount_list.split(",");
+    var skuId = amount_list[0];
+    var amount = amount_list[1];
 
     var formdata = new FormData();
     formdata.append('number',$('#receiverMobile').val());
+    formdata.append('skuId', skuId);
+    formdata.append('amount',amount);
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);
-    formdata.append('operatorId',$('#operator_id').val());
-    formdata.append('amount',$('#amount').val());
 
 
 
       $.ajax({
         processData: false,
         contentType: false,
-        url: "reloadly_recharge",
+        url: "ppn_recharge",
         type:"POST",
         headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -364,4 +371,4 @@
  </script>
 @endsection
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

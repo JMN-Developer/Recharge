@@ -15,25 +15,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
+        // \App\Models\SecretStore::create([
+        //     'type'=>'international',
+        //     'company_name'=>'Ppn',
+        //     'content'=>Crypt::encrypt('UG9pbnQxOnlWcjRANTQ2Znk=')
+
+        // ]);
     //     \App\Models\User::factory(10)->create();
     //    \App\Models\RechargeHistory::factory(10000)->create();
-      \App\Models\ApiList::create([
-           'type'=>'International',
-           'company_name'=>'Reloadly',
-       ]);
-       \App\Models\ApiList::create([
-        'type'=>'International',
-        'company_name'=>'Ding Connect',
-    ]);
+    //   \App\Models\ApiList::create([
+    //        'type'=>'International',
+    //        'company_name'=>'Reloadly',
+    //    ]);
+    //    \App\Models\ApiList::create([
+    //     'type'=>'International',
+    //     'company_name'=>'Ding Connect',
+    // ]);
 
-    \App\Models\ApiList::create([
-        'type'=>'Domestic',
-        'company_name'=>'Epay',
-    ]);
+    // \App\Models\ApiList::create([
+    //     'type'=>'Domestic',
+    //     'company_name'=>'Epay',
+    // ]);
 
-    \App\Models\ApiList::create([
-        'type'=>'Domestic',
-        'company_name'=>'Prepay',
-    ]);
+    // \App\Models\ApiList::create([
+    //     'type'=>'Domestic',
+    //     'company_name'=>'Prepay',
+    // ]);
+    // }
     }
 }

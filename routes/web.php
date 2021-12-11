@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\RechargeController;
 use App\Http\Controllers\ReloadlyController;
+use App\Http\Controllers\PpnController;
 use App\Http\Controllers\PinController;
 use App\Http\Controllers\SimController;
 use App\Http\Controllers\OperatorController;
@@ -275,7 +276,8 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 {
     Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
     Route::get('recharge-reloadly', [ReloadlyController::class,'index'])->name('recharge-reloadly');
-    Route::get('recharge-ppn', [ReloadlyController::class,'index'])->name('recharge-ppn');
+    Route::get('recharge-ppn', [PpnController::class,'index'])->name('recharge-ppn');
+
     Route::post('get_all_invoice',[RechargeController::class,'get_all_invoice'])->name('get_all_invoice');
     Route::get('all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
     Route::get('recharge-italy', [RechargeController::class,'RechargeDom'])->name('recharge-italy');
@@ -301,7 +303,9 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::post('domestic_pin',[PinController::class,'store'])->name('domestic-pin');
     Route::get('pin_invoice/{id}',[PinController::class,'invoice']);
     Route::post('reloadly_operator_details',[ReloadlyController::class,'mobile_number_details'])->name('reloadly_operator_details');
+    Route::post('ppn_operator_details',[PpnController::class,'mobile_number_details'])->name('ppn_operator_details');
     Route::post('reloadly_recharge',[ReloadlyController::class,'reloadly_recharge'])->name('reloadly_recharge');
+    Route::post('ppn_recharge',[PpnController::class,'recharge'])->name('ppn_recharge');
 
 });
 

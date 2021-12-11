@@ -1,1 +1,1 @@
-declined
+{"responseCode":"000","responseMessage":"Success","payLoad":[{"productId":765,"productName":"Robi-Bangladesh","imageUrl":"http://www.valuetopup.com/image/index/15011"}]}

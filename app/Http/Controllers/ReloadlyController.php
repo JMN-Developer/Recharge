@@ -50,6 +50,7 @@ class ReloadlyController extends Controller
         $data = $this->reloadly->operator_details($number,$countryIso);
         if($data['status']){
             $data = (array)$data['payload'];
+
             return ['status'=>true,'data'=>$data];
         }
         else
@@ -78,7 +79,7 @@ class ReloadlyController extends Controller
             'operator'=>$data->operatorName,
             'status'=>'completed',
             'cost'=>$data->requestedAmount-$data->discount,
-            'transaction_id_reloadly'=>$data->transactionId,
+            'transaction_id_company'=>$data->transactionId,
             'country_code'=>$data->countryCode,
             'discount'=>$data->discount,
             'reseller_com'=>$reseller_com,
@@ -96,7 +97,7 @@ class ReloadlyController extends Controller
         if(a::user()->role != 'admin')
         {
             $existing_wallet = User::where('id',a::user()->id)->first()->wallet;
-            $new_wallet = $existing_wallet-$requested_amount-$discount;
+            $new_wallet = $existing_wallet-$requested_amount-($discount/2);
             User::where('id',a::user()->id)->update(['wallet'=>$new_wallet]);
 
         }
@@ -114,14 +115,15 @@ class ReloadlyController extends Controller
         $data = $this->reloadly->recharge($operatorId,$amount,$countryCode,$number,$txid);
 
         if($data['status']){
+            //file_put_contents('test.txt',json_encode($data['payload']));
           $this->create_recharge($data['payload']);
           $this->update_balance($data['payload']->balanceInfo->newBalance,$data['payload']->requestedAmount,$data['payload']->discount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
-    }
+        }
     else
     {
-        $data = $data['payload'];
-        return ['status'=>false,'message'=>$data->message];
+        //$data = $data['payload'];
+        return ['status'=>false,'message'=>'Some Error Occured'];
     }
       //  file_put_contents('test.txt',json_encode($data));
        // file_put_contents('test.txt',$request->operatorId." ".$request->amount." ".$request->countryCode." ".$request->number);
