@@ -221,10 +221,10 @@ margin-left: 3px;
           <div class="col-12">
             @if (Auth::user()->role != 'admin')
             <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span>
-                {{-- <a href="{{ route('wallet-request') }}" class="notification">
+                <a href="{{ route('wallet-request') }}" class="notification">
                     <span style="font-weight:bold;color:black">WR</span>
                     <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
-                  </a> --}}
+                  </a>
 
             </p>
             {{-- <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p> --}}
@@ -311,6 +311,7 @@ margin-left: 3px;
                           Route::currentRouteName() == 'recharge-gift-card' ||
                           Route::currentRouteName() == 'recharge-calling-card' ||
                           Route::currentRouteName() == 'recharge-reloadly' ||
+                          Route::currentRouteName() == 'calling-card' ||
                           Route::currentRouteName() == 'print-all-invoice') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'recharge-int' ||
                           Route::currentRouteName() == 'recharge-italy' ||
@@ -358,6 +359,14 @@ margin-left: 3px;
                     <p>Pin</p>
                   </a>
                 </li>
+                @endif
+                @if(Auth::user()->role)
+                {{-- <li class="nav-item">
+                    <a href="{{ route('calling-card') }}" class="@if(Route::currentRouteName() == 'calling-card') nav-link active @endif nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>White Calling Card</p>
+                    </a>
+                  </li> --}}
                 @endif
                 <li class="nav-item">
                   <a href="{{ route('recharge-invoice') }}" class="@if(Route::currentRouteName() == 'recharge-invoice') nav-link active @endif nav-link">

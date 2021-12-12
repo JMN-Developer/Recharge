@@ -131,6 +131,7 @@ class PpnController extends Controller
         }
     }
 
+
     public function recharge(Request $request)
     {
         $change = [' ','+'];
@@ -189,6 +190,11 @@ class PpnController extends Controller
       //  file_put_contents('test.txt',json_encode($data));
        // file_put_contents('test.txt',$request->operatorId." ".$request->amount." ".$request->countryCode." ".$request->number);
 
+    }
+
+    public function calling_card()
+    {
+        return view('');
     }
 
 }

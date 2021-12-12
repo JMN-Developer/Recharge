@@ -73,14 +73,14 @@
 
                 <form id="wallet_submit" class="form-inline" style="justify-content: center;padding-bottom:10px">
                     <div class="form-group mb-2" style="width: 128px">
-                      <label for="staticEmail2" class="sr-only">Email</label>
+                      <label for="staticEmail2" class="sr-only"></label>
                       <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Requested Amount" disabled>
                     </div>
                     <div class="form-group mx-sm-3 mb-2">
                       <label for="inputPassword2" class="sr-only">Amount</label>
                       <input type="text" class="form-control" id="amount" placeholder="Amount">
                     </div>
-                    <div class="form-group mb-2" style="width: 120px">
+                    <div class="form-group mb-2" style="width: 123px">
                         <label for="staticEmail2" class="sr-only" >Message</label>
                         <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Message(Optional)" disabled>
                       </div>
@@ -96,41 +96,20 @@
             </div>
         </div>
         @endif
-      <!-- Default box -->
-      <div class="card card-solid">
-        <div class="card-body pb-0">
-            <table id="wallet_request_table"  class="table table-bordered display wallet_request_table">
-                <thead class="thead-dark" style="background:black;color:white">
-                  <tr>
-                    <th scope="col">#</th>
-                    @if(auth()->user()->role =='admin')
-                    <th scope="col">Reseller Name</th>
-                    @endif
-                    <th scope="col">Message</th>
-                    <th scope="col">Requested Amount</th>
-                    <th scope="col">Approved Amount</th>
-                    <th scope="col">Requested Date</th>
-                    <th scope="col">Approved Date</th>
-                    <th scope="col">Status</th>
-                    @if(auth()->user()->role =='admin')
-                    <th scope="col">Action</th>
-                    @endif
-                  </tr>
-                </thead>
-                <tbody id="wallet_data">
-
-
-                </tbody>
-
-              </table>
-        </div>
 
         <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
 
                 @csrf
-                <div style="padding: 30px">
+                <div class="modal-header">
+                    <h5 class="modal-title">Waller Request Update</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                <div class="modal-body">
+                <div >
                     <form id="approved_form">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Requested Amount</label>
@@ -156,15 +135,49 @@
 
 
 
-                      </form>
+
                     {{-- <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
                     <input class="form-control" value="{{ $item->wallet }}" type="number" step="0.01" name="balance">
                     <button class="btn btn-success btn-sm"  type="submit">Edit Balance For {{$item->first_name}}</button> --}}
                 </div>
+            </div>
 
             </div>
             </div>
         </div>
+      <!-- Default box -->
+      <div class="card card-solid">
+        <div class="card-body pb-0">
+            <table id="wallet_request_table"  class="table table-bordered display wallet_request_table">
+                <thead class="thead-dark" style="background:black;color:white">
+                  <tr>
+                    <th scope="col">#</th>
+                    @if(auth()->user()->role =='admin')
+                    <th scope="col">Reseller Name</th>
+                    @else
+                    <th scope="col">Admin Message</th>
+                    @endif
+
+                    <th scope="col">Message</th>
+                    <th scope="col">Requested Amount</th>
+                    <th scope="col">Approved Amount</th>
+                    <th scope="col">Requested Date</th>
+                    <th scope="col">Approved Date</th>
+                    <th scope="col">Status</th>
+                    @if(auth()->user()->role =='admin')
+                    <th scope="col">Action</th>
+                    @endif
+                  </tr>
+                </thead>
+                <tbody id="wallet_data">
+
+
+                </tbody>
+            </form>
+              </table>
+        </div>
+
+
         <!-- /.card-body -->
 
         <!-- /.card-footer -->
@@ -341,11 +354,26 @@
             $('.cover-spin').hide(0)
             },
         success:function(response){
+            iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 10000,
+                    title: 'Success',
+                    message: "Updated Successfully",
+
+                });
             get_data();
             $("#edit").modal('hide');
             $("#admin_message").val('');
             $("#approved_amount").val('');
             $("#requested_amount").val('');
+
 
         },
        });
@@ -362,6 +390,53 @@
 
 
     })
+    function approved_direct(id)
+    {
+        var status = 'approved';
+        var approved_amount = $("#requested_amount").val();
+        approve_amount =
+        swal({
+  title: "Are you sure?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+
+    var formdata = new FormData();
+        formdata.append('id',id);
+        formdata.append('approved_amount',approved_amount);
+        formdata.append('status',status);
+        $.ajax({
+        processData: false,
+        contentType: false,
+        url: "/approved_amount",
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formdata,
+        beforeSend: function () {
+            $('.cover-spin').show(0)
+            },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            $('.cover-spin').hide(0)
+            },
+        success:function(response){
+            get_data();
+            $("#edit").modal('hide');
+            $("#admin_message").val('');
+            $("#approved_amount").val('');
+            $("#requested_amount").val('');
+
+        },
+       });
+  } else {
+
+  }
+  });
+    }
     function approve_amount(id)
     {
         $("#due_id").val(id);
@@ -411,13 +486,17 @@
             {
                 class_name = 'red';
             }
-            admin_column = '<td class="text-center"><button onclick="approve_amount('+item[i].id+')" class="btn btn-success" ><i class="fa fa-edit"></i></button><span><button onclick="approve_amount('+item[i].id+')" class="btn btn-info" ><i class="fa fa-check"></i></button></span></td>';
+            admin_column = '<td class="text-center"><button onclick="approve_amount('+item[i].id+')" class="btn btn-success" ><i class="fa fa-edit"></i></button><span><button onclick="approved_direct('+item[i].id+')" class="btn btn-info" ><i class="fa fa-check"></i></button></span></td>';
             added_row = '<tr class="bg-ocean">'
         + '<td>' + Number(i+1) +  '</td>'
         ;
         if(user_role == 'admin')
         {
             added_row+='<td>' + item[i].reseller_name +  '</td>'
+        }
+        else
+        {
+            added_row+='<td>' + item[i].admin_message +  '</td>'
         }
         added_row+=
         '<td>' + item[i].message +  '</td>'

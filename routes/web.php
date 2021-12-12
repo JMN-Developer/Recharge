@@ -306,6 +306,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::post('ppn_operator_details',[PpnController::class,'mobile_number_details'])->name('ppn_operator_details');
     Route::post('reloadly_recharge',[ReloadlyController::class,'reloadly_recharge'])->name('reloadly_recharge');
     Route::post('ppn_recharge',[PpnController::class,'recharge'])->name('ppn_recharge');
+    Route::get('calling-card',[PpnController::class,'calling_card_index'])->name('calling-card');
 
 });
 
