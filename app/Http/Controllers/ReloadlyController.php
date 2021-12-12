@@ -70,6 +70,8 @@ class ReloadlyController extends Controller
     {
         $reseller_com = $data->discount/2;
         $admin_com = $data->discount-$reseller_com;
+        $cost = $data->requestedAmount-$data->discount;
+        $cost = round((float)$cost,2);
         RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$data->recipientPhone,
@@ -78,7 +80,7 @@ class ReloadlyController extends Controller
             'type'=>'International',
             'operator'=>$data->operatorName,
             'status'=>'completed',
-            'cost'=>$data->requestedAmount-$data->discount,
+            'cost'=> $cost,
             'transaction_id_company'=>$data->transactionId,
             'country_code'=>$data->countryCode,
             'discount'=>$data->discount,

@@ -102,7 +102,7 @@ class PpnController extends Controller
             'type'=>'International',
             'operator'=>$data->product->productName,
             'status'=>'completed',
-            'cost'=>$data->invoiceAmount,
+            'cost'=>round($data->invoiceAmount,2),
             'transaction_id_company'=>$data->transactionId,
             'country_code'=>$country_code,
             'discount'=>$discount,

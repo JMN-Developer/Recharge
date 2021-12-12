@@ -379,7 +379,7 @@ function fetch_table(start_date,end_date)
             {data:'txid',name:'txid',orderable:false},
             {data:'number',name:'number'},
             {data:'date',name:'date'},
-            {data:'type',name:'type'},
+            {data:'recharge_type',name:'type'},
             {data:'cost',name:'cost'},
             {data:'profit',name:'profit'},
             {data:'invoice',name:'invoice'}

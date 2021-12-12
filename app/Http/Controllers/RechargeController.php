@@ -1000,6 +1000,13 @@ class RechargeController extends Controller
                return Carbon::parse($data->created_at)->format('d-m-Y H:i:s');
 
             })
+            ->addColumn('recharge_type',function($data){
+                if(a::user()->role=='admin')
+                $text = $data->type.'('.$data->company_name.')';
+                else
+                $text = $data->type;
+                return $text;
+            })
             ->addColumn('invoice', function($data){
                 $button = '<a class="btn btn-success" href="recharge_invoice/'.$data->id.'"> Invoice</a>';
                 return $button;
