@@ -221,10 +221,10 @@ margin-left: 3px;
           <div class="col-12">
             @if (Auth::user()->role != 'admin')
             <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span>
-                <a href="{{ route('wallet-request') }}" class="notification">
+                {{-- <a href="{{ route('wallet-request') }}" class="notification">
                     <span style="font-weight:bold;color:black">WR</span>
                     <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
-                  </a>
+                  </a> --}}
 
             </p>
             {{-- <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p> --}}
