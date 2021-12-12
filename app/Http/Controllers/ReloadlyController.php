@@ -110,7 +110,7 @@ class ReloadlyController extends Controller
         $amount = $request->amount;
         $countryCode = $request->countryCode;
         $operatorId = $request->operatorId;
-        $transaction =  new GenerateTransactionId(a::user()->id,10);
+        $transaction =  new GenerateTransactionId(a::user()->id,11);
         $txid = $transaction->transaction_id();
         $data = $this->reloadly->recharge($operatorId,$amount,$countryCode,$number,$txid);
 

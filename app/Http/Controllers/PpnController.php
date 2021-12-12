@@ -138,7 +138,7 @@ class PpnController extends Controller
         $number = str_replace($change,'',$request->number);
         $amount = $request->amount;
         $skuId = $request->skuId;
-        $transaction =  new GenerateTransactionId(a::user()->id,11);
+        $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
         $data = $this->ppn->recharge($skuId,$amount,$txid,$number);
     //    $tmp_data = '{
