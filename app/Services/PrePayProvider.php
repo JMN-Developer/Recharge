@@ -3,7 +3,7 @@
 namespace App\Services;
 use App\Models\SecretStore;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Log;
+
 
 /**
  * Class BasicToken
@@ -117,8 +117,8 @@ class PrePayProvider
                     ]
         ]);
         $status = $response->getStatusCode();
-        $response = $response->getBody();
-        Log::info($response);
+        $response = json_decode($response->getBody());
+
 
         if($status == '200')
             {
