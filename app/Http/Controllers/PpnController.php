@@ -141,6 +141,7 @@ class PpnController extends Controller
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
         $data = $this->ppn->recharge($skuId,$amount,$txid,$number);
+
     //    $tmp_data = '{
     //     "responseCode":"000",
     //     "responseMessage":null,
