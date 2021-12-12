@@ -394,9 +394,9 @@
     })
     function approved_direct(id)
     {
+
         var status = 'approved';
-        var approved_amount = $("#requested_amount").val();
-        approve_amount =
+        var approved_amount =$("."+id+"-requested-amount").html();
         swal({
   title: "Are you sure?",
   icon: "warning",
@@ -516,7 +516,7 @@
         }
         added_row+=
         '<td>' + item[i].message +  '</td>'
-        + '<td>' + item[i].requested_amount +  '</td>'
+        + '<td ><p class="'+item[i].id+'-requested-amount">' + item[i].requested_amount +  '</p></td>'
         + '<td>' + item[i].approved_amount +  '</td>'
         + '<td>' + item[i].requested_date +  '</td>'
         + '<td>' + item[i].approved_date +  '</td>'
