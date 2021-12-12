@@ -424,6 +424,20 @@
             $('.cover-spin').hide(0)
             },
         success:function(response){
+            iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 10000,
+                    title: 'Success',
+                    message: "Updated Successfully",
+
+                });
             get_data();
             $("#edit").modal('hide');
             $("#admin_message").val('');
