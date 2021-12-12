@@ -524,7 +524,7 @@
         ;
         if(user_role == 'admin')
         {
-            if(item[i].status != 'approved')
+            if(item[i].status != 'approved' && item[i].decline_status == 0)
             {
                 added_row+=admin_column
             }

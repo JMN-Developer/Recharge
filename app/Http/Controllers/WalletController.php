@@ -78,6 +78,7 @@ class WalletController extends Controller
                 'admin_notification'=>1,
                 'status'=>$status,
             ]);
+            DueControl::where('id',$id)->update(['decline_status'=>1]);
         }
         else{
         DueControl::where('id',$id)->update(['approved_amount'=>$approved_amount,'status'=>$status,'admin_notification'=>1,'reseller_notification'=>0,'admin_message'=>$admin_message]);
