@@ -326,26 +326,12 @@ margin-left: 3px;
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{ route('recharge-int') }}" class="@if(Route::currentRouteName() == 'recharge-int') nav-link active @endif nav-link">
+                  <a href="{{ route('international') }}" class="@if(Route::currentRouteName() == 'recharge-int') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>International</p>
                   </a>
                 </li>
-                @if (Auth::user()->role == 'admin')
-                <li class="nav-item">
-                  <a href="{{ route('recharge-reloadly') }}" class="@if(Route::currentRouteName() == 'recharge-reloadly') nav-link active @endif nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>International2</p>
-                  </a>
-                </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('recharge-ppn') }}" class="@if(Route::currentRouteName() == 'recharge-ppn') nav-link active @endif nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>International3</p>
-                    </a>
-                  </li>
-                @endif
                 <li class="nav-item">
                   <a href="{{ route('recharge-italy') }}" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>

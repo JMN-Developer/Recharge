@@ -17,8 +17,9 @@ class ReloadlyController extends Controller
     //
 
     protected $reloadly;
-    public function __construct(ReloadlyProvider $reloadly)
+    public function __construct()
     {
+        $reloadly = new ReloadlyProvider();
         $this->reloadly = $reloadly;
     }
 

@@ -64,8 +64,12 @@
                                         <p style="font-weight:bold;color:white;font-size:18px">Pin Number: <span id="pin_number"></span> </p>
                                     </div>
 
-                                    <div class="text-center" style="padding-top:10px;padding-bottom:1px;background:#C62604;width:84%;margin-bottom:10px">
-                                        <p style="font-weight:bold;color:white;font-size:18px">Control Number: <span id="control_number"></span> </p>
+                                    <div style="width: 85%" >
+                                        <label for="inputMobileNumber" class="form-label">Send this pin to email</label>
+                                        <div class="d-flex">
+                                        <input type="email" id="email" class="form-control" placeholder="Email">
+                                        <button type="button" class="btn btn-sm btn-info send_pin_to_email">Send </button>
+                                         </div>
                                     </div>
 
 
@@ -183,6 +187,71 @@
 
     }
 
+    $(".send_pin_to_email").click(function(){
+        swal({
+  title: "Are you sure?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    var pin_number =  $("#pin_number").text();
+    var email = $("#email").val();
+    var formdata = new FormData();
+    formdata.append('pin_number', pin_number);
+    formdata.append('email', email);
+
+
+
+
+      $.ajax({
+        processData: false,
+        contentType: false,
+        url: "send_pin_to_email",
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formdata,
+        beforeSend: function () {
+            $('.cover-spin').show(0)
+            },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            $('.cover-spin').hide(0)
+            },
+        success:function(response){
+            $('.cover-spin').hide(0);
+            iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 10000,
+                    title: 'Success',
+                    message: "Mail Send Successfully",
+
+                });
+
+                location.reload();
+
+
+
+
+
+        },
+       });
+
+  } else {
+
+  }
+  });
+    });
+
    $("#recharge_number").click(function(){
 
     event.preventDefault();
@@ -226,7 +295,7 @@
                 get_table();
                 $(".operator_details").show();
                 $("#pin_number").text(response.pin_number)
-                $("#control_number").text(response.control_number)
+
                 iziToast.success({
                     backgroundColor:"Green",
                     messageColor:'white',
@@ -255,7 +324,7 @@
                     color:'white',
                     position:'topCenter',
                     timeout: 10000,
-                    title: 'Success',
+                    title: 'Error',
                     message: "Some Error Occured. Please Try Again",
 
                 });

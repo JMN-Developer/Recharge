@@ -19,7 +19,9 @@ use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ApiTestController;
+use App\Http\Controllers\InternationalApiController;
 use App\Http\Controllers\WalletController;
+use App\Models\ApiList;
 use App\Models\SimOperator;
 use App\Models\sim;
 use App\Models\User;
@@ -29,6 +31,7 @@ use App\Models\Phone;
 use App\Models\Order;
 use App\Models\DomesticProduct;
 use App\Models\DomesticProfit;
+
 
 
 /*
@@ -46,7 +49,7 @@ Route::get('frontend', function () {
     return view('frontend.index');
 });
 
-
+Route::get('test-notification',[PpnController::class,'send_pin']);
 
 Route::get('test',[RechargeController::class,'data_test']);
 
@@ -279,9 +282,14 @@ Route::get('wallet_notification_count',[WalletController::class,'wallet_notifica
 
 Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 {
-    Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
-    Route::get('recharge-reloadly', [ReloadlyController::class,'index'])->name('recharge-reloadly');
-    Route::get('recharge-ppn', [PpnController::class,'index'])->name('recharge-ppn');
+
+   Route::get('international', [InternationalApiController::class,'index'])->name('international');
+
+
+    // Route::get('international1', [RechargeController::class,'RechargeInt'])->name('recharge-int');
+    // Route::get('international2', [ReloadlyController::class,'index'])->name('recharge-reloadly');
+    // Route::get('international3', [PpnController::class,'index'])->name('recharge-ppn');
+
 
     Route::post('get_all_invoice',[RechargeController::class,'get_all_invoice'])->name('get_all_invoice');
     Route::get('all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
@@ -314,6 +322,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::post('ppn_pin',[PpnController::class,'pin'])->name('ppn_pin');
     Route::get('calling-card',[PpnController::class,'calling_card_index'])->name('calling-card');
     Route::get('get_white_calling_table',[PpnController::class,'get_white_calling_table'])->name('get_white_calling_table');
+    Route::post('send_pin_to_email',[PpnController::class,'send_pin']);
 
 });
 

@@ -7,17 +7,22 @@ use App\Models\Balance;
 use Illuminate\Http\Request;
 use App\Models\RechargeHistory;
 use App\Models\User;
+use App\Notifications\PinSentToEmail;
 use App\Services\PrePayProvider;
 use Auth as a;
 use App\Services\GenerateTransactionId;
+use Illuminate\Support\Facades\Notification;
+
+
 
 class PpnController extends Controller
 {
     //
 
     protected $ppn;
-    public function __construct(PrePayProvider $ppn)
+    public function __construct()
     {
+        $ppn = new PrePayProvider();
         $this->ppn = $ppn;
     }
     public function index()
@@ -87,6 +92,25 @@ class PpnController extends Controller
        //file_put_contents('test.txt',$data->id);
 
        // file_put_contents('test.txt',$number." ".$countryIso);
+    }
+    public function send_pin(Request $request)
+    {
+       // file_put_contents('test.txt',$request->pin_number." ".$request->email);
+       // $data = User::find(a::user()->id)->first();
+        $data['email'] = $request->email;
+        $PinData = [
+            'from'=>'pointrecharge@gmail.com',
+            'pin'=>$request->pin_number
+        ];
+        try {
+            Notification::route('mail',$request->email)
+                ->notify(new PinSentToEmail($PinData));
+           // Notification::send('kazinokib7@gmail.com', new PinSentToEmail($PinData));
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
     }
 
     public function create_recharge($data,$number,$txid,$country_code)
@@ -167,7 +191,7 @@ class PpnController extends Controller
         $skuId = $request->skuId;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
-        $data = $this->ppn->recharge($skuId,$amount,$txid,$number);
+       // $data = $this->ppn->recharge($skuId,$amount,$txid,$number);
 
     //    $tmp_data = '{
     //     "responseCode":"000",
@@ -257,40 +281,41 @@ class PpnController extends Controller
         $skuId = $request->skuId;
         $transaction =  new GenerateTransactionId(a::user()->id,32);
         $txid = $transaction->transaction_id();
-        $data = $this->ppn->pin($skuId,$txid);
-        // $tmp_text = '{
-        //     "responseCode": "000",
-        //     "responseMessage": null,
-        //     "payLoad": {
-        //         "transactionId": 129064031,
-        //         "transactionDate": "12/12/2021 07:05",
-        //         "invoiceAmount": 1.62,
-        //         "faceValue": 2,
-        //         "discount": 0,
-        //         "fee": 0,
-        //         "product": {
-        //             "skuId": 3576,
-        //             "productName": "White Calling PINS - Italy",
-        //             "faceValue": 2,
-        //             "instructions": ""
-        //         },
-        //         "topupDetail": null,
-        //         "pins": [
-        //             {
-        //                 "pinNumber": "822 0276 652",
-        //                 "controlNumber": "10728765",
-        //                 "deliveredAmount": 2,
-        //                 "deliveredCurrencyCode": "EUR"
-        //             }
-        //         ],
-        //         "giftCardDetail": null,
-        //         "simInfo": null,
-        //         "billPaymentDetail": null
-        //     }
-        // }';
-        // $data = json_decode($tmp_text);
-        // $data = ['status'=>true,'payload'=>$data];
+        //$data = $this->ppn->pin($skuId,$txid);
+        $tmp_text = '{
+            "responseCode": "000",
+            "responseMessage": null,
+            "payLoad": {
+                "transactionId": 129064031,
+                "transactionDate": "12/12/2021 07:05",
+                "invoiceAmount": 1.62,
+                "faceValue": 2,
+                "discount": 0,
+                "fee": 0,
+                "product": {
+                    "skuId": 3576,
+                    "productName": "White Calling PINS - Italy",
+                    "faceValue": 2,
+                    "instructions": ""
+                },
+                "topupDetail": null,
+                "pins": [
+                    {
+                        "pinNumber": "822 0276 652",
+                        "controlNumber": "10728765",
+                        "deliveredAmount": 2,
+                        "deliveredCurrencyCode": "EUR"
+                    }
+                ],
+                "giftCardDetail": null,
+                "simInfo": null,
+                "billPaymentDetail": null
+            }
+        }';
+        $data = json_decode($tmp_text);
+        $data = ['status'=>true,'payload'=>$data];
         if($data['status']){
+
            $this->create_pin($data['payload']->payLoad,$txid);
            $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
          return ['status'=>true,'message'=>'Recharge Successfull','pin_number'=>$data['payload']->payLoad->pins[0]->pinNumber,'control_number'=>$data['payload']->payLoad->pins[0]->controlNumber];
