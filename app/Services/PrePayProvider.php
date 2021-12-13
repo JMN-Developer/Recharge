@@ -131,4 +131,36 @@ class PrePayProvider
             return ['payload'=>$response,'status'=>false];
             }
     }
+    public function pin($sku_id,$txid){
+        $client = new \GuzzleHttp\Client(['http_errors' => false]);
+        $response = $client->post('https://www.valuetopup.com/api/v1/transaction/pin',[
+            'headers' => [
+            'Authorization'=>'Basic '.$this->access_token,
+            'Content-Type' => 'application/json'
+
+            ],
+            'verify' => false,
+            'json' => [
+                    'skuId' => $sku_id,
+                    'correlationId'=>$txid,
+
+
+                    ]
+        ]);
+        file_put_contents('test.txt',$response->getBody());
+        $status = $response->getStatusCode();
+        $response = json_decode($response->getBody());
+
+
+        if($status == '200')
+            {
+
+            return ['payload'=>$response,'status'=>true];
+            }
+            else
+            {
+
+            return ['payload'=>$response,'status'=>false];
+            }
+    }
 }

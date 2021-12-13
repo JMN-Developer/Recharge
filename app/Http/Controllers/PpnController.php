@@ -115,6 +115,32 @@ class PpnController extends Controller
         ]);
     }
 
+    public function create_pin($data,$txid)
+    {
+        $discount = $data->faceValue - $data->invoiceAmount;
+        $reseller_com = $discount/2;
+        $admin_com = $discount-$reseller_com;
+        RechargeHistory::create([
+            'reseller_id'=>a::user()->id,
+            'amount'=>$data->faceValue,
+            'txid'=>$txid,
+            'type'=>'White Calling',
+            'operator'=>$data->product->productName,
+            'status'=>'completed',
+            'cost'=>round($data->invoiceAmount,2),
+            'transaction_id_company'=>$data->transactionId,
+            'discount'=>$discount,
+            'reseller_com'=>$reseller_com,
+            'admin_com'=>$admin_com,
+            'deliveredAmount'=>floor($data->pins[0]->deliveredAmount),
+            'deliveredAmountCurrencyCode'=>$data->pins[0]->deliveredCurrencyCode,
+            'company_name'=>'Ppn',
+            'pin_number'=>$data->pins[0]->pinNumber,
+            'control_number'=>$data->pins[0]->controlNumber
+
+        ]);
+    }
+
     public function update_balance($recharge_amount,$cost)
     {
         $balance_info = Balance::where('type','ppn')->first();
@@ -192,9 +218,89 @@ class PpnController extends Controller
 
     }
 
-    public function calling_card()
+    public function calling_card_index()
     {
-        return view('');
+        if(a::user()->role == 'user'){
+            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','White Calling')->where('company_name','Ppn')->latest()->take(10)->get();
+        }else{
+            $data = RechargeHistory::where('type','White Calling')->where('company_name','Ppn')->join('users','users.id','=','recharge_histories.reseller_id')
+            ->select('recharge_histories.*','users.nationality')
+            ->latest()
+            ->take(10)
+            ->get();
+
+
+        }
+
+        return view('front.white-calling-ppn',compact('data'));
     }
+
+    public function get_white_calling_table()
+    {
+        if(a::user()->role == 'user'){
+            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','White Calling')->where('company_name','Ppn')->latest()->take(10)->get();
+        }else{
+            $data = RechargeHistory::where('type','White Calling')->where('company_name','Ppn')->join('users','users.id','=','recharge_histories.reseller_id')
+            ->select('recharge_histories.*','users.nationality')
+            ->latest()
+            ->take(10)
+            ->get();
+
+
+        }
+        return $data;
+
+    }
+
+    public function pin(Request $request)
+    {
+        $skuId = $request->skuId;
+        $transaction =  new GenerateTransactionId(a::user()->id,32);
+        $txid = $transaction->transaction_id();
+        $data = $this->ppn->pin($skuId,$txid);
+        // $tmp_text = '{
+        //     "responseCode": "000",
+        //     "responseMessage": null,
+        //     "payLoad": {
+        //         "transactionId": 129064031,
+        //         "transactionDate": "12/12/2021 07:05",
+        //         "invoiceAmount": 1.62,
+        //         "faceValue": 2,
+        //         "discount": 0,
+        //         "fee": 0,
+        //         "product": {
+        //             "skuId": 3576,
+        //             "productName": "White Calling PINS - Italy",
+        //             "faceValue": 2,
+        //             "instructions": ""
+        //         },
+        //         "topupDetail": null,
+        //         "pins": [
+        //             {
+        //                 "pinNumber": "822 0276 652",
+        //                 "controlNumber": "10728765",
+        //                 "deliveredAmount": 2,
+        //                 "deliveredCurrencyCode": "EUR"
+        //             }
+        //         ],
+        //         "giftCardDetail": null,
+        //         "simInfo": null,
+        //         "billPaymentDetail": null
+        //     }
+        // }';
+        // $data = json_decode($tmp_text);
+        // $data = ['status'=>true,'payload'=>$data];
+        if($data['status']){
+           $this->create_pin($data['payload']->payLoad,$txid);
+           $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
+         return ['status'=>true,'message'=>'Recharge Successfull','pin_number'=>$data['payload']->payLoad->pins[0]->pinNumber,'control_number'=>$data['payload']->payLoad->pins[0]->controlNumber];
+         }
+     else
+     {
+         $data = $data['payload'];
+         return ['status'=>false,'message'=>$data->message];
+     }
+    }
+
 
 }

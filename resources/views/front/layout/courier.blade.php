@@ -361,12 +361,12 @@ margin-left: 3px;
                 </li>
                 @endif
                 @if(Auth::user()->role)
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ route('calling-card') }}" class="@if(Route::currentRouteName() == 'calling-card') nav-link active @endif nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>White Calling Card</p>
                     </a>
-                  </li> --}}
+                  </li>
                 @endif
                 <li class="nav-item">
                   <a href="{{ route('recharge-invoice') }}" class="@if(Route::currentRouteName() == 'recharge-invoice') nav-link active @endif nav-link">

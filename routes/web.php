@@ -41,6 +41,11 @@ use App\Models\DomesticProfit;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('frontend', function () {
+
+    return view('frontend.index');
+});
+
 
 
 Route::get('test',[RechargeController::class,'data_test']);
@@ -306,7 +311,9 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::post('ppn_operator_details',[PpnController::class,'mobile_number_details'])->name('ppn_operator_details');
     Route::post('reloadly_recharge',[ReloadlyController::class,'reloadly_recharge'])->name('reloadly_recharge');
     Route::post('ppn_recharge',[PpnController::class,'recharge'])->name('ppn_recharge');
+    Route::post('ppn_pin',[PpnController::class,'pin'])->name('ppn_pin');
     Route::get('calling-card',[PpnController::class,'calling_card_index'])->name('calling-card');
+    Route::get('get_white_calling_table',[PpnController::class,'get_white_calling_table'])->name('get_white_calling_table');
 
 });
 
