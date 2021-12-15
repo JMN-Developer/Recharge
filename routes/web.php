@@ -286,7 +286,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
    Route::get('international', [InternationalApiController::class,'index'])->name('international');
 
 
-    // Route::get('international1', [RechargeController::class,'RechargeInt'])->name('recharge-int');
+    Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
     // Route::get('international2', [ReloadlyController::class,'index'])->name('recharge-reloadly');
     // Route::get('international3', [PpnController::class,'index'])->name('recharge-ppn');
 
