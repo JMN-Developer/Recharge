@@ -74,7 +74,7 @@
                 </div>
               </div>
               <div class="input-group mb-3">
-                <input type="email" name="email" class="form-control" value="{{ $data->email }}" placeholder="Email">
+                <input type="email" name="email" class="form-control" value="{{ $data->email }}" placeholder="Email" disabled>
                 <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-at"></span>

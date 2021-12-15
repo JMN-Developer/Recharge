@@ -27,7 +27,6 @@ class UpdateProfileRequest extends FormRequest
         $rules = [
             'first_name'=>'required',
             'last_name'=>'required',
-            'email'=>'required|email:rfc,dns||unique:users',
 
         ];
         if($this->request->get('password'))
@@ -42,7 +41,6 @@ class UpdateProfileRequest extends FormRequest
         return [
             'first_name.required' => 'First Name Field is Required.',
             'last_name.required' => 'Last Name Field is Required.',
-            'email.required' => 'Email Field is Required.',
             'password.confrimed'=>'Password not match',
             'password.regex'=>'Password Should Contain One Uppercase Letter,Oner Lowercase Letter,Oner Numeric Value,One Special Character',
             'password.min'=>'Password length should be 6 digit'

@@ -9,6 +9,12 @@
     ->where('type','International')
     ->whereMonth('created_at', Carbon::now()->month)
     ->sum('reseller_com');
+
+$current_wallet = App\Models\User::sum('wallet');
+$current_limit = App\Models\User::sum('due');
+$current_limit_usage = App\Models\User::sum('limit_usage');
+
+$total_due = $current_wallet+($current_limit-$current_limit_usage);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -236,7 +242,7 @@ margin-left: 3px;
           <div class="col-12">
 
 
-                <p><b class="mr-2">Due: </b><span>{{ Auth()->user()->due }}</span> </p>
+                <p><b class="mr-2">Current Wallet: </b><span>{{ $total_due }}</span> </p>
                 <p><b class="mr-2">Corriere: </b><span>{{ Auth::user()->cargo_due }}</span></p>
 
           </div>

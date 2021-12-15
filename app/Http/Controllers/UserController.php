@@ -121,7 +121,7 @@ class UserController extends Controller
                 'codice_fiscale' =>$request->codice_fiscale,
                 'nationality' => $request->company,
                 'password' => $password,
-                'email' => $request->email
+
             ]);
         }else{
             $data = User::where('id',$id)->update([
@@ -133,7 +133,7 @@ class UserController extends Controller
                 'contact_number' => $request->phone,
                 'codice_fiscale' =>$request->codice_fiscale,
                 'nationality' => $request->company,
-                'email' => $request->email
+
             ]);
         }
 
