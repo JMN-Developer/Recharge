@@ -242,7 +242,7 @@ margin-left: 3px;
           <div class="col-12">
 
 
-                <p><b class="mr-2">Current Wallet: </b><span>{{ $total_due }}</span> </p>
+
                 <p><b class="mr-2">Corriere: </b><span>{{ Auth::user()->cargo_due }}</span></p>
 
           </div>
@@ -259,6 +259,10 @@ margin-left: 3px;
              {{-- <div class="col-12">
               <b class="mr-2">Profit:</b><span>{{ $admin_profit }}&euro;</span>
             </div> --}}
+
+            <div class="col-12">
+                <p><b class="mr-2">Current Wallet: </b><span>{{ $total_due }}</span> </p>
+              </div>
             <div class="col-12">
               <b class="mr-2">Ding:</b><span>{{ $ding->balance }}&euro;</span>
             </div>
