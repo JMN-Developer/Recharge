@@ -147,7 +147,7 @@ class PrePayProvider
 
                     ]
         ]);
-        file_put_contents('test.txt',$response->getBody());
+
         $status = $response->getStatusCode();
         $response = json_decode($response->getBody());
 
