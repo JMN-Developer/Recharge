@@ -75,7 +75,7 @@
                     </div>
                     <div class="mb-3 phone_number">
                       <label for="inputMobileNumber" class="form-label">Mobile Number</label>
-                      <input type="text" class="form-control myNumber" id="inputMobileNumber" name="number" value="" placeholder="Please enter mobile number">
+                      <input type="text" class="form-control myNumber" id="inputMobileNumber" name="number" value="" placeholder="Please enter mobile number" autocomplete="off">
                     </div>
                     <div id="price">
                       <label for="">Amount</label>
@@ -310,7 +310,7 @@ $.ajax({
             $('.cover-spin').hide(0)
             },
         success:function(response){
-
+         $("#inputMobileNumber").val("");
             //load_recent_recharge();
 
             $('.cover-spin').hide(0)
