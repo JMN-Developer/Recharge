@@ -764,16 +764,16 @@ class RechargeController extends Controller
 
     public function domestic_recharge(Request $request)
     {
-        if(!CheckRechargeAvail::check($request->amount))
-        {
-            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
-        }
+
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
        // file_put_contents('test.txt',$request->amount);
 
         $sku_amount = explode(',',$request->amount);
-
+        if(!CheckRechargeAvail::check($sku_amount['1']))
+        {
+            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+        }
         if (a::user()->wallet >= $sku_amount['1']) {
             $txid = mt_rand(1000000000, 9999999999);
 
