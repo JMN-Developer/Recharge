@@ -29,7 +29,7 @@ use Kreait\Firebase\Messaging\Notification;
 use Illuminate\Support\Facades\Log;
 use DataTables;
 use DB;
-
+use App\Services\CheckRechargeAvail;
 
 
 class RechargeController extends Controller
@@ -764,7 +764,10 @@ class RechargeController extends Controller
 
     public function domestic_recharge(Request $request)
     {
-
+        if(!CheckRechargeAvail::check($request->amount))
+        {
+            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+        }
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
        // file_put_contents('test.txt',$request->amount);
