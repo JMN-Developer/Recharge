@@ -9,16 +9,17 @@ use App\Models\User;
  */
 class UpdateWallet
 {
-    public static function update($recharge_amount,$actual_amount)
+    public static function update($recharge_amount,$actual_amount,$percentage=50)
     {
+        if(auth()->user()->role != 'admin')
+        {
         $discount = $recharge_amount-$actual_amount;
-        $reseller_profit = round(($discount/2),2);
+        $reseller_profit = round((($percentage/100)*$discount),2);
         $user_info =  User::where('id',auth()->user()->id)->first();
         $total_cost = $recharge_amount-$reseller_profit;
         $current_balance = $user_info->wallet;
         $current_limit_usage = $user_info->limit_usage;
         $updated_balance = $current_balance-$total_cost;
-
 
         if($current_balance < $recharge_amount)
         {
@@ -32,6 +33,8 @@ class UpdateWallet
 
         User::where('id',auth()->user()->id)->update(['wallet'=>$updated_balance]);
         }
+
+    }
 
     }
 }

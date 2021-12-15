@@ -145,8 +145,13 @@ class PpnController extends Controller
     public function create_pin($data,$txid)
     {
         $discount = $data->faceValue - $data->invoiceAmount;
-        $reseller_com = $discount/2;
+        $reseller_com =round(($discount*.60),2);
         $admin_com = $discount-$reseller_com;
+        if(a::user()->role=='admin')
+        {
+            $admin_com = $discount;
+            $reseller_com = 0;
+        }
         RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'amount'=>$data->faceValue,
@@ -287,42 +292,42 @@ class PpnController extends Controller
         $skuId = $request->skuId;
         $transaction =  new GenerateTransactionId(a::user()->id,32);
         $txid = $transaction->transaction_id();
-        $data = $this->ppn->pin($skuId,$txid);
-        // $tmp_text = '{
-        //     "responseCode": "000",
-        //     "responseMessage": null,
-        //     "payLoad": {
-        //         "transactionId": 129064031,
-        //         "transactionDate": "12/12/2021 07:05",
-        //         "invoiceAmount": 1.62,
-        //         "faceValue": 2,
-        //         "discount": 0,
-        //         "fee": 0,
-        //         "product": {
-        //             "skuId": 3576,
-        //             "productName": "White Calling PINS - Italy",
-        //             "faceValue": 2,
-        //             "instructions": ""
-        //         },
-        //         "topupDetail": null,
-        //         "pins": [
-        //             {
-        //                 "pinNumber": "822 0276 652",
-        //                 "controlNumber": "10728765",
-        //                 "deliveredAmount": 2,
-        //                 "deliveredCurrencyCode": "EUR"
-        //             }
-        //         ],
-        //         "giftCardDetail": null,
-        //         "simInfo": null,
-        //         "billPaymentDetail": null
-        //     }
-        // }';
-        // $data = json_decode($tmp_text);
-        // $data = ['status'=>true,'payload'=>$data];
+       // $data = $this->ppn->pin($skuId,$txid);
+        $tmp_text = '{
+            "responseCode": "000",
+            "responseMessage": null,
+            "payLoad": {
+                "transactionId": 129064031,
+                "transactionDate": "12/12/2021 07:05",
+                "invoiceAmount": 1.62,
+                "faceValue": 2,
+                "discount": 0,
+                "fee": 0,
+                "product": {
+                    "skuId": 3576,
+                    "productName": "White Calling PINS - Italy",
+                    "faceValue": 2,
+                    "instructions": ""
+                },
+                "topupDetail": null,
+                "pins": [
+                    {
+                        "pinNumber": "822 0276 652",
+                        "controlNumber": "10728765",
+                        "deliveredAmount": 2,
+                        "deliveredCurrencyCode": "EUR"
+                    }
+                ],
+                "giftCardDetail": null,
+                "simInfo": null,
+                "billPaymentDetail": null
+            }
+        }';
+        $data = json_decode($tmp_text);
+        $data = ['status'=>true,'payload'=>$data];
         if($data['status']){
 
-            UpdateWallet::update($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
+          UpdateWallet::update($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount,60);
            $this->create_pin($data['payload']->payLoad,$txid);
            $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
          return ['status'=>true,'message'=>'Recharge Successfull','pin_number'=>$data['payload']->payLoad->pins[0]->pinNumber,'control_number'=>$data['payload']->payLoad->pins[0]->controlNumber];
