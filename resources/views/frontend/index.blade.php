@@ -144,7 +144,7 @@
                   <li><i class="bi bi-check-circle"></i> We provide the most secured services in Italy</li>
                 </ul>
                 <span style="font-size: 1.5rem;"> - <b>Abdullah Al Mamun Khan, </b></span><span
-                  style="font-size: 0.8rem;">COO</span>
+                  style="font-size: 0.8rem;">CEO</span>
               </div>
             </div>
           </div>
