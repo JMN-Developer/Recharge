@@ -48,16 +48,16 @@ use App\Models\DomesticProfit;
 */
 
 Route::get('/',[AuthController::class,'index']);
-Route::get('test-notification',[PpnController::class,'send_pin']);
+// Route::get('test-notification',[PpnController::class,'send_pin']);
 
-Route::get('test',[RechargeController::class,'data_test']);
+// Route::get('test',[RechargeController::class,'data_test']);
 
 Route::get('error-page', function () {
 
     return view('error.index');
 });
 
-Route::group(['prefix' => 'setting','middleware'=>['auth']], function()
+Route::group(['prefix' => 'setting','middleware'=>['auth','IsAdmin']], function()
 {
     Route::get('/',[SettingsController::class,'index'])->name('setting');
 });
@@ -267,7 +267,11 @@ Route::post('/domestic_product', function (Request $request) {
 //     return "Event has been sent!";
 // });
 
-Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
+Route::group(['middleware'=>['auth','IsAdmin']], function()
+{
+    Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
+});
+
 Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
 Route::post('amount_request',[WalletController::class,'wallet_request']);
 Route::post('approved_amount',[WalletController::class,'approved_amount']);
@@ -381,12 +385,13 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
 
     Route::get('changePin', [RetailerController::class,'changePin']);
     Route::post('add_com',[RetailerController::class,'AddCom'])->name('AddCom');
+
     Route::get("retailer-details-admin",[RetailerController::class,'retailer_details'])->name('retailer-details-admin');
 
 
 });
 
-Route::group(['prefix' => 'ApiControl','middleware'=>['auth']], function()
+Route::group(['prefix' => 'ApiControl','middleware'=>['auth','IsAdmin']], function()
 {
 
     Route::get('change_status',[ApiSettingsController::class,'change_status'])->name('change_status');
@@ -442,7 +447,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 
-Route::group(['middleware'=>['auth']], function()
+Route::group(['middleware'=>['auth','IsAdmin']], function()
 {
     Route::post('/add_balance',[BalanceController::class,'AddBalance'])->name('AddBalance');
 
