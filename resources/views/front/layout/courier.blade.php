@@ -227,6 +227,8 @@ margin-left: 3px;
                   </a>
 
             </p>
+
+            <p><b>Limit:  </b><span style="margin-left:10px">{{ auth()->user()->limit_usage }}/{{ auth()->user()->due }}</span></p>
             {{-- <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p> --}}
             @endif
           </div>
@@ -255,7 +257,7 @@ margin-left: 3px;
               <b class="mr-2">Ding:</b><span>{{ $ding->balance }}&euro;</span>
             </div>
             <div class="col-12">
-              <b class="mr-2">Domestic:</b><span>{{ ($domestic->balance)/100 }}&euro;</span>
+              <b class="mr-2">Domestic:</b><span>{{ $domestic->balance }}&euro;</span>
             </div>
             <div class="col-12">
                 <b class="mr-2">Reloadly:</b><span>{{ $reloadly->balance }}&euro;</span>

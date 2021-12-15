@@ -45,8 +45,8 @@
                                     <div class="amount_input_field">
                                         <label for="inputMobileNumber" class="form-label" style="margin-right: 43px">Select Amount</label>
                                             <select class="custom-select amount_list" name="amount" id="package" style="width: 85%">
-                                                <option value="3576">White Calling PINS - Italy 2.00 EUR</option>
-                                                <option value="3559">White Calling PINS - Italy 5.00 EUR</option>
+                                                <option value="3576,2">White Calling PINS - Italy 2.00 EUR</option>
+                                                <option value="3559,5">White Calling PINS - Italy 5.00 EUR</option>
                                              </select>
 
                                         <button class="btn btn-info mt-3" id="recharge_number" style="width: 85%;">Get Pin</button>
@@ -264,9 +264,15 @@
 })
 .then((willDelete) => {
   if (willDelete) {
-    var skuId = $(".amount_list :selected").val();
+
+    var amount_list = $(".amount_list :selected").val();
+    var amount_list = amount_list.split(",");
+    var skuId = amount_list[0];
+    var amount = amount_list[1];
     var formdata = new FormData();
     formdata.append('skuId', skuId);
+    formdata.append('amount', amount);
+
 
 
 

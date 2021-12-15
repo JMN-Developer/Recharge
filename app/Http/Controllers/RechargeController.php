@@ -454,6 +454,8 @@ class RechargeController extends Controller
 
     public function recharge(Request $request)
     {
+
+
         $change = [' ','+'];
         $number = str_replace($change,'',$request->number);
 
@@ -503,7 +505,7 @@ class RechargeController extends Controller
             $amount = $datas['amount'];
             $refcost = $datas['amount'];
         }
-        if (a::user()->wallet >= $SendValue) {
+        if (a::user()->wallet >= $SendValue || (a::user()->limit - a::user()->limit_usage)>=$SendValue) {
             $client = new \GuzzleHttp\Client(['http_errors' => false]);
             $recharge_request = $client->post('https://api.dingconnect.com/api/V1/SendTransfer',[
             'headers' => [
@@ -551,11 +553,15 @@ class RechargeController extends Controller
 
 
             if(a::user()->role != 'admin'){
+                if(a::user()->wallet == 0)
+                {
+                    a::user()->update(['limit_usage'=>a::user()->limit_usage+$real_cost]);
+                }
                 $minus = a::user()->update([
                     'wallet' => a::user()->wallet - $real_cost
                 ]);
 
-                $reseller = User::where('id',a::user()->created_by)->first();
+                //$reseller = User::where('id',a::user()->created_by)->first();
 
                 // $commission = User::where('id',a::user()->created_by)->update([
                 //     'wallet' => $reseller->wallet + $reseller_commission
@@ -858,7 +864,7 @@ class RechargeController extends Controller
 
 
             $balance = DB::table('balances')->where('type','domestic')->update([
-                'balance' => $xml2->LIMIT,
+                'balance' => round(($xml2->LIMIT)/100,2),
             ]);
             if($xml2->RESULT == 0){
 

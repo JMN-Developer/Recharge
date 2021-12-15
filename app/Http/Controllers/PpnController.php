@@ -8,10 +8,13 @@ use Illuminate\Http\Request;
 use App\Models\RechargeHistory;
 use App\Models\User;
 use App\Notifications\PinSentToEmail;
+use App\Services\CheckRechargeAvail;
 use App\Services\PrePayProvider;
 use Auth as a;
 use App\Services\GenerateTransactionId;
+use App\Services\UpdateWallet;
 use Illuminate\Support\Facades\Notification;
+
 
 
 
@@ -172,18 +175,16 @@ class PpnController extends Controller
         $discount = $recharge_amount-$cost;
         $total_cost_reseller = $cost+($discount/2);
         Balance::where('type','ppn')->update(['balance'=>$current_balance]);
-        if(a::user()->role != 'admin')
-        {
-            $existing_wallet = User::where('id',a::user()->id)->first()->wallet;
-            $new_wallet = $existing_wallet-$total_cost_reseller;
-            User::where('id',a::user()->id)->update(['wallet'=>$new_wallet]);
 
-        }
     }
 
 
     public function recharge(Request $request)
     {
+        if(!CheckRechargeAvail::check($request->amount))
+        {
+            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+        }
         $change = [' ','+'];
         $country_code = $request->countryCode;
         $number = str_replace($change,'',$request->number);
@@ -191,43 +192,44 @@ class PpnController extends Controller
         $skuId = $request->skuId;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
-       // $data = $this->ppn->recharge($skuId,$amount,$txid,$number);
+       //$data = $this->ppn->recharge($skuId,$amount,$txid,$number);
 
-    //    $tmp_data = '{
-    //     "responseCode":"000",
-    //     "responseMessage":null,
-    //     "payLoad":{
-    //        "transactionId":128959196,
-    //        "transactionDate":"12/9/2021 05:09",
-    //        "invoiceAmount":1.680,
-    //        "faceValue":2.00,
-    //        "discount":0.0,
-    //        "fee":0.0,
-    //        "product":{
-    //           "skuId":3612,
-    //           "productName":"Robi-Bangladesh",
-    //           "faceValue":2.00,
-    //           "instructions":null
-    //        },
-    //        "topupDetail":{
-    //           "localCurrencyAmount":144.32,
-    //           "salesTaxAmount":0.00,
-    //           "localCurrencyAmountExcludingTax":144.32,
-    //           "destinationCurrency":"BDT",
-    //           "operatorTransactionId":null
-    //        },
-    //        "pins":null,
-    //        "giftCardDetail":null,
-    //        "simInfo":null,
-    //        "billPaymentDetail":null
-    //     }
-    //  }';
-    //  $tmp_data = json_decode($tmp_data);
-    //  $data = ['status'=>true,'payload'=>$tmp_data];
+       $tmp_data = '{
+        "responseCode":"000",
+        "responseMessage":null,
+        "payLoad":{
+           "transactionId":128959196,
+           "transactionDate":"12/9/2021 05:09",
+           "invoiceAmount":1.680,
+           "faceValue":2.00,
+           "discount":0.0,
+           "fee":0.0,
+           "product":{
+              "skuId":3612,
+              "productName":"Robi-Bangladesh",
+              "faceValue":2.00,
+              "instructions":null
+           },
+           "topupDetail":{
+              "localCurrencyAmount":144.32,
+              "salesTaxAmount":0.00,
+              "localCurrencyAmountExcludingTax":144.32,
+              "destinationCurrency":"BDT",
+              "operatorTransactionId":null
+           },
+           "pins":null,
+           "giftCardDetail":null,
+           "simInfo":null,
+           "billPaymentDetail":null
+        }
+     }';
+     $tmp_data = json_decode($tmp_data);
+     $data = ['status'=>true,'payload'=>$tmp_data];
      //file_put_contents('test.txt',$tmp_data->responseCode);
 
         if($data['status']){
            // file_put_contents('test.txt',$data['payload']);
+         UpdateWallet::update($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
           $this->create_recharge($data['payload']->payLoad,$number,$txid,$country_code);
           $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
@@ -278,6 +280,10 @@ class PpnController extends Controller
 
     public function pin(Request $request)
     {
+        if(!CheckRechargeAvail::check($request->amount))
+        {
+            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+        }
         $skuId = $request->skuId;
         $transaction =  new GenerateTransactionId(a::user()->id,32);
         $txid = $transaction->transaction_id();
@@ -317,7 +323,7 @@ class PpnController extends Controller
         if($data['status']){
 
            $this->create_pin($data['payload']->payLoad,$txid);
-           $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
+           //$this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
          return ['status'=>true,'message'=>'Recharge Successfull','pin_number'=>$data['payload']->payLoad->pins[0]->pinNumber,'control_number'=>$data['payload']->payLoad->pins[0]->controlNumber];
          }
      else

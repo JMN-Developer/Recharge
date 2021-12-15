@@ -156,6 +156,7 @@
                     <th scope="col">#</th>
                     @if(auth()->user()->role =='admin')
                     <th scope="col">Reseller Name</th>
+                    <th scope="col">Previous Due</th>
                     @else
                     <th scope="col">Admin Message</th>
                     @endif
@@ -480,10 +481,13 @@
 
         url:get_wallet_data ,
         type:"get",
+        beforeSend: function () {
+            $('.cover-spin').show(0)
+            },
 
         success:function(response){
 
-
+            $('.cover-spin').hide(0)
             var item = response;
 
 
@@ -509,6 +513,7 @@
         if(user_role == 'admin')
         {
             added_row+='<td>' + item[i].reseller_name +  '</td>'
+            +'<td>' + item[i].limit_usage +  '</td>'
         }
         else
         {

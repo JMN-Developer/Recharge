@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Events\DueRequest;
+use App\Models\User;
 use DB;
 
 class WalletController extends Controller
@@ -20,7 +21,7 @@ class WalletController extends Controller
     }
     public function get_wallet_data()
     {
-        if(Auth::user()->role != 'admin')
+        if(auth()->user()->role != 'admin')
         {
         DueControl::where('reseller_id',Auth::user()->id)->update(['reseller_notification'=>1]);
         $data = DueControl::where('reseller_id',Auth::user()->id)->orderBy(DB::raw('case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'))->get();
@@ -33,6 +34,7 @@ class WalletController extends Controller
         {
             $item->requested_date = Carbon::parse($item->created_at)->format('d-m-Y');
             $item->reseller_name = $item->reseller->first_name." ".$item->reseller->last_name;
+            $item->limit_usage = $item->reseller->limit_usage;
             if($item->status == 'pending')
             $item->approved_date = 'Pending';
             else
@@ -60,6 +62,13 @@ class WalletController extends Controller
         return $data;
 
     }
+    public function update_balance($id,$approved_amount)
+    {
+        $user = User::where('id',$id)->first();
+        $cuurent_balance = $user->wallet;
+        $new_balance =$cuurent_balance+$approved_amount;
+        User::where('id',$id)->update(['wallet'=>$new_balance]);
+    }
     public function approved_amount( Request $request)
     {
         $id = $request->id;
@@ -83,6 +92,9 @@ class WalletController extends Controller
         else{
         DueControl::where('id',$id)->update(['approved_amount'=>$approved_amount,'status'=>$status,'admin_notification'=>1,'reseller_notification'=>0,'admin_message'=>$admin_message]);
         }
+        $this->update_balance($previous_record->reseller_id,$approved_amount);
+
+
         event(new DueRequest());
     }
     public function wallet_notification_count()

@@ -45,7 +45,7 @@ class BalanceController extends Controller
                     $users = User::find($request->user_id);
                     $users->wallet = $user_balance + $request->balance;
                     $users->save();
-                    
+
 
                     $senders = User::find(auth()->user()->id);
                     $senders->wallet = $sender_balance - $request->balance;
@@ -77,7 +77,7 @@ class BalanceController extends Controller
                     $users->wallet = $user_balance + $request->balance;
                     $users->due = $request->due;
                     $users->save();
-                    
+
 
                     $senders = User::find(auth()->user()->id);
                     $senders->wallet = $sender_balance - $request->balance;
@@ -98,13 +98,19 @@ class BalanceController extends Controller
             $user = User::where('id', $request->user_id)->update([
 
                 "due" => $info->due - $request->due
-                
+
             ]);
 
             return back();
         }else{
             return back()->with('error','Due Amount Is Less Than The Input');
         }
+    }
+
+    public function EditLimit(Request $request)
+    {
+        User::where('id',$request->user_id)->update(['due'=>$request->due]);
+        return back();
     }
 
     public function EditDue(Request $request){
@@ -115,7 +121,7 @@ class BalanceController extends Controller
             $user = User::where('id', $request->user_id)->update([
 
                 "cargo_due" => $info->cargo_due - $request->due
-                
+
             ]);
 
             return back();
@@ -132,7 +138,7 @@ class BalanceController extends Controller
             $user = User::where('id', $request->user_id)->update([
 
                 "cargo_due" => $info->cargo_due + $request->due
-                
+
             ]);
 
             return back();
@@ -143,7 +149,7 @@ class BalanceController extends Controller
         $phone = Phone::find($request->user_id);
         $phone->discount_status = $request->status;
         $phone->save();
-  
+
         return response()->json(['success'=>'Status change successfully.']);
     }
 
@@ -156,7 +162,7 @@ class BalanceController extends Controller
         $user = User::where('id', $request->user_id)->update([
 
             "wallet" => $request->balance,
-                
+
         ]);
 
         return back()->with('status','Balance Updated Successfully!');

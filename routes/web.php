@@ -19,6 +19,8 @@ use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ApiTestController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\InternationalApiController;
 use App\Http\Controllers\WalletController;
 use App\Models\ApiList;
@@ -44,11 +46,8 @@ use App\Models\DomesticProfit;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('frontend', function () {
 
-    return view('frontend.index');
-});
-
+Route::get('/',[AuthController::class,'index']);
 Route::get('test-notification',[PpnController::class,'send_pin']);
 
 Route::get('test',[RechargeController::class,'data_test']);
@@ -67,11 +66,8 @@ Route::get('/sign-up',[UserController::class,'index']);
 
 Route::post('/create',[UserController::class,'create'])->name('create');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
-    $data = Phone::where('status', 'available')->get();
-    $slider = Slider::latest()->get();
+Route::middleware(['auth:sanctum', 'verified'])->get('/l', function () {
 
-    return view('front.index',compact('data','slider'));
 })->name('/');
 Route::get('/add-reseller', function () {
     return view('front.add-reseller');
@@ -446,19 +442,24 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 
-Route::post('/add_balance',[BalanceController::class,'AddBalance'])->name('AddBalance');
+Route::group(['middleware'=>['auth']], function()
+{
+    Route::post('/add_balance',[BalanceController::class,'AddBalance'])->name('AddBalance');
 
-Route::post('/add_cargo_due',[BalanceController::class,'AddDue']);
+    Route::post('/add_cargo_due',[BalanceController::class,'AddDue']);
 
-Route::post('/edit_cargo_due',[BalanceController::class,'EditDue']);
-
-
-Route::post('/edit_balance',[BalanceController::class,'EditBalance'])->name('EditBalance');
-
-Route::get('/change-phone-price', [BalanceController::class,'PriceDiscount']);
-
-Route::post('/edit_wallet',[BalanceController::class,'edit_wallet']);
+    Route::post('/edit_cargo_due',[BalanceController::class,'EditDue']);
 
 
-Route::post('/cargo_update',[OrderController::class,'update_status']);
+    Route::post('/edit_limit',[BalanceController::class,'EditLimit'])->name('EditLimit');
+
+    Route::get('/change-phone-price', [BalanceController::class,'PriceDiscount']);
+
+    Route::post('/edit_wallet',[BalanceController::class,'edit_wallet']);
+
+
+    Route::post('/cargo_update',[OrderController::class,'update_status']);
+});
+
+
 

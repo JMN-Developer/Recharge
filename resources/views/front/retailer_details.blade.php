@@ -63,7 +63,7 @@
                     <th scope="col" style="width: 18%">Reseller Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Balance</th>
-                    <th scope="col" style="width: 12%">Due</th>
+                    <th scope="col" style="width: 12%">Limit</th>
                     <th scope="col">Comission</th>
                     <th scope="col">Cargo Due</th>
                     <th scope="col">Profile</th>
@@ -78,17 +78,9 @@
                         <td>{{ $item->id }}</td>
                         <td>{{ $item->first_name }} {{ $item->last_name }}</td>
                         <td>{{ $item->email }}</td>
-                        <td class="text-center font-weight-bold">{{ $item->wallet }}
-                            <br>
-                            <button class="btn btn-sm btn-info mt-1" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#edit{{$item->id}}">
-                                <i class="fas fa-edit"></i>
-                              </button>
-                        </td>
+                        <td class="text-center font-weight-bold">{{ $item->wallet }}</td>
                         <td class="text-center font-weight-bold">{{ $item->due }}
                             <br>
-                            <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#boom1{{$item->id}}" class="btn btn-sm btn-primary mt-1">
-                                <i class="fas fa-plus"></i>
-                              </button>
                               <span>
                                 <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#boom2{{$item->id}}" class="btn btn-sm btn-info mt-1">
                                     <i class="fas fa-edit"></i>
@@ -156,12 +148,12 @@
                           <div class="modal fade bd-example-modal-sm" id="boom2{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                               <div class="modal-content">
-                                <form action="{{url('/edit_balance')}}" method="post">
+                                <form action="{{url('/edit_limit')}}" method="post">
                                   @csrf
                                   <div>
                                     <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
                                     <input class="form-control" type="number" step="0.01" name="due">
-                                    <button class="btn btn-success btn-sm"  type="submit">Edit Due For {{$item->first_name}}</button>
+                                    <button class="btn btn-success btn-sm"  type="submit">Edit Limit For {{$item->first_name}}</button>
                                   </div>
                                 </form>
                               </div>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>JM logistic</title>
+  <title>JM Nation</title>
   <meta name="description"
     content="JM logistic was founded to improve people’s (specially for immigrants) lives by helping those with less, gain access and stay connected to more.
 
@@ -25,9 +25,9 @@
   <link href="{{asset('frontend')}}/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="{{asset('frontend')}}/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="{{asset('frontend')}}/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-  <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
+  {{-- <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
   <link href="/your-path-to-fontawesome/css/brands.css" rel="stylesheet">
-  <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet">
+  <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet"> --}}
 
   <!-- Template Main CSS File -->
   <link href="{{asset('frontend')}}/assets/css/style.css" rel="stylesheet">
@@ -85,7 +85,7 @@
             <li><a class="nav-link scrollto" href="#team">Team</a></li>
             <li><a class="nav-link scrollto" href="#pricing">Pricing</a></li>
             <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-            <li style="margin-left: 1rem;"><button type="button" class="btn btn-warning">Log In</button></li>
+            <li style="margin-left: 1rem;"><button type="button" class="btn btn-warning" onclick="location.href='login'">Log In</button></li>
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
@@ -221,14 +221,14 @@
               </a>
             </div>
 
-            <div class="col-md-6 col-lg-4 mx-auto" data-aos="zoom-in" data-aos-delay="600">
+            {{-- <div class="col-md-6 col-lg-4 mx-auto" data-aos="zoom-in" data-aos-delay="600">
               <a href="#agent" class="scrollto">
                 <div class=" box">
                   <div class="icon" style="background: #F5F5DC;"><img src="{{asset('frontend')}}/assets/img/ria.svg" width="65%"></div>
                   <h4 class="title">Become an agent of Ria</h4>
                 </div>
               </a>
-            </div>
+            </div> --}}
           </div>
 
         </div>
@@ -446,7 +446,7 @@
             </div>
           </div>
 
-          <div id="ria" class="row feature-item">
+          {{-- <div id="ria" class="row feature-item">
             <div class="col-lg-6 wow fadeInUp order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
               <img src="{{asset('frontend')}}/assets/img/ria.svg" class="img-fluid" alt="">
             </div>
@@ -471,7 +471,7 @@
               </ul>
               </p>
             </div>
-          </div>
+          </div> --}}
 
       </section><!-- End Features Section -->
 
@@ -486,10 +486,10 @@
 
             <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
               <div class="member">
-                <img src="{{asset('frontend')}}/assets/img/team-3.jpg" class="img-fluid" alt="">
+                <img src="{{asset('frontend')}}/assets/img/team-2.jpg" class="img-fluid" alt="">
                 <div class="member-info">
                   <div class="member-info-content">
-                    <h4>Mahadi Hassan Bhuiyan</h4>
+                    <h4>Mohammad Mahadi Hassan Bhuiyan</h4>
                     <span>Founder</span>
                     <div class="social">
                       <a href=""><i class="bi bi-twitter"></i></a>
@@ -504,11 +504,11 @@
 
             <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
               <div class="member">
-                <img src="{{asset('frontend')}}/assets/img/team-1.jpg" class="img-fluid" alt="">
+                <img src="{{asset('frontend')}}/assets/img/team-2.jpg" class="img-fluid" alt="">
                 <div class="member-info">
                   <div class="member-info-content">
                     <h4>Jahid Hassan Bhuiyan</h4>
-                    <span>Chief Executive Officer</span>
+                    <span>Co Founder</span>
                     <div class="social">
                       <a href=""><i class="bi bi-twitter"></i></a>
                       <a href=""><i class="bi bi-facebook"></i></a>
@@ -522,11 +522,11 @@
 
             <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
               <div class="member">
-                <img src="{{asset('frontend')}}/assets/img/team-3.jpg" class="img-fluid" alt="">
+                <img src="{{asset('frontend')}}/assets/img/team-2.jpg" class="img-fluid" alt="">
                 <div class="member-info">
                   <div class="member-info-content">
                     <h4>Abdullah Al Mamun Khan</h4>
-                    <span>Chief Operating Officer</span>
+                    <span>CEO</span>
                     <div class="social">
                       <a href=""><i class="bi bi-twitter"></i></a>
                       <a href=""><i class="bi bi-facebook"></i></a>
@@ -540,11 +540,11 @@
 
             <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
               <div class="member">
-                <img src="{{asset('frontend')}}/assets/img/team-1.jpg" class="img-fluid" alt="">
+                <img src="{{asset('frontend')}}/assets/img/team-2.jpg" class="img-fluid" alt="">
                 <div class="member-info">
                   <div class="member-info-content">
-                    <h4>Saiful Islam</h4>
-                    <span>Managing Director</span>
+                    <h4>MD. Saiful Islam</h4>
+                    <span>CMO</span>
                     <div class="social">
                       <a href=""><i class="bi bi-twitter"></i></a>
                       <a href=""><i class="bi bi-facebook"></i></a>
@@ -658,7 +658,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer" class="section-bg">
 
-      <section id="agent" class="section-bg wow fadeInUp" style="background: #fff;">
+      {{-- <section id="agent" class="section-bg wow fadeInUp" style="background: #fff;">
 
         <div class="container" data-aos="fade-up">
 
@@ -1019,7 +1019,7 @@
 
 </div>
 
-</section>
+</section> --}}
 
 <div id="contact" class="footer-top">
 

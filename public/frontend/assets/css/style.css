@@ -198,7 +198,7 @@ h6 {
 
 
 /**
-* Desktop Navigation 
+* Desktop Navigation
 */
 
 .navbar {
@@ -244,7 +244,7 @@ h6 {
 .navbar .active:focus,
 .navbar li:hover>a {
     /*color: #1bb1dc;*/
-    color:darkorange;
+    color: darkorange;
 }
 
 .navbar .dropdown ul {
@@ -312,7 +312,7 @@ h6 {
 
 
 /**
-* Mobile Navigation 
+* Mobile Navigation
 */
 
 .mobile-nav-toggle {
@@ -1003,6 +1003,7 @@ section {
     margin-bottom: 20px;
     position: relative;
     overflow: hidden;
+    height: 300px;
 }
 
 #team .member .member-info {
@@ -1020,7 +1021,7 @@ section {
 
 #team .member .member-info-content {
     transition: margin 0.2s;
-    height: 36px;
+    height: 80px;
     transition: height 0.4s;
 }
 

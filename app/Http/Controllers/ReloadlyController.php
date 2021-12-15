@@ -7,9 +7,11 @@ use App\Models\Balance;
 use Illuminate\Http\Request;
 use App\Models\RechargeHistory;
 use App\Models\User;
+use App\Services\CheckRechargeAvail;
 use App\Services\ReloadlyProvider;
 use Auth as a;
 use App\Services\GenerateTransactionId;
+use App\Services\UpdateWallet;
 
 
 class ReloadlyController extends Controller
@@ -94,20 +96,19 @@ class ReloadlyController extends Controller
         ]);
     }
 
-    public function update_balance($balance,$requested_amount,$discount)
+    public function update_balance($balance)
     {
         Balance::where('type','reloadly')->update(['balance'=>$balance]);
-        if(a::user()->role != 'admin')
-        {
-            $existing_wallet = User::where('id',a::user()->id)->first()->wallet;
-            $new_wallet = $existing_wallet-$requested_amount-($discount/2);
-            User::where('id',a::user()->id)->update(['wallet'=>$new_wallet]);
 
-        }
     }
 
     public function reloadly_recharge(Request $request)
     {
+        if(!CheckRechargeAvail::check($request->amount))
+        {
+            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+        }
+
         $change = [' ','+'];
         $number = str_replace($change,'',$request->number);
         $amount = $request->amount;
@@ -119,8 +120,9 @@ class ReloadlyController extends Controller
 
         if($data['status']){
             //file_put_contents('test.txt',json_encode($data['payload']));
+            UpdateWallet::update($data['payload']->requestedAmount,$data['payload']->requestedAmount-$data['payload']->discount);
           $this->create_recharge($data['payload']);
-          $this->update_balance($data['payload']->balanceInfo->newBalance,$data['payload']->requestedAmount,$data['payload']->discount);
+          $this->update_balance($data['payload']->balanceInfo->newBalance);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }
     else
