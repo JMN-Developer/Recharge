@@ -21,7 +21,7 @@ class UpdateWallet
         $current_limit_usage = $user_info->limit_usage;
         $updated_balance = $current_balance-$total_cost;
 
-        if($current_balance < $recharge_amount)
+        if($current_balance < $total_cost)
         {
             if($current_balance == 0 )
             {
@@ -29,7 +29,7 @@ class UpdateWallet
                 User::where('id',auth()->user()->id)->update(['limit_usage'=>$current_limit_usage+$total_cost]);
             }
             else{
-            $wallet_deduct = $recharge_amount-$current_balance;
+            $wallet_deduct = $total_cost-$current_balance;
             //$updated_balance = $current_balance-$wallet_deduct;
             User::where('id',auth()->user()->id)->update(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0]);
             }
