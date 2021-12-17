@@ -861,7 +861,7 @@ class RechargeController extends Controller
             $balancequery = Balance::where('type','domestic')->first();
 
             $prof = DomesticProfit::where('ean',$sku_amount['0'])->first();
-
+            Log::info($sku_amount['0']);
 
 
 
@@ -876,11 +876,12 @@ class RechargeController extends Controller
                    // $admin_commission = ($sku_amount['1']/100)*a::user()->admin_recharge_commission;
                     $cost = $sku_amount['1'];
 
-                    $admin_given_profit = ($prof->commission/100)*a::user()->admin_recharge_commission;
-                    $reseller_commission = $admin_given_profit;
+                    $reseller_commission = round( ($prof->commission/100)*a::user()->admin_recharge_commission,2);
+
+                    //$reseller_commission = $admin_given_profit;
                     $admin_commission = $prof->commission - $reseller_commission;
                     //$admin_commission = $admin_given_profit
-                    UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $admin_commission-$reseller_commission);
+                    UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $prof->commission,a::user()->admin_recharge_commission);
                     // $minus = a::user()->update([
                     //     'wallet' => a::user()->wallet - $cost + $admin_given_profit,
                     // ]);
