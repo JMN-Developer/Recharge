@@ -861,7 +861,7 @@ class RechargeController extends Controller
             $balancequery = Balance::where('type','domestic')->first();
 
             $prof = DomesticProfit::where('ean',$sku_amount['0'])->first();
-            Log::info($sku_amount['0']);
+
 
 
 
