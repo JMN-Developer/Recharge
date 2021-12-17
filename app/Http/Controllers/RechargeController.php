@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Log;
 use DataTables;
 use DB;
 use App\Services\CheckRechargeAvail;
-
+use App\Services\UpdateWallet;
 
 class RechargeController extends Controller
 {
@@ -880,10 +880,10 @@ class RechargeController extends Controller
                     $reseller_commission = $admin_given_profit;
                     $admin_commission = $prof->commission - $reseller_commission;
                     //$admin_commission = $admin_given_profit
-
-                    $minus = a::user()->update([
-                        'wallet' => a::user()->wallet - $cost + $admin_given_profit,
-                    ]);
+                    UpdateWallet::update($sku_amount['1'],$$sku_amount['1']- $admin_commission-$reseller_commission);
+                    // $minus = a::user()->update([
+                    //     'wallet' => a::user()->wallet - $cost + $admin_given_profit,
+                    // ]);
 
                     $reseller = User::where('id',a::user()->created_by)->first();
 
