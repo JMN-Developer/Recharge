@@ -816,7 +816,7 @@ class RechargeController extends Controller
         if($xml->RESULT == 0)
         {
             //$txid2 = mt_rand(1000000000, 9999999999);
-            $transaction =  new GenerateTransactionId(a::user()->id,11);
+            $transaction =  new GenerateTransactionId(a::user()->id,20);
             $txid2 = $transaction->transaction_id();
             $xml2 = '<?xml version="1.0" encoding="UTF-8"?>
                 <REQUEST MODE="CAPTURE" STORERECEIPT="1" TYPE="SALE">
