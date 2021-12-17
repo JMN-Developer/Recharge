@@ -938,7 +938,7 @@ class RechargeController extends Controller
                 ->take(10)
                 ->get();
             }
-            return ['status'=>false,'message'=>"Recharge Incomplete, Please try again!"];
+            return ['status'=>false,'message'=>"Recharge Incomplete, Please try again !"];
             //echo "Recharge Incomplete, Please try again!";
            // return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
         }
