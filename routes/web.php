@@ -267,10 +267,8 @@ Route::post('/domestic_product', function (Request $request) {
 //     return "Event has been sent!";
 // });
 
-Route::group(['middleware'=>['auth','IsAdmin']], function()
-{
-    Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
-});
+
+Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
 
 Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
 Route::post('amount_request',[WalletController::class,'wallet_request']);

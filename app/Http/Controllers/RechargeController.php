@@ -774,8 +774,9 @@ class RechargeController extends Controller
         {
             return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
         }
-        if (a::user()->wallet >= $sku_amount['1']) {
-            $txid = mt_rand(1000000000, 9999999999);
+        $transaction =  new GenerateTransactionId(a::user()->id,20);
+        $txid2 = $transaction->transaction_id();
+           // $txid = mt_rand(1000000000, 9999999999);
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
         <REQUEST MODE="RESERVE" STORERECEIPT="1" TYPE="SALE">
@@ -786,7 +787,7 @@ class RechargeController extends Controller
         <AMOUNT>'.$sku_amount['1'].'000</AMOUNT>
         <TERMINALID RETAILERACC="PNTRCG" STOREID="3D001">IT028215</TERMINALID>
         <LOCALDATETIME>'.Carbon::now('Europe/Berlin').'</LOCALDATETIME>
-        <TXID>'.$txid.'</TXID>
+        <TXID>'.$txid2.'</TXID>
         <CARD><EAN>'.$sku_amount['0'].'</EAN></CARD>
         <PHONE>'.$request->number.'</PHONE><CAB>
         3D001</CAB></REQUEST>';
@@ -816,8 +817,7 @@ class RechargeController extends Controller
         if($xml->RESULT == 0)
         {
             //$txid2 = mt_rand(1000000000, 9999999999);
-            $transaction =  new GenerateTransactionId(a::user()->id,11);
-            $txid2 = $transaction->transaction_id();
+
             $xml2 = '<?xml version="1.0" encoding="UTF-8"?>
                 <REQUEST MODE="CAPTURE" STORERECEIPT="1" TYPE="SALE">
                     <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
@@ -838,7 +838,7 @@ class RechargeController extends Controller
                         <PHONE>'.$request->number.'</PHONE>
                         <CAB>3D0013D001</CAB>
                     <TXID/>
-                    <TXREF>'.$txid.'</TXREF>
+                    <TXREF>'.$txid2.'</TXREF>
                     <CAB/>
                 </REQUEST>';
 
@@ -943,10 +943,7 @@ class RechargeController extends Controller
            // return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
         }
 
-        }else{
-            return ['status'=>false,'message'=>"Insufficient Balance!"];
-            //return  Redirect()->back()->with('error','Insufficient Balance!');
-        }
+
 
     }
 
