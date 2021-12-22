@@ -32,7 +32,7 @@ class ReloadlyController extends Controller
         if(a::user()->role == 'user'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->where('company_name','Reloadly')->latest()->take(10)->get();
         }else{
-            $data = RechargeHistory::where('type','International')->where('company_name','Reloadly')->join('users','users.id','=','recharge_histories.reseller_id')
+            $data = RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')
             ->latest()
             ->take(10)
@@ -71,7 +71,7 @@ class ReloadlyController extends Controller
 
     public function create_recharge($data)
     {
-        $reseller_com = $data->discount/2;
+        $reseller_com = reseller_comission($data->discount);
         $admin_com = $data->discount-$reseller_com;
         $cost = $data->requestedAmount-$data->discount;
         $cost = round((float)$cost,2);

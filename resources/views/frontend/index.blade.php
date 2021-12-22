@@ -73,8 +73,8 @@
     <header id="header" class="fixed-top d-flex align-items-center header-transparent">
       <div class="container d-flex align-items-center" style="        background: linear-gradient(to right, #888 0%, #72cff3 100%)">
 
-        <a href="index.html" class="logo me-auto" ><img src="{{asset('frontend')}}/assets/img/NEW_JM.png" alt="" class="img-fluid"></a>
-        <h1 class="logo me-auto"><a href="index.html"><span>JM</span> Nation</a></h1>
+        <a href="{{ route('/') }}" class="logo me-auto" ><img src="{{asset('frontend')}}/assets/img/NEW_JM.png" alt="" class="img-fluid"></a>
+        <h1 class="logo me-auto"><a href="{{ route('/') }}"><span>JM</span> Nation</a></h1>
 
         <nav id="navbar" class="navbar order-last order-lg-0">
           <ul>
@@ -1124,7 +1124,7 @@
 
 <div class="container">
   <div class="copyright">
-    &copy; Copyright <strong><a href="https://jmlogistic.org/">JM NATION</a></strong>. All Rights Reserved
+    &copy; Copyright <strong><a href="https://jmnation.com/">JM NATION</a></strong>. All Rights Reserved
   </div>
 </div>
 

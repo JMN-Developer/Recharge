@@ -25,8 +25,6 @@ class ReloadlyProvider
 
         $client_id = Crypt::decrypt(SecretStore::where('company_name','Reloadly')->where('secret_type','client_id')->first()->content);
         $client_secret = Crypt::decrypt(SecretStore::where('company_name','Reloadly')->where('secret_type','client_secret')->first()->content);
-       // $client_id = 'SHILVCMRGJab2DfLIxhaKqCNxlgoLFvv';
-        //$client_secret = 'ga0OsMAdey-rg7uULTs52Bqv5B3VJz-a8zdfbUn2eOxR92gKED18Udk4z8xkJkK';
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
         $response = $client->post('https://auth.reloadly.com/oauth/token',[
             'headers' => [

@@ -34,7 +34,7 @@ class PpnController extends Controller
         if(a::user()->role == 'user'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->where('company_name','Ppn')->latest()->take(10)->get();
         }else{
-            $data = RechargeHistory::where('type','International')->where('company_name','Ppn')->join('users','users.id','=','recharge_histories.reseller_id')
+            $data = RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')
             ->latest()
             ->take(10)
@@ -145,7 +145,8 @@ class PpnController extends Controller
     public function create_pin($data,$txid)
     {
         $discount = $data->faceValue - $data->invoiceAmount;
-        $reseller_com =round(($discount*.60),2);
+        $reseller_com = reseller_comission($discount);
+        //$reseller_com =round(($discount*.60),2);
         $admin_com = $discount-$reseller_com;
         if(a::user()->role=='admin')
         {
@@ -186,6 +187,8 @@ class PpnController extends Controller
 
     public function recharge(Request $request)
     {
+
+        //file_put_contents('test.txt',$test);
         if(!CheckRechargeAvail::check($request->amount))
         {
             return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
@@ -197,39 +200,39 @@ class PpnController extends Controller
         $skuId = $request->skuId;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
-       $data = $this->ppn->recharge($skuId,$amount,$txid,$number);
+       //$data = $this->ppn->recharge($skuId,$amount,$txid,$number);
 
-    //    $tmp_data = '{
-    //     "responseCode":"000",
-    //     "responseMessage":null,
-    //     "payLoad":{
-    //        "transactionId":128959196,
-    //        "transactionDate":"12/9/2021 05:09",
-    //        "invoiceAmount":1.680,
-    //        "faceValue":2.00,
-    //        "discount":0.0,
-    //        "fee":0.0,
-    //        "product":{
-    //           "skuId":3612,
-    //           "productName":"Robi-Bangladesh",
-    //           "faceValue":2.00,
-    //           "instructions":null
-    //        },
-    //        "topupDetail":{
-    //           "localCurrencyAmount":144.32,
-    //           "salesTaxAmount":0.00,
-    //           "localCurrencyAmountExcludingTax":144.32,
-    //           "destinationCurrency":"BDT",
-    //           "operatorTransactionId":null
-    //        },
-    //        "pins":null,
-    //        "giftCardDetail":null,
-    //        "simInfo":null,
-    //        "billPaymentDetail":null
-    //     }
-    //  }';
-    //  $tmp_data = json_decode($tmp_data);
-    //  $data = ['status'=>true,'payload'=>$tmp_data];
+       $tmp_data = '{
+        "responseCode":"000",
+        "responseMessage":null,
+        "payLoad":{
+           "transactionId":128959196,
+           "transactionDate":"12/9/2021 05:09",
+           "invoiceAmount":1.680,
+           "faceValue":2.00,
+           "discount":0.0,
+           "fee":0.0,
+           "product":{
+              "skuId":3612,
+              "productName":"Robi-Bangladesh",
+              "faceValue":2.00,
+              "instructions":null
+           },
+           "topupDetail":{
+              "localCurrencyAmount":144.32,
+              "salesTaxAmount":0.00,
+              "localCurrencyAmountExcludingTax":144.32,
+              "destinationCurrency":"BDT",
+              "operatorTransactionId":null
+           },
+           "pins":null,
+           "giftCardDetail":null,
+           "simInfo":null,
+           "billPaymentDetail":null
+        }
+     }';
+     $tmp_data = json_decode($tmp_data);
+     $data = ['status'=>true,'payload'=>$tmp_data];
      //file_put_contents('test.txt',$tmp_data->responseCode);
 
         if($data['status']){

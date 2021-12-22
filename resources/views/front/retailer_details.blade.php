@@ -109,7 +109,7 @@
                           </a>
                           <br>
                           <a href="/reseller/delete/{{ $item->id }}" class="btn btn-sm btn-danger mt-1 confirm">
-                            <i class="fas fa-user"></i>
+                            <i class="fas fa-trash"></i>
                           </a>
                         </td>
 
@@ -148,14 +148,23 @@
                           <div class="modal fade bd-example-modal-sm" id="boom2{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                               <div class="modal-content">
-                                <form action="{{url('/edit_limit')}}" method="post">
-                                  @csrf
-                                  <div>
-                                    <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
-                                    <input class="form-control" type="number" step="0.01" name="due">
-                                    <button class="btn btn-success btn-sm"  type="submit">Edit Limit For {{$item->first_name}}</button>
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Limit</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
                                   </div>
-                                </form>
+                                  <div class="modal-body">
+                                    <form action="{{url('/edit_limit')}}" method="post">
+                                        @csrf
+                                        <div>
+                                          <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
+                                          <input class="form-control" type="number" step="0.01" name="due">
+                                          <button class="btn btn-success btn-sm mt-3"  type="submit">Edit Limit For {{$item->first_name}}</button>
+                                        </div>
+                                      </form>
+                                  </div>
+
                               </div>
                             </div>
                           </div>
@@ -406,6 +415,9 @@
     $('#bill_table').DataTable({
 
     });
-  $(".confirm").confirm();
+
+  $(".confirm").confirm({
+    title: 'This will delete the user!',
+  });
 </script>
 @endsection

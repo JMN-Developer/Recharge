@@ -80,7 +80,7 @@
                     </div>
                     <div class="form-group mx-sm-3 mb-2">
                       <label for="inputPassword2" class="sr-only">Amount</label>
-                      <input type="text" class="form-control" id="amount" placeholder="Amount">
+                      <input type="text" class="form-control" id="amount" placeholder="Amount" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;">
                     </div>
                     <div class="form-group mb-2" style="width: 123px">
                         <label for="staticEmail2" class="sr-only" >Message</label>
@@ -122,7 +122,7 @@
 
                         <div class="form-group">
                           <label for="exampleInputPassword1">Approved Amount</label>
-                          <input type="text" class="form-control" id="approved_amount" placeholder="Approved Amount">
+                          <input type="text" class="form-control" id="approved_amount" placeholder="Approved Amount" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;">
                           <input type="hidden" id="due_id">
                         </div>
 
@@ -270,10 +270,10 @@
 
     })
 
-    $("#accept_direct").click(function(){
-      alert('hel')
+    // $("#accept_direct").click(function(){
+    //   alert('hel')
 
-    })
+    // })
 
 
     $( "#approved_form" ).submit(function( event ) {

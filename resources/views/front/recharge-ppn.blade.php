@@ -48,13 +48,16 @@
 
                                              </select>
 
+                                             <label class="form-label">Service Charge in EURO</label>
+                                             <input type="number" step="any" id="service" name="service" class="form-control" placeholder="Enter Service Charge (Optional)" style="width: 84%">
+
                                         <button class="btn btn-info mt-3" id="recharge_number" style="width: 85%;">Recharge</button>
 
                                         {{-- <button class="btn btn-primary" style="margin-bottom: 6px; float: right;">Verify</button> --}}
                                      </div>
 
 
-                                 <button class="btn btn-info mt-3" style="width: 84%;" id="check_number">Check</button>
+                                 <button class="btn btn-info mt-3" style="width: 84%;" id="check_number">Continue</button>
 
                             </div>
                         </div>

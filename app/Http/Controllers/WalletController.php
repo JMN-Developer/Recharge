@@ -32,13 +32,13 @@ class WalletController extends Controller
         }
         foreach($data as $item)
         {
-            $item->requested_date = Carbon::parse($item->created_at)->format('d-m-Y');
+            $item->requested_date = Carbon::parse($item->created_at)->format('Y-m-d');
             $item->reseller_name = $item->reseller->first_name." ".$item->reseller->last_name;
             $item->limit_usage = $item->reseller->limit_usage;
             if($item->status == 'pending')
             $item->approved_date = 'Pending';
             else
-            $item->approved_date = Carbon::parse($item->updated_at)->format('d-m-Y');
+            $item->approved_date = Carbon::parse($item->updated_at)->format('Y-m-d');
         }
         return $data;
     }
@@ -76,8 +76,17 @@ class WalletController extends Controller
         $admin_message = $request->admin_message;
         $status = $request->status;
         $previous_record = DueControl::where('id',$id)->first();
+        $limit_usage = User::where('id',$previous_record->reseller_id)->first()->limit_usage;
+        $approved_amount = $approved_amount-$limit_usage;
+
+
         if($previous_record->status =='declined')
         {
+            if($status =='declined')
+            {
+                DueControl::where('id',$id)->update(['decline_status'=>1,'status'=>$status,'reseller_notification'=>0,'admin_notification'=>1,'admin_message'=>$admin_message]);
+            }
+            else{
             DueControl::create([
                 'reseller_id'=>$previous_record->reseller_id,
                 'requested_amount'=> $previous_record->requested_amount,
@@ -88,10 +97,20 @@ class WalletController extends Controller
                 'status'=>$status,
             ]);
             DueControl::where('id',$id)->update(['decline_status'=>1]);
+            User::where('id',$previous_record->reseller_id)->update(['limit_usage'=>0]);
+        }
+
+        }
+        else{
+        if($status=='declined')
+        {
+        DueControl::where('id',$id)->update(['status'=>$status,'admin_notification'=>1,'reseller_notification'=>0,'admin_message'=>$admin_message]);
         }
         else{
         DueControl::where('id',$id)->update(['approved_amount'=>$approved_amount,'status'=>$status,'admin_notification'=>1,'reseller_notification'=>0,'admin_message'=>$admin_message]);
         }
+        User::where('id',$previous_record->reseller_id)->update(['limit_usage'=>0]);
+    }
         $this->update_balance($previous_record->reseller_id,$approved_amount);
 
 
@@ -105,7 +124,7 @@ class WalletController extends Controller
         }
         else
         {
-            $data = DueControl::where('reseller_notification',0)->get()->count();
+            $data = DueControl::where('reseller_id',Auth::user()->id)->where('reseller_notification',0)->get()->count();
         }
 
         return $data;

@@ -320,15 +320,23 @@ margin-left: 3px;
           @if (Auth::user()->recharge_permission == 1)
             <li class="@if(Route::currentRouteName() == 'recharge-int' ||
                           Route::currentRouteName() == 'recharge-italy' ||
+                          Route::currentRouteName() == 'international' ||
                           Route::currentRouteName() == 'recharge-gift-card' ||
                           Route::currentRouteName() == 'recharge-calling-card' ||
                           Route::currentRouteName() == 'recharge-reloadly' ||
                           Route::currentRouteName() == 'calling-card' ||
+                          Route::currentRouteName() == 'pin' ||
+                          Route::currentRouteName() == 'recharge-invoice' ||
+                          Route::currentRouteName() == 'pin-invoice' ||
                           Route::currentRouteName() == 'print-all-invoice') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'recharge-int' ||
                           Route::currentRouteName() == 'recharge-italy' ||
                           Route::currentRouteName() == 'recharge-gift-card' ||
+                          Route::currentRouteName() == 'international' ||
                           Route::currentRouteName() == 'recharge-calling-card' ||
+                          Route::currentRouteName() == 'pin' ||
+                          Route::currentRouteName() == 'recharge-invoice' ||
+                          Route::currentRouteName() == 'pin-invoice' ||
                           Route::currentRouteName() == 'print-all-invoice') nav-link active @endif nav-link nav-link">
                 <i class="nav-icon fab fa-rev"></i>
                 <p>
@@ -338,7 +346,7 @@ margin-left: 3px;
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{ route('international') }}" class="@if(Route::currentRouteName() == 'recharge-int') nav-link active @endif nav-link">
+                  <a href="{{ route('international') }}" class="@if(Route::currentRouteName() == 'international') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>International</p>
                   </a>
@@ -516,8 +524,8 @@ margin-left: 3px;
               </ul>
             </li>
           @endif
-            <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
-              <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
+            <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
+              <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
                 <i class="nav-icon fas fa-users"></i>
                 <p>
                   Retailer
@@ -581,8 +589,8 @@ margin-left: 3px;
 
 
             @if(auth()->user()->role == 'admin')
-              <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
-                <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
+              <li class="@if(Route::currentRouteName() == 'api-activation') nav-item menu-open @endif nav-item">
+                <a href="#" class="@if(Route::currentRouteName() == 'api-activation') nav-link active @endif nav-link">
                   <i class="nav-icon fas fa-users"></i>
                   <p>
                     Api Control

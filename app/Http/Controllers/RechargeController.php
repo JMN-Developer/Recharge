@@ -228,10 +228,48 @@ class RechargeController extends Controller
     $number = str_replace($change,'',$request->number);
 
     $client = new \GuzzleHttp\Client();
-    $operator_request = $client->get('https://api.dingconnect.com/api/V1/GetProviders?accountNumber='.$number,['headers' => [
-        'api_key'     => $this->dingconnect
-        ],'verify' => false]);
-    $operator_response = $operator_request->getBody();
+    // $operator_request = $client->get('https://api.dingconnect.com/api/V1/GetProviders?accountNumber='.$number,['headers' => [
+    //     'api_key'     => $this->dingconnect
+    //     ],'verify' => false]);
+    //$operator_response = $operator_request->getBody();
+    $operator_response = '{
+        "ResultCode":1,
+        "ErrorCodes":[
+
+        ],
+        "Items":[
+           {
+              "ProviderCode":"6DBD",
+              "CountryIso":"BD",
+              "Name":"Robi Bangladesh Data",
+              "ShortName":null,
+              "ValidationRegex":"^8800?([0-9]{10})$",
+              "CustomerCareNumber":"+88029897806",
+              "RegionCodes":[
+                 "BD"
+              ],
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LogoUrl":"https://imagerepo.ding.com/logo/6D/BD.png"
+           },
+           {
+              "ProviderCode":"RLBD",
+              "CountryIso":"BD",
+              "Name":"Robi Bangladesh",
+              "ShortName":null,
+              "ValidationRegex":"^8800?([0-9]{10})$",
+              "CustomerCareNumber":null,
+              "RegionCodes":[
+                 "BD"
+              ],
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LogoUrl":"https://imagerepo.ding.com/logo/RL/BD.png"
+           }
+        ]
+     }';
     $data = json_decode($operator_response,true);
         // dd($data);
     $count = count($data['Items']);
@@ -251,7 +289,7 @@ class RechargeController extends Controller
         ->get();
     }
     $count = '1';
-     return $pass = $this->get_product($request,$operators['0']['Name'],$operators['0']['ProviderCode'],$number);
+     return $pass = $this->get_product($request,$operators['1']['Name'],$operators['0']['ProviderCode'],$number,$operators['1']['LogoUrl']);
     }else{
         $error = 'Invalid Phone Number';
        // return ['status'=>false,'message'=>$error]
@@ -367,7 +405,7 @@ class RechargeController extends Controller
 		return redirect('/');
     }
 
-    public function get_product(Request $request,$operator = '',$code = '',$number = '')
+    public function get_product(Request $request,$operator = '',$code = '',$number = '',$logo='')
     {
         $datas = $request->all();
         // dd($number);
@@ -378,10 +416,404 @@ class RechargeController extends Controller
 
         //  dd($number);
         $client = new \GuzzleHttp\Client();
-        $product_request = $client->get('https://api.dingconnect.com/api/V1/GetProducts?&providerCodes='.$code,['headers' => [
-            'api_key'     => 'G4ymoFlN97B6PhZgK1yzuY'
-            ],'verify' => false]);
-        $product_responses = $product_request->getBody();
+        // $product_request = $client->get('https://api.dingconnect.com/api/V1/GetProducts?&providerCodes='.$code,['headers' => [
+        //     'api_key'     => 'G4ymoFlN97B6PhZgK1yzuY'
+        //     ],'verify' => false]);
+       // $product_responses = $product_request->getBody();
+
+
+       $product_responses = '{
+        "ResultCode":1,
+        "ErrorCodes":[
+
+        ],
+        "Items":[
+           {
+              "ProviderCode":"6DBD",
+              "SkuCode":"6DBDBD8101",
+              "LocalizationKey":"6DBDBD8101",
+              "SettingDefinitions":[
+
+              ],
+              "Maximum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":131.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":131.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":1.42,
+                 "SendCurrencyIso":"EUR"
+              },
+              "Minimum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":131.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":131.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":1.42,
+                 "SendCurrencyIso":"EUR"
+              },
+              "CommissionRate":0.000,
+              "ProcessingMode":"Instant",
+              "RedemptionMechanism":"Immediate",
+              "Benefits":[
+                 "Mobile",
+                 "Data"
+              ],
+              "ValidityPeriodIso":"P28D",
+              "UatNumber":"8801800000000",
+              "AdditionalInformation":null,
+              "DefaultDisplayText":"1 GB",
+              "RegionCode":"BD",
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LookupBillsRequired":false
+           },
+           {
+              "ProviderCode":"6DBD",
+              "SkuCode":"6DBDBD25146",
+              "LocalizationKey":"6DBDBD25146",
+              "SettingDefinitions":[
+
+              ],
+              "Maximum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":203.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":203.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":2.19,
+                 "SendCurrencyIso":"EUR"
+              },
+              "Minimum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":203.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":203.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":2.19,
+                 "SendCurrencyIso":"EUR"
+              },
+              "CommissionRate":0.000,
+              "ProcessingMode":"Instant",
+              "RedemptionMechanism":"Immediate",
+              "Benefits":[
+                 "Mobile",
+                 "Data"
+              ],
+              "ValidityPeriodIso":"P7D",
+              "UatNumber":"8801800000000",
+              "AdditionalInformation":null,
+              "DefaultDisplayText":"10 GB",
+              "RegionCode":"BD",
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LookupBillsRequired":false
+           },
+           {
+              "ProviderCode":"6DBD",
+              "SkuCode":"6DBDBD65244",
+              "LocalizationKey":"6DBDBD65244",
+              "SettingDefinitions":[
+
+              ],
+              "Maximum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":213.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":213.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":2.30,
+                 "SendCurrencyIso":"EUR"
+              },
+              "Minimum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":213.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":213.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":2.30,
+                 "SendCurrencyIso":"EUR"
+              },
+              "CommissionRate":0.000,
+              "ProcessingMode":"Instant",
+              "RedemptionMechanism":"Immediate",
+              "Benefits":[
+                 "Mobile",
+                 "Data"
+              ],
+              "ValidityPeriodIso":"P30D",
+              "UatNumber":"8801800000000",
+              "AdditionalInformation":null,
+              "DefaultDisplayText":"1.5 GB",
+              "RegionCode":"BD",
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LookupBillsRequired":false
+           },
+           {
+              "ProviderCode":"6DBD",
+              "SkuCode":"6DBDBD64799",
+              "LocalizationKey":"6DBDBD64799",
+              "SettingDefinitions":[
+
+              ],
+              "Maximum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":322.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":322.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":3.47,
+                 "SendCurrencyIso":"EUR"
+              },
+              "Minimum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":322.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":322.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":3.47,
+                 "SendCurrencyIso":"EUR"
+              },
+              "CommissionRate":0.000,
+              "ProcessingMode":"Instant",
+              "RedemptionMechanism":"Immediate",
+              "Benefits":[
+                 "Mobile",
+                 "Data"
+              ],
+              "ValidityPeriodIso":"P28D",
+              "UatNumber":"8801800000000",
+              "AdditionalInformation":null,
+              "DefaultDisplayText":"4 GB",
+              "RegionCode":"BD",
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LookupBillsRequired":false
+           },
+           {
+              "ProviderCode":"6DBD",
+              "SkuCode":"6DBDBD79768",
+              "LocalizationKey":"6DBDBD79768",
+              "SettingDefinitions":[
+
+              ],
+              "Maximum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":407.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":407.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":4.39,
+                 "SendCurrencyIso":"EUR"
+              },
+              "Minimum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":407.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":407.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":4.39,
+                 "SendCurrencyIso":"EUR"
+              },
+              "CommissionRate":0.000,
+              "ProcessingMode":"Instant",
+              "RedemptionMechanism":"Immediate",
+              "Benefits":[
+                 "Mobile",
+                 "Data"
+              ],
+              "ValidityPeriodIso":"P28D",
+              "UatNumber":"8801800000000",
+              "AdditionalInformation":null,
+              "DefaultDisplayText":"7 GB (5 GB + 2 GB 4G)",
+              "RegionCode":"BD",
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LookupBillsRequired":false
+           },
+           {
+              "ProviderCode":"6DBD",
+              "SkuCode":"6DBDBD2786",
+              "LocalizationKey":"6DBDBD2786",
+              "SettingDefinitions":[
+
+              ],
+              "Maximum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":511.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":511.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":5.51,
+                 "SendCurrencyIso":"EUR"
+              },
+              "Minimum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":511.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":511.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":5.51,
+                 "SendCurrencyIso":"EUR"
+              },
+              "CommissionRate":0.000,
+              "ProcessingMode":"Instant",
+              "RedemptionMechanism":"Immediate",
+              "Benefits":[
+                 "Mobile",
+                 "Data"
+              ],
+              "ValidityPeriodIso":"P28D",
+              "UatNumber":"8801800000000",
+              "AdditionalInformation":null,
+              "DefaultDisplayText":"10 GB",
+              "RegionCode":"BD",
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LookupBillsRequired":false
+           },
+           {
+              "ProviderCode":"6DBD",
+              "SkuCode":"6DBDBD22225",
+              "LocalizationKey":"6DBDBD22225",
+              "SettingDefinitions":[
+
+              ],
+              "Maximum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":662.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":662.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":7.14,
+                 "SendCurrencyIso":"EUR"
+              },
+              "Minimum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":662.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":662.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":7.14,
+                 "SendCurrencyIso":"EUR"
+              },
+              "CommissionRate":0.000,
+              "ProcessingMode":"Instant",
+              "RedemptionMechanism":"Immediate",
+              "Benefits":[
+                 "Mobile",
+                 "Data"
+              ],
+              "ValidityPeriodIso":"P28D",
+              "UatNumber":"8801800000000",
+              "AdditionalInformation":null,
+              "DefaultDisplayText":"15 GB",
+              "RegionCode":"BD",
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LookupBillsRequired":false
+           },
+           {
+              "ProviderCode":"6DBD",
+              "SkuCode":"6DBDBD40330",
+              "LocalizationKey":"6DBDBD40330",
+              "SettingDefinitions":[
+
+              ],
+              "Maximum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":929.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":929.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":10.01,
+                 "SendCurrencyIso":"EUR"
+              },
+              "Minimum":{
+                 "CustomerFee":0.00,
+                 "DistributorFee":0.00,
+                 "ReceiveValue":929.00,
+                 "ReceiveCurrencyIso":"BDT",
+                 "ReceiveValueExcludingTax":929.00,
+                 "TaxRate":0.0,
+                 "TaxName":null,
+                 "TaxCalculation":null,
+                 "SendValue":10.01,
+                 "SendCurrencyIso":"EUR"
+              },
+              "CommissionRate":0.000,
+              "ProcessingMode":"Instant",
+              "RedemptionMechanism":"Immediate",
+              "Benefits":[
+                 "Mobile",
+                 "Data"
+              ],
+              "ValidityPeriodIso":"P30D",
+              "UatNumber":"8801800000000",
+              "AdditionalInformation":null,
+              "DefaultDisplayText":"20 GB",
+              "RegionCode":"BD",
+              "PaymentTypes":[
+                 "Prepaid"
+              ],
+              "LookupBillsRequired":false
+           }
+        ]
+     }';
 
         $prod = json_decode($product_responses,true);
 
@@ -406,7 +838,7 @@ class RechargeController extends Controller
             ->get();
         }
 
-        return view('front.recharge-international',compact('datas','prods','count','stage','data','rg'));
+        return view('front.recharge-international',compact('datas','prods','count','stage','data','rg','logo'));
     }
 
 
@@ -468,6 +900,7 @@ class RechargeController extends Controller
         $datas = $request->all();
         // dd($datas);
 
+
         $received = $request->received_amount;
         $sku_amount = explode(',',$datas['amount']);
 
@@ -480,8 +913,9 @@ class RechargeController extends Controller
             $admin_commission_main = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
             if($admin_commission_main>0)
             {
-            $admin_commission = $admin_commission_main/2;
-            $reseller_commission = $admin_commission_main-$admin_commission;
+                $reseller_com = reseller_comission($admin_commission_main);
+                //$admin_commission = $admin_commission_main-$reseller_com;
+                $admin_commission = $admin_commission_main-$reseller_com;
             }
             else
             {
@@ -493,8 +927,10 @@ class RechargeController extends Controller
             $SkuCode = $datas['Sku_Code'];
             $admin_commission_main =($datas['amount']/100)*a::user()->admin_international_recharge_commission;
             if($admin_commission_main>0){
-            $admin_commission = $admin_commission_main/2;
-            $reseller_commission = $admin_commission_main-$admin_commission;
+           // $admin_commission = $admin_commission_main/2;
+            $reseller_com = reseller_comission($admin_commission_main);
+            //$admin_commission = $admin_commission_main-$reseller_com;
+            $admin_commission = $admin_commission_main-$reseller_com;
             }
             else
             {
@@ -601,18 +1037,18 @@ class RechargeController extends Controller
             $create->cost = $refcost;
             $create->service = $request->service;
             $create->save();
-           // return ['status'=>true,'message'=>'Recharge Successful!'];
-            return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
+            return ['status'=>true,'message'=>'Recharge Successful!'];
+            //return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
             }else{
                 $error = $prod['ErrorCodes']['0']['Code'];
-                //return ['status'=>false,'message'=>$error];
-                return redirect('/recharge/recharge-int')->with('error',$error);
+                return ['status'=>false,'message'=>$error];
+                //return redirect('/recharge/recharge-int')->with('error',$error);
             }
 
 
         }else{
-           // return ['status'=>false,'message'=>'Insufficient Balance!'];
-           return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
+           return ['status'=>false,'message'=>'Insufficient Balance!'];
+           //return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
         }
 
     }
@@ -876,8 +1312,8 @@ class RechargeController extends Controller
                    // $admin_commission = ($sku_amount['1']/100)*a::user()->admin_recharge_commission;
                     $cost = $sku_amount['1'];
 
-                    $reseller_commission = round( ($prof->commission/100)*a::user()->admin_recharge_commission,2);
-
+                   // $reseller_commission = round( ($prof->commission/100)*a::user()->admin_recharge_commission,2);
+                    $reseller_commission = reseller_comission($prof->commission,a::user()->admin_recharge_commission);
                     //$reseller_commission = $admin_given_profit;
                     $admin_commission = $prof->commission - $reseller_commission;
                     //$admin_commission = $admin_given_profit

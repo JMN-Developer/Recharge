@@ -20,7 +20,7 @@ class UpdateWallet
         $current_balance = $user_info->wallet;
         $current_limit_usage = $user_info->limit_usage;
         $updated_balance = $current_balance-$total_cost;
-
+       // file_put_contents('test.txt',$discount." ".$reseller_profit." ".$total_cost." ".$current_balance." ".$updated_balance);
         if($current_balance < $total_cost)
         {
             if($current_balance == 0 )

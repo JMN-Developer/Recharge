@@ -20,6 +20,7 @@ use App\Http\Controllers\PricingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ApiTestController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DingConnectController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\InternationalApiController;
 use App\Http\Controllers\WalletController;
@@ -47,7 +48,7 @@ use App\Models\DomesticProfit;
 |
 */
 
-Route::get('/',[AuthController::class,'index']);
+Route::get('/',[AuthController::class,'index'])->name('/');
 // Route::get('test-notification',[PpnController::class,'send_pin']);
 
 // Route::get('test',[RechargeController::class,'data_test']);
@@ -68,7 +69,7 @@ Route::post('/create',[UserController::class,'create'])->name('create');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/l', function () {
 
-})->name('/');
+})->name('/a');
 Route::get('/add-reseller', function () {
     return view('front.add-reseller');
 });
@@ -281,6 +282,7 @@ Route::get('wallet_notification_count',[WalletController::class,'wallet_notifica
 Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 {
 
+    Route::get('dingconnect',[DingConnectController::class,'index']);
    Route::get('international', [InternationalApiController::class,'index'])->name('international');
 
 
@@ -317,6 +319,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::post('ppn_operator_details',[PpnController::class,'mobile_number_details'])->name('ppn_operator_details');
     Route::post('reloadly_recharge',[ReloadlyController::class,'reloadly_recharge'])->name('reloadly_recharge');
     Route::post('ppn_recharge',[PpnController::class,'recharge'])->name('ppn_recharge');
+    Route::post('ding_recharge',[RechargeController::class,'recharge'])->name('ding_recharge');
     Route::post('ppn_pin',[PpnController::class,'pin'])->name('ppn_pin');
     Route::get('calling-card',[PpnController::class,'calling_card_index'])->name('calling-card');
     Route::get('get_white_calling_table',[PpnController::class,'get_white_calling_table'])->name('get_white_calling_table');
