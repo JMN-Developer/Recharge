@@ -941,7 +941,8 @@ class RechargeController extends Controller
             $amount = $datas['amount'];
             $refcost = $datas['amount'];
         }
-        if (a::user()->wallet >= $SendValue || (a::user()->limit - a::user()->limit_usage)>=$SendValue) {
+
+        if (a::user()->wallet >= $SendValue || (a::user()->due - a::user()->limit_usage)>=$SendValue) {
             $client = new \GuzzleHttp\Client(['http_errors' => false]);
             $recharge_request = $client->post('https://api.dingconnect.com/api/V1/SendTransfer',[
             'headers' => [
