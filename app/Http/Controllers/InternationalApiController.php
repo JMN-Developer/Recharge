@@ -15,7 +15,7 @@ class InternationalApiController extends Controller
     {
 
         $internationa_api = ApiList::where('type','international')->where('status',1)->first();
-        $internationa_api->company_name = 'DTONE';
+
         if($internationa_api->company_name == 'Reloadly')
         {
             $method = new ReloadlyController();
