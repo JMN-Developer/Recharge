@@ -32,7 +32,7 @@ class PpnController extends Controller
     {
 
         if(a::user()->role == 'user'){
-            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->where('company_name','Ppn')->latest()->take(10)->get();
+            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->latest()->take(10)->get();
         }else{
             $data = RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')

@@ -913,9 +913,9 @@ class RechargeController extends Controller
             $admin_commission_main = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
             if($admin_commission_main>0)
             {
-                $reseller_com = reseller_comission($admin_commission_main);
+                $reseller_commission = reseller_comission($admin_commission_main);
                 //$admin_commission = $admin_commission_main-$reseller_com;
-                $admin_commission = $admin_commission_main-$reseller_com;
+                $admin_commission = $admin_commission_main-$reseller_commission;
             }
             else
             {

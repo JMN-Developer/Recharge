@@ -21,6 +21,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ApiTestController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DingConnectController;
+use App\Http\Controllers\DtOneController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\InternationalApiController;
 use App\Http\Controllers\WalletController;
@@ -317,8 +318,10 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
     Route::get('pin_invoice/{id}',[PinController::class,'invoice']);
     Route::post('reloadly_operator_details',[ReloadlyController::class,'mobile_number_details'])->name('reloadly_operator_details');
     Route::post('ppn_operator_details',[PpnController::class,'mobile_number_details'])->name('ppn_operator_details');
+    Route::post('dtone_operator_details',[DtOneController::class,'mobile_number_details'])->name('dtone_operator_details');
     Route::post('reloadly_recharge',[ReloadlyController::class,'reloadly_recharge'])->name('reloadly_recharge');
     Route::post('ppn_recharge',[PpnController::class,'recharge'])->name('ppn_recharge');
+    Route::post('dtone_recharge',[DtOneController::class,'recharge'])->name('dtone_recharge');
     Route::post('ding_recharge',[RechargeController::class,'recharge'])->name('ding_recharge');
     Route::post('ppn_pin',[PpnController::class,'pin'])->name('ppn_pin');
     Route::get('calling-card',[PpnController::class,'calling_card_index'])->name('calling-card');

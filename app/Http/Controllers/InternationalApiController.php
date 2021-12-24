@@ -13,7 +13,9 @@ class InternationalApiController extends Controller
     //
     public function index()
     {
+
         $internationa_api = ApiList::where('type','international')->where('status',1)->first();
+        $internationa_api->company_name = 'DTONE';
         if($internationa_api->company_name == 'Reloadly')
         {
             $method = new ReloadlyController();
@@ -29,6 +31,12 @@ class InternationalApiController extends Controller
         {
             $method = new RechargeController();
             return $method->RechargeInt();
+        }
+
+        if($internationa_api->company_name == 'DTONE')
+        {
+            $method = new DtOneController();
+            return $method->index();
         }
     }
 }
