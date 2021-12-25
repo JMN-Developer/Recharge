@@ -200,39 +200,39 @@ class PpnController extends Controller
         $skuId = $request->skuId;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
-       //$data = $this->ppn->recharge($skuId,$amount,$txid,$number);
+       $data = $this->ppn->recharge($skuId,$amount,$txid,$number);
 
-       $tmp_data = '{
-        "responseCode":"000",
-        "responseMessage":null,
-        "payLoad":{
-           "transactionId":128959196,
-           "transactionDate":"12/9/2021 05:09",
-           "invoiceAmount":1.680,
-           "faceValue":2.00,
-           "discount":0.0,
-           "fee":0.0,
-           "product":{
-              "skuId":3612,
-              "productName":"Robi-Bangladesh",
-              "faceValue":2.00,
-              "instructions":null
-           },
-           "topupDetail":{
-              "localCurrencyAmount":144.32,
-              "salesTaxAmount":0.00,
-              "localCurrencyAmountExcludingTax":144.32,
-              "destinationCurrency":"BDT",
-              "operatorTransactionId":null
-           },
-           "pins":null,
-           "giftCardDetail":null,
-           "simInfo":null,
-           "billPaymentDetail":null
-        }
-     }';
-     $tmp_data = json_decode($tmp_data);
-     $data = ['status'=>true,'payload'=>$tmp_data];
+    //    $tmp_data = '{
+    //     "responseCode":"000",
+    //     "responseMessage":null,
+    //     "payLoad":{
+    //        "transactionId":128959196,
+    //        "transactionDate":"12/9/2021 05:09",
+    //        "invoiceAmount":1.680,
+    //        "faceValue":2.00,
+    //        "discount":0.0,
+    //        "fee":0.0,
+    //        "product":{
+    //           "skuId":3612,
+    //           "productName":"Robi-Bangladesh",
+    //           "faceValue":2.00,
+    //           "instructions":null
+    //        },
+    //        "topupDetail":{
+    //           "localCurrencyAmount":144.32,
+    //           "salesTaxAmount":0.00,
+    //           "localCurrencyAmountExcludingTax":144.32,
+    //           "destinationCurrency":"BDT",
+    //           "operatorTransactionId":null
+    //        },
+    //        "pins":null,
+    //        "giftCardDetail":null,
+    //        "simInfo":null,
+    //        "billPaymentDetail":null
+    //     }
+    //  }';
+    // $tmp_data = json_decode($tmp_data);
+     //$data = ['status'=>true,'payload'=>$tmp_data];
      //file_put_contents('test.txt',$tmp_data->responseCode);
 
         if($data['status']){
