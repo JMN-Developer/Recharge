@@ -289,6 +289,7 @@
     formdata.append('skuId', skuId);
     formdata.append('amount',amount);
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);
+    formdata.append('service_charge',$('#service').val());
 
 
 

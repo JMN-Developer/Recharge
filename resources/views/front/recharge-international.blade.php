@@ -244,12 +244,16 @@
     var amount = $('select[name=amount] option:selected').val();;
     var number =$("input[name=number]").val();
     var skuId = $("input[name=Sku_Code]").val();
+    var service_charge = $("input[name=service]").val();
+
    // alert(amount)
 
     var formdata = new FormData();
     formdata.append('number',number);
     formdata.append('Sku_Code', skuId);
     formdata.append('amount',amount);
+    formdata.append('service_charge',service_charge);
+
     //formdata.append('countryCode', intl.getSelectedCountryData().iso2);
 
 

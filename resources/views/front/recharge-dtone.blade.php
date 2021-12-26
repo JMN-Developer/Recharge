@@ -286,7 +286,10 @@
 
     var formdata = new FormData();
     formdata.append('number',$('#receiverMobile').val());
+    formdata.append('service_charge',$('#service').val());
     formdata.append('id', skuId);
+    formdata.append('countryCode', intl.getSelectedCountryData().iso2);
+
 
 
 

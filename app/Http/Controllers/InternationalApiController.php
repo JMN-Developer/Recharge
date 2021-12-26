@@ -13,6 +13,8 @@ class InternationalApiController extends Controller
     //
     public function index()
     {
+        $method = new DtOneController();
+        return $method->index();
 
         $internationa_api = ApiList::where('type','international')->where('status',1)->first();
 

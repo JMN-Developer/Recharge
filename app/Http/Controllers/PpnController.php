@@ -116,10 +116,10 @@ class PpnController extends Controller
 
     }
 
-    public function create_recharge($data,$number,$txid,$country_code)
+    public function create_recharge($data,$number,$txid,$country_code,$service)
     {
         $discount = $data->faceValue - $data->invoiceAmount;
-        $reseller_com = $discount/2;
+        $reseller_com = reseller_comission($discount);
         $admin_com = $discount-$reseller_com;
         RechargeHistory::create([
             'reseller_id'=>a::user()->id,
@@ -135,6 +135,7 @@ class PpnController extends Controller
             'discount'=>$discount,
             'reseller_com'=>$reseller_com,
             'admin_com'=>$admin_com,
+            'service'=>$service,
             'deliveredAmount'=>floor($data->topupDetail->localCurrencyAmount),
             'deliveredAmountCurrencyCode'=>$data->topupDetail->destinationCurrency,
             'company_name'=>'Ppn'
@@ -238,7 +239,7 @@ class PpnController extends Controller
         if($data['status']){
            // file_put_contents('test.txt',$data['payload']);
          UpdateWallet::update($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
-          $this->create_recharge($data['payload']->payLoad,$number,$txid,$country_code);
+          $this->create_recharge($data['payload']->payLoad,$number,$txid,$country_code,$request->service_charge);
           $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }

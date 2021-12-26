@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth as a;
 use App\Services\CheckRechargeAvail;
 use App\Services\UpdateWallet;
 use App\Services\GenerateTransactionId;
+use App\Models\Balance;
 
 class DtOneController extends Controller
 {
@@ -89,6 +90,44 @@ class DtOneController extends Controller
        // file_put_contents('test.txt',$number." ".$countryIso);
     }
 
+
+    public function create_recharge($data,$number,$txid,$country_code,$service = 0)
+    {
+        $discount =$data->prices->retail->amount - $data->prices->wholesale->amount;
+        $reseller_com = reseller_comission($discount);
+        $admin_com = $discount-$reseller_com;
+        RechargeHistory::create([
+            'reseller_id'=>a::user()->id,
+            'number'=>$number,
+            'amount'=>$data->prices->retail->amount,
+            'txid'=>$txid,
+            'type'=>'International',
+            'operator'=>$data->product->operator->name,
+            'status'=>'completed',
+            'cost'=>round($data->prices->wholesale->amount,2),
+            'transaction_id_company'=>$data->id,
+            'country_code'=>$country_code,
+            'discount'=>$discount,
+            'service'=>$service,
+            'reseller_com'=>$reseller_com,
+            'admin_com'=>$admin_com,
+            'deliveredAmount'=>floor($data->benefits[0]->amount->total_excluding_tax),
+            'deliveredAmountCurrencyCode'=>$data->benefits[0]->unit,
+            'company_name'=>'dtone'
+
+        ]);
+    }
+
+    public function update_balance($recharge_amount,$cost)
+    {
+        $balance_info = Balance::where('type','dtone')->first();
+        $current_balance = $balance_info->balance-$cost;
+        $discount = $recharge_amount-$cost;
+        $total_cost_reseller = $cost+($discount/2);
+        Balance::where('type','dtone')->update(['balance'=>$current_balance]);
+
+    }
+
     public function recharge(Request $request)
     {
 
@@ -98,33 +137,105 @@ class DtOneController extends Controller
             return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
         }
 
-
+        $country_code = $request->countryCode;
         $number = $request->number;
 
         $skuId = $request->id;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
        $data = $this->dtone->recharge($skuId,$txid,$number);
-
+    //     $tmp_data = '{
+    //         "benefits":[
+    //            {
+    //               "additional_information":null,
+    //               "amount":{
+    //                  "base":100,
+    //                  "promotion_bonus":0,
+    //                  "total_excluding_tax":100
+    //               },
+    //               "type":"CREDITS",
+    //               "unit":"BDT",
+    //               "unit_type":"CURRENCY"
+    //            }
+    //         ],
+    //         "confirmation_expiration_date":"2021-12-23T15:58:53.049511000Z",
+    //         "creation_date":"2021-12-23T14:58:53.049511000Z",
+    //         "credit_party_identifier":{
+    //            "mobile_number":"+8801845318609"
+    //         },
+    //         "external_id":"23122021145852002312",
+    //         "id":2237551912,
+    //         "prices":{
+    //            "retail":{
+    //               "amount":1.5,
+    //               "fee":0,
+    //               "unit":"EUR",
+    //               "unit_type":"CURRENCY"
+    //            },
+    //            "wholesale":{
+    //               "amount":1.2,
+    //               "fee":0,
+    //               "unit":"EUR",
+    //               "unit_type":"CURRENCY"
+    //            }
+    //         },
+    //         "product":{
+    //            "description":"",
+    //            "id":3425,
+    //            "name":"100 BDT",
+    //            "operator":{
+    //               "country":{
+    //                  "iso_code":"BGD",
+    //                  "name":"Bangladesh",
+    //                  "regions":null
+    //               },
+    //               "id":1446,
+    //               "name":"Robi Bangladesh",
+    //               "regions":null
+    //            },
+    //            "regions":null,
+    //            "service":{
+    //               "id":1,
+    //               "name":"Mobile"
+    //            },
+    //            "tags":[
+    //               "AIRTIME"
+    //            ],
+    //            "type":"FIXED_VALUE_RECHARGE"
+    //         },
+    //         "promotions":null,
+    //         "rates":{
+    //            "base":83.3333333333333,
+    //            "retail":66.6666666666667,
+    //            "wholesale":83.3333333333333
+    //         },
+    //         "status":{
+    //            "class":{
+    //               "id":1,
+    //               "message":"CREATED"
+    //            },
+    //            "id":10000,
+    //            "message":"CREATED"
+    //         }
+    //      }';
 
     // $tmp_data = json_decode($tmp_data);
-    //  $data = ['status'=>true,'payload'=>$tmp_data];
+     //$data = ['status'=>true,'payload'=>$tmp_data];
     //  //file_put_contents('test.txt',$tmp_data->responseCode);
 
-    //     if($data['status']){
-    //        // file_put_contents('test.txt',$data['payload']);
-    //      UpdateWallet::update($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
-    //       $this->create_recharge($data['payload']->payLoad,$number,$txid,$country_code);
-    //       $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
+        if($data['status']){
+           // file_put_contents('test.txt',$data['payload']);
+         UpdateWallet::update($data['payload']->prices->retail->amount,$data['payload']->prices->wholesale->amount);
+          $this->create_recharge($data['payload'],$number,$txid,$country_code,$request->service_charge);
+          $this->update_balance($data['payload']->prices->retail->amount,$data['payload']->prices->wholesale->amount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
-    //     }
-    // else
-    // {
-    //     $data = $data['payload'];
-    //     return ['status'=>false,'message'=>$data->message];
-    // }
-      //  file_put_contents('test.txt',json_encode($data));
-       // file_put_contents('test.txt',$request->operatorId." ".$request->amount." ".$request->countryCode." ".$request->number);
+        }
+    else
+    {
+        $data = $data['payload'];
+        return ['status'=>false,'message'=>$data->message];
+    }
+
 
     }
 }

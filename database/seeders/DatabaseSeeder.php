@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
 
         // \App\Models\SecretStore::create([
         //     'type'=>'international',
-        //     'company_name'=>'Ppn',
-        //     'content'=>Crypt::encrypt('UG9pbnQxOnlWcjRANTQ2Znk=')
+        //     'company_name'=>'dtone',
+        //     'content'=>Crypt::encrypt('YjIxMmVkYWItN2UzZS00NjUzLTk5YTgtMDBhMzUzMGQ0ZDhiOjBmYTI0NWUzLWJlNDAtNDYwMy04YzVjLTZlZDhmMDBlODk2Yw==')
 
         // ]);
     //     \App\Models\User::factory(10)->create();

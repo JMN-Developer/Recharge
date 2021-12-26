@@ -117,7 +117,7 @@
                             <td><strong>{{ $data->amount }} &euro;</strong></td>
                             @elseif($data->type == 'International')
                             <td>Retailer Price</td>
-                            <td><strong>{{ $data->cost + $data->service}} &euro;</strong></td>
+                            <td><strong>{{ $data->amount + $data->service}} &euro;</strong></td>
                             @endif
                           </tr>
                           {{-- <tr>

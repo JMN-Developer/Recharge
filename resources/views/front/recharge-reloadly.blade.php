@@ -282,7 +282,7 @@
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);
     formdata.append('operatorId',$('#operator_id').val());
     formdata.append('amount',$('#amount').val());
-
+    formdata.append('service_charge',$('#service').val());
 
 
       $.ajax({

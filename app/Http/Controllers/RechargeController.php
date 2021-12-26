@@ -984,7 +984,7 @@ class RechargeController extends Controller
 
             // dd($admin_commission);
 
-            $cost = $sendvalue + $admin_commission_main + $request->service;
+            $cost = $sendvalue + $admin_commission_main;
 
             $real_cost = $sendvalue+$admin_commission;
 
@@ -1036,7 +1036,7 @@ class RechargeController extends Controller
             $create->type = 'International';
             $create->status = 'completed';
             $create->cost = $refcost;
-            $create->service = $request->service;
+            $create->service = $request->service_charge;
             $create->save();
             return ['status'=>true,'message'=>'Recharge Successful!'];
             //return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');

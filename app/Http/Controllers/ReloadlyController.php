@@ -69,7 +69,7 @@ class ReloadlyController extends Controller
        // file_put_contents('test.txt',$number." ".$countryIso);
     }
 
-    public function create_recharge($data)
+    public function create_recharge($data,$service)
     {
         $reseller_com = reseller_comission($data->discount);
         $admin_com = $data->discount-$reseller_com;
@@ -84,6 +84,7 @@ class ReloadlyController extends Controller
             'operator'=>$data->operatorName,
             'status'=>'completed',
             'cost'=> $cost,
+            'service'=>$service,
             'transaction_id_company'=>$data->transactionId,
             'country_code'=>$data->countryCode,
             'discount'=>$data->discount,
@@ -121,7 +122,7 @@ class ReloadlyController extends Controller
         if($data['status']){
             //file_put_contents('test.txt',json_encode($data['payload']));
             UpdateWallet::update($data['payload']->requestedAmount,$data['payload']->requestedAmount-$data['payload']->discount);
-          $this->create_recharge($data['payload']);
+          $this->create_recharge($data['payload'],$request->service);
           $this->update_balance($data['payload']->balanceInfo->newBalance);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }
