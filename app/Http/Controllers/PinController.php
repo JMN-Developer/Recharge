@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\GenerateTransactionId;
 use DB;
 use App\Models\DomesticProduct;
+use App\Services\UpdateWallet;
 
 class PinController extends Controller
 {
@@ -56,6 +57,7 @@ class PinController extends Controller
         $sku_amount = explode(',',$request->amount);
 
         $amount = $sku_amount['1']*100;
+        $commission = DB::table('domestic_pins')->where('ean', $sku_amount['0'])->first()->comission;
 
         $amount = str_replace('.','',$amount);
 
@@ -121,17 +123,20 @@ class PinController extends Controller
 
 
             if(a::user()->role != 'admin'){
-                $reseller_commission = ($sku_amount['1']/100)*a::user()->pin;
-                $admin_commission = ($sku_amount['1']/100)*a::user()->admin_pin_commission;
+
+                $reseller_commission = reseller_comission($commission,a::user()->admin_pin_commission);
+                $admin_commission = $commission -  $reseller_commission;
                 $cost = $sku_amount['1'];
 
                 $admin_given_profit = ($prof->commission/100)*a::user()->admin_pin_commission;
 
-                $minus = a::user()->update([
-                    'wallet' => a::user()->wallet - $cost + $admin_given_profit,
-                ]);
+                UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $commission,a::user()->admin_pin_commission);
 
-                $reseller = User::where('id',a::user()->created_by)->first();
+                // $minus = a::user()->update([
+                //     'wallet' => a::user()->wallet - $cost + $admin_given_profit,
+                // ]);
+
+               // $reseller = User::where('id',a::user()->created_by)->first();
 
                 // $commission = User::where('id',a::user()->created_by)->update([
                 //     'wallet' => $reseller->wallet + $reseller_commission
