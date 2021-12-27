@@ -224,6 +224,23 @@ class DtOneController extends Controller
     //  //file_put_contents('test.txt',$tmp_data->responseCode);
 
         if($data['status']){
+
+            if($data['payload']->status->class->message=='REJECTED')
+            {
+                return ['status'=>false,'message'=>$data['payload']->status->message];
+            }
+
+            if($data['payload']->status->class->message=='CANCELLED')
+            {
+                return ['status'=>false,'message'=>$data['payload']->status->message];
+            }
+
+            if($data['payload']->status->class->message=='DECLINED')
+            {
+                return ['status'=>false,'message'=>$data['payload']->status->message];
+            }
+
+
            // file_put_contents('test.txt',$data['payload']);
          UpdateWallet::update($data['payload']->prices->retail->amount,$data['payload']->prices->wholesale->amount);
           $this->create_recharge($data['payload'],$number,$txid,$country_code,$request->service_charge);
