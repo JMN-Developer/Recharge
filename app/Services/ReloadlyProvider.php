@@ -20,6 +20,7 @@ class ReloadlyProvider
         //file_put_contents('test.txt',$totalDuration." ".$last_updated_date->content);
         if($totalDuration<5184000)
         {
+            // file_put_contents('test.txt',Crypt::decrypt($last_updated_date->content));
            return Crypt::decrypt($last_updated_date->content);
         }
 

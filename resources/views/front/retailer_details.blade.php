@@ -22,6 +22,10 @@
   .modal-content{
     border:whitesmoke 6px solid;
   }
+  label{
+      margin-top: 10px;
+      margin-bottom: 0px
+  }
 </style>
 @endsection
 
@@ -169,89 +173,101 @@
                             </div>
                           </div>
 
-                          <div class="modal fade bd-example-modal-sm" id="com{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-sm">
+                          <div class="modal fade bd-example-modal" id="com{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
                               <div class="modal-content">
-                                <form action="{{ route("AddCom") }}" method="post">
-                                  @csrf
-                                  <div>
-                                    <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
-                                    <label for="">Sim Commission :</label><br>
-                                    <small>Default Admin Commission is {{ $item->admin_sim_commission }}</small>
-                                    <input class="form-control"
-                                    @if (Auth::user()->role == 'admin')
-                                      value="{{$item->admin_sim_commission}}"
-                                    @else
-                                      value="{{$item->sim}}"
-                                    @endif
-                                    type="number" step="0.01" name="sim">
-                                    <label for="">Phone Commission :</label><br>
-                                    <small>Default Admin Commission is {{ $item->admin_mobile_commission }}</small>
-                                    <input class="form-control"
-                                    @if (Auth::user()->role == 'admin')
-                                      value="{{$item->admin_mobile_commission}}"
-                                    @else
-                                      value="{{$item->mobile}}"
-                                    @endif
-                                    type="number" step="0.01" name="mobile">
-                                    <label for="">Cargo Commission :</label><br>
-                                    <small>Default Admin Commission is {{ $item->admin_cargo_commission }}</small>
-                                    <input class="form-control"
-                                    @if (Auth::user()->role == 'admin')
-                                      value="{{$item->admin_cargo_commission}}"
-                                    @else
-                                      value="{{$item->cargo}}"
-                                    @endif
-                                     type="number" step="0.01" name="cargo">
-                                    <label for="">International Recharge Commission :</label><br>
-                                    <small>Default Admin Commission is {{ $item->admin_international_recharge_commission }}</small>
-                                    <input class="form-control"
-                                    @if (Auth::user()->role == 'admin')
-                                      value="{{$item->admin_international_recharge_commission}}"
-                                    @else
-                                      value="{{$item->international_recharge}}"
-                                    @endif
-                                     type="number" step="0.01" name="international_recharge">
-
-                                     <label for="">International Recharge Profit :</label><br>
-
-                                     <input class="form-control"
-                                     @if (Auth::user()->role == 'admin')
-                                     value="{{$item->reseller_profit->international_recharge_profit}}"
-                                     @endif
-                                      type="number" step="0.01" name="international_recharge_profit">
-
-
-                                    <label for="">Domestic Recharge Commission :</label><br>
-                                    <small>Default Admin Commission is {{ $item->admin_recharge_commission }}</small>
-                                    <input class="form-control"
-                                    @if (Auth::user()->role == 'admin')
-                                      value="{{$item->admin_recharge_commission}}"
-                                    @else
-                                      value="{{$item->recharge}}"
-                                    @endif
-                                     type="number" step="0.01" name="recharge"> <br>
-
-                                     <label for="">Domestic Recharge Profit :</label><br>
-
-                                     <input class="form-control"
-                                     @if (Auth::user()->role == 'admin')
-                                     value="{{$item->reseller_profit->domestic_recharge_profit}}"
-                                     @endif
-                                      type="number" step="0.01" name="domestic_recharge_profit">
-
-                                     <label for="">Pin Commission :</label><br>
-                                    <small>Default Admin Commission is {{ $item->admin_pin_commission }}</small>
-                                    <input class="form-control"
-                                    @if (Auth::user()->role == 'admin')
-                                      value="{{$item->admin_pin_commission}}"
-                                    @else
-                                      value="{{$item->pin}}"
-                                    @endif
-                                     type="number" step="0.01" name="pin"> <br>
-                                    <button class="btn btn-success btn-sm"  type="submit">Set Commission For {{$item->first_name}}</button>
+                                  <div class="modal-header">
+                                    <h5 class="modal-title">Add Comission</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
                                   </div>
-                                </form>
+                                  <div class="modal-body">
+                                    <form action="{{ route("AddCom") }}" method="post">
+                                        @csrf
+                                        <div>
+                                          <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
+                                          <label for="">Sim Commission :</label><br>
+                                          <small>Default Admin Commission is {{ $item->admin_sim_commission }}</small>
+                                          <input class="form-control"
+                                          @if (Auth::user()->role == 'admin')
+                                            value="{{$item->admin_sim_commission}}"
+                                          @else
+                                            value="{{$item->sim}}"
+                                          @endif
+                                          type="number" step="0.01" name="sim">
+                                          <br>
+                                          <label for="">Phone Commission :</label><br>
+                                          <small>Default Admin Commission is {{ $item->admin_mobile_commission }}</small>
+                                          <input class="form-control"
+                                          @if (Auth::user()->role == 'admin')
+                                            value="{{$item->admin_mobile_commission}}"
+                                          @else
+                                            value="{{$item->mobile}}"
+                                          @endif
+                                          type="number" step="0.01" name="mobile">
+                                          <br>
+                                          <label for="">Cargo Commission :</label><br>
+                                          <small>Default Admin Commission is {{ $item->admin_cargo_commission }}</small>
+                                          <input class="form-control"
+                                          @if (Auth::user()->role == 'admin')
+                                            value="{{$item->admin_cargo_commission}}"
+                                          @else
+                                            value="{{$item->cargo}}"
+                                          @endif
+                                           type="number" step="0.01" name="cargo"><br>
+                                          <label for="">International Recharge Commission :</label><br>
+                                          <small>Default Admin Commission is {{ $item->admin_international_recharge_commission }}</small>
+                                          <input class="form-control"
+                                          @if (Auth::user()->role == 'admin')
+                                            value="{{$item->admin_international_recharge_commission}}"
+                                          @else
+                                            value="{{$item->international_recharge}}"
+                                          @endif
+                                           type="number" step="0.01" name="international_recharge">
+                                           <br>
+
+                                           <label for="">International Recharge Profit :</label><br>
+
+                                           <input class="form-control"
+                                           @if (Auth::user()->role == 'admin')
+                                           value="{{$item->reseller_profit->international_recharge_profit}}"
+                                           @endif
+                                            type="number" step="0.01" name="international_recharge_profit">
+                                            <br>
+
+                                          <label for="">Domestic Recharge Commission :</label><br>
+                                          <small>Default Admin Commission is {{ $item->admin_recharge_commission }}</small>
+                                          <input class="form-control"
+                                          @if (Auth::user()->role == 'admin')
+                                            value="{{$item->admin_recharge_commission}}"
+                                          @else
+                                            value="{{$item->recharge}}"
+                                          @endif
+                                           type="number" step="0.01" name="recharge"> <br>
+
+                                           <label for="">Domestic Recharge Profit :</label><br>
+
+                                           <input class="form-control"
+                                           @if (Auth::user()->role == 'admin')
+                                           value="{{$item->reseller_profit->domestic_recharge_profit}}"
+                                           @endif
+                                            type="number" step="0.01" name="domestic_recharge_profit">
+                                            <br>
+                                           <label for="">Pin Commission :</label><br>
+                                          <small>Default Admin Commission is {{ $item->admin_pin_commission }}</small>
+                                          <input class="form-control"
+                                          @if (Auth::user()->role == 'admin')
+                                            value="{{$item->admin_pin_commission}}"
+                                          @else
+                                            value="{{$item->pin}}"
+                                          @endif
+                                           type="number" step="0.01" name="pin"> <br>
+                                          <button class="btn btn-success btn-sm"  type="submit">Set Commission For {{$item->first_name}}</button>
+                                        </div>
+                                      </form>
+                                  </div>
+
                               </div>
                             </div>
                         </div>
