@@ -1314,11 +1314,11 @@ class RechargeController extends Controller
                     $cost = $sku_amount['1'];
 
                    // $reseller_commission = round( ($prof->commission/100)*a::user()->admin_recharge_commission,2);
-                    $reseller_commission = reseller_comission($prof->commission,a::user()->admin_recharge_commission);
+                    $reseller_commission = reseller_comission($prof->commission,65);
                     //$reseller_commission = $admin_given_profit;
                     $admin_commission = $prof->commission - $reseller_commission;
                     //$admin_commission = $admin_given_profit
-                    UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $prof->commission,a::user()->admin_recharge_commission);
+                    UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $prof->commission,65);
                     // $minus = a::user()->update([
                     //     'wallet' => a::user()->wallet - $cost + $admin_given_profit,
                     // ]);

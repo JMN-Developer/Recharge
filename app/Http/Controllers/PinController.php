@@ -124,13 +124,13 @@ class PinController extends Controller
 
             if(a::user()->role != 'admin'){
 
-                $reseller_commission = reseller_comission($commission,a::user()->admin_pin_commission);
+                $reseller_commission = reseller_comission($commission,65);
                 $admin_commission = $commission -  $reseller_commission;
                 $cost = $sku_amount['1'];
 
                 $admin_given_profit = ($prof->commission/100)*a::user()->admin_pin_commission;
 
-                UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $commission,a::user()->admin_pin_commission);
+                UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $commission,65);
 
                 // $minus = a::user()->update([
                 //     'wallet' => a::user()->wallet - $cost + $admin_given_profit,
