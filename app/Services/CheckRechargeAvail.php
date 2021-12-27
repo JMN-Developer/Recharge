@@ -50,6 +50,10 @@ class CheckRechargeAvail
     public static function check($requested_amount)
     {
         $instance = new CheckRechargeAvail();
+        if(auth()->user()->role == 'admin')
+        {
+            return true;
+        }
 
         $user_info = User::where('id',auth()->user()->id)->first();
         $current_wallet = $user_info->wallet;

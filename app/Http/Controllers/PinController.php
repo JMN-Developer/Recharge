@@ -10,6 +10,7 @@ use App\Models\Pin;
 use App\Models\DomesticProfit;
 use App\Models\Balance;
 use App\Models\User;
+use App\Services\GenerateTransactionId;
 use DB;
 use App\Models\DomesticProduct;
 
@@ -59,8 +60,10 @@ class PinController extends Controller
         $amount = str_replace('.','',$amount);
 
 
-        if (a::user()->wallet >= $sku_amount['1']) {
-            $txid = mt_rand(1000000000, 9999999999);
+        if (a::user()->wallet >= $sku_amount['1'] || (a::user()->due - a::user()->limit_usage)>=$sku_amount['1'] || a::user()->role=='admin') {
+            $transaction =  new GenerateTransactionId(a::user()->id,40);
+              $txid = $transaction->transaction_id();
+
 
         $xml = '<?xml version="1.0" ?><REQUEST MODE="DIRECT" STORERECEIPT="1" TYPE="SALE">
         <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
@@ -112,7 +115,8 @@ class PinController extends Controller
 
 
             $balance = DB::table('balances')->where('type','domestic')->update([
-                'balance' => $xml->LIMIT,
+                'balance' => round(($xml->LIMIT)/100,2),
+
             ]);
 
 
@@ -183,7 +187,7 @@ class PinController extends Controller
         // $data = json_encode($bod,true);
 
         }else{
-            return  Redirect()->back()->with('error','Insufficient Balance!');
+            return  Redirect()->back()->with('error','Insufficient Balance');
         }
     }
 
