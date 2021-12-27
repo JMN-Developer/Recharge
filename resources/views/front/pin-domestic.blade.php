@@ -121,9 +121,10 @@
                         <thead>
                           <tr class="table-danger">
                             <th>Pin</th>
-                            <th>Amount</th>
                             <th>Operator</th>
-                            <th>Status</th>
+                            <th>Amount</th>
+
+                            <th>Profit</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -131,9 +132,14 @@
                           @foreach ($data as $item)
                           <tr class="bg-ocean">
                             <td>{{ $item->pin }}</td>
-                            <td>{{ $item->amount }}</td>
+
                             <td>{{ $item->operator }}</td>
-                            <td><i class="text-primary fas fa-check-square"></i></td>
+                            <td>{{ $item->amount }}</td>
+                            @if(auth()->user()->role == 'admin')
+                            <td>{{ $item->admin_com }}</td>
+                            @else
+                            <td>{{ $item->reseller_com }}</td>
+                            @endif
                             <td> <a class="btn btn-success" href="pin_invoice/{{ $item->id }}"> Invoice</a> </td>
                           </tr>
                           @endforeach
