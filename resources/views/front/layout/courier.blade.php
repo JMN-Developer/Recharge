@@ -255,6 +255,7 @@ margin-left: 3px;
               $domestic = DB::table('balances')->where('type','domestic')->latest()->first();
               $reloadly = DB::table('balances')->where('type','reloadly')->latest()->first();
               $ppn =  DB::table('balances')->where('type','ppn')->latest()->first();
+              $dtone =  DB::table('balances')->where('type','dtone')->latest()->first();
             @endphp
              {{-- <div class="col-12">
               <b class="mr-2">Profit:</b><span>{{ $admin_profit }}&euro;</span>
@@ -275,6 +276,10 @@ margin-left: 3px;
 
               <div class="col-12">
                 <b class="mr-2">PPN:</b><span>{{ $ppn->balance }}&euro;</span>
+              </div>
+
+              <div class="col-12">
+                <b class="mr-2">Dtone:</b><span>{{ $dtone->balance }}&euro;</span>
               </div>
 
           </div>
