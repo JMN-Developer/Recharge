@@ -31,7 +31,7 @@
                   <a href="/"><img src="{{ asset('images/jm logo.png') }}" width="80px" height="auto"></a>
                </div>
                <div class="card-body">
-                  <p class="login-box-msg">Mobile Recharge or Offerss </p>
+                  <p class="login-box-msg">Mobile Recharge or Offers </p>
                   <div class="row">
                      <div class="col-md-12">
 
