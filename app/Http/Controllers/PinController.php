@@ -57,7 +57,7 @@ class PinController extends Controller
         $sku_amount = explode(',',$request->amount);
 
         $amount = $sku_amount['1']*100;
-        $commission = DB::table('domestic_pins')->where('ean', $sku_amount['0'])->first()->comission;
+        $commission = DB::table('domestic_pins')->where('ean', $sku_amount['0'])->first()->commission;
 
         $amount = str_replace('.','',$amount);
 
