@@ -278,7 +278,7 @@
     event.preventDefault();
 
     var formdata = new FormData();
-    formdata.append('number',$('#receiverMobile').val());
+    formdata.append('number',$('#receiverMobile').val().split(' ').join(''));
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);
     formdata.append('operatorId',$('#operator_id').val());
     formdata.append('amount',$('#amount').val());

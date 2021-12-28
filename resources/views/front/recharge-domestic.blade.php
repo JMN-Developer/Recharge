@@ -292,7 +292,7 @@ $.ajax({
         event.preventDefault();
         var formdata = new FormData();
         formdata.append('amount',$('#amounts').val());
-        formdata.append('number',$('#inputMobileNumber').val());
+        formdata.append('number',$('#inputMobileNumber').val().split(' ').join(''));
         formdata.append('operator',$('#op').val());
       $.ajax({
         processData: false,

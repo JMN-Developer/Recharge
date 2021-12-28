@@ -285,7 +285,7 @@
 //     var amount = amount_list[1];
 
     var formdata = new FormData();
-    formdata.append('number',$('#receiverMobile').val());
+    formdata.append('number',$('#receiverMobile').val().split(' ').join(''));
     formdata.append('service_charge',$('#service').val());
     formdata.append('id', skuId);
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);

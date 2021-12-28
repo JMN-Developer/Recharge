@@ -243,6 +243,7 @@
 
     var amount = $('select[name=amount] option:selected').val();;
     var number =$("input[name=number]").val();
+    var number = number.split(' ').join('');
     var skuId = $("input[name=Sku_Code]").val();
     var service_charge = $("input[name=service]").val();
 
