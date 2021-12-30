@@ -64,7 +64,7 @@
                             <div class="col-md-6 amount_input_field">
                                 <div class="mb-3 text-center">
 
-                                    <img style="height:112px; margin-right:101px" id="operator_image" alt="Operator Logo Not Found" >
+                                    {{-- <img style="height:112px; margin-right:101px" id="operator_image" alt="Operator Logo Not Found" > --}}
 
                                  </div>
                                 <div class="mb-3" >
