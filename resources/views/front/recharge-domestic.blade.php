@@ -75,7 +75,7 @@
                     </div>
                     <div class="mb-3 phone_number">
                       <label for="inputMobileNumber" class="form-label">Mobile Number</label>
-                      <input type="text" class="form-control myNumber" id="inputMobileNumber" name="number" value="" placeholder="Please enter mobile number" autocomplete="off">
+                      <input type="text" class="form-control myNumber" id="inputMobileNumber" name="number" value="" placeholder="Please enter mobile number" autocomplete="off" onkeypress="return isNumberKey(event)">
                     </div>
                     <div id="price">
                       <label for="">Amount</label>
@@ -107,7 +107,8 @@
                             <th>Amount</th>
                             <th>Cost</th>
                             <th>Profit</th>
-                            <th>Action</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">Action</th>
                           </tr>
                         </thead>
                         <tbody id="domestic_recent_recharge">
@@ -124,8 +125,8 @@
                                 @else
                                 <td>{{ $item->reseller_com }}</td>
                                 @endif
-
-                            <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
+                                <td class="text-center">{{ $item->created_at }}</td>
+                            <td class="text-center"> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                           </tr>
                           @endforeach
                         </tbody>
@@ -204,6 +205,13 @@ $.ajax({
 
 </script>
 <script type="text/javascript">
+  function isNumberKey(evt)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
     $(function(){
         //load_recent_recharge();
         var toast = document.querySelector('.iziToast');

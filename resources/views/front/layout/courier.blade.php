@@ -19,7 +19,10 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
+
+
         .notification {
   background-color: #76D7C4;
   color: white;
@@ -30,6 +33,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
   border-radius: 2px;
   margin-left: 10px;
 }
+
 
 .notification:hover {
   background: white;
@@ -43,6 +47,13 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
   border-radius: 50%;
   background: red;
   color: white;
+}
+
+.select2-container .select2-selection--single {
+    height: 38px !important;
+}
+.font-focus{
+    font-weight: bolder;
 }
 
 .badge {
@@ -643,6 +654,7 @@ margin-left: 3px;
   @yield('js')
   <script src="{{ mix('/js/app.js') }}"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
       $(function(){
         notification_count();

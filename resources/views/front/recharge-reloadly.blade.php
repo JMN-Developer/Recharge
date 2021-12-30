@@ -40,7 +40,7 @@
                                 <div class="mb-3 receiver_inputs">
                                     <label for="inputMobileNumber" class="form-label">Receiver Number</label>
 
-                                    <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number">
+                                    <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number" onkeypress="return isNumberKey(event)">
 
                                 <div class="amount_input_field">
                                     <label for="inputMobileNumber" class="form-label" style="margin-right: 35px">Amount</label>
@@ -93,7 +93,8 @@
                                        <th>Operator</th>
                                        <th>Amount</th>
                                        <th>Profit</th>
-                                       <th>Action</th>
+                                       <th class="text-center">Date</th>
+                                       <th class="text-center">Action</th>
                                        {{-- <th>Cost</th>
                                        <th>Profit</th>
                                        <th>Action</th> --}}
@@ -110,7 +111,8 @@
                                        @else
                                        <td>{{ $item->reseller_com }}</td>
                                        @endif
-                                       <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
+                                       <td class="text-center">{{ $item->created_at }}</td>
+                                       <td class="text-center"> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                                        {{-- <td>{{ $item->cost }}</td>
 
                                        <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td> --}}
@@ -152,9 +154,18 @@
 <script>
    // Vanilla Javascript
 
-
+   function isNumberKey(evt)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
 
    $(document).ready(function() {
+
+
+
     var toast = document.querySelector('.iziToast');
         var message = sessionStorage.getItem('message');
         sessionStorage.removeItem('message');
@@ -278,7 +289,7 @@
     event.preventDefault();
 
     var formdata = new FormData();
-    formdata.append('number',$('#receiverMobile').val().split(' ').join(''));
+    formdata.append('number',$('#receiverMobile').val());
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);
     formdata.append('operatorId',$('#operator_id').val());
     formdata.append('amount',$('#amount').val());

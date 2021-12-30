@@ -71,6 +71,8 @@ class PpnController extends Controller
         $data = $this->ppn->lookup($number);
         if($data['status']){
             $data = $data['payload'];
+            if($data->responseMessage=='Success')
+            {
             $skus = $this->make_sku_list($data->payLoad->skus);
             $operator_logo = $this->ppn->operator_logo($data->payLoad->productId);
             if($operator_logo['status'])
@@ -83,6 +85,11 @@ class PpnController extends Controller
             }
             //file_put_contents('test.txt',json_encode($skus));
             return ['status'=>true,'data'=>$data,'skus'=>$skus,'logo_url'=>$logo_url,'operator_name'=>$data->payLoad->operator];
+            }
+            else
+            {
+                return ['status'=>false,'message'=>'Error in mobile number'];
+            }
         }
         else
         {

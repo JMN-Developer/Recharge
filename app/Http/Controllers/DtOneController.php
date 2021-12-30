@@ -43,7 +43,7 @@ class DtOneController extends Controller
         foreach($skus as $sku)
         {
             //$total_amount = floor($sku->minAmount * $sku->exchangeRate);
-            $amount_text = $sku->prices->retail->amount." Euro (".$sku->name." will receive)";
+            $amount_text = $sku->prices->retail->amount."</p> Euro &nbsp(&nbsp" .$sku->name." will be received )";
 
             array_push($data,['skuId'=>$sku->id,'amount'=> $sku->source->amount,'amount_text'=>$amount_text]);
         }
@@ -61,6 +61,7 @@ class DtOneController extends Controller
         //$number = $request->number;
         $data = $this->dtone->lookup($number);
 
+
         if($data['status']){
             $data = $data['payload'];
             $skus = $this->make_sku_list($data);
@@ -75,12 +76,13 @@ class DtOneController extends Controller
             //     $logo_url = '';
             // }
             //file_put_contents('test.txt',json_encode($skus));
+            file_put_contents('test.txt','hello2');
             return ['status'=>true,'data'=>$data,'operator_name'=>$operator_name,'skus'=>$skus];
         }
         else
         {
-
-            return ['status'=>false,'message'=>$data['payload']->message];
+            file_put_contents('test.txt','hello');
+            return ['status'=>false,'message'=>$data['payload']->errors[0]->message];
         }
         //$data = (array) $data;
         //echo $data;

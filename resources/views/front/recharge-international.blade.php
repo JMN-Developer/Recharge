@@ -47,7 +47,7 @@
                                     <div class="mb-3 receiver_inputs">
                                        <label for="inputMobileNumber" class="form-label">Receiver Number</label>
                                        @if ($stage == 'initial')
-                                       <input type="text" id="receiverMobile" value="{{ $datas[0]['UatNumber'] ?? '' }}" class="form-control receiver_input_form" name="number" placeholder="Receiver Number">
+                                       <input type="text" id="receiverMobile" value="{{ $datas[0]['UatNumber'] ?? '' }}" class="form-control receiver_input_form" name="number" placeholder="Receiver Number" onkeypress="return isNumberKey(event)">
                                        @else
                                        <input type="text" value="{{ $datas['number'] ?? '' }}" class="form-control receiver_input_form" name="number" placeholder="Receiver Number" readonly>
                                        @endif
@@ -153,7 +153,8 @@
                                        <th>Operator</th>
                                        <th>Cost</th>
                                        <th>Profit</th>
-                                       <th>Action</th>
+                                       <th class="text-center">Date</th>
+                                       <th class="text-center">Action</th>
                                     </tr>
                                  </thead>
                                  <tbody>
@@ -167,7 +168,8 @@
                                        @else
                                        <td>{{ $item->reseller_com }}</td>
                                        @endif
-                                       <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
+                                       <td class="text-center">{{ $item->created_at }}</td>
+                                       <td class="text-center"> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                                     </tr>
                                     @endforeach
                                  </tbody>
@@ -238,6 +240,13 @@
 @endsection
 @section('js')
 <script>
+      function isNumberKey(evt)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
     function international_recharge()
     {
 
@@ -313,6 +322,7 @@
    }));
 
    $(document).ready(function() {
+    $(".amount").select2();
     var toast = document.querySelector('.iziToast');
         var message = sessionStorage.getItem('message');
         sessionStorage.removeItem('message');

@@ -17,7 +17,10 @@
    <link rel="stylesheet" href="{{asset('css/style.css')}}">
    <link rel="stylesheet" href="{{asset('css/loader/index.css')}}">
    <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
-<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
+
+<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
+
+</head>
 @endsection
 @section('content')
 <!-- Content Wrapper. Contains page content -->
@@ -40,7 +43,7 @@
                                 <div class="mb-3 receiver_inputs">
                                     <label for="inputMobileNumber" class="form-label">Receiver Number</label>
 
-                                    <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number">
+                                    <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number" onkeypress="return isNumberKey(event)">
 
                                     <div class="amount_input_field">
                                         <label for="inputMobileNumber" class="form-label" style="margin-right: 43px">Amount</label>
@@ -91,7 +94,8 @@
                                        <th>Operator</th>
                                        <th>Amount</th>
                                        <th>Profit</th>
-                                       <th>Action</th>
+                                       <th class="text-center">Date</th>
+                                       <th class="text-center">Action</th>
                                        {{-- <th>Cost</th>
                                        <th>Profit</th>
                                        <th>Action</th> --}}
@@ -108,7 +112,8 @@
                                        @else
                                        <td>{{ $item->reseller_com }}</td>
                                        @endif
-                                       <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
+                                       <td class="text-center">{{ $item->created_at }}</td>
+                                       <td class="text-center"> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                                        {{-- <td>{{ $item->cost }}</td>
 
                                        <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td> --}}
@@ -147,12 +152,20 @@
 <script src="{{asset('js/custom.js')}}"></script>
 @endsection
 @section('js')
+
 <script>
    // Vanilla Javascript
-
+   function isNumberKey(evt)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
 
 
    $(document).ready(function() {
+       $(".amount_list").select2();
     var toast = document.querySelector('.iziToast');
         var message = sessionStorage.getItem('message');
         sessionStorage.removeItem('message');
@@ -264,9 +277,22 @@
             }
             else
             {
-                location.reload();
-                sessionStorage.setItem('error',true);
-                sessionStorage.setItem('message',response.message);
+                iziToast.error({
+                    backgroundColor:"#D12C09",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 30000,
+                    title: 'Error',
+                    message: responses.message,
+
+
+                });
+
             }
            //console.log(response.status);
            //alert('hello')
