@@ -76,12 +76,12 @@ class DtOneController extends Controller
             //     $logo_url = '';
             // }
             //file_put_contents('test.txt',json_encode($skus));
-            file_put_contents('test.txt','hello2');
+
             return ['status'=>true,'data'=>$data,'operator_name'=>$operator_name,'skus'=>$skus];
         }
         else
         {
-            file_put_contents('test.txt','hello');
+
             return ['status'=>false,'message'=>$data['payload']->errors[0]->message];
         }
         //$data = (array) $data;
