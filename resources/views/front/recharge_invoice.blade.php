@@ -47,13 +47,15 @@
                             @if($data->type == 'International')
                               <td>Phone Number</td>
 
-                            @elseif($data->type == 'pin')
+                            @elseif($data->type == 'pin' )
                               <td>Pin</td>
+                           @elseif($data->type == 'White Calling' )
+                              <td>White Calling Pin</td>
                             @else
                               <td>Numero di telefono</td>
                             @endif
-                            @if($data->type == 'pin')
-                              <td><strong>{{ $data->pin }}</strong></td>
+                            @if($data->type == 'pin' ||$data->type == 'White Calling' )
+                              <td><strong>{{ $data->pin_number }}</strong></td>
                             @else
                               <td><strong>{{ $data->number }}</strong></td>
                             @endif
@@ -79,7 +81,7 @@
                             <td>Descrizione prodotto</td>
                             <td><strong>{{ $data->operator }}</strong></td>
                           </tr>
-                          @elseif($data->type == 'pin')
+                          @elseif($data->type == 'pin' || $data->type == 'White Calling')
                             <td>Descrizione prodotto</td>
                             <td><strong>{{ $data->product }}</strong></td>
                           <tr>
@@ -160,7 +162,7 @@
                     <div class="recharge_invoice_table">
                       <table class="table table-sm">
                         <tbody>
-                          @if($data->type == 'Domestic' || $data->type == 'pin')
+                          @if($data->type == 'Domestic' || $data->type == 'pin' || $data->type == 'White Calling' )
                           <tr>
                             <td>Terminale</td>
                             <td colspan="2"><strong>IT028215</strong></td>
