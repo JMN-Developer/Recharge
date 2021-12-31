@@ -131,7 +131,7 @@
                         <tbody>
                           @foreach ($data as $item)
                           <tr class="bg-ocean">
-                            <td>{{ $item->pin }}</td>
+                            <td>{{ $item->pin_number }}</td>
 
                             <td>{{ $item->operator }}</td>
                             <td>{{ $item->amount }}</td>
