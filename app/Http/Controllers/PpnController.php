@@ -157,14 +157,10 @@ class PpnController extends Controller
     public function create_pin($data,$txid)
     {
         $discount = $data->faceValue - $data->invoiceAmount;
-        $reseller_com = reseller_comission($discount);
+        $reseller_profit = reseller_profit_white_calling($data->faceValue);
         //$reseller_com =round(($discount*.60),2);
-        $admin_com = $discount-$reseller_com;
-        if(a::user()->role=='admin')
-        {
-            $admin_com = $discount;
-            $reseller_com = 0;
-        }
+        $admin_profit = $discount-$reseller_profit;
+
         RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'amount'=>$data->faceValue,
@@ -175,8 +171,8 @@ class PpnController extends Controller
             'cost'=>round($data->invoiceAmount,2),
             'transaction_id_company'=>$data->transactionId,
             'discount'=>$discount,
-            'reseller_com'=>$reseller_com,
-            'admin_com'=>$admin_com,
+            'reseller_com'=>$reseller_profit,
+            'admin_com'=>$admin_profit,
             'deliveredAmount'=>floor($data->pins[0]->deliveredAmount),
             'deliveredAmountCurrencyCode'=>$data->pins[0]->deliveredCurrencyCode,
             'company_name'=>'Ppn',

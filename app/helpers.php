@@ -43,3 +43,60 @@ if (!function_exists('reseller_comission')) {
             return $percentage_amount;
         }
         }
+
+        if (!function_exists('reseller_profit_white_calling')) {
+            function reseller_profit_white_calling($amount)
+            {
+            //    $extra_amount =  reseller_comission($amount);
+                if(auth()->user()->role == 'admin')
+                {
+                    $profit = 0;
+                }
+                else
+                {
+                    $profit = 11;
+
+                }
+                $percentage_amount = round((($profit/100)*$amount),2);
+                return $percentage_amount;
+            }
+            }
+
+            if (!function_exists('reseller_profit_pin')) {
+                function reseller_profit_pin($amount)
+                {
+                //    $extra_amount =  reseller_comission($amount);
+                    if(auth()->user()->role == 'admin')
+                    {
+                        $profit = 0;
+                    }
+                    else
+                    {
+                        $profit = 65;
+
+                    }
+                    $percentage_amount = round((($profit/100)*$amount),2);
+                    return $percentage_amount;
+                }
+                }
+
+
+                if (!function_exists('reseller_profit_domestic')) {
+                    function reseller_profit_domestic($amount)
+                    {
+                    //    $extra_amount =  reseller_comission($amount);
+                        if(auth()->user()->role == 'admin')
+                        {
+                            $profit = 0;
+                        }
+                        else
+                        {
+                            $profit = 65;
+
+                        }
+                        $percentage_amount = round((($profit/100)*$amount),2);
+                        return $percentage_amount;
+                    }
+                    }
+
+

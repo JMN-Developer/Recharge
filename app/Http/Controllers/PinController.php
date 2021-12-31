@@ -124,7 +124,7 @@ class PinController extends Controller
 
             if(a::user()->role != 'admin'){
 
-                $reseller_commission = reseller_comission($commission,65);
+                $reseller_commission = reseller_profit_pin($commission);
                 $admin_commission = $commission -  $reseller_commission;
                 $cost = $sku_amount['1'];
 
