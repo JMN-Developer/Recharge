@@ -289,7 +289,7 @@ class RechargeController extends Controller
         ->get();
     }
     $count = '1';
-     return $pass = $this->get_product($request,$operators['1']['Name'],$operators['0']['ProviderCode'],$number,$operators['1']['LogoUrl']);
+     return $pass = $this->get_product($request,$operators['0']['Name'],$operators['0']['ProviderCode'],$number,$operators['0']['LogoUrl']);
     }else{
         $error = 'Invalid Phone Number';
        // return ['status'=>false,'message'=>$error]
