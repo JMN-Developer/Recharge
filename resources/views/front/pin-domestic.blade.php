@@ -140,7 +140,7 @@
                             @else
                             <td>{{ $item->reseller_com }}</td>
                             @endif
-                            <td> <a class="btn btn-success" href="invoice/{{ $item->id }}"> Invoice</a> </td>
+                            <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
                           </tr>
                           @endforeach
                         </tbody>
