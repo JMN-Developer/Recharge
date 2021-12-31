@@ -261,6 +261,7 @@
             for (var i = 0; i < skus.length; i++){
                 option_list+='<option value='+skus[i].skuId+','+skus[i].amount+'>'+skus[i].amount_text+'</option>'
             }
+            $('.amount_list').empty();
             $('.amount_list').append(option_list);
 
                 $("#check_number").hide();

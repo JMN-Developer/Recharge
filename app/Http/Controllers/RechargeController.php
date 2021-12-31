@@ -909,40 +909,14 @@ class RechargeController extends Controller
         if(count($sku_amount) > 1) {
             $SkuCode = $sku_amount['0'];
             $SendValue = $sku_amount['1'];
-            $amount = $sku_amount['1'];
-            $admin_commission_main = ($sku_amount['1']/100)*a::user()->admin_international_recharge_commission;
-            if($admin_commission_main>0)
-            {
-                $reseller_commission = reseller_comission($admin_commission_main);
-                //$admin_commission = $admin_commission_main-$reseller_com;
-                $admin_commission = $admin_commission_main-$reseller_commission;
-            }
-            else
-            {
-                $admin_commission = $admin_commission_main;
-                $reseller_commission = 0;
-            }
-            $refcost = $sku_amount['1'] + $admin_commission_main;
+
         }else{
             $SkuCode = $datas['Sku_Code'];
-            $admin_commission_main =($datas['amount']/100)*a::user()->admin_international_recharge_commission;
-            if($admin_commission_main>0){
-           // $admin_commission = $admin_commission_main/2;
-            $reseller_com = reseller_comission($admin_commission_main);
-            //$admin_commission = $admin_commission_main-$reseller_com;
-            $admin_commission = $admin_commission_main-$reseller_com;
-            }
-            else
-            {
-                $admin_commission = $admin_commission_main;
-                $reseller_commission = 0;
-            }
-            $SendValue = $datas['amount'] - $admin_commission_main;
-            $amount = $datas['amount'];
-            $refcost = $datas['amount'];
+            $SendValue = $datas['amount'];
+
         }
 
-        if (a::user()->wallet >= $SendValue || (a::user()->due - a::user()->limit_usage)>=$SendValue) {
+        if (CheckRechargeAvail::check($SendValue)) {
             $client = new \GuzzleHttp\Client(['http_errors' => false]);
             $recharge_request = $client->post('https://api.dingconnect.com/api/V1/SendTransfer',[
             'headers' => [
@@ -960,50 +934,12 @@ class RechargeController extends Controller
         ]);
 
         $product_responses = $recharge_request->getBody();
-
-
         $prod = json_decode($product_responses,true);
-
-        // dd($prod);
-
-
-        $sendvalue = $SendValue;
-
          $count = count($prod['ErrorCodes']);
 
          if($count == 0){
-            $auth_recharge = a::user()->international_recharge;
-
-            //$auth_admin_recharge = a::user()->admin_international_recharge_commission;
-
-           // $reseller_commission = ($sendvalue/100)*$auth_recharge;
-
-            //$admin_commission_main = ($sendvalue/100)*$auth_admin_recharge;
-           // $admin_commission = floor($admin_commission_main/2);
-            //$reseller_commission = $admin_commission_main-$admin_commission;
-
-            // dd($admin_commission);
-
-            $cost = $sendvalue + $admin_commission_main;
-
-            $real_cost = $sendvalue+$admin_commission;
-
-
-            if(a::user()->role != 'admin'){
-                if(a::user()->wallet == 0)
-                {
-                    a::user()->update(['limit_usage'=>a::user()->limit_usage+$real_cost]);
-                }
-                $minus = a::user()->update([
-                    'wallet' => a::user()->wallet - $real_cost
-                ]);
-
-                //$reseller = User::where('id',a::user()->created_by)->first();
-
-                // $commission = User::where('id',a::user()->created_by)->update([
-                //     'wallet' => $reseller->wallet + $reseller_commission
-                // ]);
-            }
+            $refcost = $SendValue+reseller_comission($SendValue);
+            UpdateWallet::update($SendValue,$refcost);
 
             $client = new \GuzzleHttp\Client();
             $product_request = $client->get('https://api.dingconnect.com/api/V1/GetBalance',['headers' => [
@@ -1022,20 +958,22 @@ class RechargeController extends Controller
                 'balance' => $bal,
             ]);
 
-
+            $total_commission = reseller_comission($SendValue);
+            $reseller_profit = reseller_profit($SendValue);
+            $admin_profit = $total_commission-$reseller_profit;
 
 
             $create = new RechargeHistory;
             $create->reseller_id = a::user()->id;
             $create->number = $request->number;
-            $create->amount = $amount;
-            $create->reseller_com = $reseller_commission;
-            $create->admin_com = $admin_commission;
+            $create->amount = $refcost;
+            $create->reseller_com = $reseller_profit;
+            $create->admin_com = $admin_profit;
             $create->txid = $txid;
             $create->operator = $request->operator;
             $create->type = 'International';
             $create->status = 'completed';
-            $create->cost = $refcost;
+            $create->cost = $SendValue;
             $create->service = $request->service_charge;
             $create->save();
             return ['status'=>true,'message'=>'Recharge Successful!'];

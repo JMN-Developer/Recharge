@@ -251,7 +251,7 @@
 
             if(responses.status==true)
             {
-                console.log('hello')
+
                 var response = responses.data;
                 var skus = responses.skus;
                 var option_list = '';

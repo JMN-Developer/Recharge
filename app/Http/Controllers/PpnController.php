@@ -52,8 +52,7 @@ class PpnController extends Controller
         foreach($skus as $sku)
         {
             $total_amount = floor($sku->minAmount * $sku->exchangeRate);
-            $amount_text = $sku->minAmount." Euro (".$total_amount." ".$sku->currencyCode." will receive)";
-
+            $amount_text = $sku->minAmount+reseller_comission($sku->minAmount)." Euro (".$total_amount." ".$sku->currencyCode." will receive)";
             array_push($data,['skuId'=>$sku->skuId,'amount'=>$sku->minAmount,'amount_text'=>$amount_text]);
         }
         usort($data, function($a, $b) {
@@ -125,13 +124,18 @@ class PpnController extends Controller
 
     public function create_recharge($data,$number,$txid,$country_code,$service)
     {
+        // $discount = $data->faceValue - $data->invoiceAmount;
+        // $reseller_com = reseller_comission($discount);
+        // $admin_com = $discount-$reseller_com;
+
         $discount = $data->faceValue - $data->invoiceAmount;
-        $reseller_com = reseller_comission($discount);
-        $admin_com = $discount-$reseller_com;
+        $total_commission = reseller_comission($data->faceValue);
+        $reseller_profit = reseller_profit($total_commission);
+        $admin_profit = $total_commission-$reseller_profit;
         RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$number,
-            'amount'=>$data->faceValue,
+            'amount'=>$data->faceValue+reseller_comission($data->faceValue),
             'txid'=>$txid,
             'type'=>'International',
             'operator'=>$data->product->productName,
@@ -140,8 +144,8 @@ class PpnController extends Controller
             'transaction_id_company'=>$data->transactionId,
             'country_code'=>$country_code,
             'discount'=>$discount,
-            'reseller_com'=>$reseller_com,
-            'admin_com'=>$admin_com,
+            'reseller_com'=>$reseller_profit,
+            'admin_com'=>$admin_profit,
             'service'=>$service,
             'deliveredAmount'=>floor($data->topupDetail->localCurrencyAmount),
             'deliveredAmountCurrencyCode'=>$data->topupDetail->destinationCurrency,

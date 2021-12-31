@@ -55,6 +55,9 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
 .font-focus{
     font-weight: bolder;
 }
+.select2-container--default .select2-results>.select2-results__options {
+    max-height: 471px
+}
 
 .badge {
   position: absolute;

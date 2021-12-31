@@ -39,11 +39,12 @@ class DtOneController extends Controller
     }
     function make_sku_list($skus)
     {
+
         $data = array();
         foreach($skus as $sku)
         {
             //$total_amount = floor($sku->minAmount * $sku->exchangeRate);
-            $amount_text = $sku->prices->retail->amount."</p> Euro &nbsp(&nbsp" .$sku->name." will be received )";
+            $amount_text = $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount)."</p> Euro &nbsp(&nbsp" .$sku->name." will be received )";
 
             array_push($data,['skuId'=>$sku->id,'amount'=> $sku->source->amount,'amount_text'=>$amount_text]);
         }
@@ -96,12 +97,13 @@ class DtOneController extends Controller
     public function create_recharge($data,$number,$txid,$country_code,$service = 0)
     {
         $discount =$data->prices->retail->amount - $data->prices->wholesale->amount;
-        $reseller_com = reseller_comission($discount);
-        $admin_com = $discount-$reseller_com;
+        $total_commission = reseller_comission($data->prices->retail->amount);
+        $reseller_profit = reseller_profit($total_commission);
+        $admin_profit = $total_commission-$reseller_profit;
         RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$number,
-            'amount'=>$data->prices->retail->amount,
+            'amount'=>$data->prices->retail->amount+reseller_comission($data->prices->retail->amount),
             'txid'=>$txid,
             'type'=>'International',
             'operator'=>$data->product->operator->name,
@@ -111,8 +113,8 @@ class DtOneController extends Controller
             'country_code'=>$country_code,
             'discount'=>$discount,
             'service'=>$service,
-            'reseller_com'=>$reseller_com,
-            'admin_com'=>$admin_com,
+            'reseller_com'=>$reseller_profit,
+            'admin_com'=>$admin_profit,
             'deliveredAmount'=>floor($data->benefits[0]->amount->total_excluding_tax),
             'deliveredAmountCurrencyCode'=>$data->benefits[0]->unit,
             'company_name'=>'dtone'
@@ -124,8 +126,6 @@ class DtOneController extends Controller
     {
         $balance_info = Balance::where('type','dtone')->first();
         $current_balance = $balance_info->balance-$cost;
-        $discount = $recharge_amount-$cost;
-        $total_cost_reseller = $cost+($discount/2);
         Balance::where('type','dtone')->update(['balance'=>$current_balance]);
 
     }
