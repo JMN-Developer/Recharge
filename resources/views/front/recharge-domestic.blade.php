@@ -106,7 +106,7 @@
                           <tr class="table-danger">
                             <th>Receiver</th>
                             <th>Amount</th>
-                            <th>Cost</th>
+
                             <th>Profit</th>
                             <th class="text-center">Date</th>
                             <th class="text-center">Action</th>
@@ -119,7 +119,7 @@
                           <tr class="bg-ocean">
                             <td>{{ $item->number }}</td>
                             <td>{{ $item->amount }}</td>
-                            <td>{{ $item->cost }}</td>
+
 
                                 @if(auth()->user()->role == 'admin')
                                 <td>{{ $item->admin_com }}</td>
