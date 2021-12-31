@@ -100,7 +100,7 @@ class DtOneController extends Controller
         $total_commission = reseller_comission($data->prices->retail->amount);
         $reseller_profit = reseller_profit($total_commission);
         $admin_profit = $total_commission-$reseller_profit;
-        RechargeHistory::create([
+        $recharge = RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$number,
             'amount'=>$data->prices->retail->amount+reseller_comission($data->prices->retail->amount),
@@ -120,6 +120,7 @@ class DtOneController extends Controller
             'company_name'=>'dtone'
 
         ]);
+        return $recharge;
     }
 
     public function update_balance($recharge_amount,$cost)
@@ -244,8 +245,8 @@ class DtOneController extends Controller
 
 
            // file_put_contents('test.txt',$data['payload']);
-         UpdateWallet::update($data['payload']->prices->retail->amount,$data['payload']->prices->wholesale->amount);
-          $this->create_recharge($data['payload'],$number,$txid,$country_code,$request->service_charge);
+        $recharge = $this->create_recharge($data['payload'],$number,$txid,$country_code,$request->service_charge);
+         UpdateWallet::update($data['payload']->prices->retail->amount,$recharge);
           $this->update_balance($data['payload']->prices->retail->amount,$data['payload']->prices->wholesale->amount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }

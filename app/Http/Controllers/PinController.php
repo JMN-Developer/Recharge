@@ -14,6 +14,7 @@ use App\Services\GenerateTransactionId;
 use DB;
 use App\Models\DomesticProduct;
 use App\Services\UpdateWallet;
+use App\Models\RechargeHistory;
 
 class PinController extends Controller
 {
@@ -126,21 +127,9 @@ class PinController extends Controller
 
                 $reseller_commission = reseller_profit_pin($commission);
                 $admin_commission = $commission -  $reseller_commission;
-                $cost = $sku_amount['1'];
+                $cost = $sku_amount['1']-$reseller_commission;
 
-                $admin_given_profit = ($prof->commission/100)*a::user()->admin_pin_commission;
 
-                UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $commission,65);
-
-                // $minus = a::user()->update([
-                //     'wallet' => a::user()->wallet - $cost + $admin_given_profit,
-                // ]);
-
-               // $reseller = User::where('id',a::user()->created_by)->first();
-
-                // $commission = User::where('id',a::user()->created_by)->update([
-                //     'wallet' => $reseller->wallet + $reseller_commission
-                // ]);
             }else{
                 $reseller_commission = 0;
                 $admin_commission = 0;
@@ -149,7 +138,7 @@ class PinController extends Controller
 
             $product = db::table('domestic_pins')->where('ean',$sku_amount['0'])->first();
 
-        $create = new Pin;
+        $create = new RechargeHistory;
 
         $create->reseller_id = a::user()->id;
 
@@ -159,11 +148,14 @@ class PinController extends Controller
 
         $create->type = 'pin';
 
-        $create->pin = $pin->PIN;
+        $create->cost = $cost;
+        $create->company_name = 'Epay';
 
-        $create->serial = $pin->SERIAL;
+        $create->pin_number = $pin->PIN;
 
-        $create->validity = $pin->VALIDTO;
+        $create->pin_serial = $pin->SERIAL;
+
+        $create->pin_validity = $pin->VALIDTO;
 
         $create->operator = $operator;
 
@@ -173,12 +165,13 @@ class PinController extends Controller
 
         $create->admin_com = $admin_commission;
 
-        $create->note = $note;
+        $create->pin_note = $note;
 
-        $create->product = $product->product;
+        $create->pin_product = $product->product;
 
         $create->save();
 
+        UpdateWallet::update($sku_amount['1'],$create);
 
 
         return  Redirect('recharge/pin/all-invoice')->with('status','Your Pin Purchase Has Been Sucessfull! Here is your pin '.$pin->PIN);

@@ -132,7 +132,7 @@ class PpnController extends Controller
         $total_commission = reseller_comission($data->faceValue);
         $reseller_profit = reseller_profit($total_commission);
         $admin_profit = $total_commission-$reseller_profit;
-        RechargeHistory::create([
+        $recharge = RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$number,
             'amount'=>$data->faceValue+reseller_comission($data->faceValue),
@@ -152,6 +152,7 @@ class PpnController extends Controller
             'company_name'=>'Ppn'
 
         ]);
+        return $recharge;
     }
 
     public function create_pin($data,$txid)
@@ -161,7 +162,7 @@ class PpnController extends Controller
         //$reseller_com =round(($discount*.60),2);
         $admin_profit = $discount-$reseller_profit;
 
-        RechargeHistory::create([
+       $recharge = RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'amount'=>$data->faceValue,
             'txid'=>$txid,
@@ -180,6 +181,7 @@ class PpnController extends Controller
             'control_number'=>$data->pins[0]->controlNumber
 
         ]);
+        return $recharge;
     }
 
     public function update_balance($recharge_amount,$cost)
@@ -245,8 +247,8 @@ class PpnController extends Controller
 
         if($data['status']){
            // file_put_contents('test.txt',$data['payload']);
-         UpdateWallet::update($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
-          $this->create_recharge($data['payload']->payLoad,$number,$txid,$country_code,$request->service_charge);
+          $recharge = $this->create_recharge($data['payload']->payLoad,$number,$txid,$country_code,$request->service_charge);
+          UpdateWallet::update($data['payload']->payLoad->faceValue,$recharge);
           $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }
@@ -338,8 +340,9 @@ class PpnController extends Controller
         // $data = ['status'=>true,'payload'=>$data];
         if($data['status']){
 
-          UpdateWallet::update($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount,60);
-           $this->create_pin($data['payload']->payLoad,$txid);
+
+           $recharge = $this->create_pin($data['payload']->payLoad,$txid);
+           UpdateWallet::update($data['payload']->payLoad->faceValue,$recharge);
            $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
          return ['status'=>true,'message'=>'Recharge Successfull','pin_number'=>$data['payload']->payLoad->pins[0]->pinNumber,'control_number'=>$data['payload']->payLoad->pins[0]->controlNumber];
          }

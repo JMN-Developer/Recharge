@@ -132,7 +132,7 @@
                       <table class="table table-sm">
                         <tbody>
                           <tr>
-                            <td colspan="2"><strong>Transazione Esegulta</strong></td>
+                            <td colspan="2"><strong> Transaction Successfull</strong></td>
                           </tr>
                           <tr>
                             <td>Id Transazione</td>
@@ -181,7 +181,7 @@
                             <td style="width: 80px">Help Desk</td>
                             <td><strong>3889883882/ 34786783388</strong></td>
                           </tr>
-                          <tr>
+                          {{-- <tr>
                             <td class="align-middle">Note</td>
                             <td>
                               @if ($data->type == "International")
@@ -194,7 +194,7 @@
                               </strong>
                               @endif
                             </td>
-                          </tr>
+                          </tr> --}}
                           {{-- <tr>
                             <td>Scadenza</td>
                             <td>

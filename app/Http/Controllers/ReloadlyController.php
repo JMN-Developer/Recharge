@@ -75,7 +75,7 @@ class ReloadlyController extends Controller
         $admin_com = $data->discount-$reseller_com;
         $cost = $data->requestedAmount-$data->discount;
         $cost = round((float)$cost,2);
-        RechargeHistory::create([
+        $recharge = RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$data->recipientPhone,
             'amount'=>$data->requestedAmount,
@@ -95,6 +95,7 @@ class ReloadlyController extends Controller
             'company_name'=>'Reloadly'
 
         ]);
+        return $recharge;
     }
 
     public function update_balance($balance)
@@ -121,8 +122,9 @@ class ReloadlyController extends Controller
 
         if($data['status']){
             //file_put_contents('test.txt',json_encode($data['payload']));
-            UpdateWallet::update($data['payload']->requestedAmount,$data['payload']->requestedAmount-$data['payload']->discount);
-          $this->create_recharge($data['payload'],$request->service_charge);
+
+          $recharge = $this->create_recharge($data['payload'],$request->service_charge);
+          UpdateWallet::update($data['payload']->requestedAmount,$recharge);
           $this->update_balance($data['payload']->balanceInfo->newBalance);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }

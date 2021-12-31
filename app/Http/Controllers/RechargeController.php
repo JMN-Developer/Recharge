@@ -939,7 +939,7 @@ class RechargeController extends Controller
 
          if($count == 0){
             $refcost = $SendValue+reseller_comission($SendValue);
-            UpdateWallet::update($SendValue,$refcost);
+
 
             $client = new \GuzzleHttp\Client();
             $product_request = $client->get('https://api.dingconnect.com/api/V1/GetBalance',['headers' => [
@@ -976,6 +976,7 @@ class RechargeController extends Controller
             $create->cost = $SendValue;
             $create->service = $request->service_charge;
             $create->save();
+            UpdateWallet::update($SendValue,$create);
             return ['status'=>true,'message'=>'Recharge Successful!'];
             //return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
             }else{
@@ -1256,7 +1257,7 @@ class RechargeController extends Controller
                     //$reseller_commission = $admin_given_profit;
                     $admin_commission = $prof->commission - $reseller_commission;
                     //$admin_commission = $admin_given_profit
-                    UpdateWallet::update($sku_amount['1'],$sku_amount['1']- $prof->commission,65);
+
                     // $minus = a::user()->update([
                     //     'wallet' => a::user()->wallet - $cost + $admin_given_profit,
                     // ]);
@@ -1284,7 +1285,7 @@ class RechargeController extends Controller
                 $create->status = 'completed';
                 $create->cost = $cost;
                 $create->save();
-
+                UpdateWallet::update($sku_amount['1'],$create);
                 return ['status'=>true,'message'=>'Your Recharge Has Been Sucessfull!'];
                 //return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
 

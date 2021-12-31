@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use App\Models\RechargeHistory;
 use App\Models\User;
 
 /**
@@ -9,7 +11,7 @@ use App\Models\User;
  */
 class UpdateWallet
 {
-    public static function update($recharge_amount,$actual_amount)
+    public static function update($recharge_amount,$recharge)
     {
         if(auth()->user()->role != 'admin')
         {
@@ -30,17 +32,22 @@ class UpdateWallet
             {
 
                 User::where('id',auth()->user()->id)->update(['limit_usage'=>$current_limit_usage+$total_cost]);
+                RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit']);
+
             }
             else{
             $wallet_deduct = $total_cost-$current_balance;
+
             //$updated_balance = $current_balance-$wallet_deduct;
             User::where('id',auth()->user()->id)->update(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0]);
+            RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit:'.$wallet_deduct.','.'Wallet:'.$current_balance]);
             }
         }
         else
         {
 
         User::where('id',auth()->user()->id)->update(['wallet'=>$updated_balance]);
+        RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Wallet']);
         }
 
     }

@@ -56,6 +56,7 @@
                       </div>
                       <input type="hidden" name="operator" id="op">
                       <select id="operator" class="brand-dropdown" value="" style="width: 100%;">
+
                         <option id="test" value="FASTCARD" data-thumbnail="{{ asset('images/fastweb.png') }}"> Fastweb</option>
                         <option id="test" value="Vodafone" data-thumbnail="{{ asset('images/vodafone.png') }}">Vodafone</option>
                         <option value="Tiscali" data-thumbnail="{{ asset('images/Tiscali.png') }}">Tiscali</option>
@@ -213,6 +214,7 @@ $.ajax({
     return true;
 }
     $(function(){
+
         //load_recent_recharge();
         var toast = document.querySelector('.iziToast');
         var message = sessionStorage.getItem('message');
