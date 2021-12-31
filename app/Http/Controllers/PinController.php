@@ -26,9 +26,9 @@ class PinController extends Controller
     public function index()
     {
         if(a::user()->role == 'user'){
-            $data = Pin::where('reseller_id', a::user()->id)->latest()->take(10)->get();
+            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','pin')->latest()->take(10)->get();
         }else{
-            $data = Pin::latest()->take(10)->get();
+            $data = RechargeHistory::where('type','pin')->latest()->take(10)->get();
         }
         return view('front.pin-domestic',compact('data'));
     }
@@ -174,7 +174,7 @@ class PinController extends Controller
         UpdateWallet::update($create);
 
 
-        return  Redirect('recharge/pin/all-invoice')->with('status','Your Pin Purchase Has Been Sucessfull! Here is your pin '.$pin->PIN);
+        return  Redirect('recharge/pin/')->with('status','Your Pin Purchase Has Been Sucessfull! Here is your pin '.$pin->PIN);
 
 
         }else{
