@@ -127,13 +127,13 @@ class PinController extends Controller
 
                 $reseller_commission = reseller_profit_pin($commission);
                 $admin_commission = $commission -  $reseller_commission;
-                $cost = $sku_amount['1']-$reseller_commission;
+                $cost = $sku_amount['1']-$commission;
 
 
             }else{
                 $reseller_commission = 0;
                 $admin_commission = 0;
-                $cost = $xml->AMOUNT;
+                $cost = $sku_amount['1']-$commission;
             }
 
             $product = db::table('domestic_pins')->where('ean',$sku_amount['0'])->first();

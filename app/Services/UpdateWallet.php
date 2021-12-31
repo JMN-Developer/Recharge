@@ -16,14 +16,10 @@ class UpdateWallet
         if(auth()->user()->role != 'admin')
         {
 
-            // $total_amount = $recharge_amount+reseller_comission($recharge_amount);
-            // $total_commission = reseller_comission($recharge_amount);
-            // $reseller_profit = reseller_profit($total_commission);
-
-       // $discount = $recharge_amount-$actual_amount;
-        // $reseller_profit = round((($percentage/100)*$discount),2);
-        $user_info =  User::where('id',auth()->user()->id)->first();
         $total_cost = $recharge->amount-$recharge->reseller_com;
+
+        $user_info =  User::where('id',auth()->user()->id)->first();
+
         $current_balance = $user_info->wallet;
         $current_limit_usage = $user_info->limit_usage;
         $updated_balance = $current_balance-$total_cost;
