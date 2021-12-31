@@ -82,7 +82,7 @@
                      <div class="col-md-12"  style="margin-top: 100px">
                         <div class="last_recharge_table">
                            <div class="last_recharge_table_head text-center">
-                              <h5><strong>Last 10 Pin</strong></h5>
+                              <h5><strong>Last 10 White Calling Card</strong></h5>
                            </div>
                            <div class="card-body table-responsive p-0">
                               <table class="table table-sm table-bordered table-hover">
