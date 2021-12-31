@@ -246,7 +246,7 @@ class DtOneController extends Controller
 
            // file_put_contents('test.txt',$data['payload']);
         $recharge = $this->create_recharge($data['payload'],$number,$txid,$country_code,$request->service_charge);
-         UpdateWallet::update($data['payload']->prices->retail->amount,$recharge);
+         UpdateWallet::update($recharge);
           $this->update_balance($data['payload']->prices->retail->amount,$data['payload']->prices->wholesale->amount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }

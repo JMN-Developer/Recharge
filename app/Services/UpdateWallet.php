@@ -11,17 +11,19 @@ use App\Models\User;
  */
 class UpdateWallet
 {
-    public static function update($recharge_amount,$recharge)
+    public static function update($recharge)
     {
         if(auth()->user()->role != 'admin')
         {
-            $total_amount = $recharge_amount+reseller_comission($recharge_amount);
-            $total_commission = reseller_comission($recharge_amount);
-            $reseller_profit = reseller_profit($total_commission);
+
+            // $total_amount = $recharge_amount+reseller_comission($recharge_amount);
+            // $total_commission = reseller_comission($recharge_amount);
+            // $reseller_profit = reseller_profit($total_commission);
+
        // $discount = $recharge_amount-$actual_amount;
         // $reseller_profit = round((($percentage/100)*$discount),2);
         $user_info =  User::where('id',auth()->user()->id)->first();
-        $total_cost = $total_amount-$reseller_profit;
+        $total_cost = $recharge->amount-$recharge->reseller_com;
         $current_balance = $user_info->wallet;
         $current_limit_usage = $user_info->limit_usage;
         $updated_balance = $current_balance-$total_cost;

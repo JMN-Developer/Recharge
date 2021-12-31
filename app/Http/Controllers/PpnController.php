@@ -248,7 +248,7 @@ class PpnController extends Controller
         if($data['status']){
            // file_put_contents('test.txt',$data['payload']);
           $recharge = $this->create_recharge($data['payload']->payLoad,$number,$txid,$country_code,$request->service_charge);
-          UpdateWallet::update($data['payload']->payLoad->faceValue,$recharge);
+          UpdateWallet::update($recharge);
           $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }
@@ -342,7 +342,7 @@ class PpnController extends Controller
 
 
            $recharge = $this->create_pin($data['payload']->payLoad,$txid);
-           UpdateWallet::update($data['payload']->payLoad->faceValue,$recharge);
+           UpdateWallet::update($recharge);
            $this->update_balance($data['payload']->payLoad->faceValue,$data['payload']->payLoad->invoiceAmount);
          return ['status'=>true,'message'=>'Recharge Successfull','pin_number'=>$data['payload']->payLoad->pins[0]->pinNumber,'control_number'=>$data['payload']->payLoad->pins[0]->controlNumber];
          }

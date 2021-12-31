@@ -124,7 +124,7 @@ class ReloadlyController extends Controller
             //file_put_contents('test.txt',json_encode($data['payload']));
 
           $recharge = $this->create_recharge($data['payload'],$request->service_charge);
-          UpdateWallet::update($data['payload']->requestedAmount,$recharge);
+          UpdateWallet::update($recharge);
           $this->update_balance($data['payload']->balanceInfo->newBalance);
         return ['status'=>true,'message'=>'Recharge Successfull'];
         }

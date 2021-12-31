@@ -976,7 +976,7 @@ class RechargeController extends Controller
             $create->cost = $SendValue;
             $create->service = $request->service_charge;
             $create->save();
-            UpdateWallet::update($SendValue,$create);
+            UpdateWallet::update($create);
             return ['status'=>true,'message'=>'Recharge Successful!'];
             //return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
             }else{
@@ -1285,7 +1285,7 @@ class RechargeController extends Controller
                 $create->status = 'completed';
                 $create->cost = $cost;
                 $create->save();
-                UpdateWallet::update($sku_amount['1'],$create);
+                UpdateWallet::update($create);
                 return ['status'=>true,'message'=>'Your Recharge Has Been Sucessfull!'];
                 //return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
 

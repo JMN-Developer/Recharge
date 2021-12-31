@@ -164,7 +164,7 @@
                                        <td>{{ $item->operator }}</td>
                                        <td>{{ $item->cost }}</td>
                                        @if(auth()->user()->role == 'admin')
-                                       <td>{{ $item->admin_com }}</td>
+                                       <td>{{ $item->admin_com+$item->discount }}</td>
                                        @else
                                        <td>{{ $item->reseller_com }}</td>
                                        @endif
