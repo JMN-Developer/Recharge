@@ -1250,7 +1250,7 @@ class RechargeController extends Controller
                 if(a::user()->role != 'admin'){
                    // $reseller_commission = ($sku_amount['1']/100)*a::user()->reseller_profit->domestic_recharge_profit;
                    // $admin_commission = ($sku_amount['1']/100)*a::user()->admin_recharge_commission;
-                    $cost = $sku_amount['1'];
+                    $cost = $sku_amount['1']-$prof->commission;
 
                    // $reseller_commission = round( ($prof->commission/100)*a::user()->admin_recharge_commission,2);
                     $reseller_commission = reseller_profit_domestic($prof->commission);
@@ -1270,7 +1270,7 @@ class RechargeController extends Controller
                 }else{
                     $reseller_commission = 0;
                     $admin_commission = 0;
-                    $cost = ($xml2->AMOUNT)/1000;
+                    $cost = $sku_amount['1']-$prof->commission;
                 }
 
                 $create = new RechargeHistory;
