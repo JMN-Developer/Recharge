@@ -79,7 +79,7 @@
                     @foreach ($data as $item)
                     <tr>
                         <td>{{$i++}}</td>
-                        <td>{{ $item->id }}</td>
+                        <td>{{ $item->user_id }}</td>
                         <td>{{ $item->first_name }} {{ $item->last_name }}</td>
                         <td>{{ $item->email }}</td>
                         <td class="text-center font-weight-bold">{{ $item->wallet }}</td>

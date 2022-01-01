@@ -141,7 +141,7 @@ class UserController extends Controller
         }
 
        // return back();
-        return redirect('/retailer/retailer-details');
+        return redirect('/retailer/retailer-details-admin');
     }
 
     /**
