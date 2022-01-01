@@ -40,6 +40,7 @@ class UserController extends Controller
         $users->email = $request->input('email');
         $users->address = $request->input('address');
         $users->role = 'user';
+        $users->user_id ='JM-'.mt_rand(10000,99999);
 
 
         $users->contact_number = $request->input('phone');
@@ -122,6 +123,7 @@ class UserController extends Controller
                 'nationality' => $request->company,
                 'password' => $password,
 
+
             ]);
         }else{
             $data = User::where('id',$id)->update([
@@ -133,6 +135,7 @@ class UserController extends Controller
                 'contact_number' => $request->phone,
                 'codice_fiscale' =>$request->codice_fiscale,
                 'nationality' => $request->company,
+
 
             ]);
         }
