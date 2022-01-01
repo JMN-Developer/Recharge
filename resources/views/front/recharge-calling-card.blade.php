@@ -29,9 +29,9 @@
       <div class="container-fluid recharge-page">
         <div class="recharge-box">
           <div class="card card-outline card-primary">
-            <div class="card-header text-center">
+            {{-- <div class="card-header text-center">
               <a href="index.html"><img src="images/jm logo.png" width="80px" height="auto"></a>
-            </div>
+            </div> --}}
             <div class="card-body">
               <h3 class="text-center mb-5">Calling Card</h3>
               <div class="row">
@@ -44,14 +44,14 @@
                     </div>
                     <div class="form-group" style="position: relative;">
                       <label>Select Operator</label>
-                    
+
                       <div class="brand-select-list">
                         <button type="button" class="selected-brand text-left" name="selected_brand" value=""></button>
                         <div class="brandUlLiContainer">
                           <ul id="brandUlList" style="max-height: 200px; overflow: auto;"></ul>
                         </div>
                       </div>
-                    
+
                       <select class=" brand-dropdown" style="width: 100%;">
                         <option value="Whitecalling" data-thumbnail="images/whiteCallingLogo.png">Whitecalling</option>
                         <option value="TalkHome" data-thumbnail="images/talkHome.png">TalkHome</option>
@@ -113,7 +113,7 @@
                     <div class="last_recharge_table_head text-center">
                       <h5><strong>Last 10 PIN Recharge</strong></h5>
                     </div>
-                
+
                     <div class="card-body table-responsive p-0">
                       <table class="table table-sm table-bordered table-hover">
                         <thead>
@@ -208,7 +208,7 @@
           <!-- /.card -->
         </div>
         <!-- /.login-box -->
-        
+
       </div>
       <!-- /.container-fluid -->
     </section>
@@ -312,7 +312,7 @@
       $('.selected-brand').html(item);
       $('.selected-brand').attr('value', value).trigger('change');
       $(".brandUlLiContainer").toggle();
-      
+
 
       if ( value == 'Whitecalling' ) {
           $('.white_calling_pin').show();

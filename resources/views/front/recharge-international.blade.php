@@ -27,9 +27,7 @@
       <div class="container-fluid recharge-page">
          <div class="recharge-box">
             <div class="card card-outline card-primary">
-               <div class="card-header text-center">
-                  <a href="/"><img src="{{ asset('images/jm logo.png') }}" width="80px" height="auto"></a>
-               </div>
+
                <div class="card-body">
                   <p class="login-box-msg">Mobile Recharge or Offers </p>
                   <div class="row">

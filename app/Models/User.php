@@ -66,7 +66,7 @@ class User extends Authenticatable
     ];
     public function reseller_profit()
     {
-        return $this->hasOne('App\Models\ResellerProfit','reseller_id','id')->withDefault(['international_rechareg_profit'=>0,'domestic_recharge_profit'=>0]);
+        return $this->hasOne('App\Models\ResellerProfit','reseller_id','id')->withDefault(['international_rechareg_profit'=>20,'domestic_recharge_profit'=>65]);
     }
 
 }

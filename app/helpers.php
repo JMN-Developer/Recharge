@@ -37,6 +37,10 @@ if (!function_exists('reseller_comission')) {
             else
             {
                 $profit = auth()->user()->reseller_profit->international_recharge_profit;
+                if(!$profit)
+                {
+                    $profit = 20;
+                }
 
             }
             $percentage_amount = round((($profit/100)*$amount),2);

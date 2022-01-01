@@ -30,9 +30,9 @@
       <div class="container-fluid recharge-page">
         <div class="recharge-box">
           <div class="card card-outline card-primary">
-            <div class="card-header text-center">
+            {{-- <div class="card-header text-center">
               <a href="index.html"><img src="{{ asset('images/jm logo.png') }}" width="80px" height="auto"></a>
-            </div>
+            </div> --}}
             <div class="card-body">
               <h3 class="text-center mb-5">Indice Brand Richriche</h3>
               <div class="row">
@@ -52,21 +52,21 @@
                     <div class="mb-3">
                       <input class="btn btn-success" type="submit" value="Add">
                     </div>
-                    
+
                   </form>
                 </div>
               </div>
 
-              
-              
-              
+
+
+
             </div>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
         </div>
         <!-- /.login-box -->
-        
+
       </div>
       <!-- /.container-fluid -->
     </section>
@@ -130,7 +130,7 @@
 
     $(".recharge_amount").hide();
 
-    $(document).on('keyup', '.myNumber', function () {      
+    $(document).on('keyup', '.myNumber', function () {
       if ( $(this).val().length >= 10 ) {
         $(".recharge_amount").show();
       }
@@ -138,7 +138,7 @@
         $(".recharge_amount").hide();
       }
     });
- 
+
 
 </script>
 @endsection
