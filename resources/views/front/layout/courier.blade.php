@@ -279,21 +279,21 @@ margin-left: 3px;
                 <p><b class="mr-2">Current Wallet: </b><span>{{ $total_due }}</span> </p>
               </div>
             <div class="col-12">
-              <b class="mr-2">Ding:</b><span>{{ $ding->balance }}&euro;</span>
+              <b class="mr-2">International1:</b><span>{{ $ding->balance }}&euro;</span>
             </div>
             <div class="col-12">
-              <b class="mr-2">Domestic:</b><span>{{ $domestic->balance }}&euro;</span>
+              <b class="mr-2">Domestic1:</b><span>{{ $domestic->balance }}&euro;</span>
             </div>
             <div class="col-12">
-                <b class="mr-2">Reloadly:</b><span>{{ $reloadly->balance }}&euro;</span>
+                <b class="mr-2">International3:</b><span>{{ $reloadly->balance }}&euro;</span>
               </div>
 
               <div class="col-12">
-                <b class="mr-2">PPN:</b><span>{{ $ppn->balance }}&euro;</span>
+                <b class="mr-2">International2:</b><span>{{ $ppn->balance }}&euro;</span>
               </div>
 
               <div class="col-12">
-                <b class="mr-2">Dtone:</b><span>{{ $dtone->balance }}&euro;</span>
+                <b class="mr-2">International4:</b><span>{{ $dtone->balance }}&euro;</span>
               </div>
 
           </div>

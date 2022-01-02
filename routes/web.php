@@ -110,6 +110,7 @@ Route::get('offer-edit/{id}', function($id){
 });
 
 Route::post('check-products', function(Request $request){
+
     $offer_detail = DomesticProduct::where('product', 'like', '%'.$request->id.'%')->where('type','recharge')->get();
     return response()->json($offer_detail, 200);
 });

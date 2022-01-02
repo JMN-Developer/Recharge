@@ -117,7 +117,7 @@ class DtOneController extends Controller
             'admin_com'=>$admin_profit,
             'deliveredAmount'=>floor($data->benefits[0]->amount->total_excluding_tax),
             'deliveredAmountCurrencyCode'=>$data->benefits[0]->unit,
-            'company_name'=>'dtone'
+            'company_name'=>'International4'
 
         ]);
         return $recharge;

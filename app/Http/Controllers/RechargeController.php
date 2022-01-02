@@ -972,6 +972,7 @@ class RechargeController extends Controller
             $create->txid = $txid;
             $create->operator = $request->operator;
             $create->type = 'International';
+            $create->company_name = 'Internation1';
             $create->status = 'completed';
             $create->cost = $SendValue;
             $create->service = $request->service_charge;
@@ -1284,6 +1285,7 @@ class RechargeController extends Controller
                 $create->type = 'Domestic';
                 $create->status = 'completed';
                 $create->cost = $cost;
+                $create->company_name = 'Domestic1';
                 $create->save();
                 UpdateWallet::update($create);
                 return ['status'=>true,'message'=>'Your Recharge Has Been Sucessfull!'];
@@ -1369,7 +1371,7 @@ class RechargeController extends Controller
             })
             ->addColumn('recharge_type',function($data){
                 if(a::user()->role=='admin')
-                $text = $data->type.'('.$data->company_name.')';
+                $text = $data->company_name;
                 else
                 $text = $data->type;
                 return $text;

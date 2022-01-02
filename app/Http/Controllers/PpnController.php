@@ -176,7 +176,7 @@ class PpnController extends Controller
             'admin_com'=>$admin_profit,
             'deliveredAmount'=>floor($data->pins[0]->deliveredAmount),
             'deliveredAmountCurrencyCode'=>$data->pins[0]->deliveredCurrencyCode,
-            'company_name'=>'Ppn',
+            'company_name'=>'International2',
             'pin_number'=>$data->pins[0]->pinNumber,
             'control_number'=>$data->pins[0]->controlNumber
 

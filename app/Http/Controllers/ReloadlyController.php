@@ -92,7 +92,7 @@ class ReloadlyController extends Controller
             'admin_com'=>$admin_com,
             'deliveredAmount'=>$data->deliveredAmount,
             'deliveredAmountCurrencyCode'=>$data->deliveredAmountCurrencyCode,
-            'company_name'=>'Reloadly'
+            'company_name'=>'International3'
 
         ]);
         return $recharge;

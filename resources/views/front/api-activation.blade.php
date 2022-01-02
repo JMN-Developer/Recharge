@@ -113,7 +113,7 @@
                                 <tr>
                                   <th style="background-color: black;color:white">Name</th>
                                   <th style="background-color: black;color:white">Activation</th>
-                                  <th style="background-color: black;color:white">Price</th>
+                                  {{-- <th style="background-color: black;color:white">Price</th> --}}
 
                               </thead>
                               <tbody id="international_table">
@@ -127,7 +127,7 @@
                                 <tr>
                                   <th style="background-color: black;color:white">Name</th>
                                   <th style="background-color: black;color:white">Activation</th>
-                                    <th style="background-color: black;color:white">Price</th>
+                                    {{-- <th style="background-color: black;color:white">Price</th> --}}
                               </thead>
                               <tbody id="domestic_table">
 
@@ -180,9 +180,8 @@ function get_data()
         for (var i = 0; i < item.length; i++){
             var checked = item[i].status?'checked':'';
         added_row = '<tr class="bg-ocean">'
-    + '<td>' + item[i].company_name +  '</td>'
+    + '<td>' + item[i].dummy_name +  '</td>'
     + '<td><input  data-id="'+item[i].id+'" class="toggle-class international" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" '+checked+' ></td>'
-    + '<td>' + item[i].company_name +  '</td>'
     + '</tr>';
     if(item[i].type == 'International')
       {

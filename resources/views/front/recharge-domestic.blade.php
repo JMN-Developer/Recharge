@@ -56,22 +56,24 @@
                       </div>
                       <input type="hidden" name="operator" id="op">
                       <select id="operator" class="brand-dropdown" value="" style="width: 100%;">
-
-                        <option id="test" value="FASTCARD" data-thumbnail="{{ asset('images/fastweb.png') }}"> Fastweb</option>
+                        <option value="WindTre" data-thumbnail="{{ asset('images/WindTre.png') }}">WindTre</option>
                         <option id="test" value="Vodafone" data-thumbnail="{{ asset('images/vodafone.png') }}">Vodafone</option>
-                        <option value="Tiscali" data-thumbnail="{{ asset('images/Tiscali.png') }}">Tiscali</option>
                         <option value="Tim" data-thumbnail="{{ asset('images/Tim.png') }}">Tim</option>
                         <option value="Very" data-thumbnail="{{ asset('images/very.png') }}">Very Mobile</option>
-                        <option value="Kena" data-thumbnail="{{ asset('images/kena.png') }}">Kena Mobile</option>
                         <option value="Lyca" data-thumbnail="{{ asset('images/lyca.png') }}">LycaMobile</option>
-                        <option value="WindTre" data-thumbnail="{{ asset('images/WindTre.png') }}">WindTre</option>
-                        <option value="Poste" data-thumbnail="{{ asset('images/PosteMobile.png') }}">PosteMobile Online</option>
+                        <option value="Kena" data-thumbnail="{{ asset('images/kena.png') }}">Kena Mobile</option>
+
+                        <option id="test" value="FASTCARD" data-thumbnail="{{ asset('images/fastweb.png') }}"> Fastweb</option>
                         <option value="Digi" data-thumbnail="{{ asset('images/Digi.png') }}">Digi Mobil</option>
-                        <option value="Tim-Carta" data-thumbnail="{{ asset('images/Tim-Carta.png') }}">Tim-Carta Servizi</option>
                         <option value="Coop" data-thumbnail="{{ asset('images/coop-voce-1-480x480.jpeg') }}">CoopVoce</option>
                         <option value="Ho" data-thumbnail="{{ asset('images/Ho.png') }}">Ho Mobile</option>
-                        <option value="Vodafone-Carte" data-thumbnail="{{ asset('images/vodafone.png') }}">Vodafone-Carte Servizi</option>
                         <option value="Iliad" data-thumbnail="{{ asset('images/Iliad.png') }}">Iliad</option>
+                        <option value="Poste" data-thumbnail="{{ asset('images/PosteMobile.png') }}">PosteMobile Online</option>
+
+                        <option value="Tiscali" data-thumbnail="{{ asset('images/Tiscali.png') }}">Tiscali</option>
+
+
+
                       </select>
                     </div>
                     <div class="mb-3 phone_number">
@@ -84,6 +86,13 @@
 
                       </select>
                     </div>
+                    <div id="description" style="margin-top:36px">
+                        <ul class="description_list">
+
+                        </ul>
+
+
+                      </div>
                     {{-- <div class="mb-3">
                       <label for="inputAmount" class="form-label">Service Charge in EURO</label>
                       <input type="text" class="form-control" id="inputAmount" step="any" name="service" placeholder="Please Enter Service Charge">
@@ -214,6 +223,24 @@ $.ajax({
     return true;
 }
     $(function(){
+        $("#description").hide();
+        $(".amounts").change(function(){
+            var description = $(this).find(':selected').attr('data-description')
+            //var description = $('.description-'+id).val();
+            let description_list = [];
+
+            description_list = description.split(",");
+            $('.description_list').empty()
+            for(var i = 0;i<description_list.length;i++)
+            {
+                $('.description_list').append('<li>'+description_list[i]+'</li>')
+            }
+            if(description_list.length>1)
+            $("#description").show()
+            else
+            $("#description").hide()
+
+         });
 
         //load_recent_recharge();
         var toast = document.querySelector('.iziToast');
@@ -377,6 +404,10 @@ $.ajax({
     $('.selected-brand').html('Select Brand');
     $('.selected-brand').attr('value', '');
 
+
+
+
+
     //change button stuff on click
     $('#brandUlList li').click(function(){
        var img = $(this).find('img').attr("src");
@@ -400,9 +431,10 @@ $.ajax({
   cache: false,
   dataType: 'json',
  success : function(response){
+
   $(response).each(function(index,item){
     var data = '<option value='+item.ean+'>'+item.amount+'</option>';
-    $('#amounts').append('<option value='+item.ean+','+item.amount+'>'+item.amount+' Euro</option>');
+    $('#amounts').append('<option data-description="'+item.description+'" data-id='+item.id+' value='+item.ean+','+item.amount+'>'+item.product+'</option>');
   })
  }
 });
@@ -421,6 +453,7 @@ $.ajax({
     $(".phone_number").hide();
 
     $(".recharge_amount").hide();
+
 
     $(document).on('keyup', '.myNumber', function () {
       if ( $(this).val().length >= 10 ) {
