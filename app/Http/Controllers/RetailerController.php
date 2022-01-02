@@ -109,22 +109,22 @@ class RetailerController extends Controller
                 'admin_pin_commission' => $request->pin,
             ]);
             $user = ResellerProfit::where('reseller_id',$request->user_id)->first();
-            if($user)
-            {
-            ResellerProfit::where('reseller_id',$request->user_id)->update([
-                'reseller_id'=>$request->user_id,
-                'international_recharge_profit'=>$request->international_recharge_profit,
-                'domestic_recharge_profit'=>$request->domestic_recharge_profit,
-            ]);
-            }
-            else
-            {
-                ResellerProfit::create([
-                    'reseller_id'=>$request->user_id,
-                    'international_recharge_profit'=>$request->international_recharge_profit,
-                    'domestic_recharge_profit'=>$request->domestic_recharge_profit,
-                ]);
-            }
+            // if($user)
+            // {
+            // ResellerProfit::where('reseller_id',$request->user_id)->update([
+            //     'reseller_id'=>$request->user_id,
+            //     'international_recharge_profit'=>$request->international_recharge_profit,
+            //     'domestic_recharge_profit'=>$request->domestic_recharge_profit,
+            // ]);
+            // }
+            // else
+            // {
+            //     ResellerProfit::create([
+            //         'reseller_id'=>$request->user_id,
+            //         'international_recharge_profit'=>$request->international_recharge_profit,
+            //         'domestic_recharge_profit'=>$request->domestic_recharge_profit,
+            //     ]);
+            // }
 
         }else{
             $user = User::where('id', $request->user_id)->update([
