@@ -239,7 +239,7 @@ margin-left: 3px;
       <div class="profile-info mt-3">
         <div class="row">
           <div class="col-12">
-            @if (Auth::user()->role != 'admin')
+            @if (Auth::user()->role != 'admin' && Auth::user()->role != 'admin2' )
             <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span>
                 <a href="{{ route('wallet-request') }}" class="notification">
                     <span style="font-weight:bold;color:black">WR</span>
@@ -253,13 +253,13 @@ margin-left: 3px;
             @endif
           </div>
 
-          <div class="col-12">
+          {{-- <div class="col-12">
 
 
 
                 <p><b class="mr-2">Corriere: </b><span>{{ Auth::user()->cargo_due }}</span></p>
 
-          </div>
+          </div> --}}
 
         </div>
         @if (Auth::user()->role == 'admin')
@@ -336,7 +336,7 @@ margin-left: 3px;
               </p>
             </a>
           </li>
-          @if (Auth::user()->recharge_permission == 1)
+          @if (Auth::user()->recharge_permission == 1 && Auth::user()->role!='admin2')
             <li class="@if(Route::currentRouteName() == 'recharge-int' ||
                           Route::currentRouteName() == 'recharge-italy' ||
                           Route::currentRouteName() == 'international' ||
@@ -422,7 +422,7 @@ margin-left: 3px;
               </ul>
             </li>
           @endif
-          @if (Auth::user()->sim_permission == 1)
+          @if (Auth::user()->sim_permission == 1  && Auth::user()->role!='admin2')
             <li class="@if(Route::currentRouteName() == 'sim-activation' ||
                           Route::currentRouteName() == 'sim-selling' ||
                           Route::currentRouteName() == 'wi-fi') nav-item menu-open @endif nav-item">
@@ -465,7 +465,7 @@ margin-left: 3px;
               </ul>
             </li>
           @endif
-          @if (Auth::user()->cargo_permission == 1)
+          @if (Auth::user()->cargo_permission == 1  && Auth::user()->role!='admin2')
             <li class="@if(Route::currentRouteName() == 'cargo-new-order' || Route::currentRouteName() == 'order-list' || Route::currentRouteName() == 'order-tracking-view' || Route::currentRouteName() == 'order-invoice-view') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'cargo-new-order' || Route::currentRouteName() == 'order-list' || Route::currentRouteName() == 'order-tracking-view' || Route::currentRouteName() == 'order-invoice-view') nav-link active @endif nav-link">
                 <i class="nav-icon fas fa-truck"></i>
@@ -510,7 +510,7 @@ margin-left: 3px;
               </ul>
             </li>
           @endif
-          @if (Auth::user()->mobile_permission == 1)
+          @if (Auth::user()->mobile_permission == 1  && Auth::user()->role!='admin2')
             <li class="@if(Route::currentRouteName() == 'phone-order' || Route::currentRouteName() == 'selling-list') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'phone-order' || Route::currentRouteName() == 'selling-list') nav-link active menu-open @endif nav-link">
                 <i class="nav-icon fas fa-mobile-alt"></i>
@@ -553,12 +553,12 @@ margin-left: 3px;
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  @if(auth()->user()->role!='admin')
-                  <a href="{{ route('retailer-details') }}" class="@if(Route::currentRouteName() == 'retailer-details') nav-link active @endif nav-link">
+                  @if(auth()->user()->role=='user' )
+                  {{-- <a href="{{ route('retailer-details') }}" class="@if(Route::currentRouteName() == 'retailer-details') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Retailer Details</p>
-                  </a>
-                  @else
+                  </a> --}}
+                  @elseif(auth()->user()->role=='admin')
 
                   <a href="{{ route('retailer-details-admin') }}" class="@if(Route::currentRouteName() == 'retailer-details-admin') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -568,7 +568,7 @@ margin-left: 3px;
                   @endif
 
                 </li>
-                @if (Auth::user()->role == 'admin')
+                @if (Auth::user()->role == 'admin' || Auth::user()->role == 'admin2')
                 <li class="nav-item">
                   <a href="/retailer/retailer-action" class="@if(Route::currentRouteName() == 'retailer-action') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>

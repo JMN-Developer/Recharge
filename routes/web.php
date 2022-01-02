@@ -59,7 +59,7 @@ Route::get('error-page', function () {
     return view('error.index');
 });
 
-Route::group(['prefix' => 'setting','middleware'=>['auth','IsAdmin']], function()
+Route::group(['prefix' => 'setting','middleware'=>['auth']], function()
 {
     Route::get('/',[SettingsController::class,'index'])->name('setting');
 });
@@ -280,7 +280,7 @@ Route::get('get_requested_amount',[WalletController::class,'get_requested_amount
 Route::get('wallet_notification_count',[WalletController::class,'wallet_notification_count']);
 
 
-Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
+Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
 {
 
     Route::get('dingconnect',[DingConnectController::class,'index']);
@@ -331,7 +331,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth']], function()
 });
 
 
-Route::group(['prefix' => 'sim','middleware'=>['auth']], function()
+Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
 {
 
     Route::get('sim-activation', [SimController::class,'index'])->name('sim-activation');
@@ -346,7 +346,7 @@ Route::group(['prefix' => 'sim','middleware'=>['auth']], function()
 });
 
 
-Route::group(['prefix' => 'cargo','middleware'=>['auth']], function()
+Route::group(['prefix' => 'cargo','middleware'=>['auth','user']], function()
 {
 
 
@@ -377,6 +377,7 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
     Route::get('retailer-sign-up', [RetailerController::class,'RetailerSignUp'])->name('retailer-sign-up');
 
     Route::get('changeStatus', [RetailerController::class,'changeStatus']);
+
     Route::get('retailer-action', [RetailerController::class,'RetailerAction'])->name('retailer-action');
 
     Route::get('changeSim', [RetailerController::class,'changeSim']);
@@ -388,14 +389,16 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
     Route::get('changeReseller', [RetailerController::class,'changeReseller']);
 
     Route::get('changePin', [RetailerController::class,'changePin']);
+
     Route::post('add_com',[RetailerController::class,'AddCom'])->name('AddCom');
 
-    Route::get("retailer-details-admin",[RetailerController::class,'retailer_details'])->name('retailer-details-admin');
+
+    Route::get("retailer-details-admin",[RetailerController::class,'retailer_details'])->name('retailer-details-admin')->middleware('admin');
 
 
 });
 
-Route::group(['prefix' => 'ApiControl','middleware'=>['auth','IsAdmin']], function()
+Route::group(['prefix' => 'ApiControl','middleware'=>['auth','admin']], function()
 {
 
     Route::get('change_status',[ApiSettingsController::class,'change_status'])->name('change_status');
@@ -451,7 +454,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 
-Route::group(['middleware'=>['auth','IsAdmin']], function()
+Route::group(['middleware'=>['auth','admin']], function()
 {
     Route::post('/add_balance',[BalanceController::class,'AddBalance'])->name('AddBalance');
 

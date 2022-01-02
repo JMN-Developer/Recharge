@@ -37,7 +37,7 @@ class RetailerController extends Controller
     public function RetailerAction($value='')
     {
         //  SHOVON WORKED HERE
-        if (Auth::user()->role == 'admin') {
+        if (Auth::user()->role == 'admin' || Auth::user()->role == 'admin2' ) {
             $data = User::where('role','user')->get();
         }else {
             $data = User::where('role','user')->where('created_by', Auth::user()->id)->get();
