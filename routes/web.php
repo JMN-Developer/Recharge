@@ -48,7 +48,8 @@ use App\Models\DomesticProfit;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//Route::view('registration','front.registration-form');
+Route::get('check_email',[Usercontroller::class,'check_email']);
 Route::get('/',[AuthController::class,'index'])->name('/');
 // Route::get('test-notification',[PpnController::class,'send_pin']);
 

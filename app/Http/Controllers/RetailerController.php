@@ -46,7 +46,7 @@ class RetailerController extends Controller
     }
     public function RetailerSignUp($value='')
     {
-        return view('front.retailer-sign-up');
+        return view('front.registration-form');
     }
     public function changeStatus(Request $request)
     {

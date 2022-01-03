@@ -29,7 +29,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(CreateProfileRequest $request)
+    public function create(Request $request)
     {
 
         $users = new User;
@@ -48,11 +48,11 @@ class UserController extends Controller
         $users->codice_fiscale = $request->input('codice_fiscale');
         $users->gender = $request->input('gender');;
         $users->wallet = 0;
-        $users->created_by = Auth::user()->id;
+        $users->created_by =Auth::user()->id;
         $users->password = Hash::make($request['password']);
         $users->save();
-
-        return redirect('/login')->with('status', 'Registered Successfully!');
+        return ['status'=>true];
+        //return redirect('/login')->with('status', 'Registered Successfully!');
     }
 
     /**
@@ -168,6 +168,25 @@ class UserController extends Controller
         $Phones->save();
 
         return back()->with('status', 'Sldier Uploaded Successfully!');
+    }
+    public function check_email(Request $request)
+    {
+        $email = $request->email;
+        $user = User::where('email',$email)->first();
+        if($user)
+        {
+            return ['status'=>true];
+        //file_put_contents('test.txt',$request->email." ".'exist');
+        //return 'exist';
+        }
+        else
+        {
+            return ['status'=>false];
+            //file_put_contents('test.txt',$request->email." ".'not exist');
+            //return 'not_exist';
+        }
+
+
     }
 
     public function updateslider(Request $request)
