@@ -70,7 +70,7 @@
                 <div class="form-wrapper">
                     <label for="">Address</label>
                     <textarea id="address" class="form-control" rows="4" required></textarea>
-                    {{-- <input id="address" type="text" class="form-control" required> --}}
+                  
                 </div>
 
                 <div class="form-group">
@@ -94,6 +94,22 @@
 
                             <option value="male">Male</option>
                             <option value="female">Female</option>
+
+                          </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-wrapper">
+                        <label for="">Company Name</label>
+                        <input id="codiac_fiscale" type="text" class="form-control" required>
+                    </div>
+                    <div class="form-wrapper">
+                        <label for="">Payment Option</label>
+                        <select id="gender" class="form-select form-control" aria-label="Default select example">
+
+                            <option value="male">Cash</option>
+                            <option value="female">Bank</option>
 
                           </select>
                     </div>
