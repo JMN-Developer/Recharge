@@ -1365,6 +1365,17 @@ class RechargeController extends Controller
                 }
 
             })
+            ->addColumn('number', function($data){
+                if($data->number)
+                {
+                    return $data->number;
+                }
+                else
+                {
+                    return $data->pin_number;
+                }
+ 
+             })
             ->addColumn('date', function($data){
                return Carbon::parse($data->created_at)->format('d-m-Y H:i:s');
 
