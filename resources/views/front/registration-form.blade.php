@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>RegistrationForm_v2 by Colorlib</title>
+    <title>New Reseller</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('registration-form/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css') }}">
     <link rel="stylesheet" href="{{ asset('registration-form/css/style.css') }}">
@@ -102,11 +102,11 @@
                 <div class="form-group">
                     <div class="form-wrapper">
                         <label for="">Company Name</label>
-                        <input id="codiac_fiscale" type="text" class="form-control" required>
+                        <input id="company_name" type="text" class="form-control" required>
                     </div>
                     <div class="form-wrapper">
-                        <label for="">Payment Option</label>
-                        <select id="gender" class="form-select form-control" aria-label="Default select example">
+                        <label for="">Payment Method</label>
+                        <select id="payment_method" class="form-select form-control" aria-label="Default select example">
 
                             <option value="male">Cash</option>
                             <option value="female">Bank</option>
@@ -265,6 +265,7 @@ var s_character = document.getElementById("s_character");
 
             });
             $("#registration_form").submit(function(event){
+               
                    event.preventDefault();
                     var first_name = $("#first_name").val();
                     var last_name = $("#last_name").val();
@@ -276,6 +277,9 @@ var s_character = document.getElementById("s_character");
                     var codiac = $("#codiac_fiscale").val();
                     var gender = $("#gender :selected").val();
                     var email = $("#email").val();
+                    var company_name = $("#company_name").val();
+                    var payment_method = $("#payment_method :selected").val();
+                    
                     var formdata = new FormData();
                     formdata.append('first_name',first_name);
                     formdata.append('last_name',last_name);
@@ -287,6 +291,8 @@ var s_character = document.getElementById("s_character");
                     formdata.append('codice_fiscale',codiac);
                     formdata.append('gender',gender);
                     formdata.append('password',password);
+                    formdata.append('company_name',company_name);
+                    formdata.append('payment_method',payment_method);
 
                     if(email_valid && password_valid)
                     {

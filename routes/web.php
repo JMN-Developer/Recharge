@@ -271,7 +271,9 @@ Route::post('/domestic_product', function (Request $request) {
 //     return "Event has been sent!";
 // });
 
-
+Route::get('contact-info', function () {
+    return view('front.contact-info');
+})->name('contact-info');
 Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
 
 Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
@@ -454,6 +456,7 @@ Route::get('/fcm', [RechargeController::class,'fcmSend']);
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
 
 
 Route::group(['middleware'=>['auth','admin']], function()

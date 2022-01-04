@@ -42,7 +42,8 @@ class UserController extends Controller
         $users->role = 'user';
         $users->user_id ='JM-'.mt_rand(10000,99999);
 
-
+        $users->payment_method = $request->input('payment_method');
+        $users->company_name = $request->input('company_name');
         $users->contact_number = $request->input('phone');
 
         $users->codice_fiscale = $request->input('codice_fiscale');
