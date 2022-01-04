@@ -162,6 +162,7 @@
             $('.cover-spin').show(0)
             },
             success: function(item){
+                console.log(item)
                 $('.cover-spin').hide(0);
                 var added_row ='';
                 var commision_column ='';

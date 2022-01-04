@@ -265,7 +265,8 @@ class PpnController extends Controller
     public function calling_card_index()
     {
         if(a::user()->role == 'user'){
-            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','White Calling')->latest()->take(10)->get();
+            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','=','White Calling')->latest()->take(10)->get();
+            
         }else{
             $data = RechargeHistory::where('type','White Calling')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')
@@ -282,9 +283,9 @@ class PpnController extends Controller
     public function get_white_calling_table()
     {
         if(a::user()->role == 'user'){
-            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','White Calling')->where('company_name','Ppn')->latest()->take(10)->get();
+            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','White Calling')->latest()->take(10)->get();
         }else{
-            $data = RechargeHistory::where('type','White Calling')->where('company_name','Ppn')->join('users','users.id','=','recharge_histories.reseller_id')
+            $data = RechargeHistory::where('type','White Calling')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')
             ->latest()
             ->take(10)
