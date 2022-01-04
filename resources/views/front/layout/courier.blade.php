@@ -239,6 +239,9 @@ margin-left: 3px;
       <div class="profile-info mt-3">
         <div class="row">
           <div class="col-12">
+          @if ( Auth::user()->role == 'admin2' )
+            <p class='text-center' style="color: #b9ff38;">JM Nation </p>
+          @endif
             @if (Auth::user()->role != 'admin' && Auth::user()->role != 'admin2' )
             <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span>
                 <a href="{{ route('wallet-request') }}" class="notification">
@@ -279,17 +282,19 @@ margin-left: 3px;
                 <p><b class="mr-2">Current Wallet: </b><span>{{ $total_due }}</span> </p>
               </div>
             <div class="col-12">
-              <b class="mr-2">International1:</b><span>{{ $ding->balance }}&euro;</span>
-            </div>
-            <div class="col-12">
               <b class="mr-2">Domestic1:</b><span>{{ $domestic->balance }}&euro;</span>
             </div>
             <div class="col-12">
-                <b class="mr-2">International3:</b><span>{{ $reloadly->balance }}&euro;</span>
-              </div>
+              <b class="mr-2">International1:</b><span>{{ $ding->balance }}&euro;</span>
+            </div>
+          
 
               <div class="col-12">
                 <b class="mr-2">International2:</b><span>{{ $ppn->balance }}&euro;</span>
+              </div>
+
+              <div class="col-12">
+                <b class="mr-2">International3:</b><span>{{ $reloadly->balance }}&euro;</span>
               </div>
 
               <div class="col-12">
