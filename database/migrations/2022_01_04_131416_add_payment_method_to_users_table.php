@@ -16,7 +16,7 @@ class AddPaymentMethodToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             //
             $table->string('payment_method')->nullable();
-            $table->string('company_name')->nullable();
+            $table->string('company')->nullable();
         });
     }
 
