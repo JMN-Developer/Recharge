@@ -35,6 +35,7 @@ use App\Models\Phone;
 use App\Models\Order;
 use App\Models\DomesticProduct;
 use App\Models\DomesticProfit;
+use App\Http\Controllers\ReportController;
 
 
 
@@ -333,6 +334,8 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
     Route::post('send_pin_to_email',[PpnController::class,'send_pin']);
 
 });
+
+Route::get('report',[ReportController::class,'index'])->name('report');
 
 
 Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()

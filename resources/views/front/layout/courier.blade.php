@@ -612,6 +612,19 @@ margin-left: 3px;
               </li>
               @endif
 
+
+              @if(auth()->user()->role == 'admin')
+              <li class="@if(Route::currentRouteName() == 'report') nav-item menu-open @endif nav-item">
+                <a href="{{ route('report') }}" class="@if(Route::currentRouteName() == 'report') nav-link active @endif nav-link">
+                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <p>
+                    Report
+
+                  </p>
+                </a>
+              </li>
+              @endif
+
               @if(auth()->user()->role == 'admin')
               <li class="@if(Route::currentRouteName() == 'wallet-request') nav-item menu-open @endif nav-item">
                 <a href="{{ route('wallet-request') }}" class="@if(Route::currentRouteName() == 'wallet-request') nav-link active @endif nav-link">
