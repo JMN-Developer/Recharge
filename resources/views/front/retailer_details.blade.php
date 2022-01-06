@@ -83,7 +83,7 @@
                         <td>{{ $item->first_name }} {{ $item->last_name }}</td>
                         <td>{{ $item->email }}</td>
                         <td class="text-center font-weight-bold">{{ $item->wallet }}</td>
-                        <td class="text-center font-weight-bold">{{ $item->due }}
+                        <td class="text-center font-weight-bold">{{ $item->limit_usage }}/{{ $item->due }}
                             <br>
                               <span>
                                 <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#boom2{{$item->id}}" class="btn btn-sm btn-info mt-1">
