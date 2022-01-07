@@ -75,9 +75,9 @@
                       <td>{{ $item->created_at }}</td>
                       <td>{{ $item->users->nationality }}</td>
                       @if($item->status == 'sold')
-                      <td><span class="badge badge-success">Completed</span></td>
+                      <td>Completed</td>
                       @else
-                      <td><span class="badge badge-primary">{{ $item->status }}</span></td>
+                      <td>{{ $item->status }}</td>
                       @endif
                       @if (Auth::user()->role == 'admin')
                       <td>

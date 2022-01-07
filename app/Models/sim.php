@@ -18,4 +18,9 @@ class sim extends Model
         'status',
         'reseller_id'
     ];
+
+    public function user()
+    {
+        return $this->hasOne('App\Models\User','id','reseller_id');
+    }
 }

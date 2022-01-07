@@ -66,7 +66,9 @@
                     </div>
                     @endif
                   <select name="offer" class="custom-select" id="offer">
-                    <option>Select Offer</option>
+                   
+                    <option value="No Offer" disabled selected hidden>Please Choose...</option>
+ 
                     @foreach ($offer as $item)
                         <option value="{{ $item->offer }}">{{ $item->offer }}</option>
                     @endforeach
@@ -192,7 +194,7 @@
                       <input type="text" name="sell_price" class="form-control" id="inputSalePrice" placeholder="Inter Sell Price">
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  {{-- <div class="col-md-6">
                     <div class="form-group">
                       <label for="selectRecarica">Recarica</label>
                       <select class="custom-select" name="recharge" id="selectRecarica">
@@ -203,7 +205,7 @@
                         <option>€50 Ricarica</option>
                       </select>
                     </div>
-                  </div>
+                  </div> --}}
                 </div>
                 <div class="row">
                   <div class="col-12">

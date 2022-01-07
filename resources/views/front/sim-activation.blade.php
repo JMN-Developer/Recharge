@@ -33,7 +33,7 @@
                 <h3 class="card-title"><strong>Add to List</strong></h3>
               </div>
               <!-- /.card-header -->
-              <form action="/add-sim" method="POST"></form>
+              <form action="/add-sim" method="POST">
                 @csrf
                 <div class="row px-3 justify-content-center">
                     <div class="col-md-2">
@@ -108,6 +108,7 @@
                     <tr>
                       <th style="background: #faaeae;">SL</th>
                       <th style="background: #faaeae;">Operator</th>
+                      <th style="background: #faaeae;">Reseller</th>
                       <th style="background: #faaeae;">ICCID Number</th>
                       <th style="background: #faaeae;">SIM Number</th>
                       <th style="background: #faaeae;">Buy Date</th>
@@ -120,6 +121,7 @@
                     <tr class="bg-ocean">
                       <td>{{ $item->id }}</td>
                       <td>{{ $item->operator }}</td>
+                      <td>{{ $item->user->first_name." ".$item->user->last_name }}</td>
                       <td>{{ $item->iccid }}</td>
                       <td>{{ $item->sim_number }}</td>
                       <td>{{ $item->buy_date }}</td>
