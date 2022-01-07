@@ -75,7 +75,7 @@ class SimController extends Controller
 
         $operator = SimOperator::where('operator', $data->operator)->first();
 
-        //$digit = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+        $digit = new NumberFormatter("en", NumberFormatter::SPELLOUT);
         $price = '€ '.$data->sell_price;
 
         $item = (new InvoiceItem())->title('Invoice')->pricePerUnit(2)->first($data->first_name)->last($data->last_name)->dob($data->dob)->gender($data->gender)->codice($data->codice)->iccid($data->iccid)->price($data->nationality);
