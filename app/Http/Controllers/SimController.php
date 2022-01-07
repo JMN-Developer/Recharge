@@ -69,7 +69,7 @@ class SimController extends Controller
             'address'       => 'The Green Street 12',
             'code'          => '#22663214',
             'custom_fields' => [
-                'order number' => '> 654321 <',
+                'order number' => '> 654321 <', 
             ],
         ]);
 
