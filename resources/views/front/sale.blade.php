@@ -190,7 +190,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label for="inputSalePrice" class="form-label">Sale Price</label>
+                      <label for="inputSalePrice" class="form-label">Sale Prices</label>
                       <input type="text" name="sell_price" class="form-control" id="inputSalePrice" placeholder="Inter Sell Price">
                     </div>
                   </div>
