@@ -284,6 +284,8 @@ Route::get('get_requested_amount',[WalletController::class,'get_requested_amount
 
 Route::get('wallet_notification_count',[WalletController::class,'wallet_notification_count']);
 
+Route::get('sim_notification_count',[SimController::class,'sim_notification_count']);
+
 
 Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
 {

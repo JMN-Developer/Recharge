@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\DueRequest;
 use Illuminate\Http\Request;
 use App\Models\sim;
 use App\Models\SimOperator;
@@ -15,6 +16,8 @@ use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
+
+use App\Events\SimRequest;
 use NumberFormatter;
 
 class SimController extends Controller
@@ -158,6 +161,7 @@ class SimController extends Controller
      */
     public function buy(Request $request)
     {
+        file_put_contents('test.txt','hellsssssssso');
        $sim = sim::where('id', $request->sim_id)->first();
         $path = $request->file->store('sim/uploads', 'public');
         if($request->file2 != null){
@@ -185,12 +189,14 @@ class SimController extends Controller
             'reseller_id' => Auth::user()->id,
             'sim_id' => $sim->id,
             'sell_price' => $request->sell_price,
+            'admin_notification' => 1,
             'recharge' => $request->recharge
         ]);
 
         $update = sim::where('id', $request->sim_id)->update([
             'status' => 'pending'
         ]);
+        event(new SimRequest());
 
         return redirect('/sim/sim-activation');
 
@@ -199,6 +205,9 @@ class SimController extends Controller
 
     public function orders(){
         if(Auth::user()->role == 'admin'){
+            
+       SimOrder::where('admin_notification',1)->update(['admin_notification'=>0]);
+
         $data = SimOrder::join('sims','sims.id','=','sim_orders.sim_id')
         ->select('sim_orders.*','sims.status')
         ->with('users')
@@ -259,6 +268,20 @@ class SimController extends Controller
         }
 
         return back();
+    }
+
+    public function sim_notification_count()
+    {
+        if(auth()->user()->role == 'admin')
+        {
+            $data = SimOrder::where('admin_notification',1)->get()->count();
+        }
+        else
+        {
+            $data = SimOrder::where('reseller_id',Auth::user()->id)->where('reseller_notification',1)->get()->count();
+        }
+
+        return $data;
     }
 
     /**

@@ -29,7 +29,9 @@ class SimOrder extends Model
         'file_2',
         'nationality',
         'sell_price',
-        'recharge'
+        'recharge',
+        'admin_notification',
+        'reseller_notification',
     ];
 
     public function users()

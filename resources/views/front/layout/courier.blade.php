@@ -436,7 +436,7 @@ margin-left: 3px;
                           Route::currentRouteName() == 'wi-fi') nav-link active @endif nav-link">
                 <i class="nav-icon fas fa-sim-card"></i>
                 <p>
-                  SIM
+                  SIM<span class="badge sim_notification_count">3</span>
                   <i class="fas fa-angle-left right"></i>
                 </p>
               </a>
@@ -458,7 +458,7 @@ margin-left: 3px;
                 <li class="nav-item">
                   <a href="{{ route('sim-selling') }}" class="@if(Route::currentRouteName() == 'sim-selling') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>SIM Selling</p>
+                    <p>SIM Selling <span class="badge sim_notification_count">3</span></p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -692,13 +692,21 @@ margin-left: 3px;
   <script>
       $(function(){
         notification_count();
+        sim_notification_count();
       });
 
         var a = Echo.channel('events')
             .listen('DueRequest', (e) => {
                 notification_count()
+                sim_notification_count();
             });
-
+       
+            var a = Echo.channel('events')
+            .listen('SimRequest', (e) => {
+              sim_notification_count();
+              
+            });
+       
 
         function notification_count()
         {
@@ -708,6 +716,19 @@ margin-left: 3px;
               url: '/wallet_notification_count',
               success: function(data){
               $('.wallet_notification_count').text(data)
+              }
+          });
+        }
+
+        function sim_notification_count()
+        {
+          $.ajax({
+              type: "GET",
+              dataType: "json",
+              url: '/sim_notification_count',
+              success: function(data){
+                console.log(data)
+              $('.sim_notification_count').text(data)
               }
           });
         }
