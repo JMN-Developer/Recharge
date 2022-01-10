@@ -61,8 +61,8 @@ class CheckRechargeAvail
         $limit = $user_info->due;
         $limit_usage = $user_info->limit_usage;
         $due_limit = $limit-$limit_usage;
-
-        if($requested_amount>$current_wallet || $current_wallet == 0)
+      
+        if($requested_amount>$current_wallet)
         {
             if($requested_amount>$due_limit)
             {
@@ -71,7 +71,7 @@ class CheckRechargeAvail
             }
             else
             {
-                // file_put_contents('test.txt','true2 '. $requested_amount." ".$due_limit );
+                // 
                 $instance->send_alert_email();
                 return true;
             }

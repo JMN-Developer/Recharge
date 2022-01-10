@@ -146,7 +146,7 @@ class DtOneController extends Controller
         $skuId = $request->id;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
-       //$data = $this->dtone->recharge($skuId,$txid,$number);
+       $data = $this->dtone->recharge($skuId,$txid,$number);
     //     $tmp_data = '{
     //         "benefits":[
     //            {
