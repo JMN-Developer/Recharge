@@ -16,7 +16,7 @@ use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
-
+use PDF;
 use App\Events\SimRequest;
 use NumberFormatter;
 
@@ -75,29 +75,30 @@ class SimController extends Controller
                 'order number' => '> 654321 <', 
             ],
         ]);
-
+        
         $operator = SimOperator::where('operator', $data->operator)->first();
-
+      
         $digit = new NumberFormatter("en", NumberFormatter::SPELLOUT);
         $price = '€ '.$data->sell_price;
+        $note = 'MODULO DI IDENTIFICAZIONE E ATTIVAZIONE DEL SERVIZIO MOBILE PREPAGATO SI DICHIARA A TUTTI GLI EFFETTI DI LEGGE CHE TUTTE LE INFORMAZIONE E I DATI INDICATI NEL PRESENTE DOCUMENTO SONO ACCURATI, COMPLETI VERITIERI';
+       // $item = (new InvoiceItem())->title('Invoice')->pricePerUnit(2)->first($data->first_name)->last($data->last_name)->dob($data->dob)->gender($data->gender)->codice($data->codice)->iccid($data->iccid)->price($data->nationality);
 
-        $item = (new InvoiceItem())->title('Invoice')->pricePerUnit(2)->first($data->first_name)->last($data->last_name)->dob($data->dob)->gender($data->gender)->codice($data->codice)->iccid($data->iccid)->price($data->nationality);
-
-        $invoice = Invoice::make()
-            ->logo('storage/'.$operator->img)
-            ->operator($operator->operator)
-            ->date($sim->created_at)
-            ->price($price)
-            ->buyer($customer)
-            ->discountByPercent(10)
-            ->taxRate(15)
-            ->shipping(1.99)
-            ->name('Invoice')
-            ->notes('MODULO DI IDENTIFICAZIONE E ATTIVAZIONE DEL SERVIZIO MOBILE PREPAGATO SI DICHIARA A TUTTI GLI EFFETTI DI LEGGE CHE TUTTE LE INFORMAZIONE E I DATI INDICATI NEL PRESENTE DOCUMENTO SONO ACCURATI, COMPLETI VERITIERI,')
-            ->addItem($item);
-
-
-        return $invoice->stream();
+        // $invoice = Invoice::make()
+        //     ->logo('storage/'.$operator->img)
+        //     ->operator($operator->operator)
+        //     ->date($sim->created_at)
+        //     ->price($price)
+        //     ->buyer($customer)
+        //     ->discountByPercent(10)
+        //     ->taxRate(15)
+        //     ->shipping(1.99)
+        //     ->name('Invoice')
+        //     ->notes('MODULO DI IDENTIFICAZIONE E ATTIVAZIONE DEL SERVIZIO MOBILE PREPAGATO SI DICHIARA A TUTTI GLI EFFETTI DI LEGGE CHE TUTTE LE INFORMAZIONE E I DATI INDICATI NEL PRESENTE DOCUMENTO SONO ACCURATI, COMPLETI VERITIERI,')
+        //     ->addItem($item);
+        $invoice = ['name'=>'Invoice','logo'=>'storage/'.$operator->img,'date'=>$sim->created_at,'price'=>$price,'buyer'=>$customer,'notes'=>$note,'first'=>$data->first_name,'last'=>$data->last_name,'dob'=>$data->dob,'gender'=>$data->gender,'codice'=>$data->codice,'iccid'=>$data->iccid,'nationality'=>$data->nationality];
+        
+        $invoice = json_decode(json_encode($invoice), FALSE);
+        return view('pdf.SimInvoice',compact('invoice'));
     }
 
     /**
@@ -152,6 +153,11 @@ class SimController extends Controller
         return Storage::download($file);
     }
 
+    public function update_sim_wallet($sim_price)
+    {
+        User::where('id',Auth::user()->id)->update(['sim_wallet'=>Auth::user()->sim_wallet+$sim_price]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -161,7 +167,7 @@ class SimController extends Controller
      */
     public function buy(Request $request)
     {
-        file_put_contents('test.txt','hellsssssssso');
+       
        $sim = sim::where('id', $request->sim_id)->first();
         $path = $request->file->store('sim/uploads', 'public');
         if($request->file2 != null){
@@ -192,7 +198,7 @@ class SimController extends Controller
             'admin_notification' => 1,
             'recharge' => $request->recharge
         ]);
-
+        $this->update_sim_wallet($sim->buy_price);
         $update = sim::where('id', $request->sim_id)->update([
             'status' => 'pending'
         ]);

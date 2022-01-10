@@ -52,6 +52,7 @@ class CheckRechargeAvail
         $instance = new CheckRechargeAvail();
         if(auth()->user()->role == 'admin')
         {
+            file_put_contents('test.txt','true1');
             return true;
         }
 
@@ -61,21 +62,25 @@ class CheckRechargeAvail
         $limit_usage = $user_info->limit_usage;
         $due_limit = $limit-$limit_usage;
 
-        if($requested_amount>$current_wallet)
+        if($requested_amount>$current_wallet || $current_wallet == 0)
         {
             if($requested_amount>$due_limit)
             {
+              //  file_put_contents('test.txt','false');
                 return false;
             }
             else
             {
+                // file_put_contents('test.txt','true2 '. $requested_amount." ".$due_limit );
                 $instance->send_alert_email();
                 return true;
             }
 
         }
+       
         $instance->send_alert_email();
-       return true;
+        //file_put_contents('test.txt','true2');
+      return true;
 
 
 

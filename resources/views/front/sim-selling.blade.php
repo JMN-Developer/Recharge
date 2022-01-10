@@ -99,7 +99,7 @@
                       @endif
                       <td class="text-center">
                         <div class="btn-group">
-                          <a href="sim-invoice/{{ $item->id }}" class="btn btn-sm btn-success">
+                          <a href="sim-invoice/{{ $item->id }}"  class="btn btn-sm btn-success">
                             <i class="fas fa-print"></i>
                           </a>
                           <a href="sim-download/{{ $item->id }}" class="btn btn-sm bg-info">

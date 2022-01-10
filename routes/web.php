@@ -472,6 +472,9 @@ Route::group(['middleware'=>['auth','admin']], function()
 
     Route::post('/edit_cargo_due',[BalanceController::class,'EditDue']);
 
+    Route::post('/edit_sim_due',[BalanceController::class,'SimDue']);
+
+
 
     Route::post('/edit_limit',[BalanceController::class,'EditLimit'])->name('EditLimit');
 

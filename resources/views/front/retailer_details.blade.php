@@ -69,6 +69,7 @@
                     <th scope="col">Balance</th>
                     <th scope="col" style="width: 12%">Limit</th>
                     <th scope="col">Comission</th>
+                    <th scope="col">Sim Due</th>
                     <th scope="col">Cargo Due</th>
                     <th scope="col">Profile</th>
 
@@ -96,11 +97,19 @@
                             <i class="fas fa-edit"></i>
                             </button>
                         </td>
-                        <td class="text-center font-weight-bold">{{ $item->cargo_due }}
+                        <td class="text-center font-weight-bold">{{ $item->sim_wallet }}
+                          <br>
+                          
+                            <span>
+                              <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#sim{{$item->id}}" class="btn btn-sm btn-info mt-1">
+                                  <i class="fas fa-edit"></i>
+                                </button>
+                            </span>
+                      </td>
+
+                        <td class="text-center font-weight-bold">{{ $item->cargo_wallet }}
                             <br>
-                            <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#cargo1{{$item->id}}" class="btn btn-sm btn-primary mt-1">
-                                <i class="fas fa-plus"></i>
-                              </button>
+                            
                               <span>
                                 <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#cargo2{{$item->id}}" class="btn btn-sm btn-info mt-1">
                                     <i class="fas fa-edit"></i>
@@ -285,19 +294,49 @@
                               </div>
                             </div>
                           </div>
-
+                          <div class="modal fade bd-example-modal-sm" id="sim{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">Sim Due</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                </div>
+                                <div class="modal-body"> 
+                                  
+                                <form action="{{url('/edit_sim_due')}}" method="post">
+                                  @csrf
+                                  <div>
+                                    <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
+                                    <input class="form-control" type="number"  step="0.01" name="due"><br>
+                                    <button class="btn btn-success btn-sm" style="float:right"  type="submit">Update Sim Due For {{$item->first_name}}</button>
+                                  </div>
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
                           <div class="modal fade bd-example-modal-sm" id="cargo2{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                               <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">Cargo Due</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                </div>
+                                <div class="modal-body">
                                 <form action="{{url('/edit_cargo_due')}}" method="post">
                                   @csrf
                                   <div>
                                     <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
-                                    <input class="form-control" type="number"  step="0.01" name="due">
-                                    <button class="btn btn-success btn-sm"  type="submit">Edit Cargo Due For {{$item->first_name}}</button>
+                                    <input class="form-control" type="number"  step="0.01" name="due"><br>
+                                    <button class="btn btn-success btn-sm"  style="float:right"  type="submit">Update Cargo Due For {{$item->first_name}}</button>
                                   </div>
                                 </form>
+                                </div>
                               </div>
                             </div>
                           </div>

@@ -248,10 +248,12 @@ margin-left: 3px;
                     <span style="font-weight:bold;color:black">WR</span>
                     <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
                   </a>
-
             </p>
-
             <p><b>Limit:  </b><span style="margin-left:10px">{{ auth()->user()->limit_usage }}/{{ auth()->user()->due }}</span></p>
+            <p style="color: #b9ff38;"><b class="mr-2">Sim:</b><span>{{ Auth()->user()->sim_wallet }}</span></p>
+            <p style="color: #b9ff38;"><b class="mr-2">Cargo:</b><span>{{ Auth()->user()->cargo_wallet }}</span></p>
+
+            
             {{-- <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p> --}}
             @endif
           </div>

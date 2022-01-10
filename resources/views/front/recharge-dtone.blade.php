@@ -262,7 +262,7 @@
 
 
             for (var i = 0; i < skus.length; i++){
-                option_list+='<option value='+skus[i].skuId+'>'+skus[i].amount_text+'</option>'
+                option_list+='<option value='+skus[i].skuId+','+skus[i].amount+'>'+skus[i].amount_text+'</option>'
             }
             $('.amount_list').empty();
             $('.amount_list').append(option_list);
@@ -311,7 +311,10 @@
 
    $("#recharge_number").click(function(){
     event.preventDefault();
-   var skuId = $(".amount_list :selected").val();
+   var sku = $(".amount_list :selected").val();
+   var sku = sku.split(',');
+   var skuId = sku[0];
+   var amount = sku[1];
 //    var amount_list = amount_list.split(",");
 //     var skuId = amount_list[0];
 //     var amount = amount_list[1];
@@ -320,6 +323,7 @@
     formdata.append('number',$('#receiverMobile').val().split(' ').join(''));
     formdata.append('service_charge',$('#service').val());
     formdata.append('id', skuId);
+    formdata.append('amount', amount);
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);
 
 

@@ -9,6 +9,7 @@ use App\Models\Phone;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use App\Models\TransactionHistory;
 
 class BalanceController extends Controller
 {
@@ -127,6 +128,37 @@ class BalanceController extends Controller
             return back();
         }else{
             return back()->with('error','Due Amount Is Less Than The Input');
+        }
+    }
+
+    public function update_transaction($total_amount,$reseller_id,$transaction_type)
+    {
+        
+        TransactionHistory::create([
+            'reseller_id'=>$reseller_id,
+            'transaction_id'=>'JM-'. mt_rand(100000,999999),
+            'transaction_type'=>$transaction_type,
+            'total_amount'=>$total_amount,
+            'wallet_amount'=>$total_amount,
+          
+
+        ]);
+    }
+
+    public function SimDue(Request $request){
+
+        $info = User::where('id', $request->user_id)->first();
+
+        if($info->sim_wallet >= $request->due){
+            $user = User::where('id', $request->user_id)->update([
+
+                "sim_wallet" => $info->sim_wallet - $request->due
+
+            ]);
+            $this->update_transaction($request->due,$request->user_id,'Sim');
+            return back();
+        }else{
+            return back()->with('error','Due Amount Is Greater Than The Input');
         }
     }
 

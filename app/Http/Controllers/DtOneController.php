@@ -46,7 +46,7 @@ class DtOneController extends Controller
             //$total_amount = floor($sku->minAmount * $sku->exchangeRate);
             $amount_text = $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount)."</p> Euro &nbsp(&nbsp" .$sku->name." will be received )";
 
-            array_push($data,['skuId'=>$sku->id,'amount'=> $sku->source->amount,'amount_text'=>$amount_text]);
+            array_push($data,['skuId'=>$sku->id,'amount'=> $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount),'amount_text'=>$amount_text]);
         }
         usort($data, function($a, $b) {
               return $a['amount'] <=> $b['amount'];
@@ -133,7 +133,7 @@ class DtOneController extends Controller
 
     public function recharge(Request $request)
     {
-
+        //file_put_contents('test.txt',$request->amount);
         //file_put_contents('test.txt',$test);
         if(!CheckRechargeAvail::check($request->amount))
         {
@@ -146,7 +146,7 @@ class DtOneController extends Controller
         $skuId = $request->id;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
-       $data = $this->dtone->recharge($skuId,$txid,$number);
+       //$data = $this->dtone->recharge($skuId,$txid,$number);
     //     $tmp_data = '{
     //         "benefits":[
     //            {
