@@ -208,6 +208,7 @@ class SimController extends Controller
             'sim_id' => $sim->id,
             'sell_price' => $request->sell_price,
             'admin_notification' => 1,
+            'status'=>'pending',
             'invoice_no'=>'JM-'.mt_rand(100000,999999),
             'recharge' => $request->recharge
         ]);

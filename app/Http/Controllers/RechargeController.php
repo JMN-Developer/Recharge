@@ -1368,7 +1368,7 @@ class RechargeController extends Controller
                 
                 $total_cost = $data->sum('amount')+$data->sum('service');
                 $total_profit = $data->sum('reseller_com');
-                file_put_contents('test.txt',$total_cost." ".$total_profit);
+              
                 
             }
             foreach($data as $value)

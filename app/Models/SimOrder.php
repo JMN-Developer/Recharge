@@ -33,6 +33,7 @@ class SimOrder extends Model
         'admin_notification',
         'invoice_no',
         'reseller_notification',
+        'status'
     ];
 
     public function users()

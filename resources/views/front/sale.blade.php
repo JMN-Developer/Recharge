@@ -18,7 +18,13 @@
   <link rel="stylesheet" href="{{ asset('css/tempusdominus-bootstrap-4.min.css') }}">
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
-<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
+  <link rel="stylesheet" href="{{ asset('css/multiple_image_preview.css') }}">
+  <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
+  <style>
+      
+  </style>
+
+</head>
 @endsection
 @section('content')
   <!-- Content Wrapper. Contains page content -->
@@ -122,20 +128,8 @@
         <div class="card card-default">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-7">
-                <div class="row">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label for="selectGender">Gender</label>
-                      <select name="gender" class="custom-select" id="selectGender">
-                        <option>Select Gender</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Others</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+              <div class="col-md-10">
+             
                 <div class="row">
                   <div class="col-md-6">
                     <div class="mb-3">
@@ -176,6 +170,50 @@
                       <input name="nationality" type="text" class="form-control" id="inputNationality" placeholder="Inter Client Nationality">
                     </div>
                   </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="selectGender">Gender</label>
+                      <select name="gender" class="custom-select" id="selectGender">
+                        <option>Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="inputSalePrice" class="form-label">Sale Prices</label>
+                      <input type="text" name="sell_price" class="form-control" id="inputSalePrice" placeholder="Inter Sell Price">
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <p style="font-weight: bold;margin-bottom:2px">Personal Document1:</p>
+                    <ol>
+                      <li>Upload pdf file of your NID (Max-size 2MB)</li>
+                      <li>Upload a recent color photograph</li>
+                    </ol>
+                    <div class="custom-file mb-3">
+                      <input type="file" class="custom-file-input" id="single_files"  name="file" required>
+                      <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+
+                  </div>
+
+                  <div class="col-md-6">
+                    <p style="font-weight: bold;margin-bottom:2px">Personal Document2(Optional):</p>
+                    <ol>
+                      <li>Upload pdf file of your NID (Max-size 2MB)</li>
+                      <li>Upload a recent color photograph</li>
+                    </ol>
+                    <div class="custom-file mb-3">
+                      <input type="file" class="custom-file-input" id="multiple_files" name="filename"  name="file2">
+                      <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+
+                  </div>
+
                 </div>
                 {{-- <div class="row">
                   <div class="col-12">
@@ -186,29 +224,10 @@
                   </div>
                 </div> --}}
               </div>
-              <div class="col-md-5 sim-act-form-right">
+              <div class="col-md-10 sim-act-form-right" style="margin-top: 10px">
+                
                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="mb-3">
-                      <label for="inputSalePrice" class="form-label">Sale Prices</label>
-                      <input type="text" name="sell_price" class="form-control" id="inputSalePrice" placeholder="Inter Sell Price">
-                    </div>
-                  </div>
-                  {{-- <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="selectRecarica">Recarica</label>
-                      <select class="custom-select" name="recharge" id="selectRecarica">
-                        <option>€5 Ricarica</option>
-                        <option>€10 Ricarica</option>
-                        <option>€20 Ricarica</option>
-                        <option>€30 Ricarica</option>
-                        <option>€50 Ricarica</option>
-                      </select>
-                    </div>
-                  </div> --}}
-                </div>
-                <div class="row">
-                  <div class="col-12">
+                  <div class="col-6">
                     <div class="form-check bg-ash">
                       <input class="form-check-input" type="checkbox" name="sim-activation-additional" id="sim-activation-additional">
                       <label class="form-check-label text-bold" for="sim-activation-additional">
@@ -219,7 +238,7 @@
                 </div>
                 <div class="activation-additional-info">
                   <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
                       <div class="form-group">
                         <label>Oparetor</label>
                         <select name="alt_operator" class="form-control select2" style="width: 100%;">
@@ -229,53 +248,27 @@
                         </select>
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
                       <div class="mb-3">
                         <label for="inputIccidNumber" class="form-label">ICCID Number</label>
                         <input type="text" name="alt_iccid" class="form-control" id="inputIccidNumber" placeholder="Inter ICCID Number">
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-12">
+
+                    <div class="col-6">
                       <div class="mb-3">
                         <label for="inputMobileNumber" class="form-label">Sim Number</label>
                         <input type="text" name="alt_sim_number" class="form-control" id="inputMobileNumber" placeholder="Inter Mobile Number">
                       </div>
                     </div>
+
                   </div>
+                  
+                
                 </div>
                 <div class="card-body">
                   <div id="actions" class="row">
-                    <div class="col-12">
-                      <div class="upload_file_text">
-                        <h6>Upload Document</h6>
-                        <ol>
-                          <li>Upload pdf file of your NID (Max-size 2MB)</li>
-                          <li>Upload a recent color photograph</li>
-                        </ol>
-                      </div>
-                      <div class="row w-100">
-                        <label for="">File 1</label>
-                        <input type="file" name="file" class="btn btn-success col " required="">
-                        <label for="">File 2</label>
-                        <input type="file" name="file2" class="btn btn-success col ">
-                        {{-- <span class="btn btn-success col fileinput-button">
-                          <i class="fas fa-plus"></i>
-                          <span>Add files</span>
-                        </span> --}}
-                        {{-- <button type="submit" class="btn btn-primary col start">
-                          <i class="fas fa-upload"></i>
-                          <span>Upload</span>
-                        </button>
-                        <button type="reset" class="btn btn-warning col cancel">
-                          <i class="fas fa-times-circle"></i>
-                          <span>Cancel</span>
-                        </button> --}}
-                      </div>
-                    </div>
+                   
                   </div>
                   <div class="table table-striped files" id="previews">
                     <div id="template" class="row mt-2">
@@ -352,10 +345,16 @@
 <!-- Custom JS -->
 <script src="{{ asset('js/custom.js') }}"></script>
 
+<script src="{{ asset('js/multiple_image_preview.js') }}"></script>
 
 
 
 <script>
+  $(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
   $(function(){
 $('#offer').change(function(){
 var empty = "";
@@ -438,6 +437,9 @@ $.ajax({
 <!-- Page specific script -->
 <script>
   $(function () {
+
+    
+
     //Initialize Select2 Elements
     $('.select2').select2()
 

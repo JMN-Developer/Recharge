@@ -1,0 +1,49 @@
+input[type="file"] {
+    display: block;
+}
+
+.imageThumb {
+    max-height: 195px;
+    width: 373px;
+    border: 2px solid;
+    padding: 1px;
+    cursor: pointer;
+}
+
+.pip_single {
+    display: inline-block;
+    margin: 10px 10px 0 0;
+}
+
+.pip_multiple {
+    display: inline-block;
+    margin: 10px 10px 0 0;
+}
+
+.remove_single {
+    display: block;
+    background: #444;
+    border: 1px solid black;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.remove_single:hover {
+    background: white;
+    color: black;
+}
+
+.remove_multiple {
+    display: block;
+    background: #444;
+    border: 1px solid black;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.remove_details {
+    background: white;
+    color: black;
+}

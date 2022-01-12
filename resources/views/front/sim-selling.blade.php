@@ -52,7 +52,6 @@
                     <tr>
                       <th style="background: #faaeae;">#</th>
                       <th style="background: #faaeae;">Order ID</th>
-                      <th style="background: #faaeae;">Offer</th>
                       <th style="background: #faaeae;">ICCID Number</th>
                       <th style="background: #faaeae;">Sim Number</th>
                       <th style="background: #faaeae;">Order Date</th>
@@ -69,7 +68,6 @@
                     <tr class="bg-ocean">
                       <td>{{ $loop->iteration }}</td>
                       <td>{{ $item->id }}</td>
-                      <td>{{ $item->offer }}</td>
                       <td>{{ $item->iccid }}</td>
                       <td>{{ $item->sim_number }}</td>
                       <td>{{ $item->created_at }}</td>
@@ -102,9 +100,9 @@
                           <a href="sim-invoice/{{ $item->id }}" target="_blank"  class="btn btn-sm btn-success">
                             <i class="fas fa-print"></i>
                           </a>
-                          <a href="sim-download/{{ $item->id }}" class="btn btn-sm bg-info">
+                          {{-- <a href="sim-download/{{ $item->id }}" class="btn btn-sm bg-info">
                             <i class="fas fa-eye"></i>
-                          </a>
+                          </a> --}}
                         </div>
                       </td>
                     </tr>
