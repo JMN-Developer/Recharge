@@ -19,6 +19,7 @@ use LaravelDaily\Invoices\Classes\InvoiceItem;
 use PDF;
 use App\Events\SimRequest;
 use NumberFormatter;
+use DataTables;
 
 class SimController extends Controller
 {
@@ -34,26 +35,112 @@ class SimController extends Controller
         $data = Offer::all();
         return view('front.wi-fi',compact('data'));
     }
+    public function sim_edit(Request $request)
+    {
+        $sim = Sim::where('id',$request->sim_id)->first();
+        return json_encode($sim);
+    }
 
-    public function index()
-    {  if(Auth::user()->role == 'user'){
-        $show = sim::where('status', 'available')
-        ->where('reseller_id',Auth::user()->id)
-        ->join('users','users.id','=','sims.reseller_id')
-        ->select('users.nationality','sims.*')
-        ->latest()
-        ->get();
-        $total = $show->count();
-        return view('front.sim-activation',compact('show','total'));
-        }else{
+    public function update_sim(Request $request)
+    {
+        $existing_record = sim::where('id',$request->id)->first();
+        $existing_reseller_id = $existing_record->reseller_id;
+        $existing_price = $existing_record->buy_price;
+        if($existing_reseller_id != $request->re_seller)
+        {
+            $user = User::where('id',$existing_reseller_id)->first();
+            User::where('id',$existing_reseller_id)->update(['sim_wallet'=>$user->sim_wallet-$existing_price]);
+            $this->update_sim_wallet($request->buy_price,$request->re_seller);
+        }
+        if($existing_price!=$request->buy_price)
+        {
+            $user = User::where('id',$existing_reseller_id)->first();
+            User::where('id',$existing_reseller_id)->update(['sim_wallet'=>$user->sim_wallet-$existing_price]);
+            $this->update_sim_wallet($request->buy_price,$request->re_seller);
+        }
+        $create = sim::where('id',$request->id)->update([
+            'operator' => $request->operator,
+            'iccid' => $request->iccid,
+            'sim_number' => $request->sim_number,
+            'buy_price' => $request->buy_price,
+            'original_price'=>$request->original_price,
+            'reseller_id' => $request->re_seller,
+            'status' => 'available'
+        ]);
+        // $this->update_sim_wallet($request->buy_price,$request->re_seller);
+        return redirect('/sim/sim-activation');
+    }
+
+    public function index(Request $request)
+    { 
+
+        if(Auth::user()->role == 'user'){
             $show = sim::where('status', 'available')
+            ->where('reseller_id',Auth::user()->id)
+            ->join('users','users.id','=','sims.reseller_id')
+            ->select('users.nationality','sims.*')
             ->latest()
             ->get();
-            $operator = SimOperator::all();
-            $user = User::where('role','user')->get();
             $total = $show->count();
+            }else{
+                $show = sim::
+                latest()
+                ->get();
+                $operator = SimOperator::all();
+                $user = User::where('role','user')->get();
+                $total = $show->count();
+               
+            }
+        
+        if ($request->ajax()) {
+           
+         
+            
+            return Datatables::of($show)
+            ->addColumn('reseller', function($show){
+                return $show->user->first_name.' '.$show->user->last_name;
+
+            })
+            ->addColumn('buy_date',function($show){
+                return date('Y-m-d', strtotime($show->created_at));
+            })
+           
+            ->addColumn('action', function($show){
+
+                
+                $button = '';
+
+                
+                $button.= '<a href="buy-sim/'.$show->id.'" type="button" class="btn btn-info btn-sm">Sale</a>';
+               
+                return $button;
+             })
+             ->addColumn('edit_column', function($show){
+
+                
+                $button2 = '';
+
+                
+                $button2.='<a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="sim_edit('.$show->id.')"><i class="la la-edit"></i></a>';
+               
+                return $button2;
+             })
+            
+
+            ->addIndexColumn()
+            ->rawColumns(['edit_column','action'])
+            ->make(true);
+        }
+        
+        if(Auth::user()->role =='user')
+        {
+            return view('front.sim-activation',compact('show','total'));
+        }
+        else
+        {
             return view('front.sim-activation',compact('show','operator','user','total'));
         }
+        
     }
 
     /**
@@ -128,9 +215,10 @@ class SimController extends Controller
             'buy_date' => Carbon\Carbon::now(),
             'buy_price' => $request->buy_price,
             'reseller_id' => $request->re_seller,
+            'original_price'=>$request->original_price,
             'status' => 'available'
         ]);
-
+        $this->update_sim_wallet($request->buy_price,$request->re_seller);
         return redirect('/sim/sim-activation');
     }
 
@@ -165,9 +253,12 @@ class SimController extends Controller
         return Storage::download($file);
     }
 
-    public function update_sim_wallet($sim_price)
+    public function update_sim_wallet($sim_price,$reseller_id)
     {
-        User::where('id',Auth::user()->id)->update(['sim_wallet'=>Auth::user()->sim_wallet+$sim_price]);
+        $user = User::where('id',$reseller_id)->first();
+
+
+        User::where('id',$reseller_id)->update(['sim_wallet'=>$user->sim_wallet+$sim_price]);
     }
 
     /**
@@ -212,7 +303,7 @@ class SimController extends Controller
             'invoice_no'=>'JM-'.mt_rand(100000,999999),
             'recharge' => $request->recharge
         ]);
-        $this->update_sim_wallet($sim->buy_price);
+      
         $update = sim::where('id', $request->sim_id)->update([
             'status' => 'pending'
         ]);

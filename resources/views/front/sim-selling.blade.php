@@ -73,9 +73,9 @@
                       <td>{{ $item->created_at }}</td>
                       <td>{{ $item->users->nationality }}</td>
                       @if($item->status == 'sold')
-                      <td>Completed</td>
+                      <td style="color:green;text-transform:uppercase;font-weight:bold">Completed</td>
                       @else
-                      <td>{{ $item->status }}</td>
+                      <td style="color:red;text-transform:uppercase;font-weight:bold">{{ $item->status }}</td>
                       @endif
                       @if (Auth::user()->role == 'admin')
                       <td>

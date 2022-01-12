@@ -16,6 +16,7 @@ class sim extends Model
         'buy_date',
         'buy_price',
         'status',
+        'original_price',
         'reseller_id'
     ];
 

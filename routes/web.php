@@ -142,7 +142,7 @@ Route::post('/offer-update/{id}', [OfferController::class,'update']);
 
 Route::get('/delete-offer/{id}', [OfferController::class,'destroy']);
 
-Route::post('/add-sim', [SimController::class,'store']);
+
 
 
 Route::get('/sim-orders', [SimController::class,'orders']);
@@ -342,7 +342,7 @@ Route::get('report',[ReportController::class,'index'])->name('report');
 
 Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
 {
-
+    Route::get('sim_edit',[SimController::class,'sim_edit']);
     Route::get('sim-activation', [SimController::class,'index'])->name('sim-activation');
     Route::get('sim-selling', [SimController::class,'orders'])->name('sim-selling');
     Route::get('wi-fi', [SimController::class,'WiFi'])->name('wi-fi');
@@ -350,6 +350,8 @@ Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
     Route::post('buy-sim', [SimController::class, 'buy'])->name('buy-sim');
     Route::get('sim-invoice/{id}', [SimController::class,'invoice'])->name('sim-invoice');
     Route::get('sim-download/{id}', [SimController::class,'download']);
+    Route::post('add-sim', [SimController::class,'store']);
+    Route::post('update-sim', [SimController::class,'update_sim']);
 
 
 });

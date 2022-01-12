@@ -12,6 +12,12 @@
               body {
     font-family: 'Maven Pro', sans-serif !important;
     background-color: #374756 !important
+}	
+
+@media print {
+  .print_button {
+    display: none;
+  }
 }
             .header-elements{
                
@@ -131,7 +137,7 @@
 	<body>
 		<div class="invoice-box">
        
-         <div class="header-elements"> <a href="{{ route('sim-invoice',['download'=>'pdf','id'=>$invoice->id]) }}"   type="button" class="btn btn-light btn-sm"><i class="fa fa-file mr-2"></i> Download</a> <a type="button" class="btn btn-light btn-sm ml-3"><i class="fa fa-print mr-2"></i> Print</a> </div>
+         <div class="header-elements"> <a href="{{ route('sim-invoice',['download'=>'pdf','id'=>$invoice->id]) }}"   type="button" class="btn btn-light btn-sm print_button"><i class="fa fa-file mr-2"></i> Download</a> <a type="button" onclick="window.print();return false;" class="btn btn-light btn-sm ml-3 print_button"><i class="fa fa-print mr-2"></i> Print</a> </div>
            
 			<table cellpadding="0" cellspacing="0">
 				<tr class="top">
@@ -211,4 +217,5 @@
 			</table>
 		</div>
 	</body>
+	
 </html>

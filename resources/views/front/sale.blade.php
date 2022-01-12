@@ -134,13 +134,13 @@
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label for="inputFirstName" class="form-label">First Name</label>
-                      <input name="fname" type="text" class="form-control" id="inputFirstName" placeholder="Inter Client First Name">
+                      <input name="fname" type="text" class="form-control" id="inputFirstName" placeholder="Inter Client First Name" required>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label for="inputLastName" class="form-label">Last Name</label>
-                      <input name="lname" type="text" class="form-control" id="inputLastName" placeholder="Inter Client Last Name">
+                      <input name="lname" type="text" class="form-control" id="inputLastName" placeholder="Inter Client Last Name" required>
                     </div>
                   </div>
                 </div>
@@ -148,7 +148,7 @@
                   <div class="col-12">
                     <div class="mb-3">
                       <label for="inputNID" class="form-label">Codici Fiscali</label>
-                      <input name="codice" type="text" class="form-control" id="inputNID" placeholder="Inter Client Codici number">
+                      <input name="codice" type="text" class="form-control" id="inputNID" placeholder="Inter Client Codici number" required>
                     </div>
                   </div>
                 </div>
@@ -157,7 +157,7 @@
                     <div class="form-group">
                       <label>Date of Birth</label>
                       <div class="input-group date" id="birthDate" data-target-input="nearest">
-                        <input name="dob" type="text" class="form-control datetimepicker-input" data-target="#birthDate" />
+                        <input name="dob" type="text" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#birthDate" required/>
                         <div class="input-group-append" data-target="#birthDate" data-toggle="datetimepicker">
                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -167,13 +167,13 @@
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label for="inputNationality" class="form-label">Nationality</label>
-                      <input name="nationality" type="text" class="form-control" id="inputNationality" placeholder="Inter Client Nationality">
+                      <input name="nationality" type="text" class="form-control" id="inputNationality" placeholder="Inter Client Nationality" required>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="selectGender">Gender</label>
-                      <select name="gender" class="custom-select" id="selectGender">
+                      <select name="gender" class="custom-select" id="selectGender" required>
                         <option>Select Gender</option>
                         <option>Male</option>
                         <option>Female</option>
@@ -184,7 +184,7 @@
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label for="inputSalePrice" class="form-label">Sale Prices</label>
-                      <input type="text" name="sell_price" class="form-control" id="inputSalePrice" placeholder="Inter Sell Price">
+                      <input type="text" name="sell_price" class="form-control" id="inputSalePrice" placeholder="Inter Sell Price" required>
                     </div>
                   </div>
 
