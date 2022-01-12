@@ -51,7 +51,6 @@
                   <thead>
                     <tr>
                       <th style="background: #faaeae;">#</th>
-                      <th style="background: #faaeae;">Order ID</th>
                       <th style="background: #faaeae;">ICCID Number</th>
                       <th style="background: #faaeae;">Sim Number</th>
                       <th style="background: #faaeae;">Order Date</th>
@@ -67,11 +66,11 @@
                     @foreach ($data as $item)
                     <tr class="bg-ocean">
                       <td>{{ $loop->iteration }}</td>
-                      <td>{{ $item->id }}</td>
+                     
                       <td>{{ $item->iccid }}</td>
                       <td>{{ $item->sim_number }}</td>
                       <td>{{ $item->created_at }}</td>
-                      <td>{{ $item->users->nationality }}</td>
+                      <td>{{ $item->users->first_name." ".$item->users->last_name."(".$item->users->user_id.")" }}</td>
                       @if($item->status == 'sold')
                       <td style="color:green;text-transform:uppercase;font-weight:bold">Completed</td>
                       @else
