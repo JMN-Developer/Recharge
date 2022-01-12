@@ -241,7 +241,7 @@
                   <div class="row">
                     <div class="col-12">
                       <div class="mb-3">
-                        <label for="inputMobileNumber" class="form-label">Mobile Number</label>
+                        <label for="inputMobileNumber" class="form-label">Sim Number</label>
                         <input type="text" name="alt_sim_number" class="form-control" id="inputMobileNumber" placeholder="Inter Mobile Number">
                       </div>
                     </div>

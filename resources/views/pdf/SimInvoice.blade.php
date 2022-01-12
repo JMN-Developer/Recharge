@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -18,7 +20,7 @@
                 
             }
 			.invoice-box {
-				max-width: 600px;
+				max-width: 700px;
                 min-height: 500px;
 				margin: auto;
 				padding: 30px;
@@ -181,8 +183,25 @@
 
 					<td>Nazionalità: <span class="info">{{$invoice->nationality}}</span></td>
 				</tr>
+				@php
+				$alt = DB::table('sim_orders')->where('iccid', $invoice->iccid)->latest()->first();
 
-              
+				$iccid = $alt->alt_iccid;
+				$sim_number = $alt->alt_sim_number;
+				$operator = $alt->alt_operator;
+				$ricarica = $alt->recharge;
+				$sim_number = $alt->sim_number; 
+				@endphp
+
+				@if ($iccid != null)
+				<tr class="heading">
+					<td> Protabilita Sim Number : <span class="info">{{$sim_number}}</span> </td>
+					<td>  Portabilita ICCID Number : <span class="info">{{$iccid}}</span> </td>
+				</tr>
+				<tr class="details">
+					<td> Portabilita Operator : <span class="info"> {{$operator}}</span> </td>
+				</tr>
+				@endif
 
 				<tr class="total">
 					<td></td>

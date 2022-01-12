@@ -142,13 +142,14 @@
                     <td class="border-0 pl-0" width="70%">
                         <h4 class="text-uppercase">
                             @if($invoice->logo)
-            <img src="{{ $invoice->getLogo() }}" alt="logo" height="50">
+            <img src="{{ $invoice->getLogo() }}" alt="logo" height="100">
         @endif
                         </h4>
                     </td>
                     <td class="border-0 pl-0">
                         {{-- <p>{{ __('invoices::invoice.serial') }} <strong>{{ $invoice->getSerialNumber() }}</strong></p> --}}
-                        <p>{{ __('invoices::invoice.date') }}: <strong>{{ $invoice->getDate() }}</strong></p>
+                        <p>Invoice: <strong>{{ $invoice->invoiceNo}}</strong></p>
+                        <p>Date: <strong>{{ $invoice->getDate() }}</strong></p>
                     </td>
                 </tr>
             </tbody>
@@ -310,28 +311,31 @@
                     <td> <span style="font-weight: bold"> Gender </span> : {{$item->gender}}</td>
                     <td> <span style="font-weight: bold"> Date Of Birth </span> : {{$item->dob}}</td>
                 </tr>
+                @php
+                $alt = DB::table('sim_orders')->where('iccid', $item->iccid)->latest()->first();
+
+                $iccid = $alt->alt_iccid;
+                $alt_sim_number = $alt->alt_sim_number;
+                $operator = $alt->alt_operator;
+                $ricarica = $alt->recharge;
+                $sim_number = $alt->sim_number; 
+            @endphp
                 <tr>
-                    <td> <span style="font-weight: bold"> Codice </span> : {{$item->codice}}</td>
+                    <td> <span style="font-weight: bold"> Sim Number </span> : {{$sim_number}}</td>
+                    
                     <td> <span style="font-weight: bold"> ICCID Number </span> : {{$item->iccid}}</td>
                 </tr>
-
-
-                @php
-                    $alt = DB::table('sim_orders')->where('iccid', $item->iccid)->latest()->first();
-
-                    $iccid = $alt->alt_iccid;
-                    $sim_number = $alt->alt_sim_number;
-                    $operator = $alt->alt_operator;
-                    $ricarica = $alt->recharge;
-                    $sim_number = $alt->sim_number; 
-                @endphp
                 <tr>
-                    <td> <span style="font-weight: bold"> Ricarica </span> : {{$ricarica}}</td>
-                    <td> <span style="font-weight: bold"> Sim Number </span> : {{$sim_number}}</td>
+                    <td> <span style="font-weight: bold"> Codice </span> : {{$item->codice}}</td>
+                    <td> <span style="font-weight: bold"> Nazionalità </span> : {{$item->price}}</td>
+                   
                 </tr>
+
+               
+              
                 @if ($iccid != null)
                     <tr>
-                        <td> <span style="font-weight: bold"> Protabilita Sim Number  </span> : {{$sim_number}}</td>
+                        <td> <span style="font-weight: bold"> Protabilita Sim Number  </span> : {{$alt_sim_number}}</td>
                         <td> <span style="font-weight: bold"> Portabilita ICCID Number </span> : {{$iccid}}</td>
                     </tr>
                     <tr>
@@ -339,10 +343,7 @@
                     </tr>
                 @endif
 
-                <tr>
-                    <td> <span style="font-weight: bold"> Nazionalità </span> : {{$item->price}}</td>
-                    <td> <span style="font-weight: bold"> FIRMA DEL CLENTE </span> :  </td>
-                </tr>
+             
                 @endforeach
                 {{-- Summary --}}
                 {{-- @if($invoice->hasItemOrInvoiceDiscount())
@@ -406,7 +407,7 @@
             </p>
         @endif --}}
 
-        <p style="font-size:15px;">
+        <p style="font-size:15px;float: right;">
             <span style="font-weight:bold">Total</span>: {{$invoice->price}}
         </p>
         {{-- <p>

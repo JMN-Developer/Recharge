@@ -100,6 +100,7 @@ class SimController extends Controller
                 ->date($sim->created_at)
                 ->price($price)
                 ->buyer($customer)
+                ->invoiceNo($data->invoice_no)
                 ->discountByPercent(10)
                 ->taxRate(15)
                 ->shipping(1.99)
