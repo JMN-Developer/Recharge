@@ -1341,6 +1341,22 @@ class RechargeController extends Controller
                     $data = RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
                 }
 
+                $total_cost = $data->sum('amount');
+                $total_profit = 0;
+                foreach($data as $value)
+                {
+                    if($value->amount !=0)
+                    {
+                        $total_profit+=$value->admin_com;
+                    }
+                    else
+                    {
+                        $total_profit+=$value->discount;
+                    }
+                }
+                
+
+
             }else{
                 if($type=='all')
                 $data = RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
@@ -1349,15 +1365,28 @@ class RechargeController extends Controller
                 else
                 $data = RechargeHistory::where('type','Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
 
-
+                
+                $total_cost = $data->sum('amount')+$data->sum('service');
+                $total_profit = $data->sum('reseller_com');
+                file_put_contents('test.txt',$total_cost." ".$total_profit);
+                
             }
-
+            foreach($data as $value)
+            {
+                $value->total_profit = round($total_profit,2);
+                $value->total_cost = round($total_cost,2) ;
+            }
+           
+            
             return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('profit', function($data){
                 if(a::user()->role=='admin')
                 {
+                    if($data->admin_com !=0)
                     return $data->admin_com;
+                    else
+                    return $data->discount;
                 }
                 else
                 {
@@ -1400,10 +1429,22 @@ class RechargeController extends Controller
         if(a::user()->role == 'admin'){
             $data = RechargeHistory::latest()->get();
             $cost = $data->sum('amount');
-            $profit = $data->sum('admin_com');
+            $profit = 0;
+            foreach($data as $value)
+            {
+                if($value->amount !=0)
+                {
+                    $profit+=$value->admin_com;
+                }
+                else
+                {
+                    $profit+=$value->discount;
+                }
+            }
+            
         }else{
             $data = RechargeHistory::where('reseller_id', a::user()->id)->latest()->get();
-            $cost = $data->sum('cost');
+            $cost = $data->sum('amount')+$data->sum('service');
             $profit = $data->sum('reseller_com');
         }
 

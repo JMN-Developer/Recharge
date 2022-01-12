@@ -31,6 +31,7 @@ class SimOrder extends Model
         'sell_price',
         'recharge',
         'admin_notification',
+        'invoice_no',
         'reseller_notification',
     ];
 

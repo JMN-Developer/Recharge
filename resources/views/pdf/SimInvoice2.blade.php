@@ -4,12 +4,12 @@
 		<meta charset="utf-8" />
 		<title>Invoice</title>
         <link rel="stylesheet" type="text/css"  media="screen" href="{{ asset('css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
+        
 		<style>
-              @import url('https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap');
+            
               body {
     font-family: 'Maven Pro', sans-serif !important;
-    background-color: #374756 !important
+   
 }
             .header-elements{
                
@@ -129,7 +129,7 @@
 	<body>
 		<div class="invoice-box">
        
-         <div class="header-elements"> <a href="{{ route('sim-invoice',['download'=>'pdf','id'=>$invoice->id]) }}"   type="button" class="btn btn-light btn-sm"><i class="fa fa-file mr-2"></i> Download</a> <a type="button" class="btn btn-light btn-sm ml-3"><i class="fa fa-print mr-2"></i> Print</a> </div>
+        
            
 			<table cellpadding="0" cellspacing="0">
 				<tr class="top">
@@ -157,7 +157,7 @@
                             ACCURATI, COMPLETI VERITIERI</p>
 					</td>
 				</tr>
-                
+              
 				<tr class="heading">
 					<td>First Name:<span class="info">{{$invoice->first}}</span></td>
 

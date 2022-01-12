@@ -348,7 +348,7 @@ Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
     Route::get('wi-fi', [SimController::class,'WiFi'])->name('wi-fi');
     Route::get('buy-sim/{id}', [SimController::class,'show']);
     Route::post('buy-sim', [SimController::class, 'buy'])->name('buy-sim');
-    Route::get('sim-invoice/{id}', [SimController::class,'invoice']);
+    Route::get('sim-invoice/{id}', [SimController::class,'invoice'])->name('sim-invoice');
     Route::get('sim-download/{id}', [SimController::class,'download']);
 
 

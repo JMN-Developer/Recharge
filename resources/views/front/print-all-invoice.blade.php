@@ -104,22 +104,7 @@ table.dataTable thead .sorting_asc{
               <div class="p-3">
 
 
-                <div class="agent_amount_table">
-                  <table class="table table-sm table-bordered">
-                    <thead class="table-danger">
-                      <tr>
-                        <th>Total Cost</th>
-                        <th>Total Profit</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="bg-sky">
-                        <td>{{ $cost }} &euro;</td>
-                        <td>{{ $profit }} &euro;</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+              
                 <div class="converter_section mt-5">
                   <div class="converter_btn-1">
                     <button type="button" class="btn btn-info btn-sm">Copy</button>
@@ -318,7 +303,7 @@ $(function() {
     //   var url = '/recharge/filebydate/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
       //window.location = url;
        //console.log('/filebydate/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD'));
-    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
   });
 
 
@@ -362,6 +347,13 @@ function fetch_table(start_date,end_date)
 
             "url":'get_all_invoice',
             "type":'POST',
+            dataSrc: function ( data ) {
+             
+           total_profit = data.data[0].total_profit;
+           total_cost = data.data[0].total_cost;
+
+           return data.data;
+         } ,
             "data":{
                 'start_date':$(".start_date").val(),
                 'end_date':$(".end_date").val(),
@@ -380,24 +372,32 @@ function fetch_table(start_date,end_date)
             {data:'number',name:'number'},
             {data:'date',name:'date'},
             {data:'recharge_type',name:'type'},
-            {data:'cost',name:'cost'},
+            {data:'amount',name:'amount'},
             {data:'profit',name:'profit'},
             {data:'invoice',name:'invoice'}
 
 
   ],
 
+
   drawCallback: function () {
             var api = this.api();
-            datatable_sum(api, false);
+            
+        $( api.column( 4 ).footer() ).html(
+          total_cost
+            );
+            $( api.column( 5 ).footer() ).html(
+          total_profit
+            );
+           // datatable_sum(api, false);
         }
 
 
     });
     function datatable_sum(dt_selector, is_calling_first) {
         //col start from 0
-        $( dt_selector.column(4).footer() ).html(dt_selector.column( 4, {page:'current'} ).data().sum().toFixed(2));
-        $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'current'} ).data().sum().toFixed(2));
+        $( dt_selector.column(4).footer() ).html(dt_selector.column( 4, {page:'all'} ).data().sum().toFixed(2));
+        $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));
 
 
     }

@@ -61,9 +61,10 @@ class SimController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function invoice($id)
+    public function invoice(Request $request)
     {
         //file_put_contents('test.txt',$id);
+        $id = $request->id;
         $data = SimOrder::where('id',$id)->first();
 
         $sim = sim::where('id',$data->sim_id)->first();
@@ -81,23 +82,33 @@ class SimController extends Controller
         $digit = new NumberFormatter("en", NumberFormatter::SPELLOUT);
         $price = '€ '.$data->sell_price;
         $note = 'MODULO DI IDENTIFICAZIONE E ATTIVAZIONE DEL SERVIZIO MOBILE PREPAGATO SI DICHIARA A TUTTI GLI EFFETTI DI LEGGE CHE TUTTE LE INFORMAZIONE E I DATI INDICATI NEL PRESENTE DOCUMENTO SONO ACCURATI, COMPLETI VERITIERI';
-       // $item = (new InvoiceItem())->title('Invoice')->pricePerUnit(2)->first($data->first_name)->last($data->last_name)->dob($data->dob)->gender($data->gender)->codice($data->codice)->iccid($data->iccid)->price($data->nationality);
-
-        // $invoice = Invoice::make()
-        //     ->logo('storage/'.$operator->img)
-        //     ->operator($operator->operator)
-        //     ->date($sim->created_at)
-        //     ->price($price)
-        //     ->buyer($customer)
-        //     ->discountByPercent(10)
-        //     ->taxRate(15)
-        //     ->shipping(1.99)
-        //     ->name('Invoice')
-        //     ->notes('MODULO DI IDENTIFICAZIONE E ATTIVAZIONE DEL SERVIZIO MOBILE PREPAGATO SI DICHIARA A TUTTI GLI EFFETTI DI LEGGE CHE TUTTE LE INFORMAZIONE E I DATI INDICATI NEL PRESENTE DOCUMENTO SONO ACCURATI, COMPLETI VERITIERI,')
-        //     ->addItem($item);
-        $invoice = ['name'=>'Invoice','logo'=>'storage/'.$operator->img,'date'=>$sim->created_at,'price'=>$price,'buyer'=>$customer,'notes'=>$note,'first'=>$data->first_name,'last'=>$data->last_name,'dob'=>$data->dob,'gender'=>$data->gender,'codice'=>$data->codice,'iccid'=>$data->iccid,'nationality'=>$data->nationality];
+     
+        $invoice = ['id'=>$data->id,'invoice_no'=>$data->invoice_no,'sim_number'=>$data->sim_number,'name'=>'Invoice','logo'=>'../../storage/'.$operator->img,'date'=> date('Y-m-d', strtotime($sim->created_at)),'price'=>$price,'buyer'=>$customer,'notes'=>$note,'first'=>$data->first_name,'last'=>$data->last_name,'dob'=>$data->dob,'gender'=>$data->gender,'codice'=>$data->codice,'iccid'=>$data->iccid,'nationality'=>$data->nationality];
         
         $invoice = json_decode(json_encode($invoice), FALSE);
+        if($request->has('download')){
+            // $pdf = PDF::loadView('pdf.SimInvoice2',compact('invoice'))->setOptions(['defaultFont' => 'sans-serif']);
+           
+            // $date = Carbon\Carbon::now();
+            // return $pdf->stream($date.'.pdf');
+
+            $item = (new InvoiceItem())->title('Invoice')->pricePerUnit(2)->first($data->first_name)->last($data->last_name)->dob($data->dob)->gender($data->gender)->codice($data->codice)->iccid($data->iccid)->price($data->nationality);
+
+            $invoice = Invoice::make()
+                ->logo('storage/'.$operator->img)
+                ->operator($operator->operator)
+                ->date($sim->created_at)
+                ->price($price)
+                ->buyer($customer)
+                ->discountByPercent(10)
+                ->taxRate(15)
+                ->shipping(1.99)
+                ->name('Invoice')
+                ->notes('MODULO DI IDENTIFICAZIONE E ATTIVAZIONE DEL SERVIZIO MOBILE PREPAGATO SI DICHIARA A TUTTI GLI EFFETTI DI LEGGE CHE TUTTE LE INFORMAZIONE E I DATI INDICATI NEL PRESENTE DOCUMENTO SONO ACCURATI, COMPLETI VERITIERI,')
+                ->addItem($item);
+            return $invoice->stream();
+        }  
+
         return view('pdf.SimInvoice',compact('invoice'));
     }
 
@@ -196,6 +207,7 @@ class SimController extends Controller
             'sim_id' => $sim->id,
             'sell_price' => $request->sell_price,
             'admin_notification' => 1,
+            'invoice_no'=>'JM-'.mt_rand(100000,999999),
             'recharge' => $request->recharge
         ]);
         $this->update_sim_wallet($sim->buy_price);
