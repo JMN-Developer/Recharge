@@ -92,7 +92,7 @@ class SimController extends Controller
                
             }
         
-        if ($request->ajax()) {
+        if ($request->type=='datatable') {
            
          
             

@@ -337,7 +337,16 @@ var table = $('.sim_table').DataTable({
     columnDefs: [
 { "orderable": false, "targets": "_all" } // Applies the option to all columns
 ],
-ajax: "{{ route('sim-activation') }}",
+ajax: {
+
+"url":"{{ route('sim-activation') }}",
+"type":'GET',
+'data':{
+  'type':'datatable'
+}
+
+},
+
     deferRender: true,
     columns: [
         //   {data: 'sl_no'},
