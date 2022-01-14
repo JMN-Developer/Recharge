@@ -11,7 +11,7 @@ class RechargeHistory extends Model
     protected $guarded = [];
     public function user()
     {
-        return $this->hasOne('App\Models\User','id','reseller_id');
+        return $this->hasOne('App\Models\User','id','reseller_id')->withDefault();
     }
 
 }

@@ -130,6 +130,9 @@ table.dataTable thead .sorting_asc{
                   <table class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                     <thead>
                       <tr>
+                        @if(Auth::user()->role == 'admin')
+                        <th style="background-color: black;color:white"  >Reseller</th>
+                        @endif
                         <th style="background-color: black;color:white"  >Requestld</th>
                         <th style="background-color: black;color:white" >Numero</th>
                         <th style="background-color: black;color:white">Data</th>
@@ -146,6 +149,9 @@ table.dataTable thead .sorting_asc{
 
                     <tfoot class="thead-dark" style="background-color: black" >
                         <tr>
+                          @if(Auth::user()->role == 'admin')
+                          <th scope="col"></th>
+                          @endif
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
@@ -367,7 +373,9 @@ function fetch_table(start_date,end_date)
         deferRender: true,
         columns: [
             //   {data: 'sl_no'},
-
+            @if(Auth::user()->role == 'admin')
+            {data:'reseller_name',name:'reseller_name',orderable:false},
+            @endif
             {data:'txid',name:'txid',orderable:false},
             {data:'number',name:'number'},
             {data:'date',name:'date'},
@@ -396,8 +404,13 @@ function fetch_table(start_date,end_date)
     });
     function datatable_sum(dt_selector, is_calling_first) {
         //col start from 0
+        @if(Auth::user()->role == 'admin')
+        $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));
+        $( dt_selector.column(6).footer() ).html(dt_selector.column( 6, {page:'all'} ).data().sum().toFixed(2));
+        @else
         $( dt_selector.column(4).footer() ).html(dt_selector.column( 4, {page:'all'} ).data().sum().toFixed(2));
         $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));
+        @endif
 
 
     }

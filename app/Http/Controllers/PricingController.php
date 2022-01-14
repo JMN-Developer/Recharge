@@ -79,6 +79,39 @@ class PricingController extends Controller
 
     public function SendPricing(Request $request)
     {
+        $w = $request->weight;
+        $fixed_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','fixed')->first();
+        $fixed_weight_limit = $fixed_data->weight_end;
+        if($fixed_weight_limit>=$w)
+        {
+            $price = $fixed_data->total;
+            return response($price);
+        }
+        else
+        {
+            $variable_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','variable')->orderBy('weight_end','ASC')->get();
+            $variable_weight = $w - $fixed_weight_limit;
+            $price = $fixed_data->total;
+            foreach($variable_data as $data)
+            {
+               
+                $remaining_weight = $variable_weight - $data->weight_end;
+                if($remaining_weight<0)
+                {
+                    $price +=$variable_weight*$data->total;
+                    return response($price);
+                }
+                else
+                {
+                    $price +=$data->weight_end*$data->total;
+                    $variable_weight -=$data->weight_end;
+                }
+                
+                
+            }
+            //file_put_contents('test.txt',json_encode($variable_data));
+
+        }
         $data = OrderRatings::where('country_name', '=', $request->country)->where('weight_start', '<=', $request->weight)->where('weight_end', '>=', $request->weight)->get('total');
         // $data = $data[0]->total;
         // $data = OrderRatings::where('country_name', '=', $request->country)->where('type', '=', $request->type)->get('total');
@@ -100,6 +133,19 @@ class PricingController extends Controller
         }else{
             $data = $data[0]->total;
         }
+
+        return response($data);
+    }
+
+    public function GetCountryByType(Request $request)
+    {
+        $data = OrderRatings::where('type', '=', $request->type)->distinct()->get('country_name');
+        
+        // if(count($data) < 1){
+        //     $data = "No data";
+        // }else{
+        //     $data = $data[0]->total;
+        // }
 
         return response($data);
     }

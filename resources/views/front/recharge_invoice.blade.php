@@ -122,6 +122,18 @@
                             <td><strong>{{ $data->amount + $data->service}} &euro;</strong></td>
                             @endif
                           </tr>
+                          <tr>
+                            <td>Retailer Name</td>
+                            <td><strong>{{ $data->user->nationality}}</strong></td>
+                          </tr>
+                          @if ($data->type == 'International')
+                          <tr>
+                            <td>Received Amount</td>
+                            <td><strong>{{ $data->deliveredAmount }} <span>{{  $data->deliveredAmountCurrencyCode }}</span></strong></td>
+                          </tr>
+                          @endif
+
+                          
                           {{-- <tr>
                             <td>bilancia</td>
                             <td><strong>{{ $data->amount }} &euro;</strong></td>

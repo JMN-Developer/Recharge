@@ -156,60 +156,8 @@ Route::post('/sim-order/update', [SimController::class,'sim_order_update']);
 
 
     //  CREATE NEW ORDER
-    Route::get('/create-new-order', [CargoController::class,'CreateNewOrder'])->name('create-new-order');
-
-    //  SEARCH ORDERS
-    Route::get('/cargo/search', [CargoController::class,'Search'])->name('search');
-
-    //  TRACK ORDERS
-    Route::get('/cargo/track', [CargoController::class,'OrderTracking'])->name('track');
-
-    //  ADD NEW ORDER
-
-
-    Route::GET('/add-new-pricing', [PricingController::class,'Pricing'])->name('add-new-pricing');
-
-    Route::POST('/add-new-pricing-for-real', [PricingController::class,'AddPricing'])->name('add-new-pricing-for-real');
-
-    Route::GET('/pricing-list', [PricingController::class,'PricingTab'])->name('pricing-list');
-
-    Route::GET('price-edit/{id}', [PricingController::class,'EditPricing']);
-
-    Route::POST('edit-new-pricing-for-real/{id}', [PricingController::class,'EditPricingForReal'])->name('edit-new-pricing-for-real');
-
-    Route::GET('price-delete/{id}', [PricingController::class,'DeletePricing'])->name('price-delete');
-
-    //  AJAX
-    Route::GET('/send-pricing', [PricingController::class,'SendPricing'])->name('send-pricing');
-
-    Route::GET('/send-pricing-for-docs', [PricingController::class,'SendPricingForDocs'])->name('send-pricing-for-docs');
-
-
-//  CARGO VIEW TRACK
-
-
-
-
-Route::post('/cargo/order-label/update', [CargoController::class,'Orderlabel']);
-
-Route::get('/cargo/order-label/{id}', function($id){
-    $get  = Order::where('id',$id)->first();
-
-    return response()->download(public_path('/storage'.'/'.$get->label));
-});
-
-
-//  CARGO ORDER TRACKING
-Route::get('/cargo/order-tracking', [CargoController::class,'OrderTracking'])->name('order-tracking');
-
-//  CARGO ORDER INVOICE
-Route::get('/cargo/order-invoice/{id}', [CargoController::class,'OrderInvoice'])->name('order-invoice-view');
-
-// CARGO ORDER VIEW
-Route::get('/cargo/order/view/{id}', [CargoController::class,'OrderView']);
-
-// CARGO ORDER cancel
-Route::get('/cargo/order/cancel/{id}', [CargoController::class,'OrderCancel']);
+   
+  
 
 //  PHONE START
 
@@ -360,7 +308,30 @@ Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
 Route::group(['prefix' => 'cargo','middleware'=>['auth','user']], function()
 {
 
+    Route::GET('price-edit/{id}', [PricingController::class,'EditPricing']);
+    Route::POST('edit-new-pricing-for-real/{id}', [PricingController::class,'EditPricingForReal'])->name('edit-new-pricing-for-real');
+    Route::GET('price-delete/{id}', [PricingController::class,'DeletePricing'])->name('price-delete');
+    Route::post('order-label/update', [CargoController::class,'Orderlabel']);
+    Route::get('order-label/{id}', function($id){
+    $get  = Order::where('id',$id)->first();
 
+    return response()->download(public_path('/storage'.'/'.$get->label));
+    });
+
+    Route::get('order-tracking', [CargoController::class,'OrderTracking'])->name('order-tracking');
+    Route::get('order-invoice/{id}', [CargoController::class,'OrderInvoice'])->name('order-invoice-view');
+    Route::get('caorder/cancel/{id}', [CargoController::class,'OrderCancel']);
+
+    Route::get('create-new-order', [CargoController::class,'CreateNewOrder'])->name('create-new-order');
+    Route::get('search', [CargoController::class,'Search'])->name('search');
+    Route::get('track', [CargoController::class,'OrderTracking'])->name('track');
+    Route::GET('add-new-pricing', [PricingController::class,'Pricing'])->name('add-new-pricing');
+    Route::POST('add-new-pricing-for-real', [PricingController::class,'AddPricing'])->name('add-new-pricing-for-real');
+    Route::GET('pricing-list', [PricingController::class,'PricingTab'])->name('pricing-list');
+    Route::get('order/view/{id}', [CargoController::class,'OrderView']);
+    Route::get('send-pricing', [PricingController::class,'SendPricing'])->name('send-pricing');
+    Route::get('send-pricing-for-docs', [PricingController::class,'SendPricingForDocs'])->name('send-pricing-for-docs');
+    Route::get('get-country-by-type', [PricingController::class,'GetCountryByType'])->name('get-country-by-type');
     Route::get('new-order', [CargoController::class,'NewOrderView'])->name('cargo-new-order');
     Route::get('order-list', [CargoController::class,'OrderList'])->name('order-list');
     Route::get('order-tracking-view', [CargoController::class,'OrderTrackingView'])->name('order-tracking-view');

@@ -28,22 +28,36 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
         <div class="row">
           <div class="col-12 phone_order_header d-block">
             <form action="{{route('track')}}">
             <div class="order_page_header mb-4">
               <h4><i class="fas fa-hand-point-right"></i>Order Tracking</h4>
-              <a href="/cargo/new-order"><i class="fas fa-plus-circle"></i>New Order</a>
+              <a href="new-order"><i class="fas fa-plus-circle"></i>New Order</a>
             </div>
             <div class="input-group mb-4">
               <label for="inputTrackingNumber" class="form-label" style="margin: 5px 15px 0 0;">Order/Tracking Number</label>
-              <input type="text" class="form-control" id="inputTrackingNumber" name="order_no" placeholder="JLC0001234">
+              <input type="text" class="form-control" id="inputTrackingNumber" name="order_no" placeholder="JLC0001234" required>
               <button type="submit" class="input-group-text tracking-btn" id="basic-addon2">Search</button>
             </div>
             </form>
           </div>
         </div>
-        @if(Route::currentRouteName() != '/cargo/order-tracking-view')   
+        @if(Route::currentRouteName() != 'order-tracking-view')   
         <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
           <thead>
             <tr>
@@ -95,8 +109,8 @@
                     <i class="fa fa-gear tiny-icon"></i><span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li> <a class="dropdown-item" target="_blank" href="/cargo/order-invoice/{{ $order->id }}"><i class="fa fa-print tiny-icon"></i> Print Invoice </a></li>
-                    <li> <a class="dropdown-item" href="/cargo/order/cancel/{{ $order->id }}"><i class="fa fa-print tiny-icon"></i> Cancel </a></li>
+                    <li> <a class="dropdown-item" target="_blank" href="order-invoice/{{ $order->id }}"><i class="fa fa-print tiny-icon"></i> Print Invoice </a></li>
+                    <li> <a class="dropdown-item" href="order/cancel/{{ $order->id }}"><i class="fa fa-print tiny-icon"></i> Cancel </a></li>
                   </ul>
               </td>
             </tr>

@@ -54,9 +54,9 @@ class CargoController extends Controller
     {
 
         if(Auth::user()->role == 'admin'){
-            $orders = Order::where('ran_id', '=', $request->order_no)->get();
+            $orders = Order::where('order_id', '=', $request->order_no)->get();
         }else{
-            $orders = Order::where('ran_id', '=', $request->order_no)->where('reseller_id', Auth::user()->id)->get();
+            $orders = Order::where('order_id', '=', $request->order_no)->where('reseller_id', Auth::user()->id)->get();
         }
         // dd($orders);
         return view('front.order-tracking', compact('orders'));
@@ -67,26 +67,32 @@ class CargoController extends Controller
         // echo "Order Tracking";
         if($request->order_no){
             if (Auth::user()->role == 'admin') {
-                $orders = Order::where('ran_id', 'LIKE', '%'.$request->order_no.'%')->get();
+                $orders = Order::where('order_id', 'LIKE', '%'.$request->order_no.'%')->get();
                 // dd($orders);
                 if (count($orders) > 0) {
                     $agent = User::where('id', $orders[0]->reseller_id)->first();
-                }else $agent = "";
+                    return view('front.order-tracking', compact('orders','agent'));
+                }else {
+                    
+                    return back()->with('error', 'Invalid Order Number!'); 
+                }
 
-                return view('front.order-tracking', compact('orders','agent'));
+                
             }else {
-                $orders = Order::where('ran_id', 'LIKE', '%'.$request->order_no.'%')->where('reseller_id', Auth::user()->id)->get();
+                $orders = Order::where('order_id', 'LIKE', '%'.$request->order_no.'%')->where('reseller_id', Auth::user()->id)->get();
 
                 $count = $orders->count();
                 if($count > 0){
                     $agent = User::where('id', $orders['0']->reseller_id)->first();
+                    return view('front.order-tracking', compact('orders','agent'));
                 }else {
                     $agent['nationality'] = null;
+                    return back()->with('error', 'Invalid Order Number!'); 
                 }
             }
 
         }
-        return view('front.order-tracking', compact('orders','agent'));
+        
 
     }
 

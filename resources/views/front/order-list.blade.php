@@ -86,21 +86,21 @@
                   <tbody>
                     @foreach($orders as $order)
                     <tr class="bg-ocean">
-                      <td>{{$order->ran_id}}</td>
+                      <td>{{$order->order_id}}</td>
                       <td>{{$order->created_at}}<!-- <br>20:42:30 --></td>
                       {{-- <td>Agent Name</td> --}}
                       {{-- <td>{{$order->city}}</td> --}}
                       <td>{{$order->first_name}}</td>
                       <td>{{$order->rfirst_name}}</td>
-                      <td>{{$order->numberOfBox}}</td>
+                      <td>{{$order->quantity1}}</td>
                       <td>{{$order->weight}}</td>
                       <td>{{$order->total}}</td>
-                      <td>{{$order->productType}}</td>
+                      <td>{{$order->delivery_condition}}</td>
                       <td>{{$order->raddress}}</td>
                       <td>{{$order->status}}</td>
                       @if (Auth::user()->role == 'admin')
                       <td>
-                        <form action="/cargo_update" method="POST">
+                        <form action="cargo_update" method="POST">
                           @csrf
                           <input type="hidden" name="reseller_id" value="{{ $order->reseller_id }}">
                           <input type="hidden" name="id" value="{{ $order->id }}">
@@ -123,14 +123,14 @@
                           <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
                           </button>
                           <div class="dropdown-menu" role="menu">
-                            <a class="dropdown-item" href="/cargo/order-invoice/{{ $order->id }}"><i class="fas fa-print"></i>Print Invoice</a>
+                            <a class="dropdown-item" href="cargo/order-invoice/{{ $order->id }}"><i class="fas fa-print"></i>Print Invoice</a>
                             @if ($order->label != null)
-                            <a class="dropdown-item" href="/cargo/order-label/{{ $order->id }}"><i class="fas fa-print"></i>Print Label</a>
+                            <a class="dropdown-item" href="cargo/order-label/{{ $order->id }}"><i class="fas fa-print"></i>Print Label</a>
                             @elseif(Auth::user()->role == 'admin')
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal{{ $order->id }}"><i class="fas fa-print"></i>Upload Label</a>
                             @endif
-                            <a class="dropdown-item" href="/cargo/order/view/{{ $order->id }}"><i class="fas fa-eye"></i>View</a>
-                            <a class="dropdown-item" href="/cargo/order/cancel/{{ $order->id }}"><i class="fas fa-times"></i>Cancel</a>
+                            <a class="dropdown-item" href="cargo/order/view/{{ $order->id }}"><i class="fas fa-eye"></i>View</a>
+                            <a class="dropdown-item" href="cargo/order/cancel/{{ $order->id }}"><i class="fas fa-times"></i>Cancel</a>
                           </div>
                         </div>
                       </td>

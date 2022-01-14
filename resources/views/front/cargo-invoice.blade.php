@@ -243,14 +243,7 @@
                       <td colspan="4" class="inner-table invoice_table_border p-1">
                         <table class="table-sm">
                           <tbody>
-                            <tr>
-                              <td>
-                                <label>Product Type</label>
-                              </td>
-                              <td>
-                                <span>{{ $order->productType }}</span>
-                              </td>
-                            </tr>
+                            
                             {{-- <tr>
                               <td>
                                 <label>Destination Country</label>
@@ -265,6 +258,14 @@
                               </td>
                               <td>
                                 <span>{{ $order->delivery_condition }}</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <label>Product Description</label>
+                              </td>
+                              <td>
+                                <span>{{ $order->productType }}</span>
                               </td>
                             </tr>
                           </tbody>
@@ -283,10 +284,10 @@
                             </tr>
                             <tr>
                               <td>
-                                <label>Charge/Kg:</label>
+                                <label>Charge:</label>
                               </td>
                               <td>
-                                <span>{{ $order->perKg }}</span>
+                                <span>{{ $order->total- $order->addiCharge }}</span>
                               </td>
                             </tr>
                             <tr>

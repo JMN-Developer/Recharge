@@ -20,7 +20,7 @@
   
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
-  <script type= "text/javascript" src="{{asset('js/countries.js')}}"></script>
+<script type= "text/javascript" src="{{asset('js/countries.js')}}"></script> 
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
 
@@ -82,7 +82,7 @@
                     <div class="form-group">
                       <label>Date of Birth</label>
                       <div class="input-group date" id="customerBirthDate" data-target-input="nearest">
-                        <input type="date" name="dob" class="form-control" />
+                        <input required type="date" name="dob" class="form-control" />
                         {{-- <div class="input-group-append" data-target="#customerBirthDate" data-toggle="datetimepicker">
                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div> --}}
@@ -90,22 +90,23 @@
                     </div>
                     <div class="mb-3">
                       <label for="documentNumber" class="form-label">Document Number</label>
-                      <input type="text" class="form-control" id="documentNumber" name="document_number" placeholder="Enter Document Number">
+                      <input required type="text" class="form-control" id="documentNumber" name="document_number" placeholder="Enter Document Number">
                     </div>
                     <div class="mb-3">
                       <label for="enterPhoneNumber" class="form-label">Phone</label>
-                      <input type="text" class="form-control" id="enterPhoneNumber" name="phone" placeholder="Enter Customer Phone Number">
+                      <input required type="text" class="form-control" id="enterPhoneNumber" name="phone" placeholder="Enter Customer Phone Number">
                     </div>
                     <div class="mb-3">
                       <label for="enterEmail" class="form-label">Email</label>
-                      <input type="email" class="form-control" id="enterEmail" name="email" placeholder="Enter Customer Email">
+                      <input required type="email" class="form-control" id="enterEmail" name="email" placeholder="Enter Customer Email">
                     </div>
                     <div class="mb-3">
                       <label for="interCustomerAddress" class="form-label">Address</label>
-                      <textarea class="form-control" id="interCustomerAddress" name="address" rows="3"></textarea>
+                      <textarea class="form-control" id="interCustomerAddress" name="address" rows="3" required ></textarea>
                     </div>
                     <div class="form-group">
-                      <select class="form-control select2" onchange="print_state('state',this.selectedIndex);" id="country" name ="country" style="width: 100%;"></select>
+                      <label>Country</label>
+                      <select required class="form-control select2" onchange="print_state('state',this.selectedIndex);" id="country" name ="country" style="width: 100%;"></select>
                     </div>
                   </div>
                 </div>
@@ -117,16 +118,16 @@
                     <h5><i class="fas fa-user-tie"></i> <strong>Receiver Information</strong></h5>
                     <div class="mb-3">
                       <label for="inputReceiverName" class="form-label">First Name</label>
-                      <input type="text" class="form-control" id="inputReceiverName" name="rfirst_name" placeholder="Receiver Name">
+                      <input type="text" class="form-control" id="inputReceiverName" name="rfirst_name" placeholder="Receiver Name" required>
                     </div>
                     <div class="mb-3">
                       <label for="inputSurName" class="form-label">Surname</label>
-                      <input type="text" class="form-control" id="inputSurName" name="rsurname" placeholder="Receiver surname">
+                      <input type="text" class="form-control" id="inputSurName" name="rsurname" placeholder="Receiver surname" required>
                     </div>
                     <div class="form-group">
                       <label>Date of Birth</label>
                       <div class="input-group date" id="receiverBirthDate" data-target-input="nearest">
-                        <input type="date" class="form-control" data-target="" name="rdob" />
+                        <input type="date" class="form-control" data-target="" name="rdob" required />
                         {{-- <div class="input-group-append" data-target="#receiverBirthDate" data-toggle="datetimepicker">
                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div> --}}
@@ -134,22 +135,33 @@
                     </div>
                     <div class="mb-3">
                       <label for="documentNumber" class="form-label">Document Number</label>
-                      <input type="text" class="form-control" id="documentNumber" name="rdocument_number" placeholder="Enter Document Number">
+                      <input type="text" class="form-control" id="documentNumber" name="rdocument_number" placeholder="Enter Document Number" required>
                     </div>
                     <div class="mb-3">
                       <label for="enterPhoneNumber" class="form-label">Phone</label>
-                      <input type="text" class="form-control" id="enterPhoneNumber" name="rphone" placeholder="Enter Receiver Phone Number">
+                      <input type="text" class="form-control" id="enterPhoneNumber" name="rphone" placeholder="Enter Receiver Phone Number" required>
                     </div>
                     <div class="mb-3">
                       <label for="enterEmail" class="form-label">Email</label>
-                      <input type="email" class="form-control" id="enterEmail" name="remail" placeholder="Enter Receiver Email">
+                      <input type="email" class="form-control" id="enterEmail" name="remail" placeholder="Enter Receiver Email" requiredrequired>
                     </div>
                     <div class="mb-3">
                       <label for="interReceiverAddress" class="form-label">Address</label>
-                      <textarea class="form-control" id="interReceiverAddress" name="raddress" rows="3"></textarea>
+                      <textarea class="form-control" id="interReceiverAddress" name="raddress" rows="3" required></textarea>
                     </div>
                     <div class="form-group">
-                      <select class="form-control select2" onchange="print_state_for_receiver('rstate',this.selectedIndex);" id="rcountry" name ="rcountry" style="width: 100%;"></select>
+                      <label>Delivary Type</label>
+                      <select data-placeholder="Select an Option" class="form-control select2" name="delivery_condition" id="delivery_condition" style="width: 100%;" required>
+                        <option></option>
+                        <option value="Goods">Goods</option>
+                        <option value="Documents">Documents</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Country<span id="r_country" style="color:red"></span></label>
+                      <select  data-placeholder="Select Country" class="form-control select2"  id="rcountry" name ="rcountry" style="width: 100%;" required>
+                        
+                      </select>
                     </div>
                     <!-- <div class="form-group">
                       <label for="exampleInputFile">File input</label>
@@ -177,14 +189,7 @@
                 <div class="bg-ocean mr-1">
                   <div class="order_information">
                     
-                    <div class="form-group">
-                      <label>Delivary Type</label>
-                      <select class="form-control select2" name="delivery_condition" id="delivery_condition" style="width: 100%;">
-                        <option>--Select--</option>
-                        <option selected="">Goods</option>
-                        <option>Documents</option>
-                      </select>
-                    </div>
+                    
 
                     <!-- <div class="mb-3">
                       <label for="inputGoodsValue" class="form-label">Goods Value (Euro)</label>
@@ -193,21 +198,21 @@
 
                     <div class="mb-3 myDIV" id="myDiv" >
                       <label for="totalWeightValue" id="myDiv" class="form-label">Total Weight (Kg)</label>
-                      <input class="form-control" step="any" type="number" name="weight" id="weight" value="1" >
+                      <input class="form-control" step="any" type="number" name="weight" id="weight" placeholder="Select Receiver Country First" required>
                     </div>
-                    <div class="mb-3 myDIV">
+                    {{-- <div class="mb-3 myDIV">
                       <label for="chargePerKgValue" class="form-label">Charge/Kg(Euro)</label>
                       <input class="form-control" type="number" step="any" name="perKg" id="perKg" value="0" placeholder="0">
-                    </div>
+                    </div> --}}
 
 
                     <div class="mb-3">
                       <label for="addiCharge" class="form-label">Additional Charge(Euro)</label>
-                      <input class="form-control" step="any" type="number" name="addiCharge" id="addiCharge" value="0" onchange="addAdditionalCharge(this)">
+                      <input class="form-control" step="any" type="number" name="addiCharge" id="addiCharge" value="0">
                     </div>
                     <div class="mb-3">
                       <label for="total" class="form-label">Total Charge(Euro)</label>
-                      <input class="form-control" step="any" readonly="true" type="number" name="total" id="total" value="0">
+                      <input class="form-control" step="any" readonly="true" type="number" name="total" id="total" value="0" required>
                       <input type="hidden" name="agent_comm" id="agent_comm" value="0">
                     </div>
                   </div>
@@ -217,16 +222,16 @@
 
 
 
-                <div class="bg-rose mt-5">
+                <div class="bg-rose">
                   <div class="order_information">
                     <div class="mb-3">
                       <label for="totalChargeValue" class="form-label d-block">BOX</label>
-                      <input type="text" class="form-control d-inline-block" style="width: 70%;" id="totalChargeValue" name="product1" placeholder="Product Name (e.g. Shirt, Pant etc.)">
-                      <input type="text" class="form-control d-inline-block" style="width: 25%; margin-left: 10px;" id="totalChargeValue" name="qty1" placeholder="Qty">
+                      <input type="text" class="form-control d-inline-block" style="width: 70%;" id="totalChargeValue" name="product1" placeholder="Product Name (e.g. Shirt, Pant etc.)" required>
+                      <input type="text" class="form-control d-inline-block" style="width: 25%; margin-left: 10px;" id="totalChargeValue" name="qty1" placeholder="Qty" required>
                     </div>
                     <div class="mb-3">
                       <label for="interCustomerAddress" class="form-label">Description</label>
-                      <textarea class="form-control" id="interCustomerAddress" name="address" rows="3"></textarea>
+                      <textarea class="form-control" id="interCustomerAddress" name="description" rows="3" required></textarea>
                     </div>
                   </div>
                 </div>
@@ -276,7 +281,15 @@
 <script>
   $(function () {
     //Initialize Select2 Elements
-    $('.select2').select2()
+    $('.select2').select2({
+
+placeholder: function(){
+     $(this).data('placeholder');
+}
+
+});
+    // $('.select2').select2()
+    
 
     //Initialize Select2 Elements
     $('.select2bs4').select2({
@@ -292,6 +305,10 @@
     $('#expectedDelivaryDate').datetimepicker({
       format: 'yyyy-mm-dd'
     });
+
+    $("#weight").attr('disabled',true);
+    $("#rcountry").attr('disabled',true);
+   $("#r_country").text('(Select Delivery Type First)')
 
   })
  
@@ -365,208 +382,161 @@ function showDiv() {
 
 <script>
   $(document).ready(function(){
+   
+    
+  });
+</script>
+<script>
+  $(document).ready(function(){
+    
+   
+    
+  });
+</script>
+<script>
+  $(document).ready(function(){
+
+    function get_total()
+    {
+        let value = document.getElementById("delivery_condition").value;
+        let weight = document.getElementById("weight").value;
+        
+        if(value == "Documents"){
+          $(".myDIV").hide();
+        }
+        if(value == "Goods"){
+          $(".myDIV").show();
+        }
+
+        var e = document.getElementById("delivery_condition");
+        var type = e.value;
+
+        var f = document.getElementById("rcountry");
+        var country = f.value;
+        
+        if(type == 'Documents')
+        {
+          $.ajax({
+            type: 'GET',
+            url: 'send-pricing-for-docs/',
+            data: {
+              type:type,
+              country:country,
+
+            },
+            success: function(data){
+              $(".myDIV").hide();
+              var additonal_charge = Number($("#addiCharge").val())
+              $('#total').val(Number(data)+additonal_charge);
+              if(data == 'No data'){
+                alert(data);
+              }
+              // alert(message);
+            }
+          });
+        }
+        else
+        {
+          if(weight)
+          {
+          $.ajax({
+            type: 'GET',
+            url: 'send-pricing/',
+            data: {
+              type:type,
+              weight:weight,
+              country:country,
+
+            },
+            success: function(data){
+              // $('#total').append(data);
+              var additonal_charge = Number($("#addiCharge").val())
+              $('#total').val(Number(data)+additonal_charge);
+              if(data == 'No data'){
+                alert(data);
+              }
+              // alert(message);
+              // $('#result').val(data);
+              // console.log(data);
+              // $("#total").append(JSON.stringify(data));
+              $(".myDIV").show();
+              // $("#total").html(data);
+            }
+          });
+        }
+        else
+        {
+           var additonal_charge = Number($("#addiCharge").val())
+           $('#total').val(additonal_charge);
+        }
+        }
+
+    }
+    $("#rcountry").change(function(){
+    
+    $("#weight").attr('disabled',false);
+    $("#weight").attr('placeholder','Product Weight');
+    get_total()
+    
+      
+  });
     
     $("#delivery_condition").change(function(){
-        let value = document.getElementById("delivery_condition").value;
-        let weight = document.getElementById("weight").value;
-        
-        if(value == "Documents"){
-          $(".myDIV").hide();
-        }
-        if(value == "Goods"){
-          $(".myDIV").show();
-        }
+      
+      $("#r_country").hide()
+      $("#weight").attr('disabled',true);
+      $("#rcountry").attr('disabled',false);
+      let value = document.getElementById("delivery_condition").value;
+      let weight = document.getElementById("weight").value;
+      let country = document.getElementById("rcountry").value;
+      if(country)
+        get_total()
+      if(value == "Documents"){
+      
+        $(".myDIV").hide();
+      }
+      if(value == "Goods"){
+        $(".myDIV").show();
+      }
+      
+      var e = document.getElementById("delivery_condition");
+      var type = e.value;
+      $('#rcountry').empty()
+      $.ajax({
+          type: 'GET',
+          url: 'get-country-by-type/',
+          data: {
+            type:type,
+          },
+          success: function(data){
+            $('#rcountry').append('<option></option>')
+            $(data).each(function(index,item){
+      $('#rcountry').append('<option value='+item.country_name+'>'+item.country_name+'</option>');
+    })
+            // $(".myDIV").hide();
+            // $('#total').val(data);
+            // if(data == 'No data'){
+            //   alert(data);
+            // }
+            // alert(message);
+          }
+        });
 
-        var e = document.getElementById("delivery_condition");
-        var type = e.value;
-
-        var f = document.getElementById("rcountry");
-        var country = f.value;
-        
-        if(type == 'Documents')
-        {
-          $.ajax({
-            type: 'GET',
-            url: '/send-pricing-for-docs/',
-            data: {
-              type:type,
-              country:country,
-
-            },
-            success: function(data){
-              $(".myDIV").hide();
-              $('#total').val(data);
-              if(data == 'No data'){
-                alert(data);
-              }
-            }
-          });
-        }
-        else
-        {
-          $.ajax({
-            type: 'GET',
-            url: '/send-pricing/',
-            data: {
-              type:type,
-              weight:weight,
-              country:country,
-
-            },
-            success: function(data){
-              // $('#total').append(data);
-              $('#total').val(data*weight);
-              // $('#result').val(data);
-              if(data == 'No data'){
-                alert(data);
-              }
-
-              // $("#total").append(JSON.stringify(data));
-              $(".myDIV").show();
-              // $("#total").html(data);
-            }
-          });
-        }
-    });
-    
+      // var f = document.getElementById("rcountry");
+      // var country = f.value;
+      
+   
+  
   });
-</script>
-<script>
-  $(document).ready(function(){
     
-    $("#rcountry").change(function(){
-        let value = document.getElementById("delivery_condition").value;
-        let weight = document.getElementById("weight").value;
-        
-        if(value == "Documents"){
-          $(".myDIV").hide();
-        }
-        if(value == "Goods"){
-          $(".myDIV").show();
-        }
-
-        var e = document.getElementById("delivery_condition");
-        var type = e.value;
-
-        var f = document.getElementById("rcountry");
-        var country = f.value;
-        
-        if(type == 'Documents')
-        {
-          $.ajax({
-            type: 'GET',
-            url: '/send-pricing-for-docs/',
-            data: {
-              type:type,
-              country:country,
-
-            },
-            success: function(data){
-              $(".myDIV").hide();
-              $('#total').val(data);
-              if(data == 'No data'){
-                alert(data);
-              }
-              // alert(message);
-            }
-          });
-        }
-        else
-        {
-          $.ajax({
-            type: 'GET',
-            url: '/send-pricing/',
-            data: {
-              type:type,
-              weight:weight,
-              country:country,
-
-            },
-            success: function(data){
-              // $('#total').append(data);
-              $('#total').val(data*weight);
-              if(data == 'No data'){
-                alert(data);
-              }
-              // alert(message);
-              // $('#result').val(data);
-              // console.log(data);
-              // $("#total").append(JSON.stringify(data));
-              $(".myDIV").show();
-              // $("#total").html(data);
-            }
-          });
-        }
-    });
-    
-  });
-</script>
-<script>
-  $(document).ready(function(){
+    $("#addiCharge").keyup("input", function(){
+     
+       get_total();
+    })
     
     $("#weight").on("input", function(){
-        let value = document.getElementById("delivery_condition").value;
-        let weight = document.getElementById("weight").value;
-        
-        if(value == "Documents"){
-          $(".myDIV").hide();
-        }
-        if(value == "Goods"){
-          $(".myDIV").show();
-        }
-
-        var e = document.getElementById("delivery_condition");
-        var type = e.value;
-
-        var f = document.getElementById("rcountry");
-        var country = f.value;
-        
-        if(type == 'Documents')
-        {
-          $.ajax({
-            type: 'GET',
-            url: '/send-pricing-for-docs/',
-            data: {
-              type:type,
-              country:country,
-
-            },
-            success: function(data){
-              $(".myDIV").hide();
-              $('#total').val(data));
-              if(data == 'No data'){
-                alert(data);
-              }
-              // alert(message);
-            }
-          });
-        }
-        else
-        {
-          $.ajax({
-            type: 'GET',
-            url: '/send-pricing/',
-            data: {
-              type:type,
-              weight:weight,
-              country:country,
-
-            },
-            success: function(data){
-              // $('#total').append(data);
-              $('#total').val(data*weight);
-              if(data == 'No data'){
-                alert(data);
-              }
-              // alert(message);
-              // $('#result').val(data);
-              // console.log(data);
-              // $("#total").append(JSON.stringify(data));
-              $(".myDIV").show();
-              // $("#total").html(data);
-            }
-          });
-        }
+      
+      get_total()
     });
     
   });

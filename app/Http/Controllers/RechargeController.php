@@ -1409,6 +1409,10 @@ class RechargeController extends Controller
                return Carbon::parse($data->created_at)->format('d-m-Y H:i:s');
 
             })
+            ->addColumn('reseller_name', function($data){
+                return $data->user->first_name." ".$data->user->last_name."(".$data->user->user_id.")";
+ 
+             })
             ->addColumn('recharge_type',function($data){
                 if(a::user()->role=='admin')
                 $text = $data->company_name;
