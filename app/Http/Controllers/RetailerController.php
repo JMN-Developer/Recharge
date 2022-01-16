@@ -101,9 +101,9 @@ class RetailerController extends Controller
     {
         if (Auth::user()->role == 'admin') {
             $user = User::where('id', $request->user_id)->update([
-                'admin_mobile_commission' => $request->mobile,
-                'admin_sim_commission' => $request->sim,
-                'admin_cargo_commission' => $request->cargo,
+               
+                'cargo_goods_profit' => $request->cargo_goods_profit,
+                'cargo_documents_profit' => $request->cargo_documents_profit,
                 'admin_recharge_commission' => $request->recharge,
                 'admin_international_recharge_commission' => $request->international_recharge,
                 'admin_pin_commission' => $request->pin,

@@ -57,7 +57,7 @@
                                 <label>Agent Code</label>
                               </td>
                               <td>
-                                <b>{{ $agent->id }}</b>
+                                <b>{{ $agent->user_id }}</b>
                               </td>
                             </tr>
                             <tr>
@@ -65,7 +65,7 @@
                                 <label>Agent Name</label>
                               </td>
                               <td>
-                                <span>{{ $agent->nationality }}</span>
+                                <span>{{ $agent->first_name.' '.$agent->last_name }}</span>
                               </td>
                             </tr>
                             {{-- <tr>
@@ -103,7 +103,7 @@
                                 <td class="pt-4"><img src="{{ asset('images/jm logo.png') }}" alt="logo" width="130" height="90"></td>
                                 <td class="text-center pt-4">
                                   <h3>Tracking Number</h3>
-                                  <h4><b>{{ $order->id }}</b></h4>
+                                  <h4><b>{{ $order->order_id }}</b></h4>
                                   <b>Date: {{ $order->created_at }}</b>
                                 </td>
                                 <td><img src="{{ asset('images/QR_Code.png') }}" alt="QR Code" width="130" height="130"></td>
@@ -265,7 +265,7 @@
                                 <label>Product Description</label>
                               </td>
                               <td>
-                                <span>{{ $order->productType }}</span>
+                                <span>{{ $order->order_description }}</span>
                               </td>
                             </tr>
                           </tbody>
@@ -279,7 +279,7 @@
                                 <label>No of Packets:</label>
                               </td>
                               <td>
-                                <span>{{ $order->numberOfBox }}</span>
+                                <span>{{ $order->quantity1 }}</span>
                               </td>
                             </tr>
                             <tr>
@@ -304,14 +304,7 @@
                       <td colspan="2" class="inner-table invoice_table_border p-1">
                         <table class="table-sm">
                           <tbody>
-                            <tr>
-                              <td>
-                                <label>Value of Goods:</label>
-                              </td>
-                              <td>
-                                <span>{{ $order->goods_value }}</span>
-                              </td>
-                            </tr>
+                          
                             <tr>
                               <td>
                                 <label>Weight:</label>
@@ -320,14 +313,7 @@
                                 <span>{{ $order->weight }}</span>
                               </td>
                             </tr>
-                            <tr>
-                              <td>
-                                <label>Home Delivery:</label>
-                              </td>
-                              <td>
-                                <span>{{ $order->homeDeliveryCharge }}</span>
-                              </td>
-                            </tr>
+                       
                             <tr>
                               <td>
                                 <label>Total Amount:</label>

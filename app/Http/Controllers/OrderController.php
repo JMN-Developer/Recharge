@@ -16,15 +16,14 @@ class OrderController extends Controller
         $ordeaars = Order::all();
         $ooyeh = count($ordeaars);
        // $randomNumber = $ooyeh.random_int(1000, 9999).$ooyeh;
-        if (1==1) {
-            // dd($request->all());
+      
 
         if(!empty($request->label)){
             $request->file('label')->store('public');  
             $labelFileName = $request->label->hashName();
         }
 
-
+        
         $orders = new Order;
         $orders->reseller_id = $request->input('reseller_id'); 
         $orders->first_name = $request->input('first_name');        
@@ -45,6 +44,11 @@ class OrderController extends Controller
         $orders->country = $request->input('country');
         $orders->rcountry = $request->input('rcountry');
         $orders->order_description = $request->input('description');
+        $orders->addiCharge = $request->input('addiCharge');
+        $orders->total = $request->input('total');
+
+        $main_price = $orders->total-$orders->addiCharge;
+       // file_put_contents('test.txt',$orders->total." ".$orders->addiCharge." ".round(((Auth::user()->cargo_documents_profit/100)*$main_price),2));
         // $orders->state = $request->input('state');
         // $orders->rstate = $request->input('rstate');
         // $orders->dist = $request->input('dist');
@@ -60,9 +64,18 @@ class OrderController extends Controller
         // $orders->perKg = $request->input('perKg');
         // $orders->cusCharge = $request->input('cusCharge');
         // $orders->homeDeliveryCharge = $request->input('homeDeliveryCharge');
-        $orders->addiCharge = $request->input('addiCharge');
-        $orders->total = $request->input('total');
-        $orders->agent_comm = $request->input('agent_comm');
+       
+        if($orders->delivery_condition == 'Goods')
+        {
+           
+            $orders->agent_comm = round(((Auth::user()->cargo_goods_profit/100)*$main_price),2);    
+         }
+         else
+         {
+           
+            $orders->agent_comm = round(((Auth::user()->cargo_documents_profit/100)*$main_price),2);
+         }
+       
         // $orders->delivery_way = $request->input('delivery_way');
         // $orders->departure_airport = $request->input('departure_airport');
         // $orders->arrival_airport = $request->input('arrival_airport');
@@ -86,11 +99,11 @@ class OrderController extends Controller
 
         $total = $request->total;
 
-        $reseller_comission = ($total/100)*$user->cargo;
+        // $reseller_comission = ($total/100)*$user->cargo;
 
-        $admin_comission = ($total/100)*$user->admin_cargo_commission;
+        // $admin_comission = ($total/100)*$user->admin_cargo_commission;
 
-        $main_price = $orders->total-$orders->addiCharge;
+       
         if($orders->delivery_condition == 'Goods')
         {
             $this->update_cargo_wallet($main_price,Auth::user()->cargo_goods_profit);    
@@ -103,14 +116,12 @@ class OrderController extends Controller
 
 
 
-        $up = User::where('id',$user->id)->update([
-            'cargo_due' => $total - $reseller_comission -  $admin_comission
-        ]);
+        // $up = User::where('id',$user->id)->update([
+        //     'cargo_due' => $total - $reseller_comission -  $admin_comission
+        // ]);
 
         return back()->with('status', 'Order Created Successfully!');
-        }else{
-            return back()->with('error', 'Insufficient Balace!');    
-        }      
+          
     }
 
     
@@ -124,44 +135,20 @@ class OrderController extends Controller
     public function update_status(Request $request)
     {
 
-        if(Auth::user()->role != 'admin')
+       
+        if($request->status =='confirmed')
         {
-        $info = Order::where('id', $request->id)->first();
-
-        $user = User::where('id', $request->reseller_id)->first();
-
-        $past = Order::where('id', $request->id)->first();
-
-        $reseller_comission = ($info->total/100)*$user->cargo;
-
-        $admin_comission = ($info->total/100)*$user->admin_cargo_commision;
-
-        // if ($request->status == 'confirmed' && $past->status != 'confirmed') {
-        //     $update = User::where('id', $request->reseller_id)->update([
-        //         'wallet' => $user->wallet - ($info->total + $reseller_comission + $admin_comission)
-        //     ]);
-        // }elseif ($request->status == 'cancel' && $past->status == 'confirm'){
-        //     $update = User::where('id', $request->reseller_id)->update([
-        //         'wallet' => $user->wallet + ($info->total + $reseller_comission + $admin_comission)
-        //     ]);
-        // }elseif ($request->status == 'pending' && $past->status == 'confirmed'){
-        //     $update = User::where('id', $request->reseller_id)->update([
-        //         'wallet' => $user->wallet + ($info->total + $reseller_comission + $admin_comission)
-        //     ]);
-        // }elseif ($request->status == 'received' && $past->status == 'pending'){
-        //     $update = User::where('id', $request->reseller_id)->update([
-        //         'wallet' => $user->wallet - ($info->total + $reseller_comission + $admin_comission)
-        //     ]);
-        // }elseif ($request->status == 'received' && $past->status == 'cancel'){
-        //     $update = User::where('id', $request->reseller_id)->update([
-        //         'wallet' => $user->wallet - ($info->total + $reseller_comission + $admin_comission)
-        //     ]);
-        // }
+            $update = Order::where('id', $request->id)->update([
+                'status' => $request->status,
+                'cost'=>$request->cost
+            ]); 
         }
-
+        else
+        {
         $update = Order::where('id', $request->id)->update([
             'status' => $request->status
         ]);
+        }
 
         return back()->with('status', 'Status Updated Successfully!');
     }

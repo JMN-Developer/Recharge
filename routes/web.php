@@ -336,6 +336,7 @@ Route::group(['prefix' => 'cargo','middleware'=>['auth','user']], function()
     Route::get('order-list', [CargoController::class,'OrderList'])->name('order-list');
     Route::get('order-tracking-view', [CargoController::class,'OrderTrackingView'])->name('order-tracking-view');
     Route::POST('add-new-order', [OrderController::class,'AddOrder'])->name('add-new-order');
+    Route::post('cargo_update',[OrderController::class,'update_status']);
 
 });
 
@@ -456,7 +457,7 @@ Route::group(['middleware'=>['auth','admin']], function()
     Route::post('/edit_wallet',[BalanceController::class,'edit_wallet']);
 
 
-    Route::post('/cargo_update',[OrderController::class,'update_status']);
+   
 });
 
 

@@ -23,6 +23,30 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
+
+        <div class="modal fade bd-example-modal-sm" id="add_cost" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Add Cargo Cost</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+              </div>
+              <div class="modal-body"> 
+                
+              <form action="{{url('/edit_sim_due')}}" method="post">
+                @csrf
+                <div>
+                  <input class="form-control" type="hidden" name="user_id" value="">
+                  <input class="form-control" type="number"  step="0.01" name="due"><br>
+                  <button class="btn btn-success btn-sm" style="float:right"  type="submit">Add Cargo Cost </button>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-12 phone_order_header d-block">
             <div class="order_page_header d-inline-block mb-2">
@@ -103,18 +127,18 @@
                         <form action="cargo_update" method="POST">
                           @csrf
                           <input type="hidden" name="reseller_id" value="{{ $order->reseller_id }}">
-                          <input type="hidden" name="id" value="{{ $order->id }}">
-                          <select name="status">
-                            <option {{$order->ef_2 == '0' ? 'selected' : '' }} value="pending">Pending</option>
-                            <option {{$order->status == 'confirmed' ? 'selected' : '' }} value="confirmed">Confirmed</option>
-                            <option {{$order->status == 'received' ? 'selected' : '' }} value="received">Received</option>
-                            <option {{$order->status == 'on_the_way' ? 'selected' : '' }} value="on_the_way">On The Way</option>
-                            <option {{$order->status == 'in_the_airport' ? 'selected' : '' }} value="in_the_airport">In Customs</option>
-                            <option {{$order->status == 'delivered' ? 'selected' : '' }} value="delivered">Delivered</option>
-                            <option {{$order->status == 'cancel' ? 'selected' : '' }} value="cancel">Cancel</option>
-                          </select>
-
-                          <input type="submit" class="btn btn-success" value="Update">
+                          <input type="hidden" id="order_id"  name="id" value="{{ $order->id }}">
+                          <select name="status" class="status">
+                            <option {{$order->ef_2 == '0' ? 'selected' : '' }} value="pending" data-id={{ $order->id }}>Pending</option>
+                            <option {{$order->status == 'confirmed' ? 'selected' : '' }} value="confirmed" data-id={{ $order->id }}>Confirmed</option>
+                            <option {{$order->status == 'received' ? 'selected' : '' }} value="received" data-id={{ $order->id }}>Received</option>
+                            <option {{$order->status == 'on_the_way' ? 'selected' : '' }} value="on_the_way" data-id={{ $order->id }}>On The Way</option>
+                            <option {{$order->status == 'in_the_airport' ? 'selected' : '' }} value="in_the_airport" data-id={{ $order->id }}>In Customs</option>
+                            <option {{$order->status == 'delivered' ? 'selected' : '' }} value="delivered" data-id={{ $order->id }}>Delivered</option>
+                            <option {{$order->status == 'cancel' ? 'selected' : '' }} value="cancel" data-id={{ $order->id }}>Cancel</option>
+                          </select><br>
+                          <input type="number" name="cost" class="cost_input" id="cost_input{{$order->id}}" placeholder="cost" style="width:105px">
+                          <input type="submit"  class="btn btn-success update{{ $order->id}}" value="Update">
                         </form>
                       </td>
                       @endif
@@ -123,14 +147,14 @@
                           <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
                           </button>
                           <div class="dropdown-menu" role="menu">
-                            <a class="dropdown-item" href="cargo/order-invoice/{{ $order->id }}"><i class="fas fa-print"></i>Print Invoice</a>
+                            <a class="dropdown-item" href="order-invoice/{{ $order->id }}"><i class="fas fa-print"></i>Print Invoice</a>
                             @if ($order->label != null)
-                            <a class="dropdown-item" href="cargo/order-label/{{ $order->id }}"><i class="fas fa-print"></i>Print Label</a>
+                            <a class="dropdown-item" href="order-label/{{ $order->id }}"><i class="fas fa-print"></i>Print Label</a>
                             @elseif(Auth::user()->role == 'admin')
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal{{ $order->id }}"><i class="fas fa-print"></i>Upload Label</a>
                             @endif
-                            <a class="dropdown-item" href="cargo/order/view/{{ $order->id }}"><i class="fas fa-eye"></i>View</a>
-                            <a class="dropdown-item" href="cargo/order/cancel/{{ $order->id }}"><i class="fas fa-times"></i>Cancel</a>
+                            <a class="dropdown-item" href="order/view/{{ $order->id }}"><i class="fas fa-eye"></i>View</a>
+                            <a class="dropdown-item" href="order/cancel/{{ $order->id }}"><i class="fas fa-times"></i>Cancel</a>
                           </div>
                         </div>
                       </td>
@@ -201,6 +225,7 @@
     </section>
     <!-- /.content -->
   </div>
+ 
   <script>
     /* Code By Webdevtrick ( https://webdevtrick.com ) */
 (function(document) {
@@ -254,5 +279,30 @@ TableFilter.init();
 <script src="{{asset('js/admin.js')}}"></script>
 <!-- Custom JS -->
 <script src="{{asset('js/custom.js')}}"></script>
+<script>
+  $(function(){
+      
+     $(".cost_input").hide();
+    //  var id = $('#status').find(':selected').data('id')
+    $(".status").change(function(){
+     
+      let value = $(this).find(':selected').val();
+      var id =  $(this).find(':selected').data('id')
+      // alert(value)
+      if(value == 'confirmed')
+      {
+        $('#cost_input'+id).show()
+        $("#cost_input"+id).attr('required',true);
+     
+       // $("#cost_input"+order_id).show();
+      }
+      else
+      {
+        $('#cost_input'+id).hide()
+        $("#cost_input"+id).attr('required',false);
+      }
+    })
+  })  
+</script>
 @endsection
 

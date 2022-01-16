@@ -274,8 +274,10 @@ class SimController extends Controller
        $sim = sim::where('id', $request->sim_id)->first();
         $path = $request->file->store('sim/uploads', 'public');
         if($request->file2 != null){
+            file_put_contents('test.txt','found');
             $path2 = $request->file2->store('sim/uploads', 'public');
         }else{
+            file_put_contents('test.txt','not found');
             $path2 = null;
         }
         $order = SimOrder::create([

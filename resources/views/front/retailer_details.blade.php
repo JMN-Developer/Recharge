@@ -196,17 +196,8 @@
                                         @csrf
                                         <div>
                                           <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
-                                          <label for="">Sim Commission :</label><br>
-                                          <small>Default Admin Commission is {{ $item->admin_sim_commission }}</small>
-                                          <input class="form-control"
-                                          @if (Auth::user()->role == 'admin')
-                                            value="{{$item->admin_sim_commission}}"
-                                          @else
-                                            value="{{$item->sim}}"
-                                          @endif
-                                          type="number" step="0.01" name="sim">
-                                          <br>
-                                          <label for="">Phone Commission :</label><br>
+                                         
+                                          {{-- <label for="">Phone Commission :</label><br>
                                           <small>Default Admin Commission is {{ $item->admin_mobile_commission }}</small>
                                           <input class="form-control"
                                           @if (Auth::user()->role == 'admin')
@@ -215,16 +206,24 @@
                                             value="{{$item->mobile}}"
                                           @endif
                                           type="number" step="0.01" name="mobile">
-                                          <br>
-                                          <label for="">Cargo Commission :</label><br>
-                                          <small>Default Admin Commission is {{ $item->admin_cargo_commission }}</small>
+                                          <br> --}}
+                                          <label for="">Cargo Goods Profit :</label><br>
+                                          <small>Default Admin Cargo Goods Proift is {{ $item->cargo_goods_profit }}</small>
                                           <input class="form-control"
                                           @if (Auth::user()->role == 'admin')
-                                            value="{{$item->admin_cargo_commission}}"
-                                          @else
-                                            value="{{$item->cargo}}"
+                                            value="{{$item->cargo_goods_profit}}"
                                           @endif
-                                           type="number" step="0.01" name="cargo"><br>
+                                           type="number" step="0.01" name="cargo_goods_profit"><br>
+
+                                           <label for="">Cargo Document Profit :</label><br>
+                                           <small>Default Admin Cargo Documents Proift is {{ $item->cargo_documents_profit }}</small>
+                                           <input class="form-control"
+                                           @if (Auth::user()->role == 'admin')
+                                             value="{{$item->cargo_documents_profit}}"
+                                           
+                                           @endif
+                                            type="number" step="0.01" name="cargo_documents_profit"><br>
+
                                           <label for="">International Recharge Commission :</label><br>
                                           <small>Default Admin Commission is {{ $item->admin_international_recharge_commission }}</small>
                                           <input class="form-control"
@@ -236,26 +235,8 @@
                                            type="number" step="0.01" name="international_recharge">
                                            <br>
 
-                                           <label for="">International Recharge Profit :</label><br>
-
-                                           <input class="form-control"
-                                           @if (Auth::user()->role == 'admin')
-                                           value="{{$item->reseller_profit->international_recharge_profit}}"
-                                           @endif
-                                            type="number" step="0.01" name="international_recharge_profit">
-                                            <br>
-
-                                          <label for="">Domestic Recharge Commission :</label><br>
-                                          <small>Default Admin Commission is {{ $item->admin_recharge_commission }}</small>
-                                          <input class="form-control"
-                                          @if (Auth::user()->role == 'admin')
-                                            value="{{$item->admin_recharge_commission}}"
-                                          @else
-                                            value="{{$item->recharge}}"
-                                          @endif
-                                           type="number" step="0.01" name="recharge"> <br>
-
                                            <label for="">Domestic Recharge Profit :</label><br>
+                                           <small>Default Admin Domestic Recharge Profit is {{$item->reseller_profit->domestic_recharge_profit }}</small>
 
                                            <input class="form-control"
                                            @if (Auth::user()->role == 'admin')

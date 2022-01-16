@@ -48,7 +48,7 @@
                   <tbody>
                     <tr>
                       <td>Order Number</td>
-                      <td>{{ $data->id }}</td>
+                      <td>{{ $data->order_id }}</td>
                     </tr>
                     <tr>
                       <td>Order Date</td>
@@ -61,6 +61,12 @@
                       <td>Order Status</td>
                       <td>{{ $data->status }}</td>
                     </tr>
+
+                    <tr>
+                      <td>Order Types</td>
+                      <td>{{ $data->delivery_condition }}</td>
+                    </tr>
+
                   </tbody>
                 </table>
               </div>
@@ -180,7 +186,7 @@
                 </table>
               </div>
             </div>
-            <div class="row pb-3">
+            {{-- <div class="row pb-3">
               <div class="col-12  table-responsive">
                 <table class="table table-sm table-bordered">
                   <thead>
@@ -216,18 +222,18 @@
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div> --}}
             <div class="row pb-3">
               <div class="col-12  table-responsive">
                 <table class="table table-sm table-bordered">
                   <thead>
                     <tr class="bg-sky">
-                      <th>Product Type</th>
+                      <th>Product Name</th>
+                      <th>Product Description</th>
                       <th>Weight</th>
                       {{-- <th>Actual Weight</th>
                       <th>Volumetric</th> --}}
-                      <th>Charge/Kg</th>
-                      <th>Charge</th>
+
                       <th>Delivery Charge</th>
                       <th>Additional Charge</th>
                       <th>Total Charge</th>
@@ -235,13 +241,13 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{{ $data->productType }}</td>
+                      <td>{{ $data->product1 }}</td>
+                      <td>{{ $data->order_description }}</td>
                       <td>{{ $data->weight }}</td>
                       {{-- <td></td>
                       <td></td> --}}
-                      <td>{{ $data->perKg }}</td>
-                      <td>{{ $data->cusCharge }}</td>
-                      <td>{{ $data->homeDeliveryCharge }}</td>
+                     
+                      <td>{{ $data->total - $data->addiCharge }}</td>
                       <td>{{ $data->addiCharge }}</td>
                       <td>{{ $data->total }}</td>
                     </tr>

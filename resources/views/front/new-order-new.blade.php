@@ -198,7 +198,7 @@
 
                     <div class="mb-3 myDIV" id="myDiv" >
                       <label for="totalWeightValue" id="myDiv" class="form-label">Total Weight (Kg)</label>
-                      <input class="form-control" step="any" type="number" name="weight" id="weight" placeholder="Select Receiver Country First" required>
+                      <input class="form-control" step="any" type="number" name="weight" id="weight" placeholder="Select Receiver Country First" >
                     </div>
                     {{-- <div class="mb-3 myDIV">
                       <label for="chargePerKgValue" class="form-label">Charge/Kg(Euro)</label>
@@ -428,9 +428,9 @@ function showDiv() {
               $(".myDIV").hide();
               var additonal_charge = Number($("#addiCharge").val())
               $('#total').val(Number(data)+additonal_charge);
-              if(data == 'No data'){
-                alert(data);
-              }
+              // if(data == 'No data'){
+              //   alert(data);
+              // }
               // alert(message);
             }
           });
@@ -452,9 +452,9 @@ function showDiv() {
               // $('#total').append(data);
               var additonal_charge = Number($("#addiCharge").val())
               $('#total').val(Number(data)+additonal_charge);
-              if(data == 'No data'){
-                alert(data);
-              }
+              // if(data == 'No data'){
+              //   alert(data);
+              // }
               // alert(message);
               // $('#result').val(data);
               // console.log(data);
@@ -489,6 +489,7 @@ function showDiv() {
       let value = document.getElementById("delivery_condition").value;
       let weight = document.getElementById("weight").value;
       let country = document.getElementById("rcountry").value;
+    
       if(country)
         get_total()
       if(value == "Documents"){
@@ -496,7 +497,12 @@ function showDiv() {
         $(".myDIV").hide();
       }
       if(value == "Goods"){
+        $("#weight").attr('required',true);
         $(".myDIV").show();
+      }
+      else
+      {
+        $("#weight").attr('required',false);
       }
       
       var e = document.getElementById("delivery_condition");

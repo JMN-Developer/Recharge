@@ -116,16 +116,17 @@ class BalanceController extends Controller
 
     public function EditDue(Request $request){
 
+       
         $info = User::where('id', $request->user_id)->first();
-
-        if($info->cargo_due >= $request->due){
+        file_put_contents('test.txt',$info->cargo_wallet." ".$request->due);
+        if($info->cargo_wallet >= $request->due){
             $user = User::where('id', $request->user_id)->update([
 
-                "cargo_due" => $info->cargo_due - $request->due
+                "cargo_wallet" => $info->cargo_wallet - $request->due
 
             ]);
 
-            return back();
+            return back()->with('success','Wallet Updated');
         }else{
             return back()->with('error','Due Amount Is Less Than The Input');
         }
@@ -156,7 +157,7 @@ class BalanceController extends Controller
 
             ]);
             $this->update_transaction($request->due,$request->user_id,'Sim');
-            return back();
+            return back()->with('success','Wallet Updated');
         }else{
             return back()->with('error','Due Amount Is Greater Than The Input');
         }

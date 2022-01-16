@@ -208,7 +208,7 @@
                       <li>Upload a recent color photograph</li>
                     </ol>
                     <div class="custom-file mb-3">
-                      <input type="file" class="custom-file-input" id="multiple_files" name="filename"  name="file2">
+                      <input type="file" class="custom-file-input" id="multiple_files" name="file2">
                       <label class="custom-file-label" for="customFile">Choose file</label>
                     </div>
 

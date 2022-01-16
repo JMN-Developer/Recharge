@@ -7,6 +7,7 @@
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
   <!-- Theme style -->
@@ -57,6 +58,8 @@
                       <th style="background: #faaeae;">Order By</th>
                       <th class="text-center" style="background: #faaeae;">Status</th>
                       @if (Auth::user()->role == 'admin')
+                      <th class="text-center" style="background: #faaeae;">Document1</th>
+                      <th class="text-center" style="background: #faaeae;">Document2</th>
                       <th class="text-center" style="background: #faaeae;">Update</th>
                       @endif
                       <th class="text-center" style="background: #faaeae;">Action</th>
@@ -77,6 +80,16 @@
                       <td style="color:red;text-transform:uppercase;font-weight:bold">{{ $item->status }}</td>
                       @endif
                       @if (Auth::user()->role == 'admin')
+                      
+                      <td><a href={{ asset('storage/'.$item->file) }} data-lightbox="image-1" > <img src={{ asset('storage/'.$item->file) }} width='100px' class='img-thumbnail' /></a></td>
+                      <td>
+                        @if($item->file_2 !=NULL)
+                        <a href={{ asset('storage/'.$item->file_2) }} data-lightbox="image-1" > <img src={{ asset('storage/'.$item->file_2) }} width='100px' class='img-thumbnail' /></a>
+                        @else
+                        Not Availavle
+                        @endif
+                        
+                      </td>
                       <td>
                         <form action="/sim-order/update" method="POST">
                           @csrf
@@ -174,4 +187,5 @@ TableFilter.init();
 <script src="{{asset('js/admin.js')}}"></script>
 <!-- Custom JS -->
 <script src="{{asset('js/custom.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 @endsection

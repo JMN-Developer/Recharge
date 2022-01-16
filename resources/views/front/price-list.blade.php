@@ -27,7 +27,7 @@
           <div class="col-12 phone_order_header d-block">
             <div class="order_page_header d-inline-block mb-2">
               <h4 class="d-inline-block"><i class="fas fa-copy"></i>Price List</h4>
-              <a href="{{url('add-new-pricing')}}" class="d-inline-block" style="float: right;"><i class="fas fa-plus-circle"></i>New Pricing</a>
+              <a href="{{url('cargo/add-new-pricing')}}" class="d-inline-block" style="float: right;"><i class="fas fa-plus-circle"></i>New Pricing</a>
             </div>
             <div class="input-group mb-4">
               <input type="text" class="form-control light-table-filter" data-table="table-info" placeholder="Search old order" aria-label="Search old order"

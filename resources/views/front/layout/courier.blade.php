@@ -96,6 +96,14 @@ margin-left: 3px;
                                   </ul>
                               </div>
                           @endif
+
+                          @if (\Session::has('success'))
+                          <div class="alert alert-success">
+                              <ul>
+                                  <li>{!! \Session::get('success') !!}</li>
+                              </ul>
+                          </div>
+                      @endif
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
@@ -508,7 +516,7 @@ margin-left: 3px;
                 </li> --}}
                 @if (Auth::user()->role == 'admin')
                 <li class="nav-item">
-                  <a href="/pricing-list" class="@if(Route::currentRouteName() == 'add-new-pricing') nav-link active @endif nav-link">
+                  <a href="/cargo/pricing-list" class="@if(Route::currentRouteName() == 'add-new-pricing') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Manage Pricing</p>
                   </a>
