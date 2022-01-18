@@ -88,7 +88,7 @@ class DtOneProvider
 
             $status = $response->getStatusCode();
             $operator_response = $response->getBody();
-
+            file_put_contents('test.txt',$operator_response);
             $operator_response = json_decode($operator_response);
             if($status == 202)
             {

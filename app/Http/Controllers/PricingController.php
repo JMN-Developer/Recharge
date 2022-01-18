@@ -82,6 +82,7 @@ class PricingController extends Controller
         $w = $request->weight;
         $fixed_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','fixed')->first();
         $fixed_weight_limit = $fixed_data->weight_end;
+        $myfile = fopen("test.txt", "a+") or die("Unable to open file!");
         if($fixed_weight_limit>=$w)
         {
             $price = $fixed_data->total;
@@ -90,25 +91,43 @@ class PricingController extends Controller
         else
         {
             $variable_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','variable')->orderBy('weight_end','ASC')->get();
-            $variable_weight = $w - $fixed_weight_limit;
+            $variable_weight = $w - $fixed_weight_limit;//95
             $price = $fixed_data->total;
+          
             foreach($variable_data as $data)
             {
                
-                $remaining_weight = $variable_weight - $data->weight_end;
+                $remaining_weight = $w - $data->weight_end;//105-100
+
+                
+                
+                
                 if($remaining_weight<0)
                 {
                     $price +=$variable_weight*$data->total;
+                   
                     return response($price);
                 }
                 else
                 {
-                    $price +=$data->weight_end*$data->total;
-                    $variable_weight -=$data->weight_end;
+                    $deduct_weight = $data->weight_end -$data->weight_start+1;//900
+                    $price +=$deduct_weight*$data->total;
+                    $variable_weight -=$deduct_weight;
+                   
+                    
                 }
-                
+               
+              
                 
             }
+            if($variable_weight>0)
+            {
+                $size = sizeof($variable_data);
+                $price += $variable_data[$size-1]->total*$variable_weight;
+                return $price;
+                
+            }
+            
             //file_put_contents('test.txt',json_encode($variable_data));
 
         }
