@@ -959,7 +959,7 @@ class RechargeController extends Controller
             ]);
 
             $total_commission = reseller_comission($SendValue);
-            $reseller_profit = reseller_profit($SendValue);
+            $reseller_profit = reseller_profit($total_commission);
             $admin_profit = $total_commission-$reseller_profit;
 
 
@@ -972,7 +972,7 @@ class RechargeController extends Controller
             $create->txid = $txid;
             $create->operator = $request->operator;
             $create->type = 'International';
-            $create->company_name = 'Internation1';
+            $create->company_name = 'International1';
             $create->status = 'completed';
             $create->cost = $SendValue;
             $create->service = $request->service_charge;
