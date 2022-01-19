@@ -48,6 +48,12 @@ if (!function_exists('reseller_comission')) {
         //     return $percentage_amount;
         }
         }
+        // if (!function_exists('get_current_balance')) {
+        //     function get_current_balance($amount)
+        //     {
+        //         if()
+        //     }
+        //     }
 
         if (!function_exists('reseller_profit_white_calling')) {
             function reseller_profit_white_calling($amount)

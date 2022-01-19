@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\RechargeHistory;
 use App\Models\User;
+use DB;
 
 /**
  * Class UpdateWallet
@@ -28,24 +29,27 @@ class UpdateWallet
         {
             if($current_balance <= 0 )
             {
+                RechargeHistory::where('id',$recharge->id)->update(['balance_before_recharge'=>auth()->user()->limit_usage]);
+                $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['limit_usage'=>$current_limit_usage+$total_cost])->first();
 
-                User::where('id',auth()->user()->id)->update(['limit_usage'=>$current_limit_usage+$total_cost]);
-                RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit']);
+                //$user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$total_cost]);
+                RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit','balance_after_recharge'=>$user->limit_usage]);
 
             }
             else{
             $wallet_deduct = $total_cost-$current_balance;
-
-            //$updated_balance = $current_balance-$wallet_deduct;
-            User::where('id',auth()->user()->id)->update(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0]);
-            RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit:'.$wallet_deduct.','.'Wallet:'.$current_balance]);
+            RechargeHistory::where('id',$recharge->id)->update(['balance_before_recharge'=>auth()->user()->wallet]);
+           // $user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0]);
+            $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0])->first();
+            RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit:'.$wallet_deduct.','.'Wallet:'.$current_balance,'balance_after_recharge'=>$user->limit_usage]);
             }
         }
         else
         {
-
-        User::where('id',auth()->user()->id)->update(['wallet'=>$updated_balance]);
-        RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Wallet']);
+        RechargeHistory::where('id',$recharge->id)->update(['balance_before_recharge'=>auth()->user()->wallet]);
+     //   $user = User::where('id',auth()->user()->id)->updateOrCreate(['wallet'=>$updated_balance]);
+        $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['wallet'=>$updated_balance])->first();
+        RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Wallet','balance_after_recharge'=>$user->wallet]);
         }
 
     }
