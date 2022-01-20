@@ -12,22 +12,22 @@ use Auth;
 class OrderController extends Controller
 {
     public function AddOrder(Request $request)
-    { 
+    {
         $ordeaars = Order::all();
         $ooyeh = count($ordeaars);
        // $randomNumber = $ooyeh.random_int(1000, 9999).$ooyeh;
-      
+
 
         if(!empty($request->label)){
-            $request->file('label')->store('public');  
+            $request->file('label')->store('public');
             $labelFileName = $request->label->hashName();
         }
 
-        
+
         $orders = new Order;
-        $orders->reseller_id = $request->input('reseller_id'); 
-        $orders->first_name = $request->input('first_name');        
-        $orders->rfirst_name = $request->input('rfirst_name');        
+        $orders->reseller_id = $request->input('reseller_id');
+        $orders->first_name = $request->input('first_name');
+        $orders->rfirst_name = $request->input('rfirst_name');
         $orders->surname = $request->input('surname');
         $orders->rsurname = $request->input('rsurname');
         $orders->dob = $request->input('dob');
@@ -40,7 +40,8 @@ class OrderController extends Controller
         $orders->remail = $request->input('remail');
         $orders->address = $request->input('address');
         $orders->raddress = $request->input('raddress');
-        $orders->order_id = 'JM-'.mt_rand(100000,999999);
+        $orders->delivery_condition = $request->input('delivery_condition');
+        $orders->order_id = transaction_cargo($orders->delivery_condition);
         $orders->country = $request->input('country');
         $orders->rcountry = $request->input('rcountry');
         $orders->order_description = $request->input('description');
@@ -56,7 +57,7 @@ class OrderController extends Controller
         // $orders->city = $request->input('city');
         // $orders->rcity = $request->input('rcity');
         // $orders->expected_date_to_receive = $request->input('expected_date_to_receive');
-        $orders->delivery_condition = $request->input('delivery_condition');
+
         // $orders->numberOfBox = $request->input('numberOfBox');
         // $orders->goods_value = $request->input('goods_value');
         // $orders->productType = $request->input('productType');
@@ -64,18 +65,18 @@ class OrderController extends Controller
         // $orders->perKg = $request->input('perKg');
         // $orders->cusCharge = $request->input('cusCharge');
         // $orders->homeDeliveryCharge = $request->input('homeDeliveryCharge');
-       
+
         if($orders->delivery_condition == 'Goods')
         {
-           
-            $orders->agent_comm = round(((Auth::user()->cargo_goods_profit/100)*$main_price),2);    
+
+            $orders->agent_comm = round(((Auth::user()->cargo_goods_profit/100)*$main_price),2);
          }
          else
          {
-           
+
             $orders->agent_comm = round(((Auth::user()->cargo_documents_profit/100)*$main_price),2);
          }
-       
+
         // $orders->delivery_way = $request->input('delivery_way');
         // $orders->departure_airport = $request->input('departure_airport');
         // $orders->arrival_airport = $request->input('arrival_airport');
@@ -103,16 +104,16 @@ class OrderController extends Controller
 
         // $admin_comission = ($total/100)*$user->admin_cargo_commission;
 
-       
+
         if($orders->delivery_condition == 'Goods')
         {
-            $this->update_cargo_wallet($main_price,Auth::user()->cargo_goods_profit);    
+            $this->update_cargo_wallet($main_price,Auth::user()->cargo_goods_profit);
          }
          else
          {
-            $this->update_cargo_wallet($main_price,Auth::user()->cargo_documents_profit); 
+            $this->update_cargo_wallet($main_price,Auth::user()->cargo_documents_profit);
          }
-       
+
 
 
 
@@ -121,10 +122,10 @@ class OrderController extends Controller
         // ]);
 
         return back()->with('status', 'Order Created Successfully!');
-          
+
     }
 
-    
+
     public function update_cargo_wallet($cargo_price,$percentage)
     {
         // $user = User::where('id',$reseller_id)->first();
@@ -135,13 +136,13 @@ class OrderController extends Controller
     public function update_status(Request $request)
     {
 
-       
+
         if($request->status =='confirmed')
         {
             $update = Order::where('id', $request->id)->update([
                 'status' => $request->status,
                 'cost'=>$request->cost
-            ]); 
+            ]);
         }
         else
         {
@@ -153,5 +154,5 @@ class OrderController extends Controller
         return back()->with('status', 'Status Updated Successfully!');
     }
 
-    
+
 }

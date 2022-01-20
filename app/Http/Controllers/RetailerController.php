@@ -13,9 +13,9 @@ class RetailerController extends Controller
     public function retailer_details()
     {
         if (Auth::user()->role == 'admin') {
-            $data = User::where('role','user')->get();
+            $data = User::where('role','user')->orderBy('limit_usage','DESC')->get();
         }else {
-            $data = User::where('role','user')->where('created_by', Auth::user()->id)->get();
+            $data = User::where('role','user')->where('created_by', Auth::user()->id)->orderBy('limit_usage','DESC')->get();
         }
         // dd($data);
         return view('front.retailer_details',compact('data'));
@@ -101,7 +101,7 @@ class RetailerController extends Controller
     {
         if (Auth::user()->role == 'admin') {
             $user = User::where('id', $request->user_id)->update([
-               
+
                 'cargo_goods_profit' => $request->cargo_goods_profit,
                 'cargo_documents_profit' => $request->cargo_documents_profit,
                 'admin_recharge_commission' => $request->recharge,

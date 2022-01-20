@@ -233,8 +233,9 @@ margin-left: 3px;
           <img src="images/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div> --}}
         <div class="info sidebar_profile_info">
-          <h5>{{Auth::user()->first_name}}</h5>
-          <p>{{ Auth::user()->nationality }}</p>
+          <p style="padding-top:12px">{{Auth::user()->first_name}}</p>
+          <p style="padding-top:5px">{{ Auth::user()->company }}</p>
+          <p style="padding-top:5px">{{ Auth::user()->user_id }}</p>
           <a href="/reseller/edit/{{ Auth::user()->id}}" class="mr-2">
             <small>Profile</small>
           </a>
@@ -261,7 +262,7 @@ margin-left: 3px;
             <p style="color: #b9ff38;"><b class="mr-2">Sim:</b><span>{{ Auth()->user()->sim_wallet }}</span></p>
             <p style="color: #b9ff38;"><b class="mr-2">Cargo:</b><span>{{ Auth()->user()->cargo_wallet }}</span></p>
 
-            
+
             {{-- <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p> --}}
             @endif
           </div>
@@ -297,7 +298,7 @@ margin-left: 3px;
             <div class="col-12">
               <b class="mr-2">International1:</b><span>{{ $ding->balance }}&euro;</span>
             </div>
-          
+
 
               <div class="col-12">
                 <b class="mr-2">International2:</b><span>{{ $ppn->balance }}&euro;</span>
@@ -710,13 +711,13 @@ margin-left: 3px;
                 notification_count()
                 sim_notification_count();
             });
-       
+
             var a = Echo.channel('events')
             .listen('SimRequest', (e) => {
               sim_notification_count();
-              
+
             });
-       
+
 
         function notification_count()
         {

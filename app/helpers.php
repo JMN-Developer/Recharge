@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\DB;
 // if (!function_exists('reseller_comission')) {
 // function reseller_comission($discount,$percentage=50)
 // {
@@ -22,6 +22,30 @@ if (!function_exists('reseller_comission')) {
         }
         $percentage_amount = round((($percentage/100)*$amount),2);
         return $percentage_amount;
+    }
+    }
+
+
+if (!function_exists('transaction_cargo')) {
+    function transaction_cargo($type)
+    {
+        $date = date('dmy');
+        $resller_id = str_pad(auth()->user()->id, 4, "0", STR_PAD_LEFT);
+        if($type=='Goods')
+        {
+            $type = 1;
+        }
+        else
+        {
+            $type = 2;
+        }
+        $order_date = date('Y-m-d');
+        $order_count = DB::table('orders')->where('reseller_id',auth()->user()->id)->where('created_at','LIKE',$order_date.'%')->count();
+        $order_count = $order_count+1;
+        $order_count =  str_pad( $order_count, 2, "0", STR_PAD_LEFT);
+        $transacrion_id = $date.$resller_id.$type.$order_count;
+        return $transacrion_id;
+
     }
     }
 
