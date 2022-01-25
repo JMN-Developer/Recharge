@@ -106,7 +106,7 @@ class ReloadlyController extends Controller
 
     public function reloadly_recharge(Request $request)
     {
-        if(!CheckRechargeAvail::check($request->amount))
+        if(!CheckRechargeAvail::check($request->amount,'International'))
         {
             return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
         }

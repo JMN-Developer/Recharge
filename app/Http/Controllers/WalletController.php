@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Events\DueRequest;
 use App\Models\User;
+use App\Services\UpdateWallet;
 use DB;
 
 class WalletController extends Controller
@@ -16,115 +17,214 @@ class WalletController extends Controller
     //
     public function index()
     {
-
-        return view('front.wallet-request');
+        return view("front.wallet-request");
     }
     public function get_wallet_data()
     {
-        if(auth()->user()->role != 'admin')
-        {
-        DueControl::where('reseller_id',Auth::user()->id)->update(['reseller_notification'=>1]);
-        $data = DueControl::where('reseller_id',Auth::user()->id)->orderBy(DB::raw('case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'))->get();
+        if (auth()->user()->role != "admin") {
+            DueControl::where("reseller_id", Auth::user()->id)->update([
+                "reseller_notification" => 1,
+            ]);
+            $data = DueControl::where("reseller_id", Auth::user()->id)
+                ->orderBy(
+                    DB::raw(
+                        'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
+                    )
+                )
+                ->get();
+        } else {
+            DueControl::where("admin_notification", 0)->update([
+                "admin_notification" => 1,
+            ]);
+            $data = DueControl::orderBy(
+                DB::raw(
+                    'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
+                )
+            )->get();
         }
-        else{
-        DueControl::where('admin_notification',0)->update(['admin_notification'=>1]);
-        $data = DueControl::orderBy(DB::raw('case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'))->get();
-        }
-        foreach($data as $item)
-        {
-            $item->requested_date = Carbon::parse($item->created_at)->format('Y-m-d');
-            $item->reseller_name = $item->reseller->first_name." ".$item->reseller->last_name;
+        foreach ($data as $item) {
+            $item->requested_date = Carbon::parse($item->created_at)->format(
+                "Y-m-d"
+            );
+            $item->reseller_name =
+                $item->reseller->first_name . " " . $item->reseller->last_name;
+            if($item->wallet_type == 'International')
             $item->limit_usage = $item->reseller->limit_usage;
-            if($item->status == 'pending')
-            $item->approved_date = 'Pending';
             else
-            $item->approved_date = Carbon::parse($item->updated_at)->format('Y-m-d');
+            $item->limit_usage = $item->reseller->domestic_limit_usage;
+
+            if ($item->status == "pending") {
+                $item->approved_date = "Pending";
+            } else {
+                $item->approved_date = Carbon::parse($item->updated_at)->format(
+                    "Y-m-d"
+                );
+            }
         }
         return $data;
     }
     public function wallet_request(Request $request)
     {
         $amount = $request->amount;
+
         DueControl::create([
-            'reseller_id'=>Auth::user()->id,
-            'requested_amount'=>$amount,
-            'message'=>$request->message,
-            'reseller_notification'=>1
+            "reseller_id" => Auth::user()->id,
+            "requested_amount" => $amount,
+            "message" => $request->message,
+            "wallet_type" => $request->wallet_type,
+            "reseller_notification" => 1,
         ]);
         event(new DueRequest());
-
     }
 
     public function get_requested_amount(Request $request)
     {
         $id = $request->id;
-        $data = DueControl::where('id',$id)->first();
+        $data = DueControl::where("id", $id)->first();
         return $data;
+    }
+    public function update_limit($id,$amount,$wallet_type)
+    {
+        if ($wallet_type == "International") {
+            User::where("id", $id)->update([
+                "limit_usage" => $amount,
+            ]);
+        } else {
+            user::where("id",$id)->update([
+                "domestic_limit_usage" => 0,
+            ]);
+        }
+    }
+    public function update_balance($id, $approved_amount,$wallet_type)
+    {
+
+        $user = User::where("id", $id)->first();
+        if($wallet_type == 'International')
+        {
+        $cuurent_balance = $user->wallet;
+        $new_balance = $cuurent_balance + $approved_amount;
+        User::where("id", $id)->update(["wallet" => $new_balance]);
+        }
+        else
+        {
+        $cuurent_balance = $user->domestic_wallet;
+        $new_balance = $cuurent_balance + $approved_amount;
+        User::where("id", $id)->update(["domestic_wallet" => $new_balance]);
+        }
+    }
+
+    public function create_transaction($id,$transaction_source,$wallet_before_transaction,$wallet_after_transaction,$approved_amount,$wallet_type,$reseller_id)
+    {
+
+        UpdateWallet::create_transaction(
+            $id,
+            "credit",
+            $transaction_source,
+            $wallet_before_transaction,
+            $wallet_after_transaction,
+            $approved_amount,
+            $wallet_type,
+            $reseller_id
+        );
 
     }
-    public function update_balance($id,$approved_amount)
-    {
-        $user = User::where('id',$id)->first();
-        $cuurent_balance = $user->wallet;
-        $new_balance =$cuurent_balance+$approved_amount;
-        User::where('id',$id)->update(['wallet'=>$new_balance]);
-    }
-    public function approved_amount( Request $request)
+    public function approved_amount(Request $request)
     {
         $id = $request->id;
         $approved_amount = $request->approved_amount;
         $admin_message = $request->admin_message;
         $status = $request->status;
-        $previous_record = DueControl::where('id',$id)->first();
-        $limit_usage = User::where('id',$previous_record->reseller_id)->first()->limit_usage;
-        $approved_amount = $approved_amount-$limit_usage;
+        $previous_record = DueControl::where("id", $id)->first();
+        $user = User::where("id", $previous_record->reseller_id)->first();
+
+        if ($previous_record->wallet_type == "International") {
+            $limit_usage = $user->limit_usage;
+            $wallet = $user->wallet;
+        } else {
+            $limit_usage = $user->domestic_limit_usage;
+            $wallet = $user->domestic_wallet;
+        }
+
+        $approved_amount = $approved_amount - $limit_usage;
+
+        if ($previous_record->status == "declined") {
+            if ($status == "declined") {
+                DueControl::where("id", $id)->update([
+                    "decline_status" => 1,
+                    "status" => $status,
+                    "reseller_notification" => 0,
+                    "admin_notification" => 1,
+                    "admin_message" => $admin_message,
+                ]);
+            } else {
+                DueControl::create([
+                    "reseller_id" => $previous_record->reseller_id,
+                    "requested_amount" => $previous_record->requested_amount,
+                    "approved_amount" => $approved_amount,
+                    "message" => $admin_message,
+                    "reseller_notification" => 0,
+                    "admin_notification" => 1,
+                    "status" => $status,
+                    "wallet_type" => $previous_record->wallet_type,
+                    "previous_due" => $limit_usage,
+                    "decline_status" => 1
+                ]);
 
 
-        if($previous_record->status =='declined')
-        {
-            if($status =='declined')
-            {
-                DueControl::where('id',$id)->update(['decline_status'=>1,'status'=>$status,'reseller_notification'=>0,'admin_notification'=>1,'admin_message'=>$admin_message]);
             }
-            else{
-            DueControl::create([
-                'reseller_id'=>$previous_record->reseller_id,
-                'requested_amount'=> $previous_record->requested_amount,
-                'approved_amount'=>$approved_amount,
-                'message'=>$admin_message,
-                'reseller_notification'=>0,
-                'admin_notification'=>1,
-                'status'=>$status,
-            ]);
-            DueControl::where('id',$id)->update(['decline_status'=>1]);
-            User::where('id',$previous_record->reseller_id)->update(['limit_usage'=>0]);
-        }
+        } else {
+            if ($status == "declined") {
+                DueControl::where("id", $id)->update([
+                    "status" => $status,
+                    "admin_notification" => 1,
+                    "reseller_notification" => 0,
+                    "admin_message" => $admin_message,
+                ]);
+            } else {
+                DueControl::where("id", $id)->update([
+                    "approved_amount" => $approved_amount,
+                    "status" => $status,
+                    "admin_notification" => 1,
+                    "reseller_notification" => 0,
+                    "admin_message" => $admin_message,
+                ]);
+
+            }
+
 
         }
-        else{
-        if($status=='declined')
-        {
-        DueControl::where('id',$id)->update(['status'=>$status,'admin_notification'=>1,'reseller_notification'=>0,'admin_message'=>$admin_message]);
-        }
-        else{
-        DueControl::where('id',$id)->update(['approved_amount'=>$approved_amount,'status'=>$status,'admin_notification'=>1,'reseller_notification'=>0,'admin_message'=>$admin_message]);
-        }
-        User::where('id',$previous_record->reseller_id)->update(['limit_usage'=>0]);
-    }
-        $this->update_balance($previous_record->reseller_id,$approved_amount);
+        if ($limit_usage > 0) {
 
+            $wallet_before_transaction = $limit_usage;
+            $wallet_after_transaction = 0;
+            $this->create_transaction($id,$previous_record->wallet_type,$wallet_before_transaction, $wallet_after_transaction, $limit_usage,'limit',$previous_record->reseller_id);
+            $wallet_before_transaction = $wallet;
+            $wallet_after_transaction = $approved_amount + $wallet;
+            $this->create_transaction($id,$previous_record->wallet_type,$wallet_before_transaction, $wallet_after_transaction, $approved_amount,'wallet',$previous_record->reseller_id);
+
+        } else {
+            $wallet_before_transaction = $wallet;
+            $wallet_after_transaction = $approved_amount + $wallet;
+            $this->create_transaction($id,$previous_record->wallet_type,$wallet_before_transaction, $wallet_after_transaction, $approved_amount,'wallet',$previous_record->reseller_id);
+
+        }
+
+        $this->update_limit($previous_record->reseller_id,0,$previous_record->wallet_type);
+        $this->update_balance($previous_record->reseller_id, $approved_amount,$previous_record->wallet_type);
 
         event(new DueRequest());
     }
     public function wallet_notification_count()
     {
-        if(auth()->user()->role == 'admin')
-        {
-            $data = DueControl::where('admin_notification',0)->get()->count();
-        }
-        else
-        {
-            $data = DueControl::where('reseller_id',Auth::user()->id)->where('reseller_notification',0)->get()->count();
+        if (auth()->user()->role == "admin") {
+            $data = DueControl::where("admin_notification", 0)
+                ->get()
+                ->count();
+        } else {
+            $data = DueControl::where("reseller_id", Auth::user()->id)
+                ->where("reseller_notification", 0)
+                ->get()
+                ->count();
         }
 
         return $data;

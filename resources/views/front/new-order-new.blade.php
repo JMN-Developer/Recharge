@@ -15,13 +15,13 @@
   <link rel="stylesheet" href="{{asset('css/tempusdominus-bootstrap-4.min.css')}}">
   <!-- Select2 -->
   <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
-  
+
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
-  
+
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
-<script type= "text/javascript" src="{{asset('js/countries.js')}}"></script> 
+<script type= "text/javascript" src="{{asset('js/countries.js')}}"></script>
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
 
@@ -161,7 +161,7 @@
                     <div class="form-group">
                       <label>Country<span id="r_country" style="color:red"></span></label>
                       <select  data-placeholder="Select Country" class="form-control select2"  id="rcountry" name ="rcountry" style="width: 100%;" required>
-                        
+
                       </select>
                     </div>
                     <!-- <div class="form-group">
@@ -180,7 +180,7 @@
                 </div>
               </div>
             </div>
-            <!-- /.row -->   
+            <!-- /.row -->
 
             <div class="row">
               <div class="col-md-12 pt-3">
@@ -189,8 +189,8 @@
               <div class="col-md-6">
                 <div class="bg-ocean mr-1">
                   <div class="order_information">
-                    
-                    
+
+
 
                     <!-- <div class="mb-3">
                       <label for="inputGoodsValue" class="form-label">Goods Value (Euro)</label>
@@ -245,7 +245,7 @@
           </form>
           <!-- /.card-body -->
         </div>
-        <!-- /.card -->  
+        <!-- /.card -->
       </div>
       <!-- /.container-fluid -->
     </section>
@@ -290,7 +290,7 @@ placeholder: function(){
 
 });
     // $('.select2').select2()
-    
+
 
     //Initialize Select2 Elements
     $('.select2bs4').select2({
@@ -312,8 +312,8 @@ placeholder: function(){
    $("#r_country").text('(Select Delivery Type First)')
 
   })
- 
-  
+
+
   $(function () {
       bsCustomFileInput.init();
     });
@@ -332,7 +332,7 @@ function weight() {
    let change = document.getElementById("total").value;
 
    let weight = document.getElementById("weight");
-   
+
    totalCharge.setAttribute('value', change+9);
 
    // let totalCharge = document.getElementById("total");
@@ -347,10 +347,10 @@ function myFunction1234() {
 
    let type = document.getElementById("productType");
    totalCharge.setAttribute('value', change+3);
-   
+
    // let totalCharge = document.getElementById("total");
 
-   console.log(change);
+  // console.log(change);
    // totalCharge.setAttribute('value','')
 
 }
@@ -361,9 +361,9 @@ function myFunction1234() {
 //     // The Alert works
 //     // alert(value);
 //     $(".myDIV").hide();
-    
+
 //     let weight = document.getElementById("weight").value;
-    
+
 //     // fetching var x also works
 //     var x = document.getElementById("myDIV");
 
@@ -383,15 +383,15 @@ function showDiv() {
 
 <script>
   $(document).ready(function(){
-   
-    
+
+
   });
 </script>
 <script>
   $(document).ready(function(){
-    
-   
-    
+
+
+
   });
 </script>
 <script>
@@ -401,7 +401,7 @@ function showDiv() {
     {
         let value = document.getElementById("delivery_condition").value;
         let weight = document.getElementById("weight").value;
-        
+
         if(value == "Documents"){
           $(".myDIV").hide();
         }
@@ -414,7 +414,7 @@ function showDiv() {
 
         var f = document.getElementById("rcountry");
         var country = f.value;
-        
+
         if(type == 'Documents')
         {
           $.ajax({
@@ -474,27 +474,27 @@ function showDiv() {
 
     }
     $("#rcountry").change(function(){
-    
+
     $("#weight").attr('disabled',false);
     $("#weight").attr('placeholder','Product Weight');
     get_total()
-    
-      
+
+
   });
-    
+
     $("#delivery_condition").change(function(){
-      
+
       $("#r_country").hide()
       $("#weight").attr('disabled',true);
       $("#rcountry").attr('disabled',false);
       let value = document.getElementById("delivery_condition").value;
       let weight = document.getElementById("weight").value;
       let country = document.getElementById("rcountry").value;
-    
+
       if(country)
         get_total()
       if(value == "Documents"){
-      
+
         $(".myDIV").hide();
       }
       if(value == "Goods"){
@@ -505,7 +505,7 @@ function showDiv() {
       {
         $("#weight").attr('required',false);
       }
-      
+
       var e = document.getElementById("delivery_condition");
       var type = e.value;
       $('#rcountry').empty()
@@ -531,21 +531,21 @@ function showDiv() {
 
       // var f = document.getElementById("rcountry");
       // var country = f.value;
-      
-   
-  
+
+
+
   });
-    
+
     $("#addiCharge").keyup("input", function(){
-     
+
        get_total();
     })
-    
+
     $("#weight").on("input", function(){
-      
+
       get_total()
     });
-    
+
   });
 </script>
 @endsection

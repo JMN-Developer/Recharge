@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\RechargeHistory;
 use App\Models\User;
 use DB;
+use App\Models\TransactionHistory;
 
 /**
  * Class UpdateWallet
@@ -12,10 +13,74 @@ use DB;
  */
 class UpdateWallet
 {
+    public static function create_transaction($id,$transaction_type,$transaction_source,$wallet_before_transaction,$wallet_after_transaction,$amount,$wallet_type,$reseller_id)
+    {
+        if($transaction_source =='International')
+        {
+        $service_code = 1;
+        $transaction_wallet = 'International';
+        }
+        else if($transaction_source =='Domestic')
+        {
+            $service_code = 2;
+            $transaction_wallet = 'Domestic';
+        }
+
+        else if($transaction_source =='Pin')
+        {
+            $service_code = 3;
+            $transaction_wallet = 'Domestic';
+        }
+
+        else if($transaction_source =='White Calling')
+        {
+            $service_code = 4;
+            $transaction_wallet = 'International';
+        }
+
+        else if($transaction_source =='Sim')
+        {
+            $service_code = 5;
+
+            $transaction_wallet = 'Sim';
+        }
+
+        else if($transaction_source =='Cargo')
+        {
+            $service_code = 6;
+            $transaction_wallet = 'Cargo';
+        }
+
+        // else if($transaction_source =='Wallet Request')
+        // {
+        //     $service_code = 7;
+        //     $transaction_wallet = 'Wallet Request';
+        // }
+
+
+        $transaction_id = date('dmyHis'). str_pad($reseller_id, 4, "0", STR_PAD_LEFT).str_pad($service_code, 2, "0", STR_PAD_LEFT);
+        TransactionHistory::create([
+            'reseller_id'=>$reseller_id,
+            'transaction_id'=>$transaction_id,
+            'transaction_source_id'=>$id,
+            'transaction_type'=>$transaction_type,
+            'transaction_source'=>$transaction_source,
+            'amount'=>$amount,
+            'transaction_wallet'=>$transaction_wallet,
+            'wallet_before_transaction'=>$wallet_before_transaction,
+            'wallet_after_transaction'=>$wallet_after_transaction,
+            'wallet_type'=>$wallet_type
+
+
+        ]);
+    }
+
     public static function update($recharge)
     {
         if(auth()->user()->role != 'admin')
         {
+            if($recharge->type =='International' || $recharge->type =='White Calling' )
+            {
 
         $total_cost = $recharge->amount-$recharge->reseller_com;
 
@@ -23,34 +88,95 @@ class UpdateWallet
 
         $current_balance = $user_info->wallet;
         $current_limit_usage = $user_info->limit_usage;
+
+       // file_put_contents('test.txt',$discount." ".$reseller_profit." ".$total_cost." ".$current_balance." ".$updated_balance);
+        if($current_balance < $total_cost)
+        {
+            if($current_balance <= 0 )
+            {
+                $wallet_before_transaction = auth()->user()->limit_usage;
+                $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['limit_usage'=>$current_limit_usage+$total_cost])->first();
+                $wallet_after_transaction = $user->limit_usage;
+                //$user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$total_cost]);
+                 RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit']);
+                 UpdateWallet::create_transaction($recharge->id,'Debit',$recharge->type,$wallet_before_transaction,$wallet_after_transaction,$total_cost,'limit',$user->id);
+
+            }
+            else{
+            $wallet_deduct = $total_cost-$current_balance;
+            $wallet_before_transaction = auth()->user()->wallet;
+           // $user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0]);
+            $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0])->first();
+             $wallet_after_transaction = 0;
+            RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit:'.$wallet_deduct.','.'Wallet:'.$current_balance]);
+            UpdateWallet::create_transaction($recharge->id,'Debit',$recharge->type,$wallet_before_transaction,$wallet_after_transaction,$total_cost-$wallet_before_transaction,'main wallet',$user->id);
+            $wallet_before_transaction = 0;
+            $wallet_after_transaction = auth()->user()->limit_usage;
+            UpdateWallet::create_transaction($recharge->id,'Debit',$recharge->type,$wallet_before_transaction,$wallet_after_transaction,$total_cost-$wallet_after_transaction,'limit',$user->id);
+            }
+        }
+        else
+        {
+            $updated_balance = $current_balance-$total_cost;
+     //   $user = User::where('id',auth()->user()->id)->updateOrCreate(['wallet'=>$updated_balance]);
+         $wallet_before_transaction = auth()->user()->wallet;
+        $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['wallet'=>$updated_balance])->first();
+        $wallet_after_transaction = $user->wallet;
+
+        RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Wallet']);
+        UpdateWallet::create_transaction($recharge->id,'Debit',$recharge->type,$wallet_before_transaction,$wallet_after_transaction,$total_cost,'wallet',$user->id);
+        }
+
+
+         }
+         else
+         {
+
+        $total_cost = $recharge->amount-$recharge->reseller_com;
+
+        $user_info =  User::where('id',auth()->user()->id)->first();
+
+        $current_balance = $user_info->domestic_wallet;
+        $current_limit_usage = $user_info->domestic_limit_usage;
         $updated_balance = $current_balance-$total_cost;
        // file_put_contents('test.txt',$discount." ".$reseller_profit." ".$total_cost." ".$current_balance." ".$updated_balance);
         if($current_balance < $total_cost)
         {
             if($current_balance <= 0 )
             {
-                RechargeHistory::where('id',$recharge->id)->update(['balance_before_recharge'=>auth()->user()->limit_usage]);
-                $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['limit_usage'=>$current_limit_usage+$total_cost])->first();
-
+                $wallet_before_transaction = auth()->user()->domestic_limit_usage;
+                $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['domestic_limit_usage'=>$current_limit_usage+$total_cost])->first();
+                $wallet_after_transaction = $user->domestic_limit_usage;
                 //$user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$total_cost]);
-                RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit','balance_after_recharge'=>$user->limit_usage]);
+                 RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit']);
+                 UpdateWallet::create_transaction($recharge->id,'Debit',$recharge->type,$wallet_before_transaction,$wallet_after_transaction,$total_cost,'limit',$user->id);
 
             }
             else{
             $wallet_deduct = $total_cost-$current_balance;
-            RechargeHistory::where('id',$recharge->id)->update(['balance_before_recharge'=>auth()->user()->wallet]);
+            $wallet_before_transaction = auth()->user()->domestic_wallet;
            // $user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0]);
-            $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['limit_usage'=>$current_limit_usage+$wallet_deduct,'wallet'=>0])->first();
-            RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit:'.$wallet_deduct.','.'Wallet:'.$current_balance,'balance_after_recharge'=>$user->limit_usage]);
+            $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['domestic_limit_usage'=>$current_limit_usage+$wallet_deduct,'domestic_wallet'=>0])->first();
+             $wallet_after_transaction = 0;
+            RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Limit:'.$wallet_deduct.','.'Wallet:'.$current_balance]);
+            UpdateWallet::create_transaction($recharge->id,'Debit',$recharge->type,$wallet_before_transaction,$wallet_after_transaction,$total_cost-$wallet_before_transaction,'main wallet',$user->id);
+            $wallet_before_transaction = 0;
+            $wallet_after_transaction = auth()->user()->domestic_limit_usage;
+            UpdateWallet::create_transaction($recharge->id,'Debit',$recharge->type,$wallet_before_transaction,$wallet_after_transaction,$total_cost-$wallet_after_transaction,'limit',$user->id);
             }
         }
         else
         {
-        RechargeHistory::where('id',$recharge->id)->update(['balance_before_recharge'=>auth()->user()->wallet]);
+
      //   $user = User::where('id',auth()->user()->id)->updateOrCreate(['wallet'=>$updated_balance]);
-        $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['wallet'=>$updated_balance])->first();
-        RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Wallet','balance_after_recharge'=>$user->wallet]);
+         $wallet_before_transaction = auth()->user()->domestic_wallet;
+        $user = tap(DB::table('users')->where('id', auth()->user()->id)) ->update(['domestic_wallet'=>$updated_balance])->first();
+        $wallet_after_transaction = $user->domestic_wallet;
+
+        RechargeHistory::where('id',$recharge->id)->update(['recharge_source'=>'Wallet']);
+        UpdateWallet::create_transaction($recharge->id,'Debit',$recharge->type,$wallet_before_transaction,$wallet_after_transaction,$total_cost,'wallet',$user->id);
         }
+         }
 
     }
 

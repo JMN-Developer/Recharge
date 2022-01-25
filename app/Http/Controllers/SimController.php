@@ -18,8 +18,10 @@ use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
 use PDF;
 use App\Events\SimRequest;
+use App\Services\UpdateWallet;
 use NumberFormatter;
 use DataTables;
+use DB;
 
 class SimController extends Controller
 {
@@ -50,13 +52,13 @@ class SimController extends Controller
         {
             $user = User::where('id',$existing_reseller_id)->first();
             User::where('id',$existing_reseller_id)->update(['sim_wallet'=>$user->sim_wallet-$existing_price]);
-            $this->update_sim_wallet($request->buy_price,$request->re_seller);
+            $this->update_sim_wallet($request->buy_price,$request->re_seller,$existing_reseller_id);
         }
         if($existing_price!=$request->buy_price)
         {
             $user = User::where('id',$existing_reseller_id)->first();
             User::where('id',$existing_reseller_id)->update(['sim_wallet'=>$user->sim_wallet-$existing_price]);
-            $this->update_sim_wallet($request->buy_price,$request->re_seller);
+            $this->update_sim_wallet($request->buy_price,$request->re_seller,$existing_reseller_id);
         }
         $create = sim::where('id',$request->id)->update([
             'operator' => $request->operator,
@@ -72,7 +74,7 @@ class SimController extends Controller
     }
 
     public function index(Request $request)
-    { 
+    {
 
         if(Auth::user()->role == 'user'){
             $show = sim::where('status', 'available')
@@ -89,13 +91,13 @@ class SimController extends Controller
                 $operator = SimOperator::all();
                 $user = User::where('role','user')->get();
                 $total = $show->count();
-               
+
             }
-        
+
         if ($request->type=='datatable') {
-           
-         
-            
+
+
+
             return Datatables::of($show)
             ->addColumn('reseller', function($show){
                 return $show->user->first_name.' '.$show->user->last_name;
@@ -104,34 +106,34 @@ class SimController extends Controller
             ->addColumn('buy_date',function($show){
                 return date('Y-m-d', strtotime($show->created_at));
             })
-           
+
             ->addColumn('action', function($show){
 
-                
+
                 $button = '';
 
-                
+
                 $button.= '<a href="buy-sim/'.$show->id.'" type="button" class="btn btn-info btn-sm">Sale</a>';
-               
+
                 return $button;
              })
              ->addColumn('edit_column', function($show){
 
-                
+
                 $button2 = '';
 
-                
+
                 $button2.='<a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="sim_edit('.$show->id.')"><i class="la la-edit"></i></a>';
-               
+
                 return $button2;
              })
-            
+
 
             ->addIndexColumn()
             ->rawColumns(['edit_column','action'])
             ->make(true);
         }
-        
+
         if(Auth::user()->role =='user')
         {
             return view('front.sim-activation',compact('show','total'));
@@ -140,7 +142,7 @@ class SimController extends Controller
         {
             return view('front.sim-activation',compact('show','operator','user','total'));
         }
-        
+
     }
 
     /**
@@ -160,22 +162,22 @@ class SimController extends Controller
             'address'       => 'The Green Street 12',
             'code'          => '#22663214',
             'custom_fields' => [
-                'order number' => '> 654321 <', 
+                'order number' => '> 654321 <',
             ],
         ]);
-        
+
         $operator = SimOperator::where('operator', $data->operator)->first();
-      
+
         $digit = new NumberFormatter("en", NumberFormatter::SPELLOUT);
         $price = '€ '.$data->sell_price;
         $note = 'MODULO DI IDENTIFICAZIONE E ATTIVAZIONE DEL SERVIZIO MOBILE PREPAGATO SI DICHIARA A TUTTI GLI EFFETTI DI LEGGE CHE TUTTE LE INFORMAZIONE E I DATI INDICATI NEL PRESENTE DOCUMENTO SONO ACCURATI, COMPLETI VERITIERI';
-     
+
         $invoice = ['id'=>$data->id,'invoice_no'=>$data->invoice_no,'sim_number'=>$data->sim_number,'name'=>'Invoice','logo'=>'../../storage/'.$operator->img,'date'=> date('Y-m-d', strtotime($sim->created_at)),'price'=>$price,'buyer'=>$customer,'notes'=>$note,'first'=>$data->first_name,'last'=>$data->last_name,'dob'=>$data->dob,'gender'=>$data->gender,'codice'=>$data->codice,'iccid'=>$data->iccid,'nationality'=>$data->nationality];
-        
+
         $invoice = json_decode(json_encode($invoice), FALSE);
         if($request->has('download')){
             // $pdf = PDF::loadView('pdf.SimInvoice2',compact('invoice'))->setOptions(['defaultFont' => 'sans-serif']);
-           
+
             // $date = Carbon\Carbon::now();
             // return $pdf->stream($date.'.pdf');
 
@@ -195,7 +197,7 @@ class SimController extends Controller
                 ->notes('MODULO DI IDENTIFICAZIONE E ATTIVAZIONE DEL SERVIZIO MOBILE PREPAGATO SI DICHIARA A TUTTI GLI EFFETTI DI LEGGE CHE TUTTE LE INFORMAZIONE E I DATI INDICATI NEL PRESENTE DOCUMENTO SONO ACCURATI, COMPLETI VERITIERI,')
                 ->addItem($item);
             return $invoice->stream();
-        }  
+        }
 
         return view('pdf.SimInvoice',compact('invoice'));
     }
@@ -218,7 +220,7 @@ class SimController extends Controller
             'original_price'=>$request->original_price,
             'status' => 'available'
         ]);
-        $this->update_sim_wallet($request->buy_price,$request->re_seller);
+        $this->update_sim_wallet($request->buy_price,$request->re_seller,$create->id);
         return redirect('/sim/sim-activation');
     }
 
@@ -253,12 +255,14 @@ class SimController extends Controller
         return Storage::download($file);
     }
 
-    public function update_sim_wallet($sim_price,$reseller_id)
+    public function update_sim_wallet($sim_price,$reseller_id,$id)
     {
         $user = User::where('id',$reseller_id)->first();
-
-
-        User::where('id',$reseller_id)->update(['sim_wallet'=>$user->sim_wallet+$sim_price]);
+        $wallet_before_transaction = $user->sim_wallet;
+        $user = tap(DB::table('users')->where('id', $reseller_id)) ->update(['sim_wallet'=>$user->sim_wallet+$sim_price])->first();
+        $wallet_after_transaction = $user->sim_wallet;
+       // User::where('id',$reseller_id)->update(['sim_wallet'=>$user->sim_wallet+$sim_price]);
+        UpdateWallet::create_transaction($id,'debit','Sim',$wallet_before_transaction,$wallet_after_transaction,$sim_price,'wallet',$reseller_id);
     }
 
     /**
@@ -270,14 +274,14 @@ class SimController extends Controller
      */
     public function buy(Request $request)
     {
-       
+
        $sim = sim::where('id', $request->sim_id)->first();
         $path = $request->file->store('sim/uploads', 'public');
         if($request->file2 != null){
-           
+
             $path2 = $request->file2->store('sim/uploads', 'public');
         }else{
-           
+
             $path2 = null;
         }
         $order = SimOrder::create([
@@ -305,7 +309,7 @@ class SimController extends Controller
             'invoice_no'=>'JM-'.mt_rand(100000,999999),
             'recharge' => $request->recharge
         ]);
-      
+
         $update = sim::where('id', $request->sim_id)->update([
             'status' => 'pending'
         ]);
@@ -318,7 +322,7 @@ class SimController extends Controller
 
     public function orders(){
         if(Auth::user()->role == 'admin'){
-            
+
        SimOrder::where('admin_notification',1)->update(['admin_notification'=>0]);
 
         $data = SimOrder::join('sims','sims.id','=','sim_orders.sim_id')

@@ -36,8 +36,7 @@ use App\Models\Order;
 use App\Models\DomesticProduct;
 use App\Models\DomesticProfit;
 use App\Http\Controllers\ReportController;
-
-
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -156,8 +155,8 @@ Route::post('/sim-order/update', [SimController::class,'sim_order_update']);
 
 
     //  CREATE NEW ORDER
-   
-  
+
+
 
 //  PHONE START
 
@@ -340,6 +339,8 @@ Route::group(['prefix' => 'cargo','middleware'=>['auth','user']], function()
 
 });
 
+Route::get('transaction-history',[TransactionController::class,'index'])->name('transaction-history');
+
 Route::group(['prefix' => 'phone','middleware'=>['auth']], function()
 {
 
@@ -451,13 +452,14 @@ Route::group(['middleware'=>['auth','admin']], function()
 
 
     Route::post('/edit_limit',[BalanceController::class,'EditLimit'])->name('EditLimit');
+    Route::post('/edit_limit_domestic',[BalanceController::class,'EditLimitDomestic'])->name('EditLimitDomestic');
 
     Route::get('/change-phone-price', [BalanceController::class,'PriceDiscount']);
 
     Route::post('/edit_wallet',[BalanceController::class,'edit_wallet']);
 
 
-   
+
 });
 
 

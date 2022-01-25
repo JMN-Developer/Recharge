@@ -199,7 +199,7 @@ class PpnController extends Controller
     {
 
         //file_put_contents('test.txt',$test);
-        if(!CheckRechargeAvail::check($request->amount))
+        if(!CheckRechargeAvail::check($request->amount,'International'))
         {
             return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
         }
@@ -266,7 +266,7 @@ class PpnController extends Controller
     {
         if(a::user()->role == 'user'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','=','White Calling')->latest()->take(10)->get();
-            
+
         }else{
             $data = RechargeHistory::where('type','White Calling')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')
@@ -299,7 +299,7 @@ class PpnController extends Controller
 
     public function pin(Request $request)
     {
-        if(!CheckRechargeAvail::check($request->amount))
+        if(!CheckRechargeAvail::check($request->amount,'International'))
         {
             return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
         }

@@ -105,7 +105,7 @@
             </div>
           </div>
         </div>
-       
+
         <div class="row">
           <div class="col-12">
             <div class="card mt-3">
@@ -178,7 +178,7 @@
                 <h3 class="card-title"><i class="fas fa-list" style="margin-right: 10px;"></i><strong>Sale List</strong></h3>
 
                 <div class="card-tools">
-                 
+
                 </div>
               </div>
               <!-- /.card-header -->
@@ -203,7 +203,7 @@
                     </tr>
                   </thead>
                   <tbody style="text-align: center">
-                   
+
                   </tbody>
                 </table>
               </div>
@@ -300,13 +300,13 @@ TableFilter.init();
               $('#sim_edit').modal('show')
             }
         });
-      
+
     }
-  
+
 </script>
 <script>
   $(function () {
-   
+
     get_data();
       //Initialize Select2 Elements
       $('.select2').select2()
@@ -317,9 +317,9 @@ TableFilter.init();
       })
       function get_data()
       {
-     
 
-  
+
+
 
 var table = $('.sim_table').DataTable();
 table.destroy();
@@ -355,16 +355,16 @@ ajax: {
         {data:'operator',name:'operator'},
         @if(Auth::user()->role == 'admin')
         {
-       
+
          name:'reseller',
          data:'reseller',
-          
+
         },
         {
-       
+
        name:'status',
        data:'status',
-        
+
       },
         @endif
         {data:'iccid',name:'iccid'},
@@ -385,9 +385,9 @@ ajax: {
 
 
 }
-      
+
 
     })
-    
+
 </script>
 @endsection

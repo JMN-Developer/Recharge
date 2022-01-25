@@ -104,7 +104,7 @@ table.dataTable thead .sorting_asc{
               <div class="p-3">
 
 
-              
+
                 <div class="converter_section mt-5">
                   <div class="converter_btn-1">
                     <button type="button" class="btn btn-info btn-sm">Copy</button>
@@ -354,7 +354,7 @@ function fetch_table(start_date,end_date)
             "url":'get_all_invoice',
             "type":'POST',
             dataSrc: function ( data ) {
-             
+
            total_profit = data.data[0].total_profit;
            total_cost = data.data[0].total_cost;
 
@@ -390,7 +390,7 @@ function fetch_table(start_date,end_date)
 
   drawCallback: function () {
             var api = this.api();
-            
+
         $( api.column( 4 ).footer() ).html(
           total_cost
             );

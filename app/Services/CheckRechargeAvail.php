@@ -47,21 +47,31 @@ class CheckRechargeAvail
     }
 
 
-    public static function check($requested_amount)
+    public static function check($requested_amount,$type)
     {
         $instance = new CheckRechargeAvail();
         if(auth()->user()->role == 'admin')
         {
-            file_put_contents('test.txt','true1');
+
             return true;
         }
 
         $user_info = User::where('id',auth()->user()->id)->first();
+        if($type == 'International')
+        {
         $current_wallet = $user_info->wallet;
         $limit = $user_info->due;
         $limit_usage = $user_info->limit_usage;
+
+        }
+        else
+        {
+            $current_wallet = $user_info->domestic_wallet;
+            $limit = $user_info->domestic_due;
+            $limit_usage = $user_info->domestic_limit_usage;
+
+        }
         $due_limit = $limit-$limit_usage;
-      
         if($requested_amount>$current_wallet)
         {
             if($requested_amount>$due_limit)
@@ -71,13 +81,13 @@ class CheckRechargeAvail
             }
             else
             {
-                // 
+                //
                 $instance->send_alert_email();
                 return true;
             }
 
         }
-       
+
         $instance->send_alert_email();
         //file_put_contents('test.txt','true2');
       return true;

@@ -17,10 +17,14 @@ class CreateTransactionHistoriesTable extends Migration
             $table->id();
             $table->integer('reseller_id');
             $table->string('transaction_id');
+            $table->integer('transaction_source_id');
             $table->string('transaction_type');
-            $table->float('total_amount');
-            $table->float('wallet_amount');
-            $table->float('limit_amount')->default(0);
+            $table->string('transaction_source');
+            $table->float('amount');
+            $table->string('transaction_wallet');
+            $table->string('wallet_type');
+            $table->string('wallet_before_transaction');
+            $table->string('wallet_after_transaction');
             $table->timestamps();
         });
     }

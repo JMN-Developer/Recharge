@@ -252,13 +252,17 @@ margin-left: 3px;
             <p class='text-center' style="color: #b9ff38;">JM Nation </p>
           @endif
             @if (Auth::user()->role != 'admin' && Auth::user()->role != 'admin2' )
-            <p style="color: #b9ff38;"><b class="mr-2">Wallet:</b><span>{{ Auth()->user()->wallet }}</span>
-                <a href="{{ route('wallet-request') }}" class="notification">
-                    <span style="font-weight:bold;color:black">WR</span>
-                    <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
-                  </a>
+            {{-- <p>   <a href="{{ route('wallet-request') }}" class="notification">
+                <span style="font-weight:bold;color:black">WR</span>
+                <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
+              </a></p> --}}
+            <p style="color: #b9ff38;"><b class="mr-2">International Wallet:</b><span>{{ Auth()->user()->wallet }}</span>
+
             </p>
-            <p><b>Limit:  </b><span style="margin-left:10px">{{ auth()->user()->limit_usage }}/{{ auth()->user()->due }}</span></p>
+            <p><b>International Limit:  </b><span style="margin-left:10px">{{ auth()->user()->limit_usage }}/{{ auth()->user()->due }}</span></p>
+            <p><b>Domestic Wallet:  </b><span style="margin-left:10px">{{ auth()->user()->domestic_wallet }}</span></p>
+            <p><b>Domestic Limit:  </b><span style="margin-left:10px">{{ auth()->user()->domestic_limit_usage }}/{{ auth()->user()->domestic_due }}</span></p>
+
             <p style="color: #b9ff38;"><b class="mr-2">Sim:</b><span>{{ Auth()->user()->sim_wallet }}</span></p>
             <p style="color: #b9ff38;"><b class="mr-2">Cargo:</b><span>{{ Auth()->user()->cargo_wallet }}</span></p>
 
@@ -612,6 +616,16 @@ margin-left: 3px;
               </li>
 
               @if(auth()->user()->role == 'user')
+              <li class="@if(Route::currentRouteName() == 'transaction-history') nav-item menu-open @endif nav-item">
+                <a href="{{ route('transaction-history') }}" class="@if(Route::currentRouteName() == 'transaction-history') nav-link active @endif nav-link">
+                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <p>
+                    Transaction History
+
+                  </p>
+                </a>
+              </li>
+
               <li class="@if(Route::currentRouteName() == 'contact-info') nav-item menu-open @endif nav-item">
                 <a href="{{ route('contact-info') }}" class="@if(Route::currentRouteName() == 'contact-info') nav-link active @endif nav-link">
                   <i class="fa fa-cog" aria-hidden="true"></i>
@@ -636,7 +650,7 @@ margin-left: 3px;
               </li>
               @endif
 
-              @if(auth()->user()->role == 'admin')
+              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user'  )
               <li class="@if(Route::currentRouteName() == 'wallet-request') nav-item menu-open @endif nav-item">
                 <a href="{{ route('wallet-request') }}" class="@if(Route::currentRouteName() == 'wallet-request') nav-link active @endif nav-link">
                   <i class="fa fa-cog" aria-hidden="true"></i>

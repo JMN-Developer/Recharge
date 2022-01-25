@@ -15,9 +15,9 @@ class PricingController extends Controller
         return view('front.price-list',compact('orders'));
 
 
-        // $prices->type = $request->input('type'); 
-        // $prices->weight_start = $request->input('weight_start');        
-        // $prices->weight_end = $request->input('weight_end');        
+        // $prices->type = $request->input('type');
+        // $prices->weight_start = $request->input('weight_start');
+        // $prices->weight_end = $request->input('weight_end');
         // $prices->charge_for_weight = $request->input('charge_for_weight');
         // $prices->charge_for_country = $request->input('charge_for_country');
         // $prices->ef_2 = $request->input('ef_1');
@@ -35,9 +35,9 @@ class PricingController extends Controller
     public function AddPricing(Request $request)
     {
         $prices = new OrderRatings;
-        $prices->type = $request->input('type'); 
-        $prices->weight_start = $request->input('weight_start');        
-        $prices->weight_end = $request->input('weight_end');        
+        $prices->type = $request->input('type');
+        $prices->weight_start = $request->input('weight_start');
+        $prices->weight_end = $request->input('weight_end');
         $prices->charge_for_weight = $request->input('charge_for_weight');
         $prices->charge_for_country = $request->input('charge_for_country');
         $prices->country_name = $request->input('country_name');
@@ -47,21 +47,21 @@ class PricingController extends Controller
 
         return back()->with('status', 'Price Created Successfully!');
     }
-    
+
     public function EditPricing($id)
     {
 
         $orders = OrderRatings::find($id);
         // dd($orders);
         return view('front.edit-pricing',compact('orders'));
-        
+
     }
     public function EditPricingForReal(Request $request, $id)
     {
         $prices = OrderRatings::find($id); ;
-        $prices->type = $request->input('type'); 
-        $prices->weight_start = $request->input('weight_start');        
-        $prices->weight_end = $request->input('weight_end');        
+        $prices->type = $request->input('type');
+        $prices->weight_start = $request->input('weight_start');
+        $prices->weight_end = $request->input('weight_end');
         $prices->charge_for_weight = $request->input('charge_for_weight');
         $prices->charge_for_country = $request->input('charge_for_country');
         $prices->country_name = $request->input('country_name');
@@ -93,19 +93,19 @@ class PricingController extends Controller
             $variable_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','variable')->orderBy('weight_end','ASC')->get();
             $variable_weight = $w - $fixed_weight_limit;//95
             $price = $fixed_data->total;
-          
+
             foreach($variable_data as $data)
             {
-               
+
                 $remaining_weight = $w - $data->weight_end;//105-100
 
-                
-                
-                
+
+
+
                 if($remaining_weight<0)
                 {
                     $price +=$variable_weight*$data->total;
-                   
+
                     return response($price);
                 }
                 else
@@ -113,28 +113,28 @@ class PricingController extends Controller
                     $deduct_weight = $data->weight_end -$data->weight_start+1;//900
                     $price +=$deduct_weight*$data->total;
                     $variable_weight -=$deduct_weight;
-                   
-                    
+
+
                 }
-               
-              
-                
+
+
+
             }
             if($variable_weight>0)
             {
                 $size = sizeof($variable_data);
                 $price += $variable_data[$size-1]->total*$variable_weight;
                 return $price;
-                
+
             }
-            
+
             //file_put_contents('test.txt',json_encode($variable_data));
 
         }
         $data = OrderRatings::where('country_name', '=', $request->country)->where('weight_start', '<=', $request->weight)->where('weight_end', '>=', $request->weight)->get('total');
         // $data = $data[0]->total;
         // $data = OrderRatings::where('country_name', '=', $request->country)->where('type', '=', $request->type)->get('total');
-        
+
         if(count($data) < 1){
             $data = "No data";
         }else{
@@ -146,7 +146,7 @@ class PricingController extends Controller
     public function SendPricingForDocs(Request $request)
     {
         $data = OrderRatings::where('country_name', '=', $request->country)->where('type', '=', $request->type)->get('total');
-        
+
         if(count($data) < 1){
             $data = "No data";
         }else{
@@ -159,7 +159,7 @@ class PricingController extends Controller
     public function GetCountryByType(Request $request)
     {
         $data = OrderRatings::where('type', '=', $request->type)->distinct()->get('country_name');
-        
+
         // if(count($data) < 1){
         //     $data = "No data";
         // }else{

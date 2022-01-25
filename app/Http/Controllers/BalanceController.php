@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use App\Models\TransactionHistory;
-
+use App\Services\UpdateWallet;
+use DB;
 class BalanceController extends Controller
 {
     //
@@ -111,52 +112,66 @@ class BalanceController extends Controller
     public function EditLimit(Request $request)
     {
         User::where('id',$request->user_id)->update(['due'=>$request->due]);
-        return back();
+        return back()->with('success','International Limit Updated');
+    }
+
+    public function EditLimitDomestic(Request $request)
+    {
+        User::where('id',$request->user_id)->update(['domestic_due'=>$request->domestic_due]);
+        return back()->with('success','Domestic Limit Updated');
     }
 
     public function EditDue(Request $request){
 
-       
+
         $info = User::where('id', $request->user_id)->first();
-        file_put_contents('test.txt',$info->cargo_wallet." ".$request->due);
+        $wallet_before_transaction = $info->cargo_wallet;
+
         if($info->cargo_wallet >= $request->due){
-            $user = User::where('id', $request->user_id)->update([
+            // $user = User::where('id', $request->user_id)->update([
 
-                "cargo_wallet" => $info->cargo_wallet - $request->due
+            //     "cargo_wallet" => $info->cargo_wallet - $request->due
 
-            ]);
+            // ]);
 
+            $user = tap(DB::table('users')->where('id', $request->user_id)) ->update([ "cargo_wallet" => $info->cargo_wallet - $request->due])->first();
+            $wallet_after_transaction = $user->sim_wallet;
+            UpdateWallet::create_transaction(0,'credit','Cargo',$wallet_before_transaction,$wallet_after_transaction,$request->due,'main wallet',$request->user_id);
             return back()->with('success','Wallet Updated');
         }else{
             return back()->with('error','Due Amount Is Less Than The Input');
         }
     }
 
-    public function update_transaction($total_amount,$reseller_id,$transaction_type)
-    {
-        
-        TransactionHistory::create([
-            'reseller_id'=>$reseller_id,
-            'transaction_id'=>'JM-'. mt_rand(100000,999999),
-            'transaction_type'=>$transaction_type,
-            'total_amount'=>$total_amount,
-            'wallet_amount'=>$total_amount,
-          
+    // public function update_transaction($total_amount,$reseller_id,$transaction_type)
+    // {
 
-        ]);
-    }
+    //     TransactionHistory::create([
+    //         'reseller_id'=>$reseller_id,
+    //         'transaction_id'=>'JM-'. mt_rand(100000,999999),
+    //         'transaction_type'=>$transaction_type,
+    //         'total_amount'=>$total_amount,
+    //         'wallet_amount'=>$total_amount,
+
+
+    //     ]);
+    // }
 
     public function SimDue(Request $request){
 
         $info = User::where('id', $request->user_id)->first();
-
+        $wallet_before_transaction = $info->sim_wallet;
         if($info->sim_wallet >= $request->due){
-            $user = User::where('id', $request->user_id)->update([
+            // $user = User::where('id', $request->user_id)->update([
 
-                "sim_wallet" => $info->sim_wallet - $request->due
+            //     "sim_wallet" => $info->sim_wallet - $request->due
 
-            ]);
-            $this->update_transaction($request->due,$request->user_id,'Sim');
+            // ]);
+
+            $user = tap(DB::table('users')->where('id', $request->user_id)) ->update([ "sim_wallet" => $info->sim_wallet - $request->due])->first();
+            $wallet_after_transaction = $user->sim_wallet;
+            UpdateWallet::create_transaction(0,'credit','Sim',$wallet_before_transaction,$wallet_after_transaction,$request->due,'main wallet',$request->user_id);
+            //$this->update_transaction($request->due,$request->user_id,'Sim');
             return back()->with('success','Wallet Updated');
         }else{
             return back()->with('error','Due Amount Is Greater Than The Input');

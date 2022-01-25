@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
 use Auth;
+use App\Services\UpdateWallet;
+use DB;
 
 
 class OrderController extends Controller
@@ -107,11 +109,11 @@ class OrderController extends Controller
 
         if($orders->delivery_condition == 'Goods')
         {
-            $this->update_cargo_wallet($main_price,Auth::user()->cargo_goods_profit);
+            $this->update_cargo_wallet($main_price,Auth::user()->cargo_goods_profit,$orders->id);
          }
          else
          {
-            $this->update_cargo_wallet($main_price,Auth::user()->cargo_documents_profit);
+            $this->update_cargo_wallet($main_price,Auth::user()->cargo_documents_profit,$orders->id);
          }
 
 
@@ -126,11 +128,15 @@ class OrderController extends Controller
     }
 
 
-    public function update_cargo_wallet($cargo_price,$percentage)
+    public function update_cargo_wallet($cargo_price,$percentage,$id)
     {
         // $user = User::where('id',$reseller_id)->first();
         $cargo_price = $cargo_price -  round((($percentage/100)*$cargo_price),2);
-        User::where('id',Auth::user()->id)->update(['cargo_wallet'=>Auth::user()->cargo_wallet+$cargo_price]);
+        $wallet_before_transaction = auth()->user()->cargo_wallet;
+       // User::where('id',Auth::user()->id)->update(['cargo_wallet'=>Auth::user()->cargo_wallet+$cargo_price]);
+        $user = tap(DB::table('users')->where('id', Auth::user()->id)) ->update(['cargo_wallet'=>Auth::user()->cargo_wallet+$cargo_price])->first();
+        $wallet_after_transaction =$user->cargo_wallet;
+        UpdateWallet::create_transaction($id,'debit','Cargo',$wallet_before_transaction,$wallet_after_transaction,$cargo_price,'wallet',Auth::user()->id);
     }
 
     public function update_status(Request $request)

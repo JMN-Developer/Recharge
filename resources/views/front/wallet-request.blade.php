@@ -74,13 +74,26 @@
 
 
                 <form id="wallet_submit" class="form-inline" style="justify-content: center;padding-bottom:10px">
+
+                    <div class="form-group mb-2" style="width: 43px">
+                        <label for="staticEmail2" class="sr-only"></label>
+                        <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Wallet:" disabled>
+                      </div>
+                      <div class="form-group mx-sm-3 mb-2">
+                        <select data-placeholder="select" class="custom-select wallet_type" name="wallet_type" required>
+                            <option value="" disabled selected >Please Select Wallet Type</option>
+                            <option value="International">International</option>
+                            <option value="Domestic">Domestic</option>
+                        </select>
+                      </div>
+
                     <div class="form-group mb-2" style="width: 128px">
                       <label for="staticEmail2" class="sr-only"></label>
                       <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Requested Amount" disabled>
                     </div>
                     <div class="form-group mx-sm-3 mb-2">
                       <label for="inputPassword2" class="sr-only">Amount</label>
-                      <input type="text" class="form-control" id="amount" placeholder="Amount" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;">
+                      <input type="text" class="form-control" id="amount" placeholder="Amount" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" required>
                     </div>
                     <div class="form-group mb-2" style="width: 123px">
                         <label for="staticEmail2" class="sr-only" >Message</label>
@@ -166,6 +179,7 @@
                     <th scope="col">Approved Amount</th>
                     <th scope="col">Requested Date</th>
                     <th scope="col">Approved Date</th>
+                    <th scope="col">Wallet Type</th>
                     <th scope="col">Status</th>
                     @if(auth()->user()->role =='admin')
                     <th scope="col">Action</th>
@@ -224,6 +238,8 @@
         var formdata = new FormData();
         formdata.append('amount',$('#amount').val());
         formdata.append('message',$("#message").val());
+        formdata.append('wallet_type',$(".wallet_type :selected").val());
+      //  formdata.append('wallet_type' $(".wallet_type :selected").val());
 
       $.ajax({
         processData: false,
@@ -525,6 +541,7 @@
         + '<td>' + item[i].approved_amount +  '</td>'
         + '<td>' + item[i].requested_date +  '</td>'
         + '<td>' + item[i].approved_date +  '</td>'
+        + '<td>' + item[i].wallet_type +  '</td>'
         + '<td class="'+class_name+'" style="font-weight:bold">' + item[i].status +  '</td>'
         ;
         if(user_role == 'admin')

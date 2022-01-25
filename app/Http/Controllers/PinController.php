@@ -15,6 +15,7 @@ use DB;
 use App\Models\DomesticProduct;
 use App\Services\UpdateWallet;
 use App\Models\RechargeHistory;
+use App\Services\CheckRechargeAvail;
 
 class PinController extends Controller
 {
@@ -51,6 +52,11 @@ class PinController extends Controller
      */
     public function store(Request $request)
     {
+        if(!CheckRechargeAvail::check($request->amount,'Domestic'))
+        {
+            return  Redirect()->back()->with('error','Insufficient wallet & Limit. Please contact with admin');
+           // return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+        }
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
 

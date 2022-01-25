@@ -916,7 +916,7 @@ class RechargeController extends Controller
 
         }
 
-        if (CheckRechargeAvail::check($SendValue)) {
+        if (CheckRechargeAvail::check($SendValue,'International')) {
             $client = new \GuzzleHttp\Client(['http_errors' => false]);
             $recharge_request = $client->post('https://api.dingconnect.com/api/V1/SendTransfer',[
             'headers' => [
@@ -1147,7 +1147,7 @@ class RechargeController extends Controller
        // file_put_contents('test.txt',$request->amount);
 
         $sku_amount = explode(',',$request->amount);
-        if(!CheckRechargeAvail::check($sku_amount['1']))
+        if(!CheckRechargeAvail::check($sku_amount['1'],'Domestic'))
         {
             return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
         }
@@ -1354,7 +1354,7 @@ class RechargeController extends Controller
                         $total_profit+=$value->discount;
                     }
                 }
-                
+
 
 
             }else{
@@ -1365,19 +1365,19 @@ class RechargeController extends Controller
                 else
                 $data = RechargeHistory::where('type','Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get();
 
-                
+
                 $total_cost = $data->sum('amount')+$data->sum('service');
                 $total_profit = $data->sum('reseller_com');
-              
-                
+
+
             }
             foreach($data as $value)
             {
                 $value->total_profit = round($total_profit,2);
                 $value->total_cost = round($total_cost,2) ;
             }
-           
-            
+
+
             return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('profit', function($data){
@@ -1403,7 +1403,7 @@ class RechargeController extends Controller
                 {
                     return $data->pin_number;
                 }
- 
+
              })
             ->addColumn('date', function($data){
                return Carbon::parse($data->created_at)->format('d-m-Y H:i:s');
@@ -1411,7 +1411,7 @@ class RechargeController extends Controller
             })
             ->addColumn('reseller_name', function($data){
                 return $data->user->first_name." ".$data->user->last_name."(".$data->user->user_id.")";
- 
+
              })
             ->addColumn('recharge_type',function($data){
                 if(a::user()->role=='admin')
@@ -1445,7 +1445,7 @@ class RechargeController extends Controller
                     $profit+=$value->discount;
                 }
             }
-            
+
         }else{
             $data = RechargeHistory::where('reseller_id', a::user()->id)->latest()->get();
             $cost = $data->sum('amount')+$data->sum('service');

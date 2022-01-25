@@ -135,7 +135,7 @@ class DtOneController extends Controller
     {
         //file_put_contents('test.txt',$request->amount);
         //file_put_contents('test.txt',$test);
-        if(!CheckRechargeAvail::check($request->amount))
+        if(!CheckRechargeAvail::check($request->amount,'International'))
         {
             return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
         }
@@ -147,7 +147,7 @@ class DtOneController extends Controller
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
         $data = $this->dtone->recharge($skuId,$txid,$number);
-     
+
     //  //file_put_contents('test.txt',$tmp_data->responseCode);
 
         if($data['status']){
@@ -159,7 +159,7 @@ class DtOneController extends Controller
         }
     else
     {
-      
+
         return ['status'=>false,'message'=>$data['message']];
     }
 
