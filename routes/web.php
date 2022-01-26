@@ -25,6 +25,7 @@ use App\Http\Controllers\DtOneController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\InternationalApiController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\FlightController;
 use App\Models\ApiList;
 use App\Models\SimOperator;
 use App\Models\sim;
@@ -351,6 +352,13 @@ Route::group(['prefix' => 'phone','middleware'=>['auth']], function()
 
 });
 
+Route::group(['prefix' => 'flights','middleware'=>['auth']], function()
+{
+
+    Route::get('/', [FlightController::class,'add_flight'])->name('add-flight');
+
+
+});
 
 Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
 {

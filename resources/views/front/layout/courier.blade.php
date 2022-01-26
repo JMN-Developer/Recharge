@@ -563,6 +563,32 @@ margin-left: 3px;
               </ul>
             </li>
           @endif
+
+          @if (Auth::user()->role=='admin')
+          <li class="@if(Route::currentRouteName() == 'add-flight') nav-item menu-open @endif nav-item">
+            <a href="#" class="@if(Route::currentRouteName() == 'add-flight') nav-link active menu-open @endif nav-link">
+              <i class="nav-icon fas fa-plane-departure"></i>
+
+              <p>
+                Flight
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+
+              <li class="nav-item">
+                <a href="{{ route('add-flight') }}" class="@if(Route::currentRouteName() == 'add-flight') nav-link active @endif nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add</p>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+         @endif
+
+
+
             <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
                 <i class="nav-icon fas fa-users"></i>
@@ -618,7 +644,7 @@ margin-left: 3px;
               @if(auth()->user()->role == 'user')
               <li class="@if(Route::currentRouteName() == 'transaction-history') nav-item menu-open @endif nav-item">
                 <a href="{{ route('transaction-history') }}" class="@if(Route::currentRouteName() == 'transaction-history') nav-link active @endif nav-link">
-                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <i class="fa fa-history" aria-hidden="true"></i>
                   <p>
                     Transaction History
 
@@ -628,7 +654,7 @@ margin-left: 3px;
 
               <li class="@if(Route::currentRouteName() == 'contact-info') nav-item menu-open @endif nav-item">
                 <a href="{{ route('contact-info') }}" class="@if(Route::currentRouteName() == 'contact-info') nav-link active @endif nav-link">
-                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <i class="fa fa-address-book" aria-hidden="true"></i>
                   <p>
                     Contact
 
@@ -641,7 +667,7 @@ margin-left: 3px;
               @if(auth()->user()->role == 'admin')
               <li class="@if(Route::currentRouteName() == 'report') nav-item menu-open @endif nav-item">
                 <a href="{{ route('report') }}" class="@if(Route::currentRouteName() == 'report') nav-link active @endif nav-link">
-                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <i class="fas fa-chart-line" aria-hidden="true"></i>
                   <p>
                     Report
 
@@ -653,7 +679,7 @@ margin-left: 3px;
               @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user'  )
               <li class="@if(Route::currentRouteName() == 'wallet-request') nav-item menu-open @endif nav-item">
                 <a href="{{ route('wallet-request') }}" class="@if(Route::currentRouteName() == 'wallet-request') nav-link active @endif nav-link">
-                  <i class="fa fa-cog" aria-hidden="true"></i>
+                  <i class="fas fa-wallet" aria-hidden="true"></i>
                   <p>
                     Wallet Request<span class="badge wallet_notification_count">3</span>
 
@@ -666,7 +692,7 @@ margin-left: 3px;
             @if(auth()->user()->role == 'admin')
               <li class="@if(Route::currentRouteName() == 'api-activation') nav-item menu-open @endif nav-item">
                 <a href="#" class="@if(Route::currentRouteName() == 'api-activation') nav-link active @endif nav-link">
-                  <i class="nav-icon fas fa-users"></i>
+                  <i class="nav-icon fas fa-code-branch"></i>
                   <p>
                     Api Control
                     <i class="fas fa-angle-left right"></i>
