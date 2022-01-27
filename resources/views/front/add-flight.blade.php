@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
   <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
-  <script type="text/javascript" src="https://api.ugotto.it/Js/setup?guid=7b0148d6-f75f-48fc-b1c8-aadec51006e9"></script>
+  {{-- <script type="text/javascript" src="https://api.ugotto.it/Js/setup?guid=7b0148d6-f75f-48fc-b1c8-aadec51006e9"></script> --}}
 
 </head>
 @endsection
@@ -23,7 +23,7 @@
 @section('content')
 <div class="content-wrapper">
 	<div class="container-fluid">
-        <div id="app"></div>
+        {{-- <div id="app"></div> --}}
 	</div>
 </div>
 @endsection
