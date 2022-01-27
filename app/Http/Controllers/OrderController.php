@@ -83,15 +83,7 @@ class OrderController extends Controller
         // $orders->departure_airport = $request->input('departure_airport');
         // $orders->arrival_airport = $request->input('arrival_airport');
         $orders->product1 = $request->input('product1');
-        $orders->product2 = $request->input('product2');
-        $orders->product3 = $request->input('product3');
-        $orders->product4 = $request->input('product4');
-        $orders->product5 = $request->input('product5');
         $orders->quantity1 = $request->input('qty1');
-        $orders->quantity2 = $request->input('qty2');
-        $orders->quantity3 = $request->input('qty3');
-        $orders->quantity4 = $request->input('qty4');
-        $orders->quantity5 = $request->input('qty5');
         if(!empty($labelFileName)){
             $orders->label = $labelFileName;
         }
