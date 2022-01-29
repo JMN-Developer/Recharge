@@ -145,11 +145,18 @@ class WalletController extends Controller
             $wallet = $user->domestic_wallet;
         }
         if($approved_amount>=$limit_usage)
+        {
         $approved_amount = $approved_amount - $limit_usage;
+        $this->update_limit($previous_record->reseller_id,0,$previous_record->wallet_type);
+
+        $this->update_balance($previous_record->reseller_id, $approved_amount,$previous_record->wallet_type);
+        }
+
+
         else
         {
         $approved_amount = $limit_usage - $approved_amount;
-
+        $this->update_limit($previous_record->reseller_id,$approved_amount,$previous_record->wallet_type);
         }
 
         if ($previous_record->status == "declined") {
@@ -192,6 +199,7 @@ class WalletController extends Controller
                     "admin_notification" => 1,
                     "reseller_notification" => 0,
                     "admin_message" => $admin_message,
+                    'previous_due'=> $limit_usage
                 ]);
 
             }
@@ -213,15 +221,15 @@ class WalletController extends Controller
             $this->create_transaction($id,$previous_record->wallet_type,$wallet_before_transaction, $wallet_after_transaction, $approved_amount,'wallet',$previous_record->reseller_id);
 
         }
-        if($approved_amount>=$limit_usage){
-        $this->update_limit($previous_record->reseller_id,0,$previous_record->wallet_type);
+        // if($approved_amount>=$limit_usage){
+        // $this->update_limit($previous_record->reseller_id,0,$previous_record->wallet_type);
 
-        $this->update_balance($previous_record->reseller_id, $approved_amount,$previous_record->wallet_type);
-        }
-        else
-        {
-            $this->update_limit($previous_record->reseller_id,$approved_amount,$previous_record->wallet_type);
-        }
+        // $this->update_balance($previous_record->reseller_id, $approved_amount,$previous_record->wallet_type);
+        // }
+        // else
+        // {
+        //     $this->update_limit($previous_record->reseller_id,$approved_amount,$previous_record->wallet_type);
+        // }
 
         event(new DueRequest());
     }
