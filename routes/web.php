@@ -352,7 +352,7 @@ Route::group(['prefix' => 'phone','middleware'=>['auth']], function()
 
 });
 
-Route::group(['prefix' => 'flights'], function()
+Route::group(['prefix' => 'flights','middleware'=>['auth']], function()
 {
 
     Route::get('/', [FlightController::class,'add_flight'])->name('add-flight');
