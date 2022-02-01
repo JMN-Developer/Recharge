@@ -173,6 +173,44 @@ table.dataTable thead .sorting_asc{
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                   
+
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="dropdown float-end">
+                                    {{-- <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="uil uil-ellipsis-v"></i>
+                                    </a> --}}
+                                   
+                                </div>
+                                <h5 class="card-title mb-0 header-title">Sale Growth</h5>
+
+                                <div id="sale-chart" class="apex-charts mt-3" dir="ltr"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="dropdown float-end">
+                                    {{-- <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="uil uil-ellipsis-v"></i>
+                                    </a> --}}
+                                   
+                                </div>
+                                <h5 class="card-title mb-0 header-title">Profit Growth</h5>
+
+                                <div id="profit-chart" class="apex-charts mt-3" dir="ltr"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                </div>
                 <div class="row">
                     <div class="col-xl-6 col-md-6">
                         <div class="card">
@@ -198,43 +236,7 @@ table.dataTable thead .sorting_asc{
                 </div>
 
                 <!-- stats + charts -->
-                <div class="row">
-                   
-
-                    <div class="col-xl-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="dropdown float-end">
-                                    {{-- <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="uil uil-ellipsis-v"></i>
-                                    </a> --}}
-                                   
-                                </div>
-                                <h5 class="card-title mb-0 header-title">Sale Growth</h5>
-
-                                <div id="sale-chart" class="apex-charts mt-3" dir="ltr"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="dropdown float-end">
-                                    {{-- <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="uil uil-ellipsis-v"></i>
-                                    </a> --}}
-                                   
-                                </div>
-                                <h5 class="card-title mb-0 header-title">Profit Growth</h5>
-
-                                <div id="profit-chart" class="apex-charts mt-3" dir="ltr"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    
-                </div>
+          
                 <!-- row -->
 
                 <!-- products -->
