@@ -11,5 +11,8 @@
 <body> 
 
 <div id="app"></div> 
-
+<script>
+  document.getElementByClassName("abs-home-slogan").innerHTML = "Hello World!";
+  </script>
 </body> 
+
