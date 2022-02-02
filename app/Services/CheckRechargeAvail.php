@@ -74,7 +74,7 @@ class CheckRechargeAvail
         $due_limit = $limit-$limit_usage;
         if($requested_amount>$current_wallet)
         {
-            if($requested_amount>$due_limit)
+            if($requested_amount>$due_limit+$current_wallet)
             {
               //  file_put_contents('test.txt','false');
                 return false;
@@ -82,13 +82,13 @@ class CheckRechargeAvail
             else
             {
                 //
-                $instance->send_alert_email();
+               // $instance->send_alert_email();
                 return true;
             }
 
         }
 
-        $instance->send_alert_email();
+       // $instance->send_alert_email();
         //file_put_contents('test.txt','true2');
       return true;
 

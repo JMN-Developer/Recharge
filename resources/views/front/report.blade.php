@@ -2,9 +2,10 @@
 @section('header')
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>Print All Invioce</title>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Report</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -13,6 +14,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
   <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel='stylesheet'>
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
@@ -186,9 +189,28 @@ table.dataTable thead .sorting_asc{
                                     </a> --}}
                                    
                                 </div>
-                                <h5 class="card-title mb-0 header-title">Sale Growth</h5>
+                                <h5 class="card-title mb-0 header-title">Domestic Recharge</h5>
 
-                                <div id="sale-chart" class="apex-charts mt-3" dir="ltr"></div>
+                                <div id="domestic_recharge" class="apex-charts mt-3" dir="ltr"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="dropdown float-end">
+                                    {{-- <a href="#" class="dropdown-toggle arrow-none text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="uil uil-ellipsis-v"></i>
+                                    </a> --}}
+                                   
+                                </div>
+                                <h5 class="card-title mb-0 header-title">International Recharge</h5>
+                                <div class="p-6 m-20 bg-white rounded shadow international_recharge_chart">
+                                   
+                                  
+                                </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -385,7 +407,7 @@ table.dataTable thead .sorting_asc{
 <script src="{{ asset('dashboard/libs/flatpickr/flatpickr.min.js')}}"></script>
 
 <!-- page js -->
-<script src="{{ asset('dashboard/js/pages/dashboard.init.js')}}"></script>
+{{-- <script src="{{ asset('dashboard/js/pages/dashboard.init.js')}}"></script> --}}
 
 <!-- App js -->
 <script src="{{ asset('dashboard/js/app.min.js')}}"></script>
@@ -408,11 +430,40 @@ table.dataTable thead .sorting_asc{
 @endsection
 
 @section('js')
+
 <script>
 
 
 $(function() {
+    get_data();
+    function get_data()
+    {
+        let url = "{{ route('get-report-data') }}";
+        var formdata = new FormData();
+        formdata.append('date','11-02-2022')
+        $.ajax({
+        processData: false,
+        contentType: false,
+        url: url ,
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formdata,
+        beforeSend: function () {
+            $('.cover-spin').show(0)
+            },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            $('.cover-spin').hide(0)
+            },
+        success:function(data){
+            var obj = JSON.parse(data);
 
+            console.log(obj)
+           //$('.international_recharge_chart').append(data)
+        },
+       });
+    }
     $('.reseller').select2({
 
     placeholder: function(){
@@ -558,4 +609,12 @@ function fetch_table(start_date,end_date)
 
 }
 </script>
+<script>
+   
+ 
+</script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts">  </script>
+{{-- <script src="{{ $international_chart->cdn() }}"></script>
+
+{{ $international_chart->script() }} --}}
 @endsection

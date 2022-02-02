@@ -286,6 +286,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
 });
 
 Route::get('report',[ReportController::class,'index'])->name('report');
+Route::post('get_report_data',[ReportController::class,'get_report_data'])->name('get-report-data');
 
 
 Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
