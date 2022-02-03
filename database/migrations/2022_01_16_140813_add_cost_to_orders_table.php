@@ -15,7 +15,7 @@ class AddCostToOrdersTable extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             //
-            $table->integer('cost')->default(0);
+            $table->float('cost')->default(0);
         });
     }
 
