@@ -184,8 +184,11 @@ class ReportController extends Controller
       $cargo_sale =round(array_sum($chart_data['sales']),2);
       $cargo_profit =round(array_sum($chart_data['profits']),2);
 
-
-        //file_put_contents('test.txt',$international_profit);
+     $top_reseller = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->select('reseller_id',DB::raw('format(sum(amount),2) as sales') )->groupBy('reseller_id')->orderByRaw('CAST(sales as DECIMAL(8,2)) DESC')->get();
+     //$top_reseller = collect($top_reseller);
+    // $top_reseller = $top_reseller->sort(Bu)
+    // $top_reseller = $top_reseller->orderByRaw('CAST(sales as DECIMAL(8,2)) DESC');
+        file_put_contents('test.txt',json_encode($top_reseller));
 
 
        
