@@ -109,8 +109,8 @@
                         <tbody>
                           <tr>
                             @if($data->type == 'International')
-                            <td>Prodotto</td>
-                              <td><strong>{{ $data->amount }}  &euro;</strong></td>
+                            {{-- <td>Prodotto</td>
+                              <td><strong>{{ $data->amount }}  &euro;</strong></td> --}}
                             @endif
                           </tr>
                           <tr>
