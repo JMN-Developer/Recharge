@@ -565,7 +565,7 @@ margin-left: 3px;
           @endif
           @if (Auth::user()->role=='admin')
           <li class="@if(Route::currentRouteName() == 'add-flight') nav-item menu-open @endif nav-item">
-            <a href="{{ route('add-flight') }}" class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
+            <a href="{{url('flights/')}}" class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
               <i class="nav-icon fas fa-plane-departure"></i>
               <p>
                 Flight

@@ -104,7 +104,7 @@ class RetailerController extends Controller
 
                 'cargo_goods_profit' => $request->cargo_goods_profit,
                 'cargo_documents_profit' => $request->cargo_documents_profit,
-                'admin_recharge_commission' => $request->recharge,
+                'admin_recharge_commission' => $request->domestic_recharge_profit,
                 'admin_international_recharge_commission' => $request->international_recharge,
                 'admin_pin_commission' => $request->pin,
             ]);
