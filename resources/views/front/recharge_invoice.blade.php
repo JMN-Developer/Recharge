@@ -107,12 +107,12 @@
                     <div class="recharge_invoice_table">
                       <table class="table table-sm">
                         <tbody>
-                          <tr>
+                          {{-- <tr>
                             @if($data->type == 'International')
-                            {{-- <td>Prodotto</td>
-                              <td><strong>{{ $data->amount }}  &euro;</strong></td> --}}
+                            <td>Prodotto</td>
+                              <td><strong>{{ $data->amount }}  &euro;</strong></td>
                             @endif
-                          </tr>
+                          </tr> --}}
                           <tr>
                             @if ($data->type == 'Domestic')
                             <td>Importo</td>
