@@ -12,7 +12,7 @@ use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
 use Illuminate\Support\Carbon;
 use DB;
 use App\Models\sim;
-use App\Models\order;
+use App\Models\Order;
 use phpDocumentor\Reflection\Types\Null_;
 
 class ReportController extends Controller
@@ -66,7 +66,7 @@ class ReportController extends Controller
        }
        else if($service =='cargo')
        {
-        $datas = order::whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(total)-sum(addiCharge),2) as profit'))->groupBy('date')->get();
+        $datas = Order::whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(total)-sum(addiCharge),2) as profit'))->groupBy('date')->get();
        }
     }
         $sale_data = [];
@@ -85,6 +85,7 @@ class ReportController extends Controller
     {
         $start_date =  Carbon::parse($request->start_date)->toDateTimeString();
         $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
+       // file_put_contents('test.txt',$request->type);
         if($request->type=='all')
         {
             $chart_data = $this->data_fetch('all',$start_date,$end_date,'recharge');
@@ -94,7 +95,7 @@ class ReportController extends Controller
         }
        else if($request->type=='international_recharge')
         {
-            $chart_data = $this->data_fetch('international_recharge',$start_date,$end_date,'recharge');
+            $chart_data = $this->data_fetch('International',$start_date,$end_date,'recharge');
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'international_recharge']);
             
@@ -102,7 +103,8 @@ class ReportController extends Controller
 
         else if($request->type=='domestic_recharge')
         {
-            $chart_data = $this->data_fetch('domestic_recharge',$start_date,$end_date,'recharge');
+            $chart_data = $this->data_fetch('Domestic',$start_date,$end_date,'recharge');
+            //file_put_contents('test.txt',json_encode($chart_data));
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'domestic_recharge']);
             
@@ -110,7 +112,7 @@ class ReportController extends Controller
 
         else if($request->type=='pin')
         {
-            $chart_data = $this->data_fetch('pin',$start_date,$end_date,'recharge');
+            $chart_data = $this->data_fetch('Pin',$start_date,$end_date,'recharge');
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'pin']);
             
@@ -183,7 +185,7 @@ class ReportController extends Controller
       $cargo_profit =round(array_sum($chart_data['profits']),2);
 
 
-
+        //file_put_contents('test.txt',$international_profit);
 
 
        

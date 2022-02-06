@@ -112,7 +112,7 @@ table.dataTable thead .sorting_asc{
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <span class="text-muted text-uppercase fs-12 fw-bold">International</span>
-                                        <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="international_sale" ></span><span style="font-weight: bold;margin-left:10px">Profit:</span id="international_profit"><span>200</span></p>
+                                        <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="international_sale" ></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span  id="international_profit"></span></p>
                                     </div>
                                     
                                 </div>
@@ -508,50 +508,7 @@ table.dataTable thead .sorting_asc{
     
   </div>
   <!-- /.content-wrapper -->
-  <script>
-   
-    (function(document) {
-    'use strict';
-
-
-    var TableFilter = (function(Arr) {
-
-        var _input;
-
-        function _onInputEvent(e) {
-            _input = e.target;
-            var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
-            Arr.forEach.call(tables, function(table) {
-                Arr.forEach.call(table.tBodies, function(tbody) {
-                    Arr.forEach.call(tbody.rows, _filter);
-                });
-            });
-        }
-
-        function _filter(row) {
-            var text = row.textContent.toLowerCase(),
-                val = _input.value.toLowerCase();
-            row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
-        }
-
-        return {
-            init: function() {
-                var inputs = document.getElementsByClassName('light-table-filter');
-                Arr.forEach.call(inputs, function(input) {
-                    input.oninput = _onInputEvent;
-                });
-            }
-        };
-    })(Array.prototype);
-
-    document.addEventListener('readystatechange', function() {
-        if (document.readyState === 'complete') {
-            TableFilter.init();
-        }
-    });
-
-})(document);
-  </script>
+  
 @endsection
 
 @section('scripts')
@@ -828,6 +785,7 @@ function filter_separate_data(type,start_date,end_date)
 }
 function process_separate_data(obj)
 {
+    console.log(obj.chart_container)
     if(obj.type =='international_recharge')
     {
         $('.international_recharge_chart').empty();
@@ -835,6 +793,7 @@ function process_separate_data(obj)
     }
     else if(obj.type =='domestic_recharge')
     {
+        
         $('.domestic_recharge_chart').empty();
         $('.domestic_recharge_chart').append(obj.chart_container)
     }
@@ -866,7 +825,10 @@ function process_separate_data(obj)
 }
 
 function process_data(obj)
-{       $('.all_chart').empty();
+
+{   
+    
+        $('.all_chart').empty();
         $('.sim_chart').empty();
         $('.cargo_chart').empty();
         $('.international_recharge_chart').empty();
