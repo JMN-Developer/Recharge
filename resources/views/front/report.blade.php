@@ -441,42 +441,8 @@ table.dataTable thead .sorting_asc{
                                                
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>#98754</td>
-                                                <td>ASOS  High</td>
-                                                <td>Otto B</td>
-                                                <td>$79.49</td>
-                                               
-                                            </tr>
-                                            <tr>
-                                                <td>#98753</td>
-                                                <td>Marco Lightweight Shirt</td>
-                                                <td>Mark P</td>
-                                                <td>$125.49</td>
-                                              
-                                            </tr>
-                                            <tr>
-                                                <td>#98752</td>
-                                                <td>Half Sleeve Shirt</td>
-                                                <td>Dave B</td>
-                                                <td>$35.49</td>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td>#98751</td>
-                                                <td>Lightweight Jacket</td>
-                                                <td>Shreyu N</td>
-                                                <td>$49.49</td>
-                                               
-                                            </tr>
-                                            <tr>
-                                                <td>#98750</td>
-                                                <td>Marco Shoes</td>
-                                                <td>Rik N</td>
-                                                <td>$69.49</td>
-                                                
-                                            </tr>
+                                        <tbody id="top_reseller">
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -826,8 +792,9 @@ function process_separate_data(obj)
 
 function process_data(obj)
 
-{   
+{
     
+        $("#top_reseller").empty();
         $('.all_chart').empty();
         $('.sim_chart').empty();
         $('.cargo_chart').empty();
@@ -857,6 +824,17 @@ function process_data(obj)
         $('#sim_profit').text(obj.sim_profit)
         $('#cargo_sale').text(obj.cargo_sale)
         $('#cargo_profit').text(obj.cargo_profit)
+        var item = obj.top_reseller;
+        for (var i = 0; i < item.length; i++){
+            added_row = '<tr class="bg-ocean">'
+        + '<td>' + item[i].reseller_id +  '</td>'
+        + '<td>' + item[i].reseller_name +  '</td>'
+        + '<td>' + item[i].sale +  '</td>'
+        + '<td>' + item[i].profit +  '</td>'
+        + '</tr>'
+        $('#top_reseller').append(added_row)
+        };
+
 
 }
 
