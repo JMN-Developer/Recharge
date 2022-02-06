@@ -79,7 +79,7 @@ Route::get('/add-reseller', function () {
 
 Route::get('/reseller/edit/{id}',[UserController::class,'edit']);
 
-Route::get('/reseller/delete/{id}',[UserController::class,'destroy']);
+Route::post('/reseller/delete',[UserController::class,'destroy'])->name('delete-reseller');
 
 Route::post('/reseller/update/{id}',[UserController::class,'update']);
 

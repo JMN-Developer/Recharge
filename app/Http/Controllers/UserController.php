@@ -151,11 +151,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
+        $id = $request->id;
         User::where('id', $id)->delete();
 
-        return back();
+       // return back();
     }
 
     public function slider(Request $request)

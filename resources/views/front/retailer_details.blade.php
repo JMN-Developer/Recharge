@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Retailer Profile</title>
-
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -15,6 +16,7 @@
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
   <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
         {{-- datatable css --}}
     <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel='stylesheet'>
 </head>
@@ -132,7 +134,7 @@
                             <i class="fas fa-edit"></i>
                           </a>
                           <br>
-                          <a href="/reseller/delete/{{ $item->id }}" class="btn btn-sm btn-danger mt-1 confirm">
+                          <a type="button"  onclick="delete_user({{ $item->id }})" class="btn btn-sm btn-danger mt-1">
                             <i class="fas fa-trash"></i>
                           </a>
                         </td>
@@ -482,7 +484,81 @@
 <script src="{{asset('js/custom.js')}}"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
 <script>
+  $(function(){
+    var toast = document.querySelector('.iziToast');
+        var message = sessionStorage.getItem('message');
+        sessionStorage.removeItem('message');
+    if(toast)
+                {
+                iziToast.hide({}, toast);
+                }
+                if ( sessionStorage.getItem('success') ) {
+            sessionStorage.removeItem('success');
+
+
+            iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 30000,
+                    title: 'Success',
+                    message: message,
+
+                });
+                //console.log(response.message);
+
+            }
+  })
+  function delete_user(id)
+  {
+   
+    swal({
+  title: "Are you sure?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+
+       var formdata = new FormData();
+        formdata.append('id',id);
+        let url = "{{ route('delete-reseller') }}";
+        $.ajax({
+        processData: false,
+        contentType: false,
+        url: url,
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formdata,
+        beforeSend: function () {
+            $('.cover-spin').show(0)
+            },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            $('.cover-spin').hide(0)
+            },
+        success:function(response){
+           
+          location.reload();
+          sessionStorage.setItem('success',true);
+          sessionStorage.setItem('message','Retailer  Deleted Successfully');
+
+        },
+       });
+  } else {
+
+  }
+  });
+  }
     $('#bill_table').DataTable({
 
     });
