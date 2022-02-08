@@ -51,18 +51,6 @@ class OrderController extends Controller
         $orders->total = $request->input('total');
 
         $main_price = $orders->total-$orders->addiCharge;
-       // file_put_contents('test.txt',$orders->total." ".$orders->addiCharge." ".round(((Auth::user()->cargo_documents_profit/100)*$main_price),2));
-        // $orders->state = $request->input('state');
-        // $orders->rstate = $request->input('rstate');
-        // $orders->dist = $request->input('dist');
-        // $orders->rdist = $request->input('rdist');
-        // $orders->city = $request->input('city');
-        // $orders->rcity = $request->input('rcity');
-        // $orders->expected_date_to_receive = $request->input('expected_date_to_receive');
-
-        // $orders->numberOfBox = $request->input('numberOfBox');
-        // $orders->goods_value = $request->input('goods_value');
-        // $orders->productType = $request->input('productType');
         $orders->weight = $request->input('weight');
         // $orders->perKg = $request->input('perKg');
         // $orders->cusCharge = $request->input('cusCharge');
@@ -89,15 +77,8 @@ class OrderController extends Controller
         }
         $orders->status = 'available';
         $orders->save();
-
         $user = User::where('id', $orders->reseller_id)->first();
-
         $total = $request->total;
-
-        // $reseller_comission = ($total/100)*$user->cargo;
-
-        // $admin_comission = ($total/100)*$user->admin_cargo_commission;
-
 
         if($orders->delivery_condition == 'Goods')
         {
@@ -109,11 +90,6 @@ class OrderController extends Controller
          }
 
 
-
-
-        // $up = User::where('id',$user->id)->update([
-        //     'cargo_due' => $total - $reseller_comission -  $admin_comission
-        // ]);
 
         return back()->with('status', 'Order Created Successfully!');
 

@@ -72,6 +72,7 @@ class CheckRechargeAvail
 
         }
         $due_limit = $limit-$limit_usage;
+        //file_put_contents('test.txt',$due_limit." ".$requested_amount." ".$current_wallet);
         if($requested_amount>$current_wallet)
         {
             if($requested_amount>$due_limit+$current_wallet)

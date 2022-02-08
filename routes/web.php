@@ -359,7 +359,7 @@ Route::group(['prefix' => 'flights'], function()
     Route::get('{any}', function () {
         return view('front.add-flight');
     })->where('any', '.*');
-    
+
    Route::get('/', [FlightController::class,'add_flight'])->name('add-flight');
 
 

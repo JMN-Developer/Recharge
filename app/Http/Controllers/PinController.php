@@ -52,16 +52,17 @@ class PinController extends Controller
      */
     public function store(Request $request)
     {
-        if(!CheckRechargeAvail::check($request->amount,'Domestic'))
+        $sku_amount = explode(',',$request->amount);
+        if(!CheckRechargeAvail::check( $sku_amount[1],'Domestic'))
         {
             return  Redirect()->back()->with('error','Insufficient wallet & Limit. Please contact with admin');
-           // return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+
         }
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
 
 
-        $sku_amount = explode(',',$request->amount);
+
 
         $amount = $sku_amount['1']*100;
         $commission = DB::table('domestic_pins')->where('ean', $sku_amount['0'])->first()->commission;

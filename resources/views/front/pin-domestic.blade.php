@@ -180,37 +180,7 @@
 @endsection
 
 @section('js')
-{{-- <script>
-  $(function(){
-$('#test').click(function(){
-var empty = "";
-var value = $(this).val();
-var table = $('#offer');
-$.ajax({
- type: "POST",
- url: "/check-products", // url to request
- data:{
-            _token:'{{ csrf_token() }}',
-            id: value,
-        },
-  cache: false,
-  dataType: 'json',
- success : function(response){
-  $(response).each(function(){
-    var data = `<div class="col-sm-6 col-md-4 col-lg-3 mt-3">
-                        <div class="Recharge_package">
-                          <div class="recharge_tk" onclick="selectAmount(10)">
-                            <strong>`+response.amount+` Tk</strong>
-                          </div>
-                        </div>
-                      </div>`;
-                      console.log(response.amount);
-  })
- }
-});
-});
-});
-</script> --}}
+
 <script type="text/javascript">
 
     //test for iterating over child elements
