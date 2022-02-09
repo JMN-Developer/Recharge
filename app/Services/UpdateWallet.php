@@ -77,6 +77,7 @@ class UpdateWallet
 
     public static function update($recharge)
     {
+
         if(auth()->user()->role != 'admin')
         {
             if($recharge->type =='International' || $recharge->type =='White Calling' )

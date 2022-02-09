@@ -15,9 +15,11 @@
    <link rel="stylesheet" href="{{asset('plugin/intl-tel-input/css/intlTelInput.min.css')}}">
    <meta name="csrf-token" content="{{ csrf_token() }}" />
    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+   <link rel="stylesheet" href="{{asset('css/autocomplete.css')}}">
    <link rel="stylesheet" href="{{asset('css/loader/index.css')}}">
    <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
+
 @endsection
 @section('content')
 <!-- Content Wrapper. Contains page content -->
@@ -148,6 +150,7 @@
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <!-- Theme JS -->
 <script src="{{asset('js/admin.js')}}"></script>
+<script src="{{asset('js/autocomplete.js')}}"></script>
 <script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
 <!-- Custom JS -->
 <script src="{{asset('js/custom.js')}}"></script>
@@ -167,6 +170,10 @@
 
 
    $(document).ready(function() {
+
+   var mobile_number =  fetch_number();
+   autocomplete(document.getElementById('receiverMobile'), mobile_number);
+
     $(".amount_list").select2();
     var toast = document.querySelector('.iziToast');
         var message = sessionStorage.getItem('message');
@@ -232,7 +239,8 @@
 
    $("#check_number").click(function(){
     event.preventDefault();
-
+    var number = $('#receiverMobile').val()
+    store_number(number);
     var formdata = new FormData();
     formdata.append('number',$('#receiverMobile').val());
     formdata.append('countryIso', intl.getSelectedCountryData().iso2);
@@ -315,6 +323,7 @@
    var sku = sku.split(',');
    var skuId = sku[0];
    var amount = sku[1];
+
 //    var amount_list = amount_list.split(",");
 //     var skuId = amount_list[0];
 //     var amount = amount_list[1];
@@ -349,9 +358,9 @@
             // $("#check_number").hide();
             // $("#amount_input_field").show();
 
-            // $('#min_amount').text(response.minAmount);
+            //  $('#min_amount').text(response.minAmount);
             // $('#max_amount').text(response.maxAmount);
-            // $("#exchange_rate").val(response.fx.rate);
+            //$("#exchange_rate").val(response.fx.rate);
             // $("#currency_code").val(response.fx.currencyCode);
 
             if(response.status==true)
@@ -359,7 +368,7 @@
                 location.reload();
                 sessionStorage.setItem('success',true);
                 sessionStorage.setItem('message',response.message);
-                //console.log(response.message);
+                console.log(response.message);
             }
             else
             {
@@ -368,7 +377,7 @@
                 sessionStorage.setItem('message',response.message);
             }
            //console.log(response.status);
-           //alert('hello')
+          // alert('hello')
 
         },
        });

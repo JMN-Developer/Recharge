@@ -2,23 +2,22 @@
 @section('header')
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <title>Recharge Italy</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
-  <link rel="stylesheet" href="{{asset('css/loader/index.css')}}">
-  <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
-
-  <link rel="stylesheet" href="{{asset('css/style.css')}}">
-<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recharge International</title>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
+    <link rel="stylesheet" href="{{asset('plugin/intl-tel-input/css/intlTelInput.min.css')}}">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('css/autocomplete.css')}}">
+    <link rel="stylesheet" href="{{asset('css/loader/index.css')}}">
+    <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
+ <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
 
 
 </head>
@@ -40,7 +39,7 @@
               <a href="/"><img src="{{ asset('images/jm logo.png') }}" width="80px" height="auto"></a>
             </div> --}}
             <div class="card-body">
-              <h3 class="text-center mb-5">Indice Brand Richriche</h3>
+              <h3 class="text-center">Indice Brand Richriche</h3>
               <div class="row">
                 <div class="col-md-6">
                   <form id="domestic_recharge">
@@ -76,10 +75,11 @@
 
                       </select>
                     </div>
-                    <div class="mb-3 phone_number">
+                    <div class="mb-3 phone_number" style="position: relative">
                       <label for="inputMobileNumber" class="form-label">Mobile Number</label>
-                      <input type="text" class="form-control myNumber" id="inputMobileNumber" name="number" value="" placeholder="Please enter mobile number" autocomplete="off" onkeypress="return isNumberKey(event)">
-                     
+                      {{-- <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number" onkeypress="return isNumberKey(event)"> --}}
+                      <input type="text" class="form-control receiver_input_form myNumber" id="inputMobileNumber" name="number"  placeholder="Please enter mobile number" autocomplete="off" onkeypress="return isNumberKey(event)" required>
+
                     </div>
                     <div id="price">
                       <label for="">Amount </label>
@@ -174,6 +174,8 @@
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <!-- Theme JS -->
 <script src="{{asset('js/admin.js')}}"></script>
+<script src="{{asset('js/autocomplete.js')}}"></script>
+<script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
 <!-- Custom JS -->
 <script src="{{asset('js/custom.js')}}"></script>
 @endsection
@@ -225,6 +227,8 @@ $.ajax({
     return true;
 }
     $(function(){
+        var mobile_number =  fetch_number();
+        autocomplete(document.getElementById('inputMobileNumber'), mobile_number);
         $("#description").hide();
         $(".amounts").change(function(){
             var description = $(this).find(':selected').attr('data-description')
@@ -326,9 +330,10 @@ $.ajax({
         });
 
     }
-    //Form Submit
+
     $( "#domestic_recharge" ).submit(function( event ) {
         event.preventDefault();
+        store_number($('#inputMobileNumber').val())
         var formdata = new FormData();
         formdata.append('amount',$('#amounts').val());
         formdata.append('number',$('#inputMobileNumber').val().split(' ').join(''));

@@ -518,7 +518,7 @@
   })
   function delete_user(id)
   {
-   
+
     swal({
   title: "Are you sure?",
   icon: "warning",
@@ -547,7 +547,7 @@
             $('.cover-spin').hide(0)
             },
         success:function(response){
-           
+
           location.reload();
           sessionStorage.setItem('success',true);
           sessionStorage.setItem('message','Retailer  Deleted Successfully');
