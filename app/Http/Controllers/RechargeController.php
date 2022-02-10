@@ -494,14 +494,12 @@ class RechargeController extends Controller
     public function check_daily_duplicate(Request $request)
     {
         $number = $request->number;
-       // $change = [' ','+'];
-        //$number = str_replace($change,'',$request->number);
 
-       $dt = Carbon::now();
+      $dt = Carbon::now();
         $current_date = $dt->toDateString();
-       // file_put_contents('test.txt',$number." ".$current_date);
+
         $avail = DB::table('recharge_histories')->whereDate('created_at','=','2022-02-10')->where('number',$number)->first();
-       // file_put_contents('test.txt',json_encode($avail));
+
         if($avail)
         {
         return '1';
