@@ -282,6 +282,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
     Route::get('calling-card',[PpnController::class,'calling_card_index'])->name('calling-card');
     Route::get('get_white_calling_table',[PpnController::class,'get_white_calling_table'])->name('get_white_calling_table');
     Route::post('send_pin_to_email',[PpnController::class,'send_pin']);
+    Route::get('check_daily_duplicate',[RechargeController::class,'check_daily_duplicate']);
 
 });
 

@@ -317,26 +317,53 @@
 
    });
 
-   $("#recharge_number").click(function(){
-    event.preventDefault();
-   var sku = $(".amount_list :selected").val();
+   function check_daily_duplicate(number)
+   {
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: 'check_daily_duplicate',
+            data: {'number': number},
+            success: function(data){
+                if(data == 1)
+                {
+                    swal({
+                        title: "Are you sure to continue this rechagre?",
+                        text: "You have already recharged this number today",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                        if (willDelete) {
+                            recharge_number()
+                        } else {
+                           //location.reload()
+                        }
+                        });
+                }
+                else
+                {
+                    recharge_number()
+                }
+
+            }
+        });
+   }
+
+   function recharge_number()
+   {
+
+    var sku = $(".amount_list :selected").val();
    var sku = sku.split(',');
    var skuId = sku[0];
    var amount = sku[1];
-
-//    var amount_list = amount_list.split(",");
-//     var skuId = amount_list[0];
-//     var amount = amount_list[1];
-
-    var formdata = new FormData();
+   var formdata = new FormData();
     formdata.append('number',$('#receiverMobile').val().split(' ').join(''));
     formdata.append('service_charge',$('#service').val());
     formdata.append('id', skuId);
     formdata.append('amount', amount);
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);
-
-
-
 
       $.ajax({
         processData: false,
@@ -355,13 +382,6 @@
             },
         success:function(response){
             $('.cover-spin').hide(0);
-            // $("#check_number").hide();
-            // $("#amount_input_field").show();
-
-            //  $('#min_amount').text(response.minAmount);
-            // $('#max_amount').text(response.maxAmount);
-            //$("#exchange_rate").val(response.fx.rate);
-            // $("#currency_code").val(response.fx.currencyCode);
 
             if(response.status==true)
             {
@@ -381,6 +401,14 @@
 
         },
        });
+
+
+
+   }
+
+   $("#recharge_number").click(function(){
+    event.preventDefault();
+    check_daily_duplicate($('#receiverMobile').val())
 
 
    });

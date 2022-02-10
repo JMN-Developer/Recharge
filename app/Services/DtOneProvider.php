@@ -67,7 +67,7 @@ class DtOneProvider
     }
 
     public function transaction($transaction_id)
-    
+
     {
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
         $operator_request = $client->get('https://dvs-api.dtone.com/v1/transactions/'.$transaction_id,['headers' => [
@@ -82,7 +82,7 @@ class DtOneProvider
             // file_put_contents('test.txt',$operator_response);
 
             $operator_response = json_decode($operator_response);
-           
+
             if($status == 200)
             {
 
@@ -96,7 +96,7 @@ class DtOneProvider
 
     }
 
-    
+
 
 
     public function recharge($sku_id,$txid,$mobile)
@@ -119,7 +119,7 @@ class DtOneProvider
                     ]
         ]);
         $status = $response->getStatusCode();
-       
+
         $response = json_decode($response->getBody());
 
 
@@ -133,12 +133,12 @@ class DtOneProvider
                     {
                         if($transaction_report['payload']->status->message == 'COMPLETED' || $transaction_report['payload']->status->message == 'SUBMITTED' )
                         {
-                           
+
                         return ['payload'=>$transaction_report['payload'],'status'=>true];
                         }
                         else
                         {
-                        
+
                         return ['message'=>$transaction_report['payload']->status->message,'status'=>false];
                         }
                     }
@@ -151,20 +151,20 @@ class DtOneProvider
 
                 // file_put_contents('test.txt',json_encode($response));
         //     $confirmation = $this->confirmation($response->id);
-            
+
         // //   file_put_contents('test.txt',json_encode($response));
         //     if($confirmation['status']==true)
         //     {
-        //        $transaction_report = $this->transaction($response->id); 
+        //        $transaction_report = $this->transaction($response->id);
         //        if($transaction_report['status']==true)
-        //       {  
+        //       {
         //         return ['payload'=>$transaction_report[],'status'=>false];
         //       }
         //       else
         //       {
         //         return ['payload'=>$response,'status'=>false];
         //       }
-          
+
         //     }
         //     else{
         //         return ['payload'=>$confirmation['message'],'status'=>false];
@@ -198,7 +198,7 @@ class DtOneProvider
 
             $status = $response->getStatusCode();
             $operator_response = $response->getBody();
-         
+
             $operator_response = json_decode($operator_response);
             if($status == 202)
             {

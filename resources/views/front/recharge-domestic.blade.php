@@ -331,10 +331,43 @@ $.ajax({
 
     }
 
-    $( "#domestic_recharge" ).submit(function( event ) {
-        event.preventDefault();
-        store_number($('#inputMobileNumber').val())
-        var formdata = new FormData();
+    function check_daily_duplicate(number)
+   {
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: 'check_daily_duplicate',
+            data: {'number': number},
+            success: function(data){
+                if(data == 1)
+                {
+                    swal({
+                        title: "Are you sure to continue this rechagre?",
+                        text: "You have already recharged this number today",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                        if (willDelete) {
+                            recharge_number()
+                        } else {
+                           //location.reload()
+                        }
+                        });
+                }
+                else
+                {
+                    recharge_number()
+                }
+
+            }
+        });
+   }
+
+   function recharge_number()
+   {
+    var formdata = new FormData();
         formdata.append('amount',$('#amounts').val());
         formdata.append('number',$('#inputMobileNumber').val().split(' ').join(''));
         formdata.append('operator',$('#op').val());
@@ -358,17 +391,6 @@ $.ajax({
             //load_recent_recharge();
 
             $('.cover-spin').hide(0)
-            // $(".phone_number").hide();
-            // //$(".brandUlLiContainer").toggle();
-            // $('#amounts').empty();
-            // $('.selected-brand').empty();
-            // $('.selected-brand').html('Select Brand');
-            // $('.selected-brand').attr('value', '');
-            // $(".recharge_amount").hide();
-            // $("#inputMobileNumber").val("");
-
-
-
 
             if(response.status==true)
             {
@@ -388,6 +410,13 @@ $.ajax({
 
         },
        });
+
+   }
+
+    $( "#domestic_recharge" ).submit(function( event ) {
+        event.preventDefault();
+        store_number($('#inputMobileNumber').val())
+        check_daily_duplicate($('#inputMobileNumber').val())
 
     });
 

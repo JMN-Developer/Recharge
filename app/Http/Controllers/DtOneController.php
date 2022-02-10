@@ -58,6 +58,7 @@ class DtOneController extends Controller
     {
 
         $number = $request->number;
+
         $countryIso = $request->countryIso;
         //$number = $request->number;
         $data = $this->dtone->lookup($number);
@@ -67,17 +68,6 @@ class DtOneController extends Controller
             $data = $data['payload'];
             $skus = $this->make_sku_list($data);
             $operator_name = $data[0]->operator->name;
-            // $operator_logo = $this->ppn->operator_logo($data->payLoad->productId);
-            // if($operator_logo['status'])
-            // {
-            //     $logo_url = $operator_logo['payload']->payLoad[0]->imageUrl;
-            // }
-            // else
-            // {
-            //     $logo_url = '';
-            // }
-            //file_put_contents('test.txt',json_encode($skus));
-
             return ['status'=>true,'data'=>$data,'operator_name'=>$operator_name,'skus'=>$skus];
         }
         else

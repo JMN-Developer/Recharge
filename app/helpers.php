@@ -1,5 +1,8 @@
 <?php
+
+use App\Models\RechargeHistory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 // if (!function_exists('reseller_comission')) {
 // function reseller_comission($discount,$percentage=50)
 // {
@@ -22,6 +25,23 @@ if (!function_exists('reseller_comission')) {
         }
         $percentage_amount = round((($percentage/100)*$amount),2);
         return $percentage_amount;
+    }
+    }
+
+
+if (!function_exists('check_daily_duplicate')) {
+    function check_daily_duplicate($number)
+    {
+        $change = [' ','+'];
+        $number = str_replace($change,'',$number);
+        file_put_contents('test.txt',$number);
+        $dt = Carbon::now();
+        $current_date = $dt->toDateString();
+        $avial = DB::table('recharge_histories')->where('created_at','LIKE','%'.$current_date)->where('number',$number)->first();
+        if($avial)
+        return false;
+        else
+        return true;
     }
     }
 
