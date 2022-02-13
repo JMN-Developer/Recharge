@@ -65,14 +65,15 @@ class WalletController extends Controller
     }
     public function wallet_request(Request $request)
     {
-        $amount = $request->amount;
-
+        $path = $request->document->store('image/paymentSlip', 'public');
         DueControl::create([
             "reseller_id" => Auth::user()->id,
-            "requested_amount" => $amount,
+            "requested_amount" => $request->amount,
             "message" => $request->message,
             "wallet_type" => $request->wallet_type,
             "reseller_notification" => 1,
+            'document'=>$path
+
         ]);
         event(new DueRequest());
     }

@@ -23,7 +23,7 @@ thead {
           <h2 style="float: left">Available Sims</h2> @if(Auth::user()->role == 'admin') <a style="float: right; margin-top:10px;" class="btn btn-success" href="/add-sim">Add Sim</a> @endif
           <div class="reseller">
             <input type="search" class="light-table-filter" data-table="table-info" placeholder="ICCID Number, SIM Number, Operator Name etc.">
- 
+
             <table class="table-info table">
                 <thead>
                 <tr>
@@ -52,18 +52,18 @@ thead {
                   @endforeach
                 </tbody>
             </table>
-         
+
         </section>
-         
+
             <script>
               /* Code By Webdevtrick ( https://webdevtrick.com ) */
 (function(document) {
     'use strict';
- 
+
     var TableFilter = (function(Arr) {
- 
+
         var _input;
- 
+
         function _onInputEvent(e) {
         _input = e.target;
         var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
@@ -73,12 +73,12 @@ thead {
         });
         });
         }
- 
+
         function _filter(row) {
         var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
         row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
         }
- 
+
         return {
         init: function() {
         var inputs = document.getElementsByClassName('light-table-filter');
@@ -88,16 +88,16 @@ thead {
         }
         };
     })(Array.prototype);
- 
+
     document.addEventListener('readystatechange', function() {
         if (document.readyState === 'complete') {
         TableFilter.init();
         }
     });
- 
+
 })(document);
             </script>
-         
+
       </div>
 
 

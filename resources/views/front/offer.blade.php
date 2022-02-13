@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wi-fi</title>
+  <title>Sim Offer</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -59,7 +59,7 @@ thead {
                             @foreach ($operator as $item)
                                 <option value="{{$item->operator}}">{{$item->operator}}</option>
                             @endforeach
-                        </select>  
+                        </select>
                 </div>
                 <div class="col-md-5">
                     <label style="font-weight: bold; color:black">Costo al mese:</label>

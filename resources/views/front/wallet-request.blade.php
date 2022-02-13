@@ -70,47 +70,42 @@
     <section class="content">
         @if(auth()->user()->role != 'admin')
         <div class="card card-solid">
-            <div class="card-body pb-0 text-center">
-
-
-                <form id="wallet_submit" class="form-inline" style="justify-content: center;padding-bottom:10px">
-
-                    <div class="form-group mb-2" style="width: 43px">
-                        <label for="staticEmail2" class="sr-only"></label>
-                        <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Wallet:" disabled>
-                      </div>
-                      <div class="form-group mx-sm-3 mb-2">
-                        <select data-placeholder="select" class="custom-select wallet_type" name="wallet_type" required>
+            <div class="card-body pb-0">
+                <form  id="wallet_submit">
+                    <div class="form-row">
+                      <div class="form-group col-md-3">
+                        <label for="inputEmail4">Wallet</label>
+                        <select data-placeholder="select" class="custom-select form-control wallet_type" name="wallet_type" required>
                             <option value="" disabled selected >Please Select Wallet Type</option>
                             <option value="International">International</option>
                             <option value="Domestic">Domestic</option>
-                        </select>
+                          </select>
+                      </div>
+                      <div class="form-group col-md-2">
+                        <label for="inputPassword4">Requested Amount</label>
+                        <input type="text" class="form-control" id="amount" placeholder="Amount" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" required>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <label for="inputPassword4">Message(Optional)</label>
+                        <textarea id="message" class="form-control" rows="2"></textarea>
                       </div>
 
-                    <div class="form-group mb-2" style="width: 128px">
-                      <label for="staticEmail2" class="sr-only"></label>
-                      <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Requested Amount" disabled>
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                      <label for="inputPassword2" class="sr-only">Amount</label>
-                      <input type="text" class="form-control" id="amount" placeholder="Amount" onkeypress="if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;" required>
-                    </div>
-                    <div class="form-group mb-2" style="width: 123px">
-                        <label for="staticEmail2" class="sr-only" >Message</label>
-                        <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Message(Optional)" disabled>
+                      <div class="form-group col-md-3">
+                        <label for="inputPassword4">Document Upload</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="document" name="document">
+                            <label class="custom-file-label " for="customFile">Choose file</label>
+                          </div>
                       </div>
-                      <div class="form-group mx-sm-4 mb-2">
-                       <textarea id="message"></textarea>
-                      </div>
-                    <button type="submit" class="btn btn-primary mb-2">Submit</button>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2 float-right">Submit</button>
+
                   </form>
-
-
-
-
             </div>
         </div>
         @endif
+
 
         <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -170,6 +165,7 @@
                     @if(auth()->user()->role =='admin')
                     <th scope="col">Reseller Name</th>
                     <th scope="col">Previous Due</th>
+                    <th scope="col">Document</th>
                     @else
                     <th scope="col">Admin Message</th>
                     @endif
@@ -182,6 +178,7 @@
                     <th scope="col">Wallet Type</th>
                     <th scope="col">Status</th>
                     @if(auth()->user()->role =='admin')
+
                     <th scope="col">Action</th>
                     @endif
                   </tr>
@@ -230,7 +227,11 @@
     $(function(){
 
         get_data();
-
+        $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+        //$(e.target).siblings('.custom-file-label').html(fileName);//more than one file
+        $('.custom-file-label').html(fileName);
+    });
 
 
         $( "#wallet_submit" ).submit(function( event ) {
@@ -239,6 +240,7 @@
         formdata.append('amount',$('#amount').val());
         formdata.append('message',$("#message").val());
         formdata.append('wallet_type',$(".wallet_type :selected").val());
+        formdata.append('document',$('#document')[0].files[0]);
       //  formdata.append('wallet_type' $(".wallet_type :selected").val());
 
       $.ajax({
@@ -507,8 +509,11 @@
             var item = response;
 
 
+
             for (var i = 0; i < item.length; i++){
                 var status = item[i].status;
+                var url = '{{ URL::asset('/storage//') }}'
+                var image = "<a href=\"" + url+'/'+item[i].document + "\"  download><img width=\"85px\" class=\"imageThumb\" src=\"" + url+'/'+item[i].document + "\"/></a>"
             let class_name = '';
             if(status == 'pending')
             {
@@ -530,6 +535,7 @@
         {
             added_row+='<td>' + item[i].reseller_name +  '</td>'
             +'<td>' + item[i].limit_usage +  '</td>'
+             +'<td>'+image+'</td>'
         }
         else
         {

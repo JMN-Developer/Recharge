@@ -51,36 +51,60 @@
                   <thead>
                     <tr>
                       <th style="background: #faaeae;">Name</th>
+                      @if(auth()->user()->role !='admin' && auth()->user()->recharge_permission == 1 )
                       <th style="background: #faaeae;">Recharge</th>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->sim_permission == 1 )
                       <th style="background: #faaeae;">SIM</th>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->cargo_permission == 1 )
                       <th style="background: #faaeae;">Cargo</th>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->mobile_permission == 1 )
                       <th style="background: #faaeae;">Mobile</th>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->reseller_permission == 1 )
                       <th style="background: #faaeae;">Reseller</th>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->pin_permission == 1 )
                       <th style="background: #faaeae;">Pin</th>
+                      @endif
                     </tr>
                   </thead>
                   <tbody>
                     @foreach($data as $retailer)
                     <tr class="bg-ocean">
                       <td>{{$retailer->first_name}}</td>
+                      @if(auth()->user()->role !='admin' && auth()->user()->recharge_permission == 1 )
                       <td>
                         <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>
                       </td>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->sim_permission == 1 )
                       <td>
                         <input id="sim{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class sim" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->sim_permission ? 'checked' : '' }}>
                       </td>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->cargo_permission == 1 )
                       <td>
                         <input id="cargo{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class cargo" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->cargo_permission ? 'checked' : '' }}>
                       </td>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->mobile_permission == 1 )
                       <td>
                         <input id="phone{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class phone" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->mobile_permission ? 'checked' : '' }}>
                       </td>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->reseller_permission == 1 )
                       <td>
                         <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class reseller" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->reseller_permission ? 'checked' : '' }}>
                       </td>
+                      @endif
+                      @if(auth()->user()->role !='admin' && auth()->user()->pin_permission == 1 )
                       <td>
                         <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class pin" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->pin_permission ? 'checked' : '' }}>
                       </td>
+                      @endif
                     </tr>
                     @endforeach
                   </tbody>
@@ -99,11 +123,26 @@
   </div>
   <!-- /.content-wrapper -->
   <script>
+
+  function check_eligble()
+  {
+    $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '/retailer/checkStatus',
+            data: {'status': status, 'user_id': user_id},
+            success: function(data){
+
+            }
+        });
+  }
   $(function() {
     $('.recharge').change(function() {
+        var check = 0;
+
         var status = $(this).prop('checked') == true ? 1 : 0;
         var user_id = $(this).data('id');
-        console.log('hello');
+
 
         $.ajax({
             type: "GET",
@@ -111,7 +150,14 @@
             url: '/retailer/changeStatus',
             data: {'status': status, 'user_id': user_id},
             success: function(data){
-              console.log(data.success)
+
+                if(data.message =='error')
+                {
+                   // $(this).prop('unchecked')
+                    $('.recharge').bootstrapToggle('off')
+
+                    // alert('You do not have this access')
+                }
             }
         });
     })
@@ -122,7 +168,7 @@
     $('.sim').change(function() {
         var status = $(this).prop('checked') == true ? 1 : 0;
         var user_id = $(this).data('id');
-        console.log('hello');
+
 
         $.ajax({
             type: "GET",
@@ -198,7 +244,7 @@
       $('.pin').change(function() {
           var status = $(this).prop('checked') == true ? 1 : 0;
           var user_id = $(this).data('id');
-          console.log('hello');
+
 
           $.ajax({
               type: "GET",

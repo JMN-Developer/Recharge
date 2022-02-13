@@ -42,6 +42,7 @@ class RetailerController extends Controller
         }else {
             $data = User::where('role','user')->where('created_by', Auth::user()->id)->get();
         }
+
         return view('front.retailer-action',compact('data'));
     }
     public function RetailerSignUp($value='')
@@ -50,12 +51,23 @@ class RetailerController extends Controller
     }
     public function changeStatus(Request $request)
     {
+        $permission =   User::where('id',auth()->user()->id)->first()->recharge_permission;
+        if($permission == 1)
+        {
+
         $user = User::find($request->user_id);
         $user->recharge_permission = $request->status;
         $user->save();
 
-        return response()->json(['success'=>'Status change successfully.']);
+        return response()->json(['message'=>'success']);
+        }
+        else
+        {
+            return response()->json(['message'=>'error']);
+        }
     }
+
+
     public function changeSim(Request $request)
     {
         $user = User::find($request->user_id);

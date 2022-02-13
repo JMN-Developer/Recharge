@@ -276,7 +276,7 @@ class SimController extends Controller
     {
 
        $sim = sim::where('id', $request->sim_id)->first();
-        $path = $request->file->store('sim/uploads', 'public');
+        $path = $request->file->store('image/sim', 'public');
         if($request->file2 != null){
 
             $path2 = $request->file2->store('sim/uploads', 'public');

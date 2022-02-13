@@ -2,9 +2,9 @@
 
     // menu handling
     $(document).on('click', '.nav-item', function() {
-        $('body .nav-item').removeClass('menu-is-opening').removeClass('menu-open');  
-        $('body .nav-item .nav-treeview').hide();  
-        $(this).addClass('menu-is-opening').addClass('menu-open');  
+        $('body .nav-item').removeClass('menu-is-opening').removeClass('menu-open');
+        $('body .nav-item .nav-treeview').hide();
+        $(this).addClass('menu-is-opening').addClass('menu-open');
         $(this).find('.nav-treeview').show();
     });
 
@@ -120,5 +120,5 @@
 
 
 })(jQuery);
-   
+
 

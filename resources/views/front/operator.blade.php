@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wi-fi</title>
+  <title>Sim Operator</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -46,11 +46,11 @@
                   <div class="card">
                     <div class="card-header">
                       <h3 class="card-title"><i class="fas fa-list" style="margin-right: 10px;"></i><strong>Operator List</strong> (Total- {{ $total ?? "" }} Operator)</h3>
-      
+
                       <div class="card-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
                           <input type="text" name="table_search" data-table="table-info" class="form-control float-right light-table-filter" placeholder="Search">
-      
+
                           <div class="input-group-append">
                             <button type="submit" class="btn btn-default">
                               <i class="fas fa-search"></i>
@@ -90,7 +90,7 @@
         </div>
         </section>
 </div>
-         
+
             <script>
               /* Code By Webdevtrick ( https://webdevtrick.com ) */
 
@@ -98,11 +98,11 @@
 
 (function(document) {
     'use strict';
- 
+
     var TableFilter = (function(Arr) {
- 
+
         var _input;
- 
+
         function _onInputEvent(e) {
         _input = e.target;
         var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
@@ -112,12 +112,12 @@
         });
         });
         }
- 
+
         function _filter(row) {
         var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
         row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
         }
- 
+
         return {
         init: function() {
         var inputs = document.getElementsByClassName('light-table-filter');
@@ -127,16 +127,16 @@
         }
         };
     })(Array.prototype);
- 
+
     document.addEventListener('readystatechange', function() {
         if (document.readyState === 'complete') {
         TableFilter.init();
         }
     });
- 
+
 })(document);
             </script>
-         
+
       </div>
 @endsection
 @section('scripts')

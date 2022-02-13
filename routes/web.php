@@ -375,6 +375,7 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
     Route::get('retailer-sign-up', [RetailerController::class,'RetailerSignUp'])->name('retailer-sign-up');
 
     Route::get('changeStatus', [RetailerController::class,'changeStatus']);
+    Route::get('checkStatus', [RetailerController::class,'checkStatus']);
 
     Route::get('retailer-action', [RetailerController::class,'RetailerAction'])->name('retailer-action');
 
