@@ -36,6 +36,7 @@ class PricingController extends Controller
     {
         $prices = new OrderRatings;
         $prices->type = $request->input('type');
+        $prices->charge_type  = $request->input('charge_type');
         $prices->weight_start = $request->input('weight_start');
         $prices->weight_end = $request->input('weight_end');
         $prices->charge_for_weight = $request->input('charge_for_weight');

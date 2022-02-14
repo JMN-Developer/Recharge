@@ -14,10 +14,10 @@
   <link rel="stylesheet" href="{{asset('css/tempusdominus-bootstrap-4.min.css')}}">
   <!-- Select2 -->
   <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
-  
+
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
-  
+
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
   <script type= "text/javascript" src="{{asset('js/countries.js')}}"></script>
@@ -103,13 +103,22 @@
                       <label for="interCustomerAddress" class="form-label">Total</label>
                       <input type="number" step="any" class="form-control" id="total" name="total" placeholder="Total">
                     </div>
+
+                    <div class="mb-3" class="form-label">
+                        <label>Charge Type</label>
+                        <select class="form-control select2" name="charge_type" id="type" style="width: 100%;">
+                          <option>--Select--</option>
+                          <option value="fixed">Fixed</option>
+                          <option value="variable">Variable</option>
+                        </select>
+                      </div>
                   </div>
                 </div>
               </div>
 
 
             </div>
-            <!-- /.row -->   
+            <!-- /.row -->
             <div class="my-5">
               <button type="submit" class="btn btn-primary" style="width: 100%;">Set Price</button>
             </div>
@@ -117,7 +126,7 @@
           </form>
           <!-- /.card-body -->
         </div>
-        <!-- /.card -->  
+        <!-- /.card -->
       </div>
       <!-- /.container-fluid -->
     </section>
@@ -171,8 +180,8 @@
     });
 
   })
- 
-  
+
+
   $(function () {
       bsCustomFileInput.init();
     });
@@ -185,7 +194,7 @@
 
 
    totalCharge.setAttribute('value', parseInt(weightCharge) + parseInt(countryCharge));
-   
+
    // let totalCharge = document.getElementById("total");
 
    console.log(change);
@@ -201,7 +210,7 @@
 
 
    totalCharge.setAttribute('value', parseInt(weightCharge) + parseInt(countryCharge));
-   
+
    // let totalCharge = document.getElementById("total");
 
    console.log(change);
