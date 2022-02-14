@@ -243,7 +243,7 @@
                       <td colspan="4" class="inner-table invoice_table_border p-1">
                         <table class="table-sm">
                           <tbody>
-                            
+
                             {{-- <tr>
                               <td>
                                 <label>Destination Country</label>
@@ -304,7 +304,7 @@
                       <td colspan="2" class="inner-table invoice_table_border p-1">
                         <table class="table-sm">
                           <tbody>
-                          
+
                             <tr>
                               <td>
                                 <label>Weight:</label>
@@ -313,7 +313,7 @@
                                 <span>{{ $order->weight }}</span>
                               </td>
                             </tr>
-                       
+
                             <tr>
                               <td>
                                 <label>Total Amount:</label>
@@ -343,18 +343,17 @@
                       <tr>
                         <td colspan="8" class="invoice_table_border" style="padding: 10px 8px;">
                           <b>TERMS AND CONDITIONS :</b> <br>
-                          <b>***Shipping time</b> Any delivery dates provided by Sundarban Cargo are estimates. Sundarban Cargo reserves the right to
-                          make deliveries in instalments. Sometimes due to customs clearance problem, your Consignment might be delayed for
-                          extra 60 working days from the actual arrival date. <b>***Lost & Damaged products</b> Due to unavoidable circumstances, goods may
-                          be lost from customs. In this regard, shipper will get refund of 80% <b>of the consignment value. We will not be liable
-                          for any loss or damage</b> to the consignment, or any delay or mis delivery if the cause was any of the following: a) War,
-                          terrorism, riot, strike, lockout or any similar action. b) Natural disasters (e.g. floods), poor or extreme weather
-                          conditions. c) The consignment being seized or detained by any public authority. d) Incorrect or insufficient
-                          address given on the consignment note or manifest. This includes any omission or ambiguity of information provided by you.
-                          e) Incorrect or insufficient packaging of the consignment. f) Natural wastage of a perishable or fragile consignment.
-                          <b>***Fines & Extra Charges</b> Shipper will be charged extra charges for the following reasons: a) If the actual weight of
-                          consignment is higher from the weight provided by shipper in the invoice. b) If any Flammable items found in the
-                          consignment, shipper will be fined <b>&euro;170</b> . c) If customs charged extra duties or taxes for the clearance.
+                          <b>***Shipping time </b>Any delivery dates provide dby JM Nation are estimates. JM Nation reserves the right to make
+                          deliveries ininstalments. Sometimes due to customs clearance problem,your Consignment might be delayed for extra 60 working
+                          days from the actual arrival date. <b>***Lost & Damagedproducts</b> Duetounavoidable circumstances,goods maybe lost from customs.
+                          Inthis regard,shipper will getrefundof 80% ofthe consignment value. We will not be liable for any loss or damage to the
+                          consignment,or anydelayor mis deliveryifthecausewas anyofthefollowing:a) War,terrorism,riot,strike,lockout or anysimilar
+                          action. b) Natural disasters (e.g. floods),poor or extreme weather conditions. c) The consignment being seized or detained by any
+                          public authority. d) Incorrect or insuicient address given on the consignment note or manifest. This includes any comission or
+                          ambiguity of information provided by you. e) Incorrect or insuicient packaging of the consignment. f) Natural wastage of a
+                          perishable or fragileconsignment. <b> ***Fines & Extra Charges </b> Shipper will bechargedextra charges for the following reasons:a) If the
+                          actual weight of consignmentis higher from the weight provided by shipper in the invoice. b) If any Flammable items found in the
+                          consignment,shipper will be fined €170 . c) If customs charged extra duties or taxes for the clearance.
                           <br>
                           <br>
                           I confirm that, I have read and agreed to the terms and conditions. All goods are personally packed by me and have

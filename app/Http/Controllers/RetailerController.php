@@ -51,20 +51,14 @@ class RetailerController extends Controller
     }
     public function changeStatus(Request $request)
     {
-        $permission =   User::where('id',auth()->user()->id)->first()->recharge_permission;
-        if($permission == 1)
-        {
+
 
         $user = User::find($request->user_id);
         $user->recharge_permission = $request->status;
         $user->save();
 
         return response()->json(['message'=>'success']);
-        }
-        else
-        {
-            return response()->json(['message'=>'error']);
-        }
+
     }
 
 
