@@ -69,7 +69,7 @@
                     @foreach ($data as $item)
                     <tr class="bg-ocean">
                       <td>{{ $loop->iteration }}</td>
-                     
+
                       <td>{{ $item->iccid }}</td>
                       <td>{{ $item->sim_number }}</td>
                       <td>{{ $item->created_at }}</td>
@@ -80,15 +80,15 @@
                       <td style="color:red;text-transform:uppercase;font-weight:bold">{{ $item->status }}</td>
                       @endif
                       @if (Auth::user()->role == 'admin')
-                      
-                      <td><a href={{ asset('storage/'.$item->file) }} data-lightbox="image-1" > <img src={{ asset('storage/'.$item->file) }} width='100px' class='img-thumbnail' /></a></td>
-                      <td>
+
+                      <td class="text-center"><a href={{ asset('storage/'.$item->file) }}  download> File</a></td>
+                      <td class="text-center">
                         @if($item->file_2 !=NULL)
-                        <a href={{ asset('storage/'.$item->file_2) }} data-lightbox="image-1" > <img src={{ asset('storage/'.$item->file_2) }} width='100px' class='img-thumbnail' /></a>
+                        <a href={{ asset('storage/'.$item->file_2) }} download>File</a>
                         @else
                         Not Availavle
                         @endif
-                        
+
                       </td>
                       <td>
                         <form action="/sim-order/update" method="POST">
