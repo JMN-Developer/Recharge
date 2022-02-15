@@ -26,7 +26,7 @@ class UpdateWallet
             $transaction_wallet = 'Domestic';
         }
 
-        else if($transaction_source =='Pin')
+        else if($transaction_source =='pin')
         {
             $service_code = 3;
             $transaction_wallet = 'Domestic';
