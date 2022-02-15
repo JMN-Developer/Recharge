@@ -91,7 +91,7 @@
                       </div>
 
                       <div class="form-group col-md-3">
-                        <label for="inputPassword4">Document Upload</label>
+                        <label for="inputPassword4">PAYMENT COPY</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="document" name="document">
                             <label class="custom-file-label " for="customFile">Choose file</label>
@@ -165,7 +165,7 @@
                     @if(auth()->user()->role =='admin')
                     <th scope="col">Reseller Name</th>
                     <th scope="col">Previous Due</th>
-                    <th scope="col">Document</th>
+                    <th scope="col">Payment Copy</th>
                     @else
                     <th scope="col">Admin Message</th>
                     @endif
@@ -513,7 +513,7 @@
             for (var i = 0; i < item.length; i++){
                 var status = item[i].status;
                 var url = '{{ URL::asset('/storage//') }}'
-                var image = "<a href=\"" + url+'/'+item[i].document + "\"  download><img width=\"85px\" class=\"imageThumb\" src=\"" + url+'/'+item[i].document + "\"/></a>"
+                var image = "<a href=\"" + url+'/'+item[i].document + "\"  download>File</a>"
             let class_name = '';
             if(status == 'pending')
             {
