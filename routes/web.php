@@ -38,6 +38,7 @@ use App\Models\DomesticProduct;
 use App\Models\DomesticProfit;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -290,6 +291,15 @@ Route::get('report',[ReportController::class,'index'])->name('report');
 Route::post('get_report_data',[ReportController::class,'get_report_data'])->name('get-report-data');
 Route::post('get_report_data_separate',[ReportController::class,'get_report_data_separate'])->name('get-report-data-separate');
 
+Route::group(['prefix' => 'ticket'], function()
+{
+
+    Route::get('/',[TicketController::class,'index']);
+    Route::post('ticket_submit',[TicketController::class,'ticket_submit']);
+    Route::get('get_ticket-data',[TicketController::class,'get_ticket_data'])->name('get-ticket-data');
+    Route::post('ticket_answer',[TicketController::class,'ticket_answer']);
+
+});
 
 Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
 {
