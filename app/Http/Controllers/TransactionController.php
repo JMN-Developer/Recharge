@@ -84,10 +84,10 @@ class TransactionController extends Controller
             $cargo = $cargo_debit - $cargo_credit;
             }
             foreach($data as $d){
-            $d->wallet = $wallet;
-            $d->limit = $limit;
-            $d->cargo = $cargo;
-            $d->sim = $sim;
+            $d->wallet = round($wallet,2);
+            $d->limit = round($limit,2);
+            $d->cargo = round($cargo,2);
+            $d->sim = round($sim,2);
             }
 
             return Datatables::of($data)
