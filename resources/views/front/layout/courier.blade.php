@@ -650,7 +650,7 @@ margin-left: 3px;
                 </a>
               </li>
 
-              @if(auth()->user()->role == 'user')
+
               <li class="@if(Route::currentRouteName() == 'transaction-history') nav-item menu-open @endif nav-item">
                 <a href="{{ route('transaction-history') }}" class="@if(Route::currentRouteName() == 'transaction-history') nav-link active @endif nav-link">
                   <i class="fa fa-history" aria-hidden="true"></i>
@@ -660,7 +660,7 @@ margin-left: 3px;
                   </p>
                 </a>
               </li>
-
+              @if(auth()->user()->role == 'user')
               <li class="@if(Route::currentRouteName() == 'contact-info') nav-item menu-open @endif nav-item">
                 <a href="{{ route('contact-info') }}" class="@if(Route::currentRouteName() == 'contact-info') nav-link active @endif nav-link">
                   <i class="fa fa-address-book" aria-hidden="true"></i>

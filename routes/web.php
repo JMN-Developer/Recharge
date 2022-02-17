@@ -353,7 +353,14 @@ Route::group(['prefix' => 'cargo','middleware'=>['auth','user']], function()
 
 });
 
-Route::get('transaction-history',[TransactionController::class,'index'])->name('transaction-history');
+Route::group(['middleware'=>['auth']], function()
+{
+
+
+    Route::get('transaction-history',[TransactionController::class,'index'])->name('transaction-history');
+
+});
+
 
 Route::group(['prefix' => 'phone','middleware'=>['auth']], function()
 {

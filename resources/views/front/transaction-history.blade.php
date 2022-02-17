@@ -176,6 +176,9 @@ table.dataTable thead .sorting_asc{
                             <table  id="tab-table-all" class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                                 <thead>
                                   <tr>
+                                    @if(auth()->user()->role =='admin')
+                                    <th style="background-color: black;color:white" >Reseller Name</th>
+                                    @endif
                                     <th style="background-color: black;color:white" >Transaction No</th>
                                     <th style="background-color: black;color:white" >Service</th>
                                     <th style="background-color: black;color:white">Description</th>
@@ -192,9 +195,9 @@ table.dataTable thead .sorting_asc{
 
                                 <tfoot class="thead-dark" style="background-color: black" >
                                     <tr>
-                                      @if(Auth::user()->role == 'admin')
-                                      <th scope="col"></th>
-                                      @endif
+                                        @if(auth()->user()->role == 'admin')
+                                        <th scope="col"></th>
+                                        @endif
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
@@ -216,6 +219,9 @@ table.dataTable thead .sorting_asc{
                             <table  id="tab-table-international-recharge" class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                                 <thead>
                                   <tr>
+                                    @if(auth()->user()->role =='admin')
+                                    <th style="background-color: black;color:white" >Reseller Name</th>
+                                    @endif
                                     <th style="background-color: black;color:white"  >Transaction No</th>
                                     <th style="background-color: black;color:white" >Service</th>
                                     <th style="background-color: black;color:white">Description</th>
@@ -232,9 +238,10 @@ table.dataTable thead .sorting_asc{
 
                                 <tfoot class="thead-dark" style="background-color: black" >
                                     <tr>
-                                      @if(Auth::user()->role == 'admin')
-                                      <th scope="col"></th>
-                                      @endif
+
+                                        @if(auth()->user()->role == 'admin')
+                                        <th scope="col"></th>
+                                        @endif
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
@@ -256,6 +263,9 @@ table.dataTable thead .sorting_asc{
                             <table  id="tab-table-domestic-recharge" class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                                 <thead>
                                   <tr>
+                                    @if(auth()->user()->role =='admin')
+                                    <th style="background-color: black;color:white" >Reseller Name</th>
+                                    @endif
                                     <th style="background-color: black;color:white"  >Transaction No</th>
                                     <th style="background-color: black;color:white" >Service</th>
                                     <th style="background-color: black;color:white">Description</th>
@@ -272,9 +282,9 @@ table.dataTable thead .sorting_asc{
 
                                 <tfoot class="thead-dark" style="background-color: black" >
                                     <tr>
-                                      @if(Auth::user()->role == 'admin')
-                                      <th scope="col"></th>
-                                      @endif
+                                        @if(auth()->user()->role == 'admin')
+                                        <th scope="col"></th>
+                                        @endif
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
@@ -297,6 +307,9 @@ table.dataTable thead .sorting_asc{
                             <table  id="tab-table-pin" class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                                 <thead>
                                   <tr>
+                                    @if(auth()->user()->role =='admin')
+                                    <th style="background-color: black;color:white" >Reseller Name</th>
+                                    @endif
                                     <th style="background-color: black;color:white"  >Transaction No</th>
                                     <th style="background-color: black;color:white" >Service</th>
                                     <th style="background-color: black;color:white">Description</th>
@@ -313,9 +326,9 @@ table.dataTable thead .sorting_asc{
 
                                 <tfoot class="thead-dark" style="background-color: black" >
                                     <tr>
-                                      @if(Auth::user()->role == 'admin')
-                                      <th scope="col"></th>
-                                      @endif
+                                        @if(auth()->user()->role == 'admin')
+                                        <th scope="col"></th>
+                                        @endif
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
@@ -337,6 +350,9 @@ table.dataTable thead .sorting_asc{
                             <table  id="tab-table-white-calling" class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                                 <thead>
                                   <tr>
+                                    @if(auth()->user()->role =='admin')
+                                    <th style="background-color: black;color:white" >Reseller Name</th>
+                                    @endif
                                     <th style="background-color: black;color:white"  >Transaction No</th>
                                     <th style="background-color: black;color:white" >Service</th>
                                     <th style="background-color: black;color:white">Description</th>
@@ -353,9 +369,9 @@ table.dataTable thead .sorting_asc{
 
                                 <tfoot class="thead-dark" style="background-color: black" >
                                     <tr>
-                                      @if(Auth::user()->role == 'admin')
-                                      <th scope="col"></th>
-                                      @endif
+                                        @if(auth()->user()->role == 'admin')
+                                        <th scope="col"></th>
+                                        @endif
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
@@ -377,6 +393,9 @@ table.dataTable thead .sorting_asc{
                             <table  id="tab-table-sim" class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                                 <thead>
                                   <tr>
+                                    @if(auth()->user()->role =='admin')
+                                    <th style="background-color: black;color:white" >Reseller Name</th>
+                                    @endif
                                     <th style="background-color: black;color:white"  >Transaction No</th>
                                     <th style="background-color: black;color:white" >Service</th>
                                     <th style="background-color: black;color:white">Description</th>
@@ -393,9 +412,7 @@ table.dataTable thead .sorting_asc{
 
                                 <tfoot class="thead-dark" style="background-color: black" >
                                     <tr>
-                                      @if(Auth::user()->role == 'admin')
-                                      <th scope="col"></th>
-                                      @endif
+
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
@@ -417,6 +434,9 @@ table.dataTable thead .sorting_asc{
                             <table  id="tab-table-cargo" class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                                 <thead>
                                   <tr>
+                                    @if(auth()->user()->role =='admin')
+                                    <th style="background-color: black;color:white" >Reseller Name</th>
+                                    @endif
                                     <th style="background-color: black;color:white"  >Transaction No</th>
                                     <th style="background-color: black;color:white" >Service</th>
                                     <th style="background-color: black;color:white">Description</th>
@@ -433,9 +453,7 @@ table.dataTable thead .sorting_asc{
 
                                 <tfoot class="thead-dark" style="background-color: black" >
                                     <tr>
-                                      @if(Auth::user()->role == 'admin')
-                                      <th scope="col"></th>
-                                      @endif
+
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
@@ -554,7 +572,7 @@ $(function() {
     });
 
     $(".reseller").change(function(){
-        fetch_table($(".start_date").val(),$(".end_date").val())
+        fetch_table($(".start_date").val(),$(".end_date").val(),$('#reseller option:selected').val())
 
     });
 
@@ -623,9 +641,9 @@ function filter()
     fetch_table($(".start_date").val(),$(".end_date").val())
 }
 
-function fetch_table(start_date,end_date)
+function fetch_table(start_date,end_date,retailer = 'all')
 {
-    console.log(start_date,end_date);
+
     $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
         $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
     } );
@@ -642,9 +660,9 @@ function fetch_table(start_date,end_date)
         processing: true,
         serverSide: true,
 
-        ordering:false,
+        ordering:true,
         searchPanes: {
-            orderable: false
+            orderable: true
         },
 
         columnDefs: [
@@ -661,6 +679,7 @@ function fetch_table(start_date,end_date)
                 'type':'datatable',
                 'start_date':$(".start_date").val(),
                 'end_date':$(".end_date").val(),
+                'retailer':retailer
 
             },
             dataSrc: function ( data ) {
@@ -678,7 +697,9 @@ function fetch_table(start_date,end_date)
         deferRender: true,
         columns: [
             //   {data: 'sl_no'},
-
+            @if(Auth::user()->role == 'admin')
+            {data:'reseller_name',name:'reseller_name'},
+             @endif
             {data:'transaction_id',name:'transaction_id',orderable:false},
             {data:'transaction_source',name:'transaction_source'},
             {data:'description',name:'description'},
@@ -720,13 +741,12 @@ function fetch_table(start_date,end_date)
     $('#tab-table-cargo').DataTable().search( 'Cargo' ).draw();
     function datatable_sum(dt_selector, is_calling_first) {
         //col start from 0
-        @if(Auth::user()->role == 'admin')
-        $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));
-        $( dt_selector.column(6).footer() ).html(dt_selector.column( 6, {page:'all'} ).data().sum().toFixed(2));
-        @else
+
+
         $( dt_selector.column(4).footer() ).html(dt_selector.column( 4, {page:'all'} ).data().sum().toFixed(2));
         $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));
-        @endif
+
+
 
 
     }
