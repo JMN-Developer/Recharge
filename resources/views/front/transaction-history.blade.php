@@ -715,16 +715,16 @@ function fetch_table(start_date,end_date,retailer = 'all')
   drawCallback: function () {
             var api = this.api();
 
-        $( api.column( 2 ).footer() ).html(
+        $( api.column( 0 ).footer() ).html(
             'Wallet = '+wallet
             );
-            $( api.column( 3 ).footer() ).html(
+            $( api.column( 1 ).footer() ).html(
                 'Limit = '+limit
             );
-            $( api.column( 4 ).footer() ).html(
+            $( api.column( 2 ).footer() ).html(
                 'Cargo = '+cargo
             );
-            $( api.column( 5 ).footer() ).html(
+            $( api.column( 3 ).footer() ).html(
                 'Sim ='+sim
             );
            // datatable_sum(api, false);
