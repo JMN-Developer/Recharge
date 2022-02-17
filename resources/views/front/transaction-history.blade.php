@@ -668,9 +668,9 @@ function fetch_table(start_date,end_date,retailer = 'all')
         columnDefs: [
     { "orderable": false, "targets": "_all" } // Applies the option to all columns
   ],
-  paging:         false,
-  scrollY:        600,
-  scrollCollapse: true,
+  paging:         true,
+//   scrollY:        600,
+//   scrollCollapse: true,
         ajax: {
 
             "url":'transaction-history',
