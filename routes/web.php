@@ -39,6 +39,7 @@ use App\Models\DomesticProfit;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\BangladeshRechargeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -235,12 +236,18 @@ Route::get('wallet_notification_count',[WalletController::class,'wallet_notifica
 
 Route::get('sim_notification_count',[SimController::class,'sim_notification_count']);
 
+Route::get('complain_notification_count',[TicketController::class,'complain_notification_count']);
+
 
 Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
 {
 
     Route::get('dingconnect',[DingConnectController::class,'index']);
    Route::get('international', [InternationalApiController::class,'index'])->name('international');
+   Route::get('recharge-bangladesh', [BangladeshRechargeController::class,'index'])->name('bangladesh');
+   Route::post('bangladeshi_operator_details',[BangladeshRechargeController::class,'mobile_number_details'])->name('bangladeshi_operator_details');
+   Route::post('bangladeshi_recharge',[BangladeshRechargeController::class,'recharge'])->name('bangladeshi_recharge');
+
 
 
     Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
@@ -284,6 +291,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
     Route::get('get_white_calling_table',[PpnController::class,'get_white_calling_table'])->name('get_white_calling_table');
     Route::post('send_pin_to_email',[PpnController::class,'send_pin']);
     Route::get('check_daily_duplicate',[RechargeController::class,'check_daily_duplicate']);
+    Route::get('bangladeshi_exchange_rate',[BangladeshRechargeController::class,'bangladeshi_exchange_rate']);
 
 });
 
@@ -294,7 +302,8 @@ Route::post('get_report_data_separate',[ReportController::class,'get_report_data
 Route::group(['prefix' => 'ticket'], function()
 {
 
-    Route::get('/',[TicketController::class,'index']);
+    Route::get('/',[TicketController::class,'index'])->name('ticket');
+    Route::get('add',[TicketController::class,'add_ticket_view'])->name('add-ticket-view');
     Route::post('ticket_submit',[TicketController::class,'ticket_submit']);
     Route::get('get_ticket-data',[TicketController::class,'get_ticket_data'])->name('get-ticket-data');
     Route::post('ticket_answer',[TicketController::class,'ticket_answer']);

@@ -15,14 +15,14 @@ class BalanceSeeder extends Seeder
      */
     public function run()
     {
-        Balance::create([
-            'type' => 'ding',
-            'balance' => 0
-        ]);
+        // Balance::create([
+        //     'type' => 'ding',
+        //     'balance' => 0
+        // ]);
 
-        Balance::create([
-            'type' => 'domestic',
-            'balance' => 0
-        ]);
+        // Balance::create([
+        //     'type' => 'domestic',
+        //     'balance' => 0
+        // ]);
     }
 }

@@ -384,6 +384,15 @@ margin-left: 3px;
                 </p>
               </a>
               <ul class="nav nav-treeview">
+                @if (Auth::user()->role == 'admin')
+                <li class="nav-item">
+                    <a href="{{ route('bangladesh') }}" class="@if(Route::currentRouteName() == 'international') nav-link active @endif nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Bangladesh</p>
+                    </a>
+                  </li>
+                @endif
+
                 <li class="nav-item">
                   <a href="{{ route('international') }}" class="@if(Route::currentRouteName() == 'international') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -686,6 +695,18 @@ margin-left: 3px;
               @endif
 
               @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user'  )
+              <li class="@if(Route::currentRouteName() == 'ticket') nav-item menu-open @endif nav-item">
+                <a href="{{ route('ticket') }}" class="@if(Route::currentRouteName() == 'ticket') nav-link active @endif nav-link">
+                  <i class="fas fa-wallet" aria-hidden="true"></i>
+                  <p>
+                    Complain<span class="badge complain_notification_count">3</span>
+
+                  </p>
+                </a>
+              </li>
+              @endif
+
+              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user'  )
               <li class="@if(Route::currentRouteName() == 'wallet-request') nav-item menu-open @endif nav-item">
                 <a href="{{ route('wallet-request') }}" class="@if(Route::currentRouteName() == 'wallet-request') nav-link active @endif nav-link">
                   <i class="fas fa-wallet" aria-hidden="true"></i>
@@ -753,6 +774,7 @@ margin-left: 3px;
       $(function(){
         notification_count();
         sim_notification_count();
+        complain_notification_count();
       });
 
         var a = Echo.channel('events')
@@ -761,9 +783,15 @@ margin-left: 3px;
                 sim_notification_count();
             });
 
-            var a = Echo.channel('events')
+        var a = Echo.channel('events')
             .listen('SimRequest', (e) => {
               sim_notification_count();
+
+            });
+        var a = Echo.channel('events')
+            .listen('TicketRequest', (e) => {
+
+            complain_notification_count();
 
             });
 
@@ -780,6 +808,20 @@ margin-left: 3px;
           });
         }
 
+        function complain_notification_count()
+        {
+
+          $.ajax({
+              type: "GET",
+              dataType: "json",
+              url: '/complain_notification_count',
+              success: function(data){
+                console.log(data)
+              $('.complain_notification_count').text(data)
+              }
+          });
+        }
+
         function sim_notification_count()
         {
           $.ajax({
@@ -787,7 +829,7 @@ margin-left: 3px;
               dataType: "json",
               url: '/sim_notification_count',
               success: function(data){
-                console.log(data)
+
               $('.sim_notification_count').text(data)
               }
           });

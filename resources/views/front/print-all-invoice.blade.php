@@ -105,27 +105,7 @@ table.dataTable thead .sorting_asc{
 
 
 
-                <div class="converter_section mt-5">
-                  <div class="converter_btn-1">
-                    <button type="button" class="btn btn-info btn-sm">Copy</button>
-                    <button type="button" class="btn btn-info btn-sm">Exel</button>
-                    <button type="button" class="btn btn-info btn-sm">CSV</button>
-                    <button type="button" class="btn btn-info btn-sm">PDF</button>
-                  </div>
-                  <div class="converter_search-1">
-                    <div class="card-tools">
-                      <div class="input-group input-group-sm">
-                        {{-- <input type="text" name="table_search" data-table="table-info" class="form-control float-right light-table-filter" placeholder="Search"> --}}
 
-                        {{-- <div class="input-group-append">
-                          <button type="submit" class="btn btn-default">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </div> --}}
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div class="recharge_input_table table-responsive p-0">
                   <table class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                     <thead>
@@ -179,50 +159,7 @@ table.dataTable thead .sorting_asc{
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <script>
-    /* Code By Webdevtrick ( https://webdevtrick.com ) */
-    (function(document) {
-    'use strict';
 
-
-    var TableFilter = (function(Arr) {
-
-        var _input;
-
-        function _onInputEvent(e) {
-            _input = e.target;
-            var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
-            Arr.forEach.call(tables, function(table) {
-                Arr.forEach.call(table.tBodies, function(tbody) {
-                    Arr.forEach.call(tbody.rows, _filter);
-                });
-            });
-        }
-
-        function _filter(row) {
-            var text = row.textContent.toLowerCase(),
-                val = _input.value.toLowerCase();
-            row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
-        }
-
-        return {
-            init: function() {
-                var inputs = document.getElementsByClassName('light-table-filter');
-                Arr.forEach.call(inputs, function(input) {
-                    input.oninput = _onInputEvent;
-                });
-            }
-        };
-    })(Array.prototype);
-
-    document.addEventListener('readystatechange', function() {
-        if (document.readyState === 'complete') {
-            TableFilter.init();
-        }
-    });
-
-})(document);
-  </script>
 @endsection
 
 @section('scripts')

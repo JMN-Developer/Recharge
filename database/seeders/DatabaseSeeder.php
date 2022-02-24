@@ -16,32 +16,41 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        // \App\Models\SecretStore::create([
-        //     'type'=>'international',
-        //     'company_name'=>'dtone',
-        //     'content'=>Crypt::encrypt('YjIxMmVkYWItN2UzZS00NjUzLTk5YTgtMDBhMzUzMGQ0ZDhiOjBmYTI0NWUzLWJlNDAtNDYwMy04YzVjLTZlZDhmMDBlODk2Yw==')
+        \App\Models\service_code::create([
+            'service_name'=>'International Recharge',
+            'company_name'=>'Ding Connect',
+            'service_code'=>10
 
-        // ]);
-    //     \App\Models\User::factory(10)->create();
-    //    \App\Models\RechargeHistory::factory(10000)->create();
-    //   \App\Models\ApiList::create([
-    //        'type'=>'International',
-    //        'company_name'=>'Reloadly',
-    //    ]);
-    //    \App\Models\ApiList::create([
-    //     'type'=>'International',
-    //     'company_name'=>'Ding Connect',
-    // ]);
+        ]);
 
-    // \App\Models\ApiList::create([
-    //     'type'=>'Domestic',
-    //     'company_name'=>'Epay',
-    // ]);
+        \App\Models\service_code::create([
+            'service_name'=>'International Recharge',
+            'company_name'=>'DtOne',
+            'service_code'=>11
 
-    // \App\Models\ApiList::create([
-    //     'type'=>'Domestic',
-    //     'company_name'=>'Prepay',
-    // ]);
-    // }
+        ]);
+
+        \App\Models\service_code::create([
+            'service_name'=>'International Recharge',
+            'company_name'=>'Reloadly',
+            'service_code'=>12
+
+        ]);
+
+        \App\Models\service_code::create([
+            'service_name'=>'International Recharge',
+            'company_name'=>'PPN',
+            'service_code'=>13
+
+        ]);
+
+        \App\Models\service_code::create([
+            'service_name'=>'Domestic Recharge',
+            'company_name'=>'PPN',
+            'service_code'=>13
+
+        ]);
+
+
     }
 }

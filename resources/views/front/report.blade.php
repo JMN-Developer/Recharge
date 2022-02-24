@@ -73,18 +73,18 @@ table.dataTable thead .sorting_asc{
                                     <input type="text" class="form-control" name="daterange" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
                                     <input type="hidden" class='start_date'>
                                     <input type="hidden" class='end_date'>
-            
+
                                     <!-- <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" /> -->
                                   </div>
                               </div>
-            
-                             
-                            
+
+
+
                               <div class="col-md-2">
                                 <input type="button"  onclick="filter()" value="Filter" class="btn btn-success" style="margin-top:30px">
                               </div>
                           </div>
-            
+
                     </div>
                 </div>
                 <!-- end page title -->
@@ -93,14 +93,14 @@ table.dataTable thead .sorting_asc{
                     <div class="col-md-6 col-xl-3">
                         <div class="card">
                             <div class="card-body">
-                                
+
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <span class="text-muted text-uppercase fs-12 fw-bold">All Recharge</span>
                                         <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="all_sale"></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span id="all_profit"></span></p>
-                                        
+
                                     </div>
-                                   
+
                                 </div>
                             </div>
                         </div>
@@ -114,7 +114,7 @@ table.dataTable thead .sorting_asc{
                                         <span class="text-muted text-uppercase fs-12 fw-bold">International</span>
                                         <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="international_sale" ></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span  id="international_profit"></span></p>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -128,7 +128,7 @@ table.dataTable thead .sorting_asc{
                                         <span class="text-muted text-uppercase fs-12 fw-bold">Domestic</span>
                                         <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="domestic_sale"></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span id="domestic_profit"></span></p>
                                     </div>
-                                   
+
                                 </div>
                             </div>
                         </div>
@@ -142,7 +142,7 @@ table.dataTable thead .sorting_asc{
                                         <span class="text-muted text-uppercase fs-12 fw-bold">Pin</span>
                                         <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="pin_sale"></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span id="pin_profit"></span></p>
                                     </div>
-                                  
+
                                 </div>
                             </div>
                         </div>
@@ -156,13 +156,13 @@ table.dataTable thead .sorting_asc{
                                         <span class="text-muted text-uppercase fs-12 fw-bold">White Calling</span>
                                         <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="white_calling_sale"></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span id="white_calling_profit"></span></p>
                                     </div>
-                                  
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    
+
                     <div class="col-md-6 col-xl-3">
                         <div class="card">
                             <div class="card-body">
@@ -171,13 +171,13 @@ table.dataTable thead .sorting_asc{
                                         <span class="text-muted text-uppercase fs-12 fw-bold">Sim</span>
                                         <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="sim_sale"></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span id="sim_profit"></span></p>
                                     </div>
-                                  
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                     
+
                     <div class="col-md-6 col-xl-3">
                         <div class="card">
                             <div class="card-body">
@@ -186,7 +186,7 @@ table.dataTable thead .sorting_asc{
                                         <span class="text-muted text-uppercase fs-12 fw-bold">Cargo</span>
                                         <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="cargo_sale"></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span id="cargo_profit"></span></p>
                                     </div>
-                                  
+
                                 </div>
                             </div>
                         </div>
@@ -199,18 +199,18 @@ table.dataTable thead .sorting_asc{
                             <div class="card-body">
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
-                                        
+
                                         <input type="text" class="form-control" name="daterange_all_recharge" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                
+
                                         <!-- <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" /> -->
                                       </div>
                                   </div>
                                 <h5 class="card-title mb-0 header-title">All Recharge</h5>
                                 <div class="p-2 m-2 bg-white rounded shadow all_chart" style="margin-top: 50px !important">
-                                   
-                                  
+
+
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -220,22 +220,22 @@ table.dataTable thead .sorting_asc{
                             <div class="card-body">
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
-                                        
+
                                         <input type="text" class="form-control" name="daterange_domestic_recharge" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                
-                                      
+
+
                                       </div>
                                   </div>
                                 <div class="dropdown float-end">
-                                    
-                                   
+
+
                                 </div>
                                 <h5 class="card-title mb-0 header-title">Domestic Recharge</h5>
                                 <div class="p-2 m-2 bg-white rounded shadow domestic_recharge_chart" style="margin-top: 50px !important">
-                                   
-                                  
+
+
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -245,22 +245,22 @@ table.dataTable thead .sorting_asc{
                             <div class="card-body">
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
-                                        
+
                                         <input type="text" class="form-control" name="daterange_international_recharge" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                
-                                      
+
+
                                       </div>
                                   </div>
                                 <div class="dropdown float-end">
-                                  
-                                   
+
+
                                 </div>
                                 <h5 class="card-title mb-0 header-title">International Recharge</h5>
                                 <div class="p-2 m-2 bg-white rounded shadow international_recharge_chart" style="margin-top: 50px !important">
-                                   
-                                  
+
+
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -270,22 +270,22 @@ table.dataTable thead .sorting_asc{
                             <div class="card-body">
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
-                                        
+
                                         <input type="text" class="form-control" name="daterange_pin" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                
-                                      
+
+
                                       </div>
                                   </div>
                                 <div class="dropdown float-end">
-                                    
-                                   
+
+
                                 </div>
                                 <h5 class="card-title mb-0 header-title">Pin</h5>
                                 <div class="p-2 m-2 bg-white rounded shadow pin_chart" style="margin-top: 50px !important">
-                                   
-                                  
+
+
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -296,21 +296,21 @@ table.dataTable thead .sorting_asc{
                             <div class="card-body">
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
-                                        
+
                                         <input type="text" class="form-control" name="daterange_white_calling" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                
-                                      
+
+
                                       </div>
                                   </div>
                                 <div class="dropdown float-end">
-                                   
+
                                 </div>
                                 <h5 class="card-title mb-0 header-title">White Calling</h5>
                                 <div class="p-2 m-2 bg-white rounded shadow white_calling_chart" style="margin-top: 50px !important">
-                                   
-                                  
+
+
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -320,21 +320,21 @@ table.dataTable thead .sorting_asc{
                             <div class="card-body">
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
-                                        
+
                                         <input type="text" class="form-control" name="daterange_sim" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                
-                                      
+
+
                                       </div>
                                   </div>
                                 <div class="dropdown float-end">
-                                 
+
                                 </div>
                                 <h5 class="card-title mb-0 header-title">Sim</h5>
                                 <div class="p-2 m-2 bg-white rounded shadow sim_chart" style="margin-top: 50px !important">
-                                   
-                                  
+
+
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -345,41 +345,41 @@ table.dataTable thead .sorting_asc{
                             <div class="card-body">
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
-                                        
+
                                         <input type="text" class="form-control" name="daterange_cargo" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                
-                                      
+
+
                                       </div>
                                   </div>
                                 <div class="dropdown float-end">
-                                   
+
                                 </div>
                                 <h5 class="card-title mb-0 header-title">Cargo</h5>
                                 <div class="p-2 m-2 bg-white rounded shadow cargo_chart" style="margin-top: 50px !important">
-                                   
-                                  
+
+
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
 
 
-                   
+
 
                     {{-- <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
-                                        
+
                                         <input type="text" class="form-control" name="daterange_all_recharge" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                
-                                      
+
+
                                       </div>
                                   </div>
                                 <div class="dropdown float-end">
-                                   
+
                                 </div>
                                 <h5 class="card-title mb-0 header-title">Profit Growth</h5>
 
@@ -388,13 +388,13 @@ table.dataTable thead .sorting_asc{
                         </div>
                     </div> --}}
 
-                    
+
                 </div>
                 {{-- <div class="row">
                     <div class="col-xl-6 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                               
+
                                 <h5 class="card-title mt-0 mb-0 header-title">Sales By Category</h5>
                                 <div id="sales-by-category-chart" class="apex-charts mb-0 mt-4" dir="ltr"></div>
                             </div>
@@ -405,7 +405,7 @@ table.dataTable thead .sorting_asc{
                     <div class="col-xl-6 col-md-6">
                         <div class="card">
                             <div class="card-body">
-                               
+
                                 <h5 class="card-title mt-0 mb-0 header-title">Profit By Category</h5>
                                 <div id="profit-by-category-chart" class="apex-charts mb-0 mt-4" dir="ltr"></div>
                             </div>
@@ -415,12 +415,12 @@ table.dataTable thead .sorting_asc{
                 </div> --}}
 
                 <!-- stats + charts -->
-          
+
                 <!-- row -->
 
                 <!-- products -->
                 <div class="row">
-                    
+
                     <!-- end col-->
                     <div class="col-xl-12">
                         <div class="card">
@@ -438,11 +438,11 @@ table.dataTable thead .sorting_asc{
                                                 <th scope="col">Reseller Name</th>
                                                 <th scope="col">Total Sale</th>
                                                 <th scope="col">Total Profit</th>
-                                               
+
                                             </tr>
                                         </thead>
                                         <tbody id="top_reseller">
-                                            
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -457,7 +457,7 @@ table.dataTable thead .sorting_asc{
                 <!-- end row -->
 
                 <!-- widgets -->
-            
+
                 <!-- end row -->
 
             </div>
@@ -467,14 +467,14 @@ table.dataTable thead .sorting_asc{
         <!-- content -->
 
         <!-- Footer Start -->
-       
+
         <!-- end Footer -->
 
     </div>
-    
+
   </div>
   <!-- /.content-wrapper -->
-  
+
 @endsection
 
 @section('scripts')
@@ -520,11 +520,11 @@ $(function() {
     var start = moment().subtract(29, 'days');
      var end = moment();
 //   $(".start_date").val(start.format('YYYY-MM-DD'));
-//   $(".end_date").val(end.format('YYYY-MM-DD')); 
+//   $(".end_date").val(end.format('YYYY-MM-DD'));
     get_data(start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'));
 
-  
-   
+
+
     $('.reseller').select2({
 
     placeholder: function(){
@@ -567,7 +567,7 @@ $(function() {
        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
     }
   }, function(start, end, label) {
-   
+
      $(".start_date").val(start.format('YYYY-MM-DD'));
      $(".end_date").val(end.format('YYYY-MM-DD'));
      get_data($(".start_date").val(),$(".end_date").val())
@@ -588,7 +588,7 @@ $(function() {
        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
     }
   }, function(start, end, label) {
-   
+
     filter_separate_data('all',start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'))
 
   });
@@ -607,7 +607,7 @@ $(function() {
     }
   }, function(start, end, label) {
     filter_separate_data('international_recharge',start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'))
-   
+
 
   });
 
@@ -624,7 +624,7 @@ $(function() {
     }
   }, function(start, end, label) {
     filter_separate_data('domestic_recharge',start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'))
-     
+
     //  get_data($(".start_date").val(),$(".end_date").val())
 
 
@@ -659,7 +659,7 @@ $(function() {
        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
     }
   }, function(start, end, label) {
-   
+
     filter_separate_data('white_calling',start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'))
 
 
@@ -678,7 +678,7 @@ $(function() {
        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
     }
   }, function(start, end, label) {
-   
+
     filter_separate_data('sim',start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'))
 
   });
@@ -696,8 +696,8 @@ $(function() {
        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
     }
   }, function(start, end, label) {
-   
-   
+
+
     filter_separate_data('cargo',start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'))
 
   });
@@ -720,7 +720,7 @@ function filter()
 
 function filter_separate_data(type,start_date,end_date)
 {
-     
+
      let url = "{{ route('get-report-data-separate') }}";
         var formdata = new FormData();
         formdata.append('start_date',start_date)
@@ -751,7 +751,7 @@ function filter_separate_data(type,start_date,end_date)
 }
 function process_separate_data(obj)
 {
-    console.log(obj.chart_container)
+   // console.log(obj.chart_container)
     if(obj.type =='international_recharge')
     {
         $('.international_recharge_chart').empty();
@@ -759,7 +759,7 @@ function process_separate_data(obj)
     }
     else if(obj.type =='domestic_recharge')
     {
-        
+
         $('.domestic_recharge_chart').empty();
         $('.domestic_recharge_chart').append(obj.chart_container)
     }
@@ -793,7 +793,7 @@ function process_separate_data(obj)
 function process_data(obj)
 
 {
-    
+
         $("#top_reseller").empty();
         $('.all_chart').empty();
         $('.sim_chart').empty();
@@ -839,7 +839,7 @@ function process_data(obj)
 }
 
 function get_data(start,end)
-    { 
+    {
         //console.log("Hello "+$(".start_date").val()+" "+$(".end_date").val())
         let url = "{{ route('get-report-data') }}";
         var formdata = new FormData();
@@ -871,8 +871,8 @@ function get_data(start,end)
 
 </script>
 <script>
-   
- 
+
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts">  </script>
 {{-- <script src="{{ $international_chart->cdn() }}"></script>
