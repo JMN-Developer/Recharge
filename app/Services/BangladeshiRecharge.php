@@ -26,12 +26,12 @@ class BangladeshiRecharge
     {
         $token = SecretStore::where('company_name','SSL')->first()->content;
         $this->client_pass = Crypt::decrypt($token);
-        $options = [
-            'cache_wsdl'     => WSDL_CACHE_NONE,
-            'trace'          => 1,
-        ];
+        // $options = [
+        //     'cache_wsdl'     => WSDL_CACHE_NONE,
+        //     'trace'          => 1,
+        // ];
         try {
-            $this->client = new SoapClient($this->wsdl_path,$options);
+            $this->client = new SoapClient($this->wsdl_path);
             $this->soap_exception_occured = false;
             $this->exception = '';
             } catch(SoapFault $exception) {
