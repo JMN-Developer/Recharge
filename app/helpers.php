@@ -34,7 +34,6 @@ if (!function_exists('check_daily_duplicate')) {
     {
         $change = [' ','+'];
         $number = str_replace($change,'',$number);
-        file_put_contents('test.txt',$number);
         $dt = Carbon::now();
         $current_date = $dt->toDateString();
         $avial = DB::table('recharge_histories')->where('created_at','LIKE','%'.$current_date)->where('number',$number)->first();
@@ -44,6 +43,17 @@ if (!function_exists('check_daily_duplicate')) {
         return true;
     }
     }
+
+    if (!function_exists('euro_rate_for_bd_recharge')) {
+        function euro_rate_for_bd_recharge()
+        {
+
+
+            $rate = DB::table('api_lists')->where('type','Bangladesh')->first()->euro_rate_per_hundred_bdt;
+            return $rate;
+
+        }
+        }
 
 
 if (!function_exists('transaction_cargo')) {

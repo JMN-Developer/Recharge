@@ -288,6 +288,7 @@ margin-left: 3px;
               $reloadly = DB::table('balances')->where('type','reloadly')->latest()->first();
               $ppn =  DB::table('balances')->where('type','ppn')->latest()->first();
               $dtone =  DB::table('balances')->where('type','dtone')->latest()->first();
+              $ssl =  DB::table('balances')->where('type','ssl')->latest()->first();
             @endphp
              {{-- <div class="col-12">
               <b class="mr-2">Profit:</b><span>{{ $admin_profit }}&euro;</span>
@@ -314,6 +315,10 @@ margin-left: 3px;
 
               <div class="col-12">
                 <b class="mr-2">International4:</b><span>{{ $dtone->balance }}&euro;</span>
+              </div>
+
+              <div class="col-12">
+                <b class="mr-2">Bangladesh:</b><span>{{ $ssl->balance }} TK;</span>
               </div>
 
           </div>
@@ -807,7 +812,13 @@ margin-left: 3px;
               }
           });
         }
-
+        function isNumberKeyDecimal(evt)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
         function complain_notification_count()
         {
 

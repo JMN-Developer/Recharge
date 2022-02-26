@@ -427,6 +427,7 @@ Route::group(['prefix' => 'ApiControl','middleware'=>['auth','admin']], function
 {
 
     Route::get('change_status',[ApiSettingsController::class,'change_status'])->name('change_status');
+    Route::get('update_euro_rate',[ApiSettingsController::class,'update_euro_rate'])->name('update_euro_rate');
     Route::get('get_data',[ApiSettingsController::class,'get_data'])->name('get_data');
     Route::get('api-activation', [ApiSettingsController::class,'ApiActivation'])->name('api-activation');
 

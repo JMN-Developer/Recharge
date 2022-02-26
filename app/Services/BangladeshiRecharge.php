@@ -4,6 +4,10 @@ namespace App\Services;
 use SoapClient;
 use Auth;
 use App\Services\GenerateTransactionId;
+use App\Models\currency_rate;
+use SebastianBergmann\Environment\Console;
+use Illuminate\Support\Facades\Crypt;
+use App\Models\SecretStore;
 
 /**
  * Class BangladeshiRecharge
@@ -12,7 +16,7 @@ use App\Services\GenerateTransactionId;
 class BangladeshiRecharge
 {
     private $client_id = 'JMNationAPI';
-    private $client_pass = 'Sk1Kc0VZcXBoUDlJUQ==';
+    private $client_pass;
     private $wsdl_path = "http://vrapi.sslwireless.com/?wsdl";
     private $soap_exception_occured;
     private $exception;
@@ -20,6 +24,8 @@ class BangladeshiRecharge
 
     public function __construct()
     {
+        $token = SecretStore::where('company_name','SSL')->first()->content;
+        $this->client_pass = Crypt::decrypt($token);
         $options = [
             'cache_wsdl'     => WSDL_CACHE_NONE,
             'trace'          => 1,
@@ -36,7 +42,25 @@ class BangladeshiRecharge
 
 
     }
+    public function current_euro_rate()
+    {
+        $date = date('Y-m-d');
+        $currency_rate = currency_rate::where('updated_at','LIKE',$date.'%')->first();
+        if($currency_rate)
+        {
+        return $currency_rate->eur;
+        }
+        else
+        {
+        $client = new \GuzzleHttp\Client(['http_errors' => false]);
+        $operator_request = $client->get('https://freecurrencyapi.net/api/v2/latest?apikey=7db968c0-956a-11ec-b831-1b1d53e27789&base_currency=EUR');
+        $response = $operator_request->getBody();
+        $response = json_decode($response);
+        currency_rate::where('id',1)->update(['eur'=>$response->data->BDT]);
+        return $response->data->BDT;
+        }
 
+    }
 
 
     public function offer_details($operator_id)
@@ -64,7 +88,7 @@ class BangladeshiRecharge
                 $this->soap_exception_occured = true;
                 $this->exception = 'Soap Exception '.$exception;
             }
-
+            file_put_contents('create_recharge.txt',json_encode($data));
             return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
     }
     public function InitRecharge($guid,$vr_guid)
@@ -76,7 +100,7 @@ class BangladeshiRecharge
                 $this->soap_exception_occured = true;
                 $this->exception = 'Soap Exception '.$exception;
             }
-
+            file_put_contents('init_recharge.txt',json_encode($data));
             return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
     }
 
@@ -100,6 +124,7 @@ class BangladeshiRecharge
                 $this->soap_exception_occured = true;
                 $this->exception = 'Soap Exception '.$exception;
             }
+
 
             return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
     }

@@ -45,4 +45,8 @@ class ApiSettingsController extends Controller
 
        // file_put_contents('test.txt',$request->type." ".$request->id." ".$request->status);
     }
+    public function update_euro_rate(Request $request)
+    {
+        ApiList::where('type','Bangladesh')->update(['euro_rate_per_hundred_bdt'=>$request->value]);
+    }
 }

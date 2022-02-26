@@ -20,6 +20,7 @@ class UpdateWallet
         $service_code = 1;
         $transaction_wallet = 'International';
         }
+
         else if($transaction_source =='Domestic')
         {
             $service_code = 2;
@@ -49,6 +50,11 @@ class UpdateWallet
         {
             $service_code = 6;
             $transaction_wallet = 'Cargo';
+        }
+        else if($transaction_source =='Bangladesh')
+        {
+        $service_code = 7;
+        $transaction_wallet = 'International';
         }
 
         // else if($transaction_source =='Wallet Request')
@@ -80,7 +86,7 @@ class UpdateWallet
 
         if(auth()->user()->role != 'admin')
         {
-            if($recharge->type =='International' || $recharge->type =='White Calling' )
+            if($recharge->type =='International' || $recharge->type =='White Calling' ||$recharge->type =='Bangladesh'  )
             {
 
         $total_cost = $recharge->amount-$recharge->reseller_com;

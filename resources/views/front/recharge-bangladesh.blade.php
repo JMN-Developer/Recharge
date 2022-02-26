@@ -87,13 +87,13 @@
 
                                     <div class="amount_input_field">
                                         <label for="inputMobileNumber" class="form-label" style="">Amount</label>
-                                        <input type="text" id="amount" class="form-control" name="amount" placeholder="Amount" onkeypress="return isNumberKey(event)"  style="width: 84%">
+                                        <input type="text" id="amount" class="form-control" name="amount" placeholder="Amount" onkeypress="return isNumberKeyDecimal(event)"  style="width: 84%">
                                         <input type="hidden" id="operator_id" >
                                         <input type="hidden" id="operator_name" >
-                                        <p style="color: red;font-weight:bold"><span id="main_amount"></span> BDT will receive</p>
+                                        <p style="color: red;font-weight:bold" id="bd_amount_field"><span id="main_amount"></span> BDT will receive</p>
 
                                              <label class="form-label">Service Charge in EURO</label>
-                                             <input type="number" step="any" id="service" name="service" class="form-control" placeholder="Enter Service Charge (Optional)" style="width: 84%">
+                                             <input type="number" step="any" id="service" name="service"  value="0" class="form-control" placeholder="Enter Service Charge (Optional)" style="width: 84%">
 
                                         <button class="btn btn-info mt-3" id="recharge_number" style="width: 85%;">Recharge</button>
 
@@ -105,22 +105,46 @@
 
                             </div>
                         </div>
-                            <div class="col-md-6 amount_input_field">
-                                <div class="mb-3 text-center">
+                            <div class="col-md-6 ">
 
-                                    {{-- <img style="height:112px; margin-right:101px" id="operator_image" alt="Operator Logo Not Found" > --}}
+                        <div class="last_recharge_table">
+                           <div class="last_recharge_table_head text-center">
+                              <h5><strong>Last 10 Recharge</strong></h5>
+                           </div>
+                           <div class="card-body table-responsive p-0">
+                              <table class="table table-sm table-bordered table-hover">
+                                 <thead>
+                                    <tr class="table-danger">
+                                       <th>Receiver</th>
+                                       <th>Operator</th>
+                                       <th>Amount</th>
+                                       <th>Profit</th>
+                                       <th class="text-center">Date</th>
+                                       <th class="text-center" >Action</th>
 
-                                 </div>
-                                <div class="mb-3" >
-                                    <div class="text-center" style="padding-top:10px;padding-bottom:1px;background:#C62604;width:84%;margin-bottom:10px">
-                                        <p style="font-weight:bold;color:white;font-size:18px">Operator Name: <span id="operator_name"></span> </p>
-                                    </div>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    @foreach ($data as $item)
+                                    <tr class="bg-ocean">
+                                       <td>{{ $item->number }}</td>
+                                       <td>{{ $item->operator }}</td>
+                                       <td>{{ $item->amount }}</td>
+                                       @if(auth()->user()->role == 'admin')
+                                       <td>{{ $item->admin_com+$item->discount }}</td>
+                                       @else
+                                       <td>{{ $item->service }}</td>
+                                       @endif
+                                       <td class="text-center">{{ $item->created_at }}</td>
+                                       <td class="text-center"> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
 
-                                    <div class="text-center" style="padding-top:10px;padding-bottom:1px;background:#C62604;width:84%;margin-bottom:10px">
-                                        <p style="font-weight:bold;color:white;font-size:18px">Profit : <span id="operator_name">{{ auth()->user()->admin_international_recharge_commission }}%</span> </p>
-                                    </div>
+                                    </tr>
+                                    @endforeach
+                                 </tbody>
+                              </table>
+                           </div>
+                        </div>
 
-                                 </div>
                             </div>
                         </div>
 
@@ -172,7 +196,7 @@
                </div>
                <!-- /.card-body -->
             </div>
-            <div class="card card-outline card-primary">
+            <div class="card card-outline card-primary offer_section">
                 <div class="card-body">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="active">
@@ -262,22 +286,24 @@
 <script>
     function offer_select(id,amount,update_amount)
     {
+        console.log(id+" "+amount+" "+update_amount);
 
         //console.log(amount+" "+update_amount)
       $('.offer-card').removeClass('offer-card-after-click');
        $('.click-check-'+id).addClass('offer-card-after-click');
        $("#amount").val(update_amount);
        $('#main_amount').text(amount);
-
+       $("#bd_amount_field").show();
     }
 
       function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode
-    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+    if (charCode != 43 && charCode > 31 && (charCode < 48 || charCode > 57))
         return false;
     return true;
 }
+
    // Vanilla Javascript
 
 
@@ -359,6 +385,8 @@
      $(".amount_input_field").hide();
     $("#calculation_section").hide();
     $("#recharge_number").hide();
+    $(".offer_section").hide();
+    $("#bd_amount_field").hide();
     var input = document.querySelector("#receiverMobile");
   var intl =  window.intlTelInput(input,({
      // options here
@@ -379,7 +407,7 @@
             <div class="flex-grow-1">
                <div class="row">
                   <div class="col-md-2">
-                     <img src="{{ asset('images/robi.png') }}" width="30px" height="30px">
+                    <img src="{{ asset('storage/${obj[i].operator_logo}') }}" width="30px" height="30px">
                   </div>
                   <div class="col-md-10">
                      <div>
@@ -405,24 +433,24 @@ $('.voice').append(offer_list)
 
        else if(obj[i].offer_type == 'internet')
         {
-            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`${obj[i].amount},${obj[i].update_amount})">
+            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${obj[i].amount},${obj[i].update_amount})">
    <div class="card offer-card click-check-`+i+`">
       <div class="card-body">
          <div class="d-flex">
             <div class="flex-grow-1">
                <div class="row">
                   <div class="col-md-2">
-                     <img src="{{ asset('images/robi.png') }}" width="30px" height="30px">
+                    <img src="{{ asset('storage/${obj[i].operator_logo}') }}" width="30px" height="30px">
                   </div>
                   <div class="col-md-10">
                      <div>
                         <p>${obj[i].offer_description}</p>
                         <div class="row">
                            <div class="col-md-6">
-                              <p style="width: 80px;font-size:14px" class="border rounded border-dark p-2"> <i class="fas fa-calendar-alt" style="color:rebeccapurple"></i><span style="margin-left:3px">30 Days</span></p>
+                              <p style="width: 80px;font-size:14px" class="border rounded border-dark p-2"> <i class="fas fa-calendar-alt" style="color:rebeccapurple"></i><span style="margin-left:3px">${obj[i].offer_validity}</span></p>
                            </div>
                            <div class="col-md-6">
-                              <p style="width: 80px;font-size:15px;color:white;background-color:rebeccapurple;font-weight:bold;text-align:center" class="border rounded border-dark p-2"> 30 Tk</p>
+                              <p style="width: 80px;font-size:15px;color:white;background-color:rebeccapurple;font-weight:bold;text-align:center" class="border rounded border-dark p-2"> ${obj[i].update_amount} &euro;</p>
                            </div>
                         </div>
                      </div>
@@ -436,24 +464,24 @@ $('.voice').append(offer_list)
 $('.internet').append(offer_list)
         }
         else{
-            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`${obj[i].amount},${obj[i].update_amount})">
+            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${obj[i].amount},${obj[i].update_amount})">
    <div class="card offer-card click-check-`+i+`">
       <div class="card-body">
          <div class="d-flex">
             <div class="flex-grow-1">
                <div class="row">
                   <div class="col-md-2">
-                     <img src="{{ asset('images/robi.png') }}" width="30px" height="30px">
+                     <img src="{{ asset('storage/${obj[i].operator_logo}') }}" width="30px" height="30px">
                   </div>
                   <div class="col-md-10">
                      <div>
                         <p>${obj[i].offer_description}</p>
                         <div class="row">
                            <div class="col-md-6">
-                              <p style="width: 80px;font-size:14px" class="border rounded border-dark p-2"> <i class="fas fa-calendar-alt" style="color:rebeccapurple"></i><span style="margin-left:3px">30 Days</span></p>
+                              <p style="width: 80px;font-size:14px" class="border rounded border-dark p-2"> <i class="fas fa-calendar-alt" style="color:rebeccapurple"></i><span style="margin-left:3px">${obj[i].offer_validity}</span></p>
                            </div>
                            <div class="col-md-6">
-                              <p style="width: 80px;font-size:15px;color:white;background-color:rebeccapurple;font-weight:bold;text-align:center" class="border rounded border-dark p-2"> 30 Tk</p>
+                              <p style="width: 80px;font-size:15px;color:white;background-color:rebeccapurple;font-weight:bold;text-align:center" class="border rounded border-dark p-2"> ${obj[i].update_amount} &euro;</p>
                            </div>
                         </div>
                      </div>
@@ -502,15 +530,11 @@ $('.combo').append(offer_list)
                 $("#check_number").hide();
                 $(".amount_input_field").show();
                 $("#recharge_number").show();
-                $("#operator_id").val(responses.offer_data[0].operator_id);
-                $("#operator_name").val(responses.offer_data[0].operator_name);
+                $("#operator_id").val(responses.operator_id);
+                $("#operator_name").val(responses.operator_name);
+                $(".offer_section").show();
                 $('.cover-spin').hide(0);
                 processData(responses.offer_data);
-
-
-
-                // $("#receiverMobile").attr('disabled',true);
-                // $('.iti__flag-container').attr('disabled',true);
 
             }
             else
@@ -586,6 +610,7 @@ $('.combo').append(offer_list)
     formdata.append('operator_id',$("#operator_id").val());
     formdata.append('operator_name',$("#operator_name").val());
     formdata.append('updated_amount',$('#amount').val());
+    formdata.append('service_charge',$("#service").val());
 
       $.ajax({
         processData: false,
@@ -640,6 +665,7 @@ $('.combo').append(offer_list)
     $("#calculation_section").hide();
     $("#recharge_number").hide();
     $("#check_number").show();
+    $(".offer_section").hide();
 
    });
     $("#amount").keyup(function(){
@@ -651,11 +677,12 @@ $('.combo').append(offer_list)
         var currencyCode = $("#currency_code").val();
         var calculation_text = (exchange_rate*value).toFixed(0)+" "+currencyCode+" will receive";
         //alert(calculation_text)
-        $("#calculation_section").show();
+
+        $("#bd_amount_field").show();
         $("#calculation").text(calculation_text);
         }
         else{
-            $("#calculation_section").hide();
+            $("#bd_amount_field").hide();
         }
 
         });

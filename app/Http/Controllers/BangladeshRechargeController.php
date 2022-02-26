@@ -8,8 +8,9 @@ use App\Services\BangladeshiRecharge;
 use App\Services\GenerateTransactionId;
 use App\Services\UpdateWallet;
 use App\Models\RechargeHistory;
-
+use DB;
 use Auth;
+use App\Models\Balance;
 class BangladeshRechargeController extends Controller
 {
     //
@@ -19,32 +20,47 @@ class BangladeshRechargeController extends Controller
         $this->bangladeshi_recharge = new BangladeshiRecharge();
     }
 
-    public function create_recharge($number,$amount,$updated_amount,$txid,$operator_name,$transaction_id_company,$service)
+    public function calculate_profit($amount)
     {
-        // $discount =$data->prices->retail->amount - $data->prices->wholesale->amount;
-        // $total_commission = reseller_comission($data->prices->retail->amount);
-        // $reseller_profit = reseller_profit($total_commission);
-        // $admin_profit = $total_commission-$reseller_profit;
-        $cost = 0;
+        $rate = euro_rate_for_bd_recharge();
+        $current_currency_rate = $this->bangladeshi_recharge->current_euro_rate();
+        $currency_profit = $rate - (100/$current_currency_rate);
+        $api_profit = (1.5/100)*$amount;
+       // file_put_contents('test.txt',$current_currency_rate.' '.$currency_profit.' '.$company_profit);
+        $admin_profit = $currency_profit+$api_profit;
+        return $admin_profit;
+    }
+
+    public function create_recharge($number,$amount,$updated_amount,$txid,$operator_name,$transaction_id_company,$service=0)
+    {
+
+        $admin_profit = $this->calculate_profit($amount);
+        $cost = $amount - $admin_profit;
         $recharge = RechargeHistory::create([
-            'reseller_id'=>a::user()->id,
+            'reseller_id'=>Auth::user()->id,
             'number'=>$number,
             'amount'=>$amount,
             'txid'=>$txid,
-            'type'=>'International',
+            'type'=>'Bangladesh',
             'operator'=>$operator_name,
             'status'=>'completed',
             'cost'=>$cost,
             'transaction_id_company'=>$transaction_id_company,
             'service'=>$service,
-            'reseller_com'=>$service,
             'admin_com'=>$admin_profit,
             'deliveredAmount'=>$updated_amount,
             'deliveredAmountCurrencyCode'=>'BDT',
-            'company_name'=>'International5'
+            'company_name'=>'Bangladesh1'
 
         ]);
         return $recharge;
+    }
+    public function update_balance()
+    {
+        $current_balance =$this->bangladeshi_recharge->balanceInfo();
+
+        Balance::where('type','ssl')->update(['balance'=>$current_balance['balance_info']]);
+
     }
 
     public function recharge(Request $request)
@@ -53,36 +69,60 @@ class BangladeshRechargeController extends Controller
        $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_id = $request->operator_id;
+        file_put_contents('test.txt',$operator_id);
         $guid =  new GenerateTransactionId(Auth::user()->id,13);
         $guid =  $guid->transaction_id();
         //file_put_contents('test.txt',$request->operator_id);
-       $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$msisdn,$amount);
-       $init_recharge =  $this->bangladeshi_recharge->InitRecharge($guid,$create_recharge['data']->vr_guid);
+      $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$msisdn,$amount);
+      if($create_recharge['data']->recharge_status=='100')
+      {
+      $init_recharge =  $this->bangladeshi_recharge->InitRecharge($guid,$create_recharge['data']->vr_guid);
        if($init_recharge['data']->recharge_status == 200)
        {
         $recharge = $this->create_recharge($msisdn,$request->updated_amount,$amount,$guid,$request->operator_name,$create_recharge['data']->vr_guid,$request->service_charge);
         UpdateWallet::update($recharge);
-         $this->update_balance($data['payload']->prices->retail->amount,$data['payload']->prices->wholesale->amount);
+         $this->update_balance();
         return ['status'=>true,'message'=>'Recharge Successfull'];
        }
        else
        {
-        return ['status'=>false,'message'=>$data['message']];
+        return ['status'=>false,'message'=>$init_recharge['data']->message];
        }
+    }
+    else
+    {
+        return ['status'=>false,'message'=>$create_recharge['data']->message];
+    }
+
     }
 
     public function bangladeshi_exchange_rate(Request $request){
-       $rate = 1.04;
+
+
+       $rate = euro_rate_for_bd_recharge();
        $unit_rate = 100/$rate;
         $value = $request->value;
         $updated_value = $value*$unit_rate;
+
         echo floor($updated_value);
 
     }
 
     public function index()
     {
-        return view('front.recharge-bangladesh');
+
+        if(Auth::user()->role == 'user'){
+            $data = RechargeHistory::where('reseller_id', Auth::user()->id)->where('type','Bangladesh')->latest()->take(10)->get();
+        }else{
+            $data = RechargeHistory::where('type','Bangladesh')->join('users','users.id','=','recharge_histories.reseller_id')
+            ->select('recharge_histories.*','users.nationality')
+            ->latest()
+            ->take(10)
+            ->get();
+
+
+        }
+        return view('front.recharge-bangladesh',compact('data'));
       //dd($this->bangladeshi_recharge->balanceInfo());
      //echo json_encode($this->bangladeshi_recharge->getOperatorLimit('3'));
       //dd( $this->bangladeshi_recharge->operatorInfo('8801845318609'));
@@ -92,17 +132,20 @@ class BangladeshRechargeController extends Controller
     public function mobile_number_details(Request $request)
     {
        // $msisdn = $request->number;
+    //    $current_currency_rate = $this->bangladeshi_recharge->current_euro_rate();
+    //    file_put_contents('test.txt',$current_currency_rate);
         $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_details =  $this->bangladeshi_recharge->operatorInfo($msisdn);
         if($operator_details['soap_exception_occured']==false)
         {
-            $rate = 1.04;
+            $rate = euro_rate_for_bd_recharge();
             $unit_rate = $rate/100;
             $data =  $this->bangladeshi_recharge->offer_details($operator_details['data']->operator_id);
             foreach($data as $d)
             {
                 $d->update_amount =  round($d->amount*$unit_rate,4);
+                $d->operator_logo = DB::table('sim_operators')->where('operator',$operator_details['data']->operator_name)->first()->img;
             }
 
             return ['status'=>true,'offer_data'=>$data,'operator_id'=>$operator_details['data']->operator_id,'operator_name'=>$operator_details['data']->operator_name];
