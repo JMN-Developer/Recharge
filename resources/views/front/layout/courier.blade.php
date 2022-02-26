@@ -389,7 +389,7 @@ margin-left: 3px;
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                @if (Auth::user()->role == 'admin')
+                @if (Auth::user()->role == 'admin' || Auth::user()->id == 23)
                 <li class="nav-item">
                     <a href="{{ route('bangladesh') }}" class="@if(Route::currentRouteName() == 'international') nav-link active @endif nav-link">
                       <i class="far fa-circle nav-icon"></i>
