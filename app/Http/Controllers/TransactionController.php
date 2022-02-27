@@ -24,7 +24,7 @@ class TransactionController extends Controller
             {
                 if($request->retailer == 'all')
                 {
-                $data = TransactionHistory::whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                $data = TransactionHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                 $wallet_debit = TransactionHistory::whereBetween('created_at', [$start_date, $end_date])->where('transaction_wallet','Wallet Request')->where('transaction_type','debit')->sum('amount') ;
                 $wallet_credit = TransactionHistory::whereBetween('created_at', [$start_date, $end_date])->where('transaction_wallet','International')->orWhere('transaction_wallet','Domestic')->where('transaction_type','credit')->sum('amount') ;
                 $wallet = $wallet_debit - $wallet_credit;
@@ -44,7 +44,7 @@ class TransactionController extends Controller
                 else
                 {
                     $user_id = $request->retailer;
-                    $data = TransactionHistory:: where('reseller_id',$user_id)-> whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                    $data = TransactionHistory:: where('reseller_id',$user_id)-> whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                     $wallet_debit = TransactionHistory::where('reseller_id',$user_id)->whereBetween('created_at', [$start_date, $end_date])->where('transaction_wallet','Wallet Request')->where('transaction_type','debit')->sum('amount') ;
                     $wallet_credit = TransactionHistory::where('reseller_id',$user_id)->whereBetween('created_at', [$start_date, $end_date])->where('transaction_wallet','International')->orWhere('transaction_wallet','Domestic')->where('transaction_type','credit')->sum('amount') ;
                     $wallet = $wallet_debit - $wallet_credit;
@@ -66,7 +66,7 @@ class TransactionController extends Controller
             else{
 
 
-            $data = TransactionHistory:: where('reseller_id',$user_id)-> whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+            $data = TransactionHistory:: where('reseller_id',$user_id)-> whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
             $wallet_debit = TransactionHistory::where('reseller_id',$user_id)->whereBetween('created_at', [$start_date, $end_date])->where('transaction_wallet','Wallet Request')->where('transaction_type','debit')->sum('amount') ;
             $wallet_credit = TransactionHistory::where('reseller_id',$user_id)->whereBetween('created_at', [$start_date, $end_date])->where('transaction_wallet','International')->orWhere('transaction_wallet','Domestic')->where('transaction_type','credit')->sum('amount') ;
             $wallet = $wallet_debit - $wallet_credit;
