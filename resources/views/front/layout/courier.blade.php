@@ -364,6 +364,7 @@ margin-left: 3px;
           @if (Auth::user()->recharge_permission == 1 && Auth::user()->role!='admin2')
             <li class="@if(Route::currentRouteName() == 'recharge-int' ||
                           Route::currentRouteName() == 'recharge-italy' ||
+                          Route::currentRouteName() == 'bangladesh' ||
                           Route::currentRouteName() == 'international' ||
                           Route::currentRouteName() == 'recharge-gift-card' ||
                           Route::currentRouteName() == 'recharge-calling-card' ||
@@ -375,6 +376,7 @@ margin-left: 3px;
                           Route::currentRouteName() == 'print-all-invoice') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'recharge-int' ||
                           Route::currentRouteName() == 'recharge-italy' ||
+                          Route::currentRouteName() == 'bangladesh' ||
                           Route::currentRouteName() == 'recharge-gift-card' ||
                           Route::currentRouteName() == 'international' ||
                           Route::currentRouteName() == 'recharge-calling-card' ||
@@ -391,7 +393,7 @@ margin-left: 3px;
               <ul class="nav nav-treeview">
                 @if (Auth::user()->role == 'admin' || Auth::user()->id == 23)
                 <li class="nav-item">
-                    <a href="{{ route('bangladesh') }}" class="@if(Route::currentRouteName() == 'international') nav-link active @endif nav-link">
+                    <a href="{{ route('bangladesh') }}" class="@if(Route::currentRouteName() == 'bangladesh') nav-link active @endif nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Bangladesh</p>
                     </a>
