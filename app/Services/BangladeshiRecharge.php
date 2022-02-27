@@ -88,7 +88,7 @@ class BangladeshiRecharge
                 $this->soap_exception_occured = true;
                 $this->exception = 'Soap Exception '.$exception;
             }
-            file_put_contents('create_recharge.txt',json_encode($data));
+            //file_put_contents('create_recharge.txt',json_encode($data));
             return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
     }
     public function InitRecharge($guid,$vr_guid)
@@ -100,7 +100,7 @@ class BangladeshiRecharge
                 $this->soap_exception_occured = true;
                 $this->exception = 'Soap Exception '.$exception;
             }
-            file_put_contents('init_recharge.txt',json_encode($data));
+            //file_put_contents('init_recharge.txt',json_encode($data));
             return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
     }
 

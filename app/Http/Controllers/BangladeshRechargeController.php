@@ -69,7 +69,7 @@ class BangladeshRechargeController extends Controller
        $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_id = $request->operator_id;
-        file_put_contents('test.txt',$operator_id);
+        //file_put_contents('test.txt',$operator_id);
         $guid =  new GenerateTransactionId(Auth::user()->id,13);
         $guid =  $guid->transaction_id();
         //file_put_contents('test.txt',$request->operator_id);
