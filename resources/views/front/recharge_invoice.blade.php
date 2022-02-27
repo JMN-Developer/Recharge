@@ -44,7 +44,7 @@
                       <table class="table table-sm">
                         <tbody>
                           <tr>
-                            @if($data->type == 'International')
+                            @if($data->type == 'International' || $data->type == 'Bangladesh')
                               <td>Phone Number</td>
 
                             @elseif($data->type == 'pin' )
@@ -61,7 +61,7 @@
                             @endif
                           </tr>
                           <tr>
-                            @if($data->type == 'International')
+                            @if($data->type == 'International' || $data->type == 'Bangladesh')
                               <td>Date</td>
                             @else
                               <td>Data Transazione</td>
@@ -69,7 +69,7 @@
                             <td><strong>{{ Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</strong></td>
                           </tr>
                           <tr>
-                            @if($data->type == 'International')
+                            @if($data->type == 'International' || $data->type == 'Bangladesh')
                               <td>Time</td>
                             @else
                               <td>Time Transazione</td>
@@ -92,7 +92,7 @@
                         </tbody>
                       </table>
                     </div>
-                    @if($data->type == 'International')
+                    @if($data->type == 'International' || $data->type == 'Bangladesh'  )
                     <div class="recharge_invoice_table">
                       <table class="table table-sm">
                         <tbody>
@@ -117,7 +117,7 @@
                             @if ($data->type == 'Domestic')
                             <td>Importo</td>
                             <td><strong>{{ $data->amount }} &euro;</strong></td>
-                            @elseif($data->type == 'International')
+                            @elseif($data->type == 'International' || $data->type == 'Bangladesh')
                             <td>Retailer Price</td>
                             <td><strong>{{ $data->amount + $data->service}} &euro;</strong></td>
                             @endif
@@ -126,14 +126,14 @@
                             <td>Retailer Name</td>
                             <td><strong>{{ $data->user->nationality}}</strong></td>
                           </tr>
-                          @if ($data->type == 'International')
+                          @if ($data->type == 'International' || $data->type == 'Bangladesh')
                           <tr>
                             <td>Received Amount</td>
                             <td><strong>{{ $data->deliveredAmount }} <span>{{  $data->deliveredAmountCurrencyCode }}</span></strong></td>
                           </tr>
                           @endif
 
-                          
+
                           {{-- <tr>
                             <td>bilancia</td>
                             <td><strong>{{ $data->amount }} &euro;</strong></td>
