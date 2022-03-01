@@ -900,7 +900,7 @@ class RechargeController extends Controller
                     $cost = $sku_amount['1']-$prof->commission;
                 }
 
-                $create = newRechargeHistory;
+                $create = new RechargeHistory();
                 $create->reseller_id = a::user()->id;
                 $create->number = $request->number;
                 $create->amount = $sku_amount['1'];
