@@ -216,7 +216,7 @@ function get_data()
 
         else
         {
-            var euro_input = '<p><input id="euro_rate_per_hundred_bdt" onkeypress="return isNumberKeyDecimal(event)" type="text" value='+item[i].euro_rate_per_hundred_bdt+'></p>';
+            var euro_input = '<input style="height:37px" id="euro_rate_per_hundred_bdt" onkeypress="return isNumberKeyDecimal(event)" type="text" value='+item[i].euro_rate_per_hundred_bdt+'><span style="margin-left:5px"><button onclick="euro_rate_save()" class="btn btn-primary">Save</button></span>';
             added_row+='<td>'+euro_input+'</td>';
             added_row+= '</tr>';
 
@@ -235,7 +235,6 @@ function get_data()
         }
     });
 }
-
 
 
 $('.tab a').on('click', function(e) {
@@ -295,6 +294,31 @@ $(document).on("blur", '#euro_rate_per_hundred_bdt', function(event) {
 
 
   })
+  function euro_rate_save()
+{
+
+
+    swal({
+            text: "Euro Rate Updated",
+            icon: "success",
+            });
+
+    $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '/ApiControl/update_euro_rate',
+            data: {'value':$("#euro_rate_per_hundred_bdt").val()},
+            success: function(data){
+
+            $('#international_table').empty();
+            $('#domestic_table').empty();
+            $('#bangladesh_table').empty();
+                get_data();
+
+              //console.log(data.success)
+            }
+        });
+}
   </script>
 
 

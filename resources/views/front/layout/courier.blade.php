@@ -318,7 +318,7 @@ margin-left: 3px;
               </div>
 
               <div class="col-12">
-                <b class="mr-2">Bangladesh:</b><span>{{ $ssl->balance }} TK;</span>
+                <b class="mr-2">Bangladesh:</b><span>{{ $ssl->balance }} TK</span>
               </div>
 
           </div>

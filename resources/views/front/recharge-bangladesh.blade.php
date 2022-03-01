@@ -90,7 +90,7 @@
                                         <input type="text" id="amount" class="form-control" name="amount" placeholder="Amount" onkeypress="return isNumberKeyDecimal(event)"  style="width: 84%">
                                         <input type="hidden" id="operator_id" >
                                         <input type="hidden" id="operator_name" >
-                                        <p style="color: red;font-weight:bold" id="bd_amount_field"><span id="main_amount"></span> BDT will receive</p>
+                                        <p style="color: red;font-weight:bold" id="bd_amount_field"><span id="main_amount"></span> Euro</p>
 
                                              <label class="form-label">Service Charge in EURO</label>
                                              <input type="number" step="any" id="service" name="service"  value="0" class="form-control" placeholder="Enter Service Charge (Optional)" style="width: 84%">
@@ -152,45 +152,7 @@
 
 
 
-                     {{-- <div class="col-md-12"  style="margin-top: 100px">
-                        <div class="last_recharge_table">
-                           <div class="last_recharge_table_head text-center">
-                              <h5><strong>Last 10 Recharge</strong></h5>
-                           </div>
-                           <div class="card-body table-responsive p-0">
-                              <table class="table table-sm table-bordered table-hover">
-                                 <thead>
-                                    <tr class="table-danger">
-                                       <th>Receiver</th>
-                                       <th>Operator</th>
-                                       <th>Amount</th>
-                                       <th>Profit</th>
-                                       <th class="text-center">Date</th>
-                                       <th class="text-center" >Action</th>
 
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                    @foreach ($data as $item)
-                                    <tr class="bg-ocean">
-                                       <td>{{ $item->number }}</td>
-                                       <td>{{ $item->operator }}</td>
-                                       <td>{{ $item->amount }}</td>
-                                       @if(auth()->user()->role == 'admin')
-                                       <td>{{ $item->admin_com+$item->discount }}</td>
-                                       @else
-                                       <td>{{ $item->reseller_com }}</td>
-                                       @endif
-                                       <td class="text-center">{{ $item->created_at }}</td>
-                                       <td class="text-center"> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
-
-                                    </tr>
-                                    @endforeach
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div> --}}
                   </div>
 
                </div>
@@ -200,26 +162,21 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="active">
-                            <a href="#voice" data-toggle="tab">Voice</a>
-                        </li>
-                        <li>
                             <a href="#internet" data-toggle="tab">Internet</a>
                         </li>
+
                         <li>
                             <a href="#combo" data-toggle="tab">Combo</a>
+                        </li>
+                        <li>
+                            <a href="#voice" data-toggle="tab">Voice</a>
                         </li>
 
                     </ul>
                     <div class="tab-content offer_list">
-                            <div  class="tab-pane active" id="voice">
-                                <div class="row voice">
-
-                                </div>
 
 
-                            </div>
-
-                            <div  class="tab-pane" id="internet">
+                            <div  class="tab-pane active" id="internet">
                                 <div class="row internet">
 
                                 </div>
@@ -229,6 +186,13 @@
                                 <div class="row combo">
 
                                 </div>
+                            </div>
+                            <div  class="tab-pane " id="voice">
+                                <div class="row voice">
+
+                                </div>
+
+
                             </div>
 
 
@@ -284,15 +248,15 @@
     // });
 </script>
 <script>
-    function offer_select(id,amount,update_amount)
+    function offer_select(id,amount,update_amount,offer_description)
     {
-        console.log(id+" "+amount+" "+update_amount);
+
 
         //console.log(amount+" "+update_amount)
       $('.offer-card').removeClass('offer-card-after-click');
        $('.click-check-'+id).addClass('offer-card-after-click');
-       $("#amount").val(update_amount);
-       $('#main_amount').text(amount);
+       $("#amount").val(offer_description);
+       $('#main_amount').text(update_amount);
        $("#bd_amount_field").show();
     }
 
@@ -318,6 +282,7 @@
             url: 'bangladeshi_exchange_rate',
             data: {'value': value},
             success: function(data){
+
                 $("#main_amount").text(data);
 
             }
@@ -389,9 +354,9 @@
     $("#bd_amount_field").hide();
     var input = document.querySelector("#receiverMobile");
   var intl =  window.intlTelInput(input,({
-     // options here
-   }));
 
+   }));
+   intl.setCountry("bd")
    function processData(obj)
    {
     $('.voice').empty();
@@ -400,7 +365,7 @@
     for (var i = 0; i < obj.length; i++){
         if(obj[i].offer_type == 'voice')
         {
-            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${obj[i].amount},${obj[i].update_amount})">
+            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${obj[i].amount},${obj[i].update_amount},'${obj[i].offer_description}')">
    <div class="card offer-card click-check-`+i+`">
       <div class="card-body">
          <div class="d-flex">
@@ -433,7 +398,7 @@ $('.voice').append(offer_list)
 
        else if(obj[i].offer_type == 'internet')
         {
-            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${obj[i].amount},${obj[i].update_amount})">
+            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${obj[i].amount},${obj[i].update_amount},'${obj[i].offer_description}')">
    <div class="card offer-card click-check-`+i+`">
       <div class="card-body">
          <div class="d-flex">
@@ -464,7 +429,7 @@ $('.voice').append(offer_list)
 $('.internet').append(offer_list)
         }
         else{
-            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${obj[i].amount},${obj[i].update_amount})">
+            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${obj[i].amount},${obj[i].update_amount},'${obj[i].offer_description}')">
    <div class="card offer-card click-check-`+i+`">
       <div class="card-body">
          <div class="d-flex">
@@ -609,7 +574,7 @@ $('.combo').append(offer_list)
     formdata.append('amount', $('#main_amount').text());
     formdata.append('operator_id',$("#operator_id").val());
     formdata.append('operator_name',$("#operator_name").val());
-    formdata.append('updated_amount',$('#amount').val());
+    //formdata.append('updated_amount',$('#amount').val());
     formdata.append('service_charge',$("#service").val());
 
       $.ajax({
@@ -686,13 +651,13 @@ $('.combo').append(offer_list)
         }
 
         });
-       $('.iti__flag-container').click(function() {
+    //    $('.iti__flag-container').click(function() {
 
-         var countryCode = $('.iti__selected-flag').attr('title');
-         var countryCode = countryCode.replace(/[^0-9]/g,'')
-         $('#receiverMobile').val("");
-         $('#receiverMobile').val("+"+countryCode+" "+ $('#receiverMobile').val());
-      });
+    //      var countryCode = $('.iti__selected-flag').attr('title');
+    //      var countryCode = countryCode.replace(/[^0-9]/g,'')
+    //      $('#receiverMobile').val("");
+    //      $('#receiverMobile').val("+"+countryCode+" "+ $('#receiverMobile').val());
+    //   });
    });
  </script>
 @endsection

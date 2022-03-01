@@ -66,6 +66,10 @@ class BangladeshRechargeController extends Controller
     public function recharge(Request $request)
     {
        $amount = $request->amount;
+       $rate = euro_rate_for_bd_recharge();
+       $unit_rate = 100/$rate;
+       $bd_amount = $unit_rate*$amount;
+
        $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_id = $request->operator_id;
@@ -73,13 +77,14 @@ class BangladeshRechargeController extends Controller
         $guid =  new GenerateTransactionId(Auth::user()->id,13);
         $guid =  $guid->transaction_id();
         //file_put_contents('test.txt',$request->operator_id);
-      $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$msisdn,$amount);
+      $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$msisdn,$bd_amount);
+
       if($create_recharge['data']->recharge_status=='100')
       {
       $init_recharge =  $this->bangladeshi_recharge->InitRecharge($guid,$create_recharge['data']->vr_guid);
        if($init_recharge['data']->recharge_status == 200)
        {
-        $recharge = $this->create_recharge($msisdn,$request->updated_amount,$amount,$guid,$request->operator_name,$create_recharge['data']->vr_guid,$request->service_charge);
+        $recharge = $this->create_recharge($msisdn,$request->amount,$bd_amount,$guid,$request->operator_name,$create_recharge['data']->vr_guid,$request->service_charge);
         UpdateWallet::update($recharge);
          $this->update_balance();
         return ['status'=>true,'message'=>'Recharge Successfull'];
@@ -100,11 +105,12 @@ class BangladeshRechargeController extends Controller
 
 
        $rate = euro_rate_for_bd_recharge();
-       $unit_rate = 100/$rate;
-        $value = $request->value;
-        $updated_value = $value*$unit_rate;
+       $unit_rate = $rate/100;
+       $value = $request->value;
 
-        echo floor($updated_value);
+        $updated_value = $value*$unit_rate;
+        //file_put_contents('test.txt',$unit_rate." ".$value." ".$updated_value);
+        echo $updated_value;
 
     }
 

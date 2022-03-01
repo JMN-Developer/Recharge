@@ -71,6 +71,7 @@ table.dataTable thead .sorting_asc{
                         <th style="background-color: black;color:white">Ticket Number</th>
                         <th style="background-color: black;color:white">Service</th>
                         <th style="background-color: black;color:white">Last Response</th>
+                        <th style="background-color: black;color:white">Status</th>
                         <th style="background-color: black;color:white">Action</th>
 
 
@@ -172,8 +173,9 @@ function fetch_table()
             {data:'reseller_name',name:'reseller_name',orderable:false},
             @endif
             {data:'ticket_no',name:'ticket_no'},
-            {data:'service',name:'service'},
+            {data:'service_name',name:'service_name'},
             {data:'last_response',name:'last_response'},
+            {data:'status',name:'status'},
             {data:'action',name:'action'},
 
 

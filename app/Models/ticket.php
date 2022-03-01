@@ -13,4 +13,8 @@ class ticket extends Model
     {
         return $this->belongsTo('App\Models\User','reseller_id','id');
     }
+    public function last_response()
+    {
+        return $this->hasOne('App\Models\ticket_response','ticket_id','id')->latestOfMany();
+    }
 }

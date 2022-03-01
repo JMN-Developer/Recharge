@@ -10,6 +10,7 @@ use DB;
 use App\Notifications\TicketNotification;
 use Illuminate\Support\Facades\Notification;
 use App\Events\TicketRequest;
+use App\Models\ticket_response;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -20,19 +21,31 @@ class TicketController extends Controller
     {
         return view('front.ticket');
     }
+    public function ticket_response_view(Request $request)
+    {
+        $ticket_id = $request->id;
+        $ticket_response = ticket_response::where('ticket_id',$ticket_id)->latest()->get();
+        $ticket_details = ticket::where('id',$ticket_id)->first();
+
+        return view('front.ticket-response',compact('ticket_response','ticket_details'));
+    }
     public function ticket_submit(Request $request)
     {
         $path = $request->document->store('image/ticketDocument', 'public');
         $date = date('dmyhis');
         $resller_id = str_pad(auth()->user()->id, 4, "0", STR_PAD_LEFT);
         $ticket_no = $date.$resller_id;
-        ticket::create([
+       $ticket =  ticket::create([
             "reseller_id" => Auth::user()->id,
             'ticket_no'=>$ticket_no,
-            "problem_description" => $request->message,
-            'problem_document'=>$path,
+            "service_name" => $request->service,
             'admin_notification'=>1
 
+        ]);
+        ticket_response::create([
+            'ticket_id'=>$ticket->id,
+            'reseller_message'=>$request->reseller_message,
+            'problem_document'=>$path
         ]);
         $data = [
             'from'=>'pointrecharge@gmail.com',
@@ -41,8 +54,8 @@ class TicketController extends Controller
 
         try {
 
-            Notification::route('mail','nokibevon7@gmail.com')
-                ->notify(new TicketNotification($data));
+            // Notification::route('mail','nokibevon7@gmail.com')
+            //     ->notify(new TicketNotification($data));
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -93,7 +106,7 @@ class TicketController extends Controller
                         'case when status= "pending" then 1 when status= "answered" then 2 when status="approved" then 3 end'
                     )
                 )
-                ->get();
+                ->select(['*']);
         } else {
             // ticket::where("admin_notification", 0)->update([
             //     "admin_notification" => 1,
@@ -105,9 +118,14 @@ class TicketController extends Controller
                 DB::raw(
                     'case when status= "pending" then 1 when status= "answered" then 2 when status="approved" then 3 end'
                 )
-            )->get();
+            )->select(['*']);
         }
         foreach ($data as $item) {
+            $response = ticket_response::where('tikcet_id',$item->id)->latest()->first()->updated_at;
+            $last_response =  Carbon::parse($response)->format(
+                "Y-m-d h:i:s"
+            );
+            $item->last_response = $last_response;
             $item->requested_date = Carbon::parse($item->created_at)->format(
                 "Y-m-d h:i:s"
             );
@@ -142,7 +160,12 @@ class TicketController extends Controller
            $text = $data->reseller->first_name." ".$data->reseller->last_name;
            return $text;
          })
-         ->rawColumns(['transaction_amount','description','reseller_name'])
+         ->addColumn('last_response', function($data){
+            $text =$data->last_response->updated_at;
+            return $text;
+          })
+
+         ->rawColumns(['transaction_amount','description','reseller_name','last_response'])
         ->addIndexColumn()
         ->make(true);
         return $data;

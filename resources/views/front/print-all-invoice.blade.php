@@ -104,8 +104,28 @@ table.dataTable thead .sorting_asc{
               <div class="p-3">
 
 
+{{--
+                <div class="converter_section mt-5">
+                  <div class="converter_btn-1">
+                    <button type="button" class="btn btn-info btn-sm">Copy</button>
+                    <button type="button" class="btn btn-info btn-sm">Exel</button>
+                    <button type="button" class="btn btn-info btn-sm">CSV</button>
+                    <button type="button" class="btn btn-info btn-sm">PDF</button>
+                  </div>
+                  <div class="converter_search-1">
+                    <div class="card-tools">
+                      <div class="input-group input-group-sm">
+                        <input type="text" name="table_search" data-table="table-info" class="form-control float-right light-table-filter" placeholder="Search">
 
-
+                        <div class="input-group-append">
+                          <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> --}}
                 <div class="recharge_input_table table-responsive p-0">
                   <table class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                     <thead>
@@ -271,9 +291,11 @@ function fetch_table(start_date,end_date)
     var user_role = $("#user_role").val();
 
     var table = $('.invoice_table').DataTable();
+    //console.log(table.column( 5 ).data().sum());
     table.destroy();
 
     var table = $('.invoice_table').DataTable({
+
 
         processing: true,
         serverSide: true,
@@ -334,12 +356,14 @@ function fetch_table(start_date,end_date)
             $( api.column( 5 ).footer() ).html(
           total_profit
             );
-           // datatable_sum(api, false);
+            //datatable_sum(api, false);
         }
 
 
     });
     function datatable_sum(dt_selector, is_calling_first) {
+
+
         //col start from 0
         @if(Auth::user()->role == 'admin')
         $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));

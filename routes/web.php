@@ -304,9 +304,10 @@ Route::group(['prefix' => 'ticket'], function()
 
     Route::get('/',[TicketController::class,'index'])->name('ticket');
     Route::get('add',[TicketController::class,'add_ticket_view'])->name('add-ticket-view');
-    Route::post('ticket_submit',[TicketController::class,'ticket_submit']);
+    Route::post('ticket_submit',[TicketController::class,'ticket_submit'])->name('ticket-submit');
     Route::get('get_ticket-data',[TicketController::class,'get_ticket_data'])->name('get-ticket-data');
     Route::post('ticket_answer',[TicketController::class,'ticket_answer']);
+    Route::get('ticket-response/{id}',[TicketController::class,'ticket_response_view']);
 
 });
 

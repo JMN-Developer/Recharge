@@ -48,37 +48,52 @@ table.dataTable thead .sorting_asc{
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-list" style="margin-right: 10px;"></i>
-                  <strong>Ticket</strong>
+                  <strong>New Ticket</strong>
                 </h3>
               </div>
 
 
                 <div class="card-body pb-0">
-                    <form  id="ticket_submit">
+                    <form  action="{{ route('ticket-submit') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="form-row">
 
-                      <div class="form-group col-md-12">
+                      <div class="form-group col-md-6">
                         <label for="inputPassword4">Service</label>
+                        <select  data-placeholder="Select an Option"  class="custom-select service"  name="service">
+                            <option></option>
 
+                             <option value="International Recharge">International Recharge</option>
+                             <option value="Domestic Recharge">Domestic Recharge</option>
+                             <option value="Wallet Transaction">Wallet Transaction</option>
+                             <option value="Sim">Sim</option>
+                             <option value="Cargo">Cargo</option>
+                             <option value="Flight">Flight</option>
+                             <option value="Others">Others</option>
+                          {{-- <option value="offer_table_two">Gift Card</option>
+                          <option value="offer_table_two">Calling Card</option> --}}
+                        </select>
                       </div>
 
-                          <div class="form-group col-md-6">
+
+                        <div class="form-group col-md-12">
                             <label for="inputPassword4">Message</label>
-                            <textarea id="message" class="form-control" rows="3"></textarea>
+                            <textarea id="message" class="form-control" rows="6" name="reseller_message"></textarea>
                           </div>
 
-                          <div class="form-group col-md-4">
+                          <div class="form-group col-md-6">
                             <label for="inputPassword4">Attachment</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="document" name="document">
                                 <label class="custom-file-label " for="customFile">Choose file</label>
                               </div>
                           </div>
-                          <div class="form-group col-md-2">
-                            <input type='submit' class="btn btn-primary" value="Submit" style="margin-top: 32px">
-                          </div>
+
 
                         </div>
+                        <div class="form-group col-md-12">
+                            <input type='submit' class="btn btn-primary" value="Submit" style="margin-top: 32px;">
+                          </div>
 
 
                       </form>
@@ -104,5 +119,18 @@ table.dataTable thead .sorting_asc{
 @endsection
 
 @section('scripts')
+<script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(function(){
+        $('.service').select2({
+
+    placeholder: function(){
+        $(this).data('placeholder');
+    }
+
+    });
+    });
+</script>
 
 @endsection

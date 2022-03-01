@@ -80,7 +80,8 @@ class BangladeshiRecharge
     }
     public function CreateRecharge($guid,$operator_id,$recipient_msisdn,$amount)
     {
-
+        $amount = ceil($amount);
+        //file_put_contents('test.txt',$amount);
         try {
             $data = $this->client->CreateRecharge($this->client_id,$this->client_pass,$guid,$operator_id,$recipient_msisdn,$amount,'prepaid');
             //file_put_contents('test.txt',json_encode($data));
