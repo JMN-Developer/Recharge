@@ -91,12 +91,13 @@ class RechargeController extends Controller
     public function RechargeDom($value='')
     {
         if(a::user()->role == 'user'){
-            $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->get();
+            $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->latest()->get();
         }else{
             $data =RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')
 
             ->take(10)
+            ->latest()
             ->get();
         }
         return view('front.recharge-domestic',compact('data'));
@@ -280,11 +281,11 @@ class RechargeController extends Controller
     $datas['number'] = $number;
     $stage = 'check_number';
     if(a::user()->role == 'user'){
-        $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
+        $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->latest()->get();
     }else{
         $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
         ->select('recharge_histories.*','users.nationality')
-
+        ->latest()
         ->take(10)
         ->get();
     }
@@ -318,11 +319,11 @@ class RechargeController extends Controller
     $datas['number'] = $number;
     $stage = 'check_number';
     if(a::user()->role == 'user'){
-        $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
+        $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->latest()->get();
     }else{
         $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
         ->select('recharge_histories.*','users.nationality')
-
+        ->latest()
         ->take(10)
         ->get();
     }
@@ -589,7 +590,7 @@ class RechargeController extends Controller
             $admin_profit = $total_commission-$reseller_profit;
 
 
-            $create = newRechargeHistory;
+            $create = new RechargeHistory();
             $create->reseller_id = a::user()->id;
             $create->number = $request->number;
             $create->amount = $refcost;
@@ -742,11 +743,11 @@ class RechargeController extends Controller
     {
 
         if(a::user()->role == 'user'){
-            $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->get();
+            $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->latest()->get();
         }else{
             $data =RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')
-
+            ->latest()
             ->take(10)
             ->get();
         }
