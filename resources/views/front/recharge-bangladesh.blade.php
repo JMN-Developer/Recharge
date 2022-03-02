@@ -86,7 +86,7 @@
                                     <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number" onkeypress="return isNumberKey(event)">
 
                                     <div class="amount_input_field">
-                                        <label for="inputMobileNumber" class="form-label" style="">Amount</label>
+                                        <label for="inputMobileNumber" class="form-label" style="">Amount in BDT</label>
                                         <input type="text" id="amount" class="form-control" name="amount" placeholder="Amount" onkeypress="return isNumberKeyDecimal(event)"  style="width: 84%">
                                         <input type="hidden" id="operator_id" >
                                         <input type="hidden" id="operator_name" >
@@ -631,6 +631,17 @@ $('.combo').append(offer_list)
     $("#recharge_number").hide();
     $("#check_number").show();
     $(".offer_section").hide();
+
+   });
+
+   $('#amount').keydown(function(){
+    value = this.value;
+    var regExp = /[a-zA-Z]/g;
+    if(regExp.test(value)){
+      $("#amount").val('');
+    } else {
+
+    }
 
    });
     $("#amount").keyup(function(){

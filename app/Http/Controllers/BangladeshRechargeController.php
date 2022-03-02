@@ -143,6 +143,7 @@ class BangladeshRechargeController extends Controller
         $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_details =  $this->bangladeshi_recharge->operatorInfo($msisdn);
+
         if($operator_details['soap_exception_occured']==false)
         {
             $rate = euro_rate_for_bd_recharge();

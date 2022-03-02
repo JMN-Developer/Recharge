@@ -119,13 +119,18 @@ class BangladeshiRecharge
 
     public function operatorInfo($msisdn)
     {
+       $verify =  $this->verifyMsisdn($msisdn);
+       if($verify['data']==0)
+       {
+        return ['exception'=>'Phone number is not valid','soap_exception_occured'=>true];
+       }
+
         try {
             $data = $this->client->FindOperatorInfo($this->client_id,$msisdn);
             } catch(SoapFault $exception) {
                 $this->soap_exception_occured = true;
                 $this->exception = 'Soap Exception '.$exception;
             }
-
 
             return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
     }
