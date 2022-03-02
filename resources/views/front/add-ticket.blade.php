@@ -43,6 +43,8 @@ table.dataTable thead .sorting_asc{
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+
+
         <div class="row">
           <div class="col-12 mt-3">
             <div class="card">

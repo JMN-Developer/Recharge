@@ -16,11 +16,12 @@ class CreateTicketResponsesTable extends Migration
         Schema::create('ticket_responses', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('ticket_id')->unsigned();
-            $table->string('reseller_message',1000);
-            $table->string('problem_document');
-            $table->string('admin_message')->nullable();
+            $table->bigInteger('user_id')->unsigned();
+            $table->string('message',1000);
+            $table->string('document')->nullable();
             $table->timestamps();
             $table->foreign('ticket_id')->references('id')->on('tickets')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

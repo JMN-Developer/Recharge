@@ -82,7 +82,7 @@ margin-left: 3px;
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
     </ul>
-                          @if (\Session::has('error'))
+                          {{-- @if (\Session::has('error'))
                               <div class="alert alert-danger">
                                   <ul>
                                       <li>{!! \Session::get('error') !!}</li>
@@ -103,7 +103,7 @@ margin-left: 3px;
                                   <li>{!! \Session::get('success') !!}</li>
                               </ul>
                           </div>
-                      @endif
+                      @endif --}}
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
@@ -778,12 +778,16 @@ margin-left: 3px;
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
+
       $(function(){
         notification_count();
         sim_notification_count();
         complain_notification_count();
       });
-
+      $(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
         var a = Echo.channel('events')
             .listen('DueRequest', (e) => {
                 notification_count()

@@ -21,21 +21,47 @@ class TicketController extends Controller
     {
         return view('front.ticket');
     }
+    public function ticket_reply(Request $request)
+    {
+        if($request->document)
+        {
+        $path = $request->document->store('image/ticketDocument', 'public');
+        }
+        else
+        {
+            $path = NULL;
+        }
+        ticket_response::create([
+            'ticket_id'=>$request->ticket_id,
+            'message'=>$request->reseller_message,
+            'document'=>$path,
+            'user_id'=>Auth::user()->id
+        ]);
+        return redirect()->back()->with('success','Response Submitted');
+    }
     public function ticket_response_view(Request $request)
     {
-        $ticket_id = $request->id;
-        $ticket_response = ticket_response::where('ticket_id',$ticket_id)->latest()->get();
-        $ticket_details = ticket::where('id',$ticket_id)->first();
+        $ticket_no = $request->id;
+        $ticket_details = ticket::where('ticket_no',$ticket_no)->first();
+        $ticket_response = ticket_response::where('ticket_id',$ticket_details->id)->get();
+
 
         return view('front.ticket-response',compact('ticket_response','ticket_details'));
     }
     public function ticket_submit(Request $request)
     {
+        if($request->document)
+        {
         $path = $request->document->store('image/ticketDocument', 'public');
+        }
+        else
+        {
+            $path = NULL;
+        }
         $date = date('dmyhis');
         $resller_id = str_pad(auth()->user()->id, 4, "0", STR_PAD_LEFT);
         $ticket_no = $date.$resller_id;
-       $ticket =  ticket::create([
+        $ticket =  ticket::create([
             "reseller_id" => Auth::user()->id,
             'ticket_no'=>$ticket_no,
             "service_name" => $request->service,
@@ -44,8 +70,9 @@ class TicketController extends Controller
         ]);
         ticket_response::create([
             'ticket_id'=>$ticket->id,
-            'reseller_message'=>$request->reseller_message,
-            'problem_document'=>$path
+            'message'=>$request->reseller_message,
+            'document'=>$path,
+            'user_id'=>Auth::user()->id
         ]);
         $data = [
             'from'=>'pointrecharge@gmail.com',
@@ -59,7 +86,9 @@ class TicketController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
-        event(new TicketRequest());
+        //event(new TicketRequest());
+
+        return redirect()->route('ticket')->with('success','Ticket Submitted Successfully');
     }
 
     public function complain_notification_count()
@@ -165,7 +194,12 @@ class TicketController extends Controller
             return $text;
           })
 
-         ->rawColumns(['transaction_amount','description','reseller_name','last_response'])
+          ->addColumn('action', function($data){
+            $text ='<a class="btn btn-primary" href="ticket/ticket-response/'.$data->ticket_no.'">Show Details</a>';
+            return $text;
+          })
+
+         ->rawColumns(['transaction_amount','description','reseller_name','last_response','action'])
         ->addIndexColumn()
         ->make(true);
         return $data;

@@ -73,11 +73,11 @@ class CargoController extends Controller
                     $agent = User::where('id', $orders[0]->reseller_id)->first();
                     return view('front.order-tracking', compact('orders','agent'));
                 }else {
-                    
-                    return back()->with('error', 'Invalid Order Number!'); 
+
+                    return back()->with('error', 'Invalid Order Number!');
                 }
 
-                
+
             }else {
                 $orders = Order::where('order_id', 'LIKE', '%'.$request->order_no.'%')->where('reseller_id', Auth::user()->id)->get();
 
@@ -87,12 +87,12 @@ class CargoController extends Controller
                     return view('front.order-tracking', compact('orders','agent'));
                 }else {
                     $agent['nationality'] = null;
-                    return back()->with('error', 'Invalid Order Number!'); 
+                    return back()->with('error', 'Invalid Order Number!');
                 }
             }
 
         }
-        
+
 
     }
 

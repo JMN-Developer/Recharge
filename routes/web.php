@@ -308,6 +308,7 @@ Route::group(['prefix' => 'ticket'], function()
     Route::get('get_ticket-data',[TicketController::class,'get_ticket_data'])->name('get-ticket-data');
     Route::post('ticket_answer',[TicketController::class,'ticket_answer']);
     Route::get('ticket-response/{id}',[TicketController::class,'ticket_response_view']);
+    Route::post('ticket_reply',[TicketController::class,'ticket_reply'])->name('ticket-reply');
 
 });
 
