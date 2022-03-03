@@ -28,6 +28,21 @@ if (!function_exists('reseller_comission')) {
     }
     }
 
+    if (!function_exists('service_permission')) {
+        function service_permission($service_name,$services)
+        {
+            foreach ($services as $key => $val) {
+                if ($val['service_name'] === $service_name) {
+                    return $val['permission'];
+                }
+            }
+            return null;
+        }
+        }
+
+
+
+
 
 if (!function_exists('check_daily_duplicate')) {
     function check_daily_duplicate($number)

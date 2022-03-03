@@ -16,11 +16,64 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        \App\Models\currency_rate::create([
-                    'bdt'=>'1',
-                    'eur'=>'96.308462',
+        // \App\Models\currency_rate::create([
+        //             'bdt'=>'1',
+        //             'eur'=>'96.308462',
 
-                ]);
+        //         ]);
+
+        \App\Models\service_control::create([
+            'service_name'=>'Bangladeshi Recharge',
+
+        ]);
+
+        \App\Models\service_control::create([
+            'service_name'=>'International Recharge',
+
+        ]);
+
+
+        \App\Models\service_control::create([
+            'service_name'=>'Domestic Recharge',
+
+        ]);
+
+        \App\Models\service_control::create([
+            'service_name'=>'Pin',
+
+        ]);
+
+
+        \App\Models\service_control::create([
+            'service_name'=>'White Calling',
+
+        ]);
+
+        \App\Models\service_control::create([
+            'service_name'=>'Sim',
+
+        ]);
+
+        \App\Models\service_control::create([
+            'service_name'=>'Cargo',
+
+        ]);
+
+        \App\Models\service_control::create([
+            'service_name'=>'Flight',
+
+        ]);
+
+        \App\Models\service_control::create([
+            'service_name'=>'Support',
+
+        ]);
+
+
+        \App\Models\service_control::create([
+            'service_name'=>'Transaction History',
+
+        ]);
 
         // ]);
 

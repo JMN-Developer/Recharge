@@ -40,6 +40,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\BangladeshRechargeController;
+use App\Http\Controllers\ServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -437,10 +438,12 @@ Route::group(['prefix' => 'ApiControl','middleware'=>['auth','admin']], function
 
 });
 
+Route::group(['middleware'=>['auth','admin']], function()
+{
+Route::get('service-controler',[ServiceController::class,'index'])->name('service-control');
+Route::get('service-status-update',[ServiceController::class,'status_update'])->name('service-status-update');
 
-
-
-
+});
 
 
 

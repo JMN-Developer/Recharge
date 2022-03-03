@@ -13,6 +13,10 @@
 $current_wallet = App\Models\User::sum('wallet');
 $current_limit = App\Models\User::sum('due');
 $current_limit_usage = App\Models\User::sum('limit_usage');
+$services = App\Models\service_control::get(['service_name','permission'])->toArray();
+
+
+
 
 $total_due = $current_wallet+($current_limit-$current_limit_usage);
 ?>
@@ -391,7 +395,7 @@ margin-left: 3px;
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                @if (Auth::user()->role == 'admin' || Auth::user()->id == 23)
+                @if (Auth::user()->role == 'admin'  || service_permission('Bangladeshi Recharge',$services) == 1)
                 <li class="nav-item">
                     <a href="{{ route('bangladesh') }}" class="@if(Route::currentRouteName() == 'bangladesh') nav-link active @endif nav-link">
                       <i class="far fa-circle nav-icon"></i>
@@ -399,21 +403,23 @@ margin-left: 3px;
                     </a>
                   </li>
                 @endif
-
+                @if (Auth::user()->role == 'admin'  || service_permission('International Recharge',$services) == 1)
                 <li class="nav-item">
                   <a href="{{ route('international') }}" class="@if(Route::currentRouteName() == 'international') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>International</p>
                   </a>
                 </li>
-
+                @endif
+                @if (Auth::user()->role == 'admin'  || service_permission('Domestic Recharge',$services) == 1)
                 <li class="nav-item">
                   <a href="{{ route('recharge-italy') }}" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Italy</p>
                   </a>
                 </li>
-                @if (Auth::user()->pin_permission == 1)
+                @endif
+                @if ((Auth::user()->role == 'admin'  || service_permission('Pin',$services) == 1) && (Auth::user()->pin_permission == 1))
                 <li class="nav-item">
                   <a href="{{ route('pin') }}" class="@if(Route::currentRouteName() == 'pin') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -421,7 +427,7 @@ margin-left: 3px;
                   </a>
                 </li>
                 @endif
-                @if(Auth::user()->role)
+                @if(Auth::user()->role == 'admin'  || service_permission('White Calling',$services) == 1)
                 <li class="nav-item">
                     <a href="{{ route('calling-card') }}" class="@if(Route::currentRouteName() == 'calling-card') nav-link active @endif nav-link">
                       <i class="far fa-circle nav-icon"></i>
@@ -458,7 +464,7 @@ margin-left: 3px;
               </ul>
             </li>
           @endif
-          @if (Auth::user()->sim_permission == 1  && Auth::user()->role!='admin2')
+          @if (Auth::user()->sim_permission == 1  && Auth::user()->role!='admin2' &&  service_permission('Sim',$services) == 1)
             <li class="@if(Route::currentRouteName() == 'sim-activation' ||
                           Route::currentRouteName() == 'sim-selling' ||
                           Route::currentRouteName() == 'wi-fi') nav-item menu-open @endif nav-item">
@@ -501,7 +507,7 @@ margin-left: 3px;
               </ul>
             </li>
           @endif
-          @if (Auth::user()->cargo_permission == 1  && Auth::user()->role!='admin2')
+          @if ((Auth::user()->cargo_permission == 1  && Auth::user()->role!='admin2') &&  service_permission('Cargo',$services) == 1)
             <li class="@if(Route::currentRouteName() == 'cargo-new-order' || Route::currentRouteName() == 'order-list' || Route::currentRouteName() == 'order-tracking-view' || Route::currentRouteName() == 'order-invoice-view') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'cargo-new-order' || Route::currentRouteName() == 'order-list' || Route::currentRouteName() == 'order-tracking-view' || Route::currentRouteName() == 'order-invoice-view') nav-link active @endif nav-link">
                 <i class="nav-icon fas fa-truck"></i>
@@ -546,7 +552,7 @@ margin-left: 3px;
               </ul>
             </li>
           @endif
-          @if (Auth::user()->mobile_permission == 1  && Auth::user()->role!='admin2')
+          @if (Auth::user()->mobile_permission == 1  && Auth::user()->role!='admin2' )
             <li class="@if(Route::currentRouteName() == 'phone-order' || Route::currentRouteName() == 'selling-list') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'phone-order' || Route::currentRouteName() == 'selling-list') nav-link active menu-open @endif nav-link">
                 <i class="nav-icon fas fa-mobile-alt"></i>
@@ -701,7 +707,7 @@ margin-left: 3px;
               </li>
               @endif
 
-              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user'  )
+              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user')
               <li class="@if(Route::currentRouteName() == 'ticket') nav-item menu-open @endif nav-item">
                 <a href="{{ route('ticket') }}" class="@if(Route::currentRouteName() == 'ticket') nav-link active @endif nav-link">
                   <i class="fas fa-wallet" aria-hidden="true"></i>
@@ -719,6 +725,19 @@ margin-left: 3px;
                   <i class="fas fa-wallet" aria-hidden="true"></i>
                   <p>
                     Wallet Request<span class="badge wallet_notification_count">3</span>
+
+                  </p>
+                </a>
+              </li>
+              @endif
+
+
+              @if(auth()->user()->role == 'admin')
+              <li class="@if(Route::currentRouteName() == 'service-control') nav-item menu-open @endif nav-item">
+                <a href="{{ route('service-control') }}" class="@if(Route::currentRouteName() == 'service-control') nav-link active @endif nav-link">
+                  <i class="fas fa-wallet" aria-hidden="true"></i>
+                  <p>
+                    Service Control
 
                   </p>
                 </a>
