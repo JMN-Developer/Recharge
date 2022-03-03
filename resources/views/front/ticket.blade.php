@@ -110,17 +110,91 @@ table.dataTable thead .sorting_asc{
 @endsection
 
 @section('scripts')
+<!-- jQuery -->
 <script src="{{asset('js/jquery.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
+<!-- Bootstrap -->
+<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('js/moment.min.js')}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<!-- Theme JS -->
+<script src="{{asset('js/admin.js')}}"></script>
+<!-- Custom JS -->
+<script src="{{asset('js/custom.js')}}"></script>
+
+@endsection
+
+@section('js')
 <script>
-    $(function(){
-        $('.service').select2({
+let get_ticket_data = '{{route("get-ticket-data")}}';
 
-    placeholder: function(){
-        $(this).data('placeholder');
-    }
+$(function() {
+
+
+
+
+
+    $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+
+    fetch_table()
+
+
+});
+
+function fetch_table()
+{
+
+
+
+    var table = $('.invoice_table').DataTable();
+    table.destroy();
+
+    var table = $('.invoice_table').DataTable({
+
+        processing: true,
+        serverSide: true,
+
+        ordering:false,
+        searchPanes: {
+            orderable: false
+        },
+        dom: 'Plfrtip',
+        columnDefs: [
+    { "orderable": false, "targets": "_all" } // Applies the option to all columns
+  ],
+        ajax: {
+
+            "url":get_ticket_data,
+            "type":'get',
+            },
+        deferRender: true,
+        columns: [
+            //   {data: 'sl_no'},
+            @if(Auth::user()->role == 'admin')
+            {data:'reseller_name',name:'reseller_name',orderable:false},
+            @endif
+            {data:'ticket_no',name:'ticket_no'},
+            {data:'service_name',name:'service_name'},
+            {data:'last_response',name:'last_response'},
+            {data:'status',name:'status'},
+            {data:'action',name:'action'},
+
+
+  ],
+
 
     });
-    });
+
+
+}
 </script>
 @endsection

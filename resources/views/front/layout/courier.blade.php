@@ -410,7 +410,7 @@ margin-left: 3px;
                 <li class="nav-item">
                   <a href="{{ route('recharge-italy') }}" class="@if(Route::currentRouteName() == 'recharge-italy') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Domestic</p>
+                    <p>Italy</p>
                   </a>
                 </li>
                 @if (Auth::user()->pin_permission == 1)
@@ -706,7 +706,7 @@ margin-left: 3px;
                 <a href="{{ route('ticket') }}" class="@if(Route::currentRouteName() == 'ticket') nav-link active @endif nav-link">
                   <i class="fas fa-wallet" aria-hidden="true"></i>
                   <p>
-                    Complain<span class="badge complain_notification_count">3</span>
+                    Support <span class="badge complain_notification_count">3</span>
 
                   </p>
                 </a>

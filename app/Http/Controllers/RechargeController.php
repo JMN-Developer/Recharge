@@ -952,22 +952,22 @@ class RechargeController extends Controller
                 {
                     //file_put_contents('test.txt',$request->retailer_id);
                 if($type=='all')
-                $data =RechargeHistory::where('reseller_id',$reseller_id)->whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                $data =RechargeHistory::where('reseller_id',$reseller_id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                 elseif($type=='International')
-                $data =RechargeHistory::where('reseller_id',$reseller_id)->where('type','International')->whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                $data =RechargeHistory::where('reseller_id',$reseller_id)->where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                 else
-                $data =RechargeHistory::where('reseller_id',$reseller_id)->where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                $data =RechargeHistory::where('reseller_id',$reseller_id)->where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                 }
                 else
                 {
                     if($type=='all'){
-                    $data =RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                    $data =RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
 
                     }
                     elseif($type=='International')
-                    $data =RechargeHistory::where('type','International')->whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                    $data =RechargeHistory::where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                     else
-                    $data =RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                    $data =RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                 }
 
                 $total_cost = $data->get()->sum('amount');
@@ -988,11 +988,11 @@ class RechargeController extends Controller
 
             }else{
                 if($type=='all')
-                $data =RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                $data =RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                 elseif($type=='International')
-                $data =RechargeHistory::where('type','International')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                $data =RechargeHistory::where('type','International')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
                 else
-                $data =RechargeHistory::where('type','Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->select(['*']);
+                $data =RechargeHistory::where('type','Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
 
 
                 $total_cost = $data->sum('amount')+$data->sum('service');
@@ -1099,12 +1099,12 @@ class RechargeController extends Controller
             }
 
         }else{
-            $data =RechargeHistory::where('reseller_id', a::user()->id)->get();
+            $data =RechargeHistory::where('reseller_id', a::user()->id)->latest()->get();
             $cost = $data->sum('amount')+$data->sum('service');
             $profit = $data->sum('reseller_com');
         }
 
-        $resellers = user::where('role','!=','admin')->get();
+        $resellers = user::where('role','!=','admin')->latest()->get();
 
 
 

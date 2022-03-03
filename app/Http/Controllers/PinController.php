@@ -58,7 +58,6 @@ class PinController extends Controller
 
 
 
-
         $amount = $sku_amount['1']*100;
         $commission = DB::table('domestic_pins')->where('ean', $sku_amount['0'])->first()->commission;
 
@@ -175,11 +174,12 @@ class PinController extends Controller
 
         UpdateWallet::update($create);
 
-
-        return  Redirect('recharge/pin/')->with('status','Your Pin Purchase Has Been Sucessfull! Here is your pin '.$pin->PIN);
+        return ['status'=>true,'message'=>'Your Pin Purchase Has Been Sucessfull! Here is your pin '.$pin->PIN];
+        //return  Redirect('recharge/pin/')->with('status',);
 
 
         }else{
+            return ['status'=>false,'message'=>'Error occured Please try again!'];
             return  Redirect()->back()->with('error','Error occured Please try again!');
         }
 
@@ -187,7 +187,8 @@ class PinController extends Controller
         // $data = json_encode($bod,true);
 
         }else{
-            return  Redirect()->back()->with('error','Insufficient Balance');
+            return ['status'=>false,'message'=>'Insufficient Balance'];
+            // return  Redirect()->back()->with('error','Insufficient Balance');
         }
     }
 

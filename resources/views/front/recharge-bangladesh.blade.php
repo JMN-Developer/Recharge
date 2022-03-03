@@ -289,6 +289,8 @@
         });
     })
 
+
+
    var mobile_number =  fetch_number();
    autocomplete(document.getElementById('receiverMobile'), mobile_number);
 
@@ -470,6 +472,29 @@ $('.combo').append(offer_list)
     event.preventDefault();
     var number = $('#receiverMobile').val()
     store_number(number);
+    if(number.startsWith('+39'))
+    {
+        iziToast.error({
+                    backgroundColor:"#D12C09",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 10000,
+                    title: 'Error',
+                    message: 'This Section is only for Bangladeshi Recharge. Please go to Recharge Italy Section',
+
+
+                });
+                return;
+    }
+
+   else if(number.startsWith('+88') || number.startsWith('01'))
+   {
+
     var formdata = new FormData();
     formdata.append('number',$('#receiverMobile').val());
     formdata.append('countryIso', intl.getSelectedCountryData().iso2);
@@ -521,13 +546,32 @@ $('.combo').append(offer_list)
 
                 });
 
-
             }
-           //console.log(response.status);
-           //alert('hello')
+
 
         },
        });
+
+     }
+     else{
+        iziToast.error({
+                    backgroundColor:"#D12C09",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 10000,
+                    title: 'Error',
+                    message: 'This Section is only for Bangladeshi Recharge. Please go to Recharge International Section',
+
+
+                });
+                return;
+     }
+
 
 
    });

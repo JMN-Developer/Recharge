@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
   <title>Recharge Italy</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -12,6 +13,7 @@
   <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
+  <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
 
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
@@ -26,16 +28,17 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid recharge-page">
+
         <div class="recharge-box">
+
           <div class="card card-outline card-primary">
-            {{-- <div class="card-header text-center">
-              <a href="/"><img src="{{ asset('images/jm logo.png') }}" width="80px" height="auto"></a>
-            </div> --}}
+
             <div class="card-body">
               <h3 class="text-center mb-5">Indice Brand Pin</h3>
               <div class="row">
                 <div class="col-md-6">
-                  <form action="domestic_pin" method="post">
+                  {{-- <form action="domestic_pin" method="post"> --}}
+                    <form id="pin_form">
                     @csrf
                     <div class="form-group">
                       <label>Brand</label>
@@ -171,6 +174,7 @@
 @section('scripts')
 <!-- jQuery -->
 <script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
 <!-- Bootstrap -->
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <!-- Theme JS -->
@@ -182,6 +186,62 @@
 @section('js')
 
 <script type="text/javascript">
+
+     $(function(){
+        $(".pin_details").hide()
+        var toast = document.querySelector('.iziToast');
+        var message = sessionStorage.getItem('message');
+        sessionStorage.removeItem('message');
+
+        if(toast)
+                {
+                iziToast.hide({}, toast);
+                }
+        if ( sessionStorage.getItem('error') ) {
+            sessionStorage.removeItem('error');
+
+                iziToast.error({
+                    backgroundColor:"#D12C09",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 30000,
+                    title: 'Error',
+                    message: message,
+
+
+                });
+
+                //console.log(response.message);
+
+            }
+
+            if ( sessionStorage.getItem('success') ) {
+            sessionStorage.removeItem('success');
+
+
+            iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 50000,
+                    title: 'Success',
+                    message: message,
+
+                });
+                //console.log(response.message);
+
+            }
+     });
 
     //test for iterating over child elements
     var dropdownArray = [];
@@ -253,6 +313,74 @@
       else {
         $(".recharge_amount").hide();
       }
+    });
+
+    $( "#pin_form" ).submit(function( event ) {
+        event.preventDefault();
+
+        swal({
+  title: "Are you sure?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+
+          var formdata = new FormData();
+        formdata.append('amount',$("#amounts").val());
+        formdata.append('operator',$("#op").val());
+
+
+
+
+      $.ajax({
+        processData: false,
+        contentType: false,
+        url: "domestic_pin",
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formdata,
+        beforeSend: function () {
+            $('.cover-spin').show(0)
+            },
+        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
+            $('.cover-spin').hide(0)
+            },
+        success:function(response){
+            $('.cover-spin').hide(0);
+
+
+
+            if(response.status==true)
+            {
+               // get_table();
+
+                location.reload();
+                sessionStorage.setItem('success',true);
+                sessionStorage.setItem('message',response.message);
+              // $("#pin_number").text(response.pin_number)
+
+
+            }
+            else
+            {
+                location.reload();
+                sessionStorage.setItem('error',true);
+                sessionStorage.setItem('message',response.message);
+            }
+
+
+        },
+       });
+
+  } else {
+
+  }
+  });
+
     });
 
 

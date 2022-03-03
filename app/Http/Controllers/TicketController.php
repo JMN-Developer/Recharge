@@ -81,12 +81,12 @@ class TicketController extends Controller
 
         try {
 
-            // Notification::route('mail','nokibevon7@gmail.com')
-            //     ->notify(new TicketNotification($data));
+             Notification::route('mail','nokibevon7@gmail.com')
+                 ->notify(new TicketNotification($data));
         } catch (\Throwable $th) {
             //throw $th;
         }
-        //event(new TicketRequest());
+        event(new TicketRequest());
 
         return redirect()->route('ticket')->with('success','Ticket Submitted Successfully');
     }
