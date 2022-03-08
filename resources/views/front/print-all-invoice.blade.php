@@ -313,7 +313,7 @@ function fetch_table(start_date,end_date)
             "url":'get_all_invoice',
             "type":'POST',
             dataSrc: function ( data ) {
-
+                console.log(data.data[0]);
            total_profit = data.data[0].total_profit;
            total_cost = data.data[0].total_cost;
 

@@ -74,7 +74,7 @@ class RechargeController extends Controller
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
         }else{
             $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
-            ->select('recharge_histories.*','users.nationality')
+            ->get('recharge_histories.*','users.nationality')
 
             ->take(10)
             ->get();
@@ -94,7 +94,7 @@ class RechargeController extends Controller
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->latest()->get();
         }else{
             $data =RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
-            ->select('recharge_histories.*','users.nationality')
+            ->get('recharge_histories.*','users.nationality')
 
             ->take(10)
             ->latest()
@@ -284,7 +284,7 @@ class RechargeController extends Controller
         $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->latest()->get();
     }else{
         $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
-        ->select('recharge_histories.*','users.nationality')
+        ->get('recharge_histories.*','users.nationality')
         ->latest()
         ->take(10)
         ->get();
@@ -322,7 +322,7 @@ class RechargeController extends Controller
         $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->latest()->get();
     }else{
         $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
-        ->select('recharge_histories.*','users.nationality')
+        ->get('recharge_histories.*','users.nationality')
         ->latest()
         ->take(10)
         ->get();
@@ -440,7 +440,7 @@ class RechargeController extends Controller
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
         }else{
             $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
-            ->select('recharge_histories.*','users.nationality')
+            ->get('recharge_histories.*','users.nationality')
 
             ->take(10)
             ->get();
@@ -483,7 +483,7 @@ class RechargeController extends Controller
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
         }else{
             $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
-            ->select('recharge_histories.*','users.nationality')
+            ->get('recharge_histories.*','users.nationality')
 
             ->take(10)
             ->get();
@@ -746,7 +746,7 @@ class RechargeController extends Controller
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->latest()->get();
         }else{
             $data =RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
-            ->select('recharge_histories.*','users.nationality')
+            ->get('recharge_histories.*','users.nationality')
             ->latest()
             ->take(10)
             ->get();
@@ -952,22 +952,22 @@ class RechargeController extends Controller
                 {
                     //file_put_contents('test.txt',$request->retailer_id);
                 if($type=='all')
-                $data =RechargeHistory::where('reseller_id',$reseller_id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                $data =RechargeHistory::where('reseller_id',$reseller_id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 elseif($type=='International')
-                $data =RechargeHistory::where('reseller_id',$reseller_id)->where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                $data =RechargeHistory::where('reseller_id',$reseller_id)->where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 else
-                $data =RechargeHistory::where('reseller_id',$reseller_id)->where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                $data =RechargeHistory::where('reseller_id',$reseller_id)->where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 }
                 else
                 {
                     if($type=='all'){
-                    $data =RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                    $data =RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
 
                     }
                     elseif($type=='International')
-                    $data =RechargeHistory::where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                    $data =RechargeHistory::where('type','International')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     else
-                    $data =RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                    $data =RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 }
 
                 $total_cost = $data->get()->sum('amount');
@@ -988,11 +988,11 @@ class RechargeController extends Controller
 
             }else{
                 if($type=='all')
-                $data =RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                $data =RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 elseif($type=='International')
-                $data =RechargeHistory::where('type','International')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                $data =RechargeHistory::where('type','International')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 else
-                $data =RechargeHistory::where('type','Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                $data =RechargeHistory::where('type','Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
 
 
                 $total_cost = $data->sum('amount')+$data->sum('service');
@@ -1001,28 +1001,19 @@ class RechargeController extends Controller
 
 
             }
-            $data2 = $data->get();
-            foreach($data2 as $value)
+
+
+            foreach($data as $value)
             {
-
-
-                $value->setAttribute('total_profit',round($total_profit,2));
-                $value->setAttribute('total_cost',round($total_cost,2));
-                // $value->total_profit = round($total_profit,2);
-                // $value->total_cost = round($total_cost,2) ;
-               // file_put_contents('test.txt',$value->total_cost);
-
+                $value->total_profit = round($total_profit,2);
+                $value->total_cost = round($total_cost,2) ;
             }
 
 
-           // array_push($data->get(),['total_proft'=>100,'total_cost'=>'200']);
-            //$data->get()[1614] = ['total_proft'=>100,'total_cost'=>'200'];
-            //$size = sizeof($data->get());
 
 
 
-
-            return Datatables::eloquent($data)
+            return Datatables::of($data)
 
             ->addIndexColumn()
             ->addColumn('profit', function($data){

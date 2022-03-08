@@ -17,7 +17,6 @@ $services = App\Models\service_control::get(['service_name','permission'])->toAr
 
 
 
-
 $total_due = $current_wallet+($current_limit-$current_limit_usage);
 ?>
 <!DOCTYPE html>
