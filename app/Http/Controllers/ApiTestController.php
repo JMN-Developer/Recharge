@@ -5,12 +5,46 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\OauthToken;
-
+use App\Services\SecretProvider;
 class ApiTestController extends Controller
 {
     //
     use OauthToken;
+    protected $epay;
 
+    public function __construct()
+    {
+
+        $this->epay = SecretProvider::get_secret('epay');
+    }
+
+    public function epay_transaction_list()
+    {
+        $xml = '<?xml version="1.0" encoding="ISO-8859-1" ?>
+        <REQUEST TYPE="TXLIST">
+        <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
+        <PASSWORD>'.$this->epay.'</PASSWORD>
+        <LOCALDATETIME>2008-03-17 09:08:51</LOCALDATETIME>
+        <LISTOPTIONS>
+        <FROM>2022-03-01 10:00:00</FROM>
+        <UNTIL>2008-03-08 11:00:00</UNTIL>
+        </LISTOPTIONS>
+        </REQUEST>';
+        $client = new \GuzzleHttp\Client();
+        $recharge_request = $client->post('https://precision.epayworldwide.com/up-interface',[
+            'headers' => [
+            'api_key'     => 'Etmo8i5V9q862PHn5dNJSb',
+            'content_type' => 'application/xml'
+            ],
+            'verify' => false,
+            'body' => $xml
+        ]);
+
+        $body = $recharge_request->getBody();
+        $xml = simplexml_load_string($body);
+
+        dd($xml);
+    }
 
     public function test_token()
     {
