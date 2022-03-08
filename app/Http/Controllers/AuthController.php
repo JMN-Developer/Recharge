@@ -14,9 +14,15 @@ class AuthController extends Controller
     {
         if(auth()->check())
         {
+            if(auth()->user()->role == 'admin')
+            {
             $data = Phone::where('status', 'available')->get();
             $slider = Slider::latest()->get();
             return view('front.index',compact('data','slider'));
+            }
+            else
+            dd('System Under Maintenance');
+
         }
         else
         {

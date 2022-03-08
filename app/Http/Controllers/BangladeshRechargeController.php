@@ -116,7 +116,7 @@ class BangladeshRechargeController extends Controller
 
     public function index()
     {
-
+        //dd($this->bangladeshi_recharge->balanceInfo());
         if(Auth::user()->role == 'user'){
             $data = RechargeHistory::where('reseller_id', Auth::user()->id)->where('type','Bangladesh')->latest()->take(10)->get();
         }else{
@@ -129,7 +129,7 @@ class BangladeshRechargeController extends Controller
 
         }
         return view('front.recharge-bangladesh',compact('data'));
-      //dd($this->bangladeshi_recharge->balanceInfo());
+      //
      //echo json_encode($this->bangladeshi_recharge->getOperatorLimit('3'));
       //dd( $this->bangladeshi_recharge->operatorInfo('8801845318609'));
 
