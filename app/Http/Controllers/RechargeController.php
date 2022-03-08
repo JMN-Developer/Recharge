@@ -970,9 +970,9 @@ class RechargeController extends Controller
                     $data =RechargeHistory::where('type','Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 }
 
-                $total_cost = $data->get()->sum('amount');
+                $total_cost = $data->sum('amount');
                 $total_profit = 0;
-                foreach($data->get() as $value)
+                foreach($data as $value)
                 {
                     if($value->amount !=0)
                     {
@@ -1021,13 +1021,13 @@ class RechargeController extends Controller
                 if(a::user()->role=='admin')
                 {
                     if($data->admin_com !=0)
-                    return $data->admin_com;
+                    return round($data->admin_com,2);
                     else
-                    return $data->discount;
+                    return round($data->discount,2);
                 }
                 else
                 {
-                    return $data->reseller_com;
+                    return round($data->reseller_com,2);
                 }
 
             })
