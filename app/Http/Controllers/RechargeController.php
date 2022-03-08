@@ -74,7 +74,7 @@ class RechargeController extends Controller
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
         }else{
             $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
-            ->get('recharge_histories.*','users.nationality')
+            ->select('recharge_histories.*','users.nationality')
 
             ->take(10)
             ->get();
@@ -94,8 +94,7 @@ class RechargeController extends Controller
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->latest()->get();
         }else{
             $data =RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
-            ->get('recharge_histories.*','users.nationality')
-
+            ->select('recharge_histories.*','users.nationality')
             ->take(10)
             ->latest()
             ->get();
