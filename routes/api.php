@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RechargeController;
 use App\Http\Controllers\ApiTestController;
+use App\Http\Controllers\DtOneController;
 use App\Models\Offer;
 
 /*
@@ -40,3 +41,5 @@ Route::post('check_operator',[ApiTestController::class,'check_operator']);
 Route::post('get_products',[ApiTestController::class,'get_products']);
 
 Route::get('epay-transaction-list',[ApiTestController::class,'epay_transaction_list']);
+Route::get('dtone-transaction',[DtOneController::class,'all_transaction']);
+Route::get('ean_profit',[ApiTestController::class,'ean_profit']);

@@ -96,7 +96,23 @@ class DtOneProvider
 
     }
 
+    public function transaction_list()
+    {
+        $client = new \GuzzleHttp\Client(['http_errors' => false]);
+        $operator_request = $client->get('https://dvs-api.dtone.com/v1/transactions',['headers' => [
+            'Authorization'     => 'Basic '.$this->access_token,
+            'Accept'=> 'application/json',
 
+            ],'verify' => false]);
+
+            $status = $operator_request->getStatusCode();
+            $operator_response = $operator_request->getBody();
+           // file_put_contents('test.txt',$operator_response);
+            //return $operator_response;
+            $operator_response = json_decode($operator_response);
+            return $operator_response;
+           //file_put_contents('test.txt','hello');
+    }
 
 
     public function recharge($sku_id,$txid,$mobile)

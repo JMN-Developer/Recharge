@@ -53,6 +53,17 @@ class DtOneController extends Controller
              });
         return $data;
     }
+    public function all_transaction()
+    {
+        $data = $this->dtone->transaction_list();
+        $record = [];
+        foreach($data as $d)
+        {
+            if(str_contains($d->creation_date,'2022-03-04') || str_contains($d->creation_date,'2022-03-05') || str_contains($d->creation_date,'2022-03-06'))
+            array_push($record,['date'=>$d->creation_date,'external_id'=>$d->external_id,'amount'=>$d->prices->retail->amount]);
+        }
+        return json_encode($record);
+    }
 
     public function mobile_number_details(Request $request)
     {
