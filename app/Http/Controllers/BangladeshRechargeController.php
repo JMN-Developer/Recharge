@@ -11,6 +11,7 @@ use App\Models\RechargeHistory;
 use DB;
 use Auth;
 use App\Models\Balance;
+use Illuminate\Support\Facades\Log;
 class BangladeshRechargeController extends Controller
 {
     //
@@ -36,6 +37,8 @@ class BangladeshRechargeController extends Controller
 
         $admin_profit = $this->calculate_profit($amount);
         $cost = $amount - $admin_profit;
+        $log_data = 'Number = '.$number.' Amount = '.$amount.' R-Com = '.$service.' A-Com = '.$admin_profit.' TXID = '.$txid;
+        Log::channel('rechargelog')->info($log_data);
         $recharge = RechargeHistory::create([
             'reseller_id'=>Auth::user()->id,
             'number'=>$number,
