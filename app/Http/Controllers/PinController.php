@@ -16,6 +16,7 @@ use App\Models\DomesticProduct;
 use App\Services\UpdateWallet;
 use App\Models\RechargeHistory;
 use App\Services\CheckRechargeAvail;
+use Illuminate\Support\Facades\Log;
 
 class PinController extends Controller
 {
@@ -139,6 +140,8 @@ class PinController extends Controller
 
             $product = db::table('domestic_pins')->where('ean',$sku_amount['0'])->first();
 
+            $log_data = 'PIN = '.$pin->PIN.' Amount = '.$sku_amount['1'].' R-Com = '.$reseller_commission.' A-Com = '.$admin_commission.' TXID = '.$txid;
+            Log::channel('rechargelog')->info($log_data);
         $create = new RechargeHistory;
 
         $create->reseller_id = a::user()->id;

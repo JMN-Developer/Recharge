@@ -6,6 +6,7 @@ use App\Models\RechargeHistory;
 use App\Models\User;
 use DB;
 use App\Models\TransactionHistory;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class UpdateWallet
@@ -65,6 +66,8 @@ class UpdateWallet
 
 
         $transaction_id = date('dmyHis'). str_pad($reseller_id, 4, "0", STR_PAD_LEFT).str_pad($service_code, 2, "0", STR_PAD_LEFT);
+        $log_data = 'TXID = '.$transaction_id.' Amount = '.$amount.' Tx-Type = '.$transaction_type.' WBT = '.$wallet_before_transaction.' WAT = '.$wallet_after_transaction.' Wallet Type = '.$wallet_type;
+        Log::channel('transactionlog')->info($log_data);
         TransactionHistory::create([
             'reseller_id'=>$reseller_id,
             'transaction_id'=>$transaction_id,

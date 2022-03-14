@@ -96,6 +96,17 @@ return [
             'driver' => 'monolog',
             'handler' => NullHandler::class,
         ],
+        'rechargelog' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/Recharge Log/app.log'),
+            'level' => 'info',
+        ],
+
+        'transactionlog' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/Transaction Log/app.log'),
+            'level' => 'info',
+        ],
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),

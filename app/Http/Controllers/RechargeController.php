@@ -900,6 +900,8 @@ class RechargeController extends Controller
                     $cost = $sku_amount['1']-$prof->commission;
                 }
 
+                $log_data = 'Number = '.$request->number.' Amount = '.$sku_amount['1'].' R-Com = '.$reseller_commission.' A-Com = '.$admin_commission.' TXID = '.$xml2->TXID;
+                Log::channel('rechargelog')->info($log_data);
                 $create = new RechargeHistory();
                 $create->reseller_id = a::user()->id;
                 $create->number = $request->number;

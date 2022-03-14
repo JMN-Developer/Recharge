@@ -11,7 +11,7 @@ use App\Services\CheckRechargeAvail;
 use App\Services\UpdateWallet;
 use App\Services\GenerateTransactionId;
 use App\Models\Balance;
-
+use Illuminate\Support\Facades\Log;
 class DtOneController extends Controller
 {
     //
@@ -101,6 +101,8 @@ class DtOneController extends Controller
         $total_commission = reseller_comission($data->prices->retail->amount);
         $reseller_profit = reseller_profit($total_commission);
         $admin_profit = $total_commission-$reseller_profit;
+        $log_data = 'Number = '.$number.' Amount = '.$data->prices->retail->amount+reseller_comission($data->prices->retail->amount).' R-Com = '.$reseller_profit.' A-Com = '.$admin_profit.' TXID = '.$txid;
+        Log::channel('rechargelog')->info($log_data);
         $recharge = RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$number,

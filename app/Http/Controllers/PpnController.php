@@ -14,7 +14,7 @@ use Auth as a;
 use App\Services\GenerateTransactionId;
 use App\Services\UpdateWallet;
 use Illuminate\Support\Facades\Notification;
-
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -161,6 +161,9 @@ class PpnController extends Controller
         $reseller_profit = reseller_profit_white_calling($data->faceValue);
         //$reseller_com =round(($discount*.60),2);
         $admin_profit = $discount-$reseller_profit;
+        $log_data = 'Number = '.$data->pins[0]->pinNumber.' Amount = '.$data->faceValue.' R-Com = '.$reseller_profit.' A-Com = '.$admin_profit.' TXID = '.$txid;
+        Log::channel('rechargelog')->info($log_data);
+
 
        $recharge = RechargeHistory::create([
             'reseller_id'=>a::user()->id,

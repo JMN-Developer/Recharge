@@ -7,11 +7,13 @@ use App\Models\Phone;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 
+
 class AuthController extends Controller
 {
     //
     public function index()
     {
+
         if(auth()->check())
         {
             $data = Phone::where('status', 'available')->get();
