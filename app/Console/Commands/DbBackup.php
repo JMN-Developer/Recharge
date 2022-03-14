@@ -46,6 +46,7 @@ class DbBackup extends Command
         $command = "mysqldump --user=" . env('DB_USERNAME') ." --password=" . env('DB_PASSWORD') . " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . "  | gzip > " . storage_path() . "/app/backup/" . $filename;
         $returnVar = NULL;
         $output  = NULL;
+        exec($command, $output, $returnVar);
         $file = storage_path() . "/app/backup/" . $filename;
         //$file = fopen(storage_path() . "/app/backup/" . $filename, "r");
         //file_put_contents('test.txt',$file);
@@ -61,6 +62,5 @@ class DbBackup extends Command
            //throw $th;
             Log::error($th);
        }
-        exec($command, $output, $returnVar);
     }
 }
