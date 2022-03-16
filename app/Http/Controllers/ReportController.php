@@ -54,11 +54,11 @@ class ReportController extends Controller
      $datas = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('date')->get();
     else
     {
-       if($service == 'recharge') 
+       if($service == 'recharge')
        {
-      
+
         $datas = RechargeHistory::where('type',$type)->whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('date')->get();
-       
+
        }
        else if($service == 'sim')
        {
@@ -83,6 +83,7 @@ class ReportController extends Controller
 
     public function get_report_data_separate(Request $request)
     {
+
         $start_date =  Carbon::parse($request->start_date)->toDateTimeString();
         $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
        // file_put_contents('test.txt',$request->type);
@@ -91,14 +92,14 @@ class ReportController extends Controller
             $chart_data = $this->data_fetch('all',$start_date,$end_date,'recharge');
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'all']);
-            
+
         }
        else if($request->type=='international_recharge')
         {
             $chart_data = $this->data_fetch('International',$start_date,$end_date,'recharge');
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'international_recharge']);
-            
+
         }
 
         else if($request->type=='domestic_recharge')
@@ -107,7 +108,7 @@ class ReportController extends Controller
             //file_put_contents('test.txt',json_encode($chart_data));
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'domestic_recharge']);
-            
+
         }
 
         else if($request->type=='pin')
@@ -115,7 +116,7 @@ class ReportController extends Controller
             $chart_data = $this->data_fetch('Pin',$start_date,$end_date,'recharge');
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'pin']);
-            
+
         }
 
         else if($request->type=='white_calling')
@@ -123,40 +124,45 @@ class ReportController extends Controller
             $chart_data = $this->data_fetch('White Calling',$start_date,$end_date,'recharge');
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'white_calling']);
-            
+
         }
         else if($request->type=='sim')
         {
             $chart_data = $this->data_fetch('sim',$start_date,$end_date,'sim');
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'sim']);
-            
+
         }
         else if($request->type=='cargo')
         {
             $chart_data = $this->data_fetch('cargo',$start_date,$end_date,'cargo');
             $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
             echo json_encode(['chart_container'=>$all_chart,'type'=>'cargo']);
-            
+
         }
-    
+
     }
 
     public function get_report_data(Request $request)
     {
-      
+
         $start_date =  Carbon::parse($request->start_date)->toDateTimeString();
         $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
-      
+
       $chart_data = $this->data_fetch('International',$start_date,$end_date,'recharge');
       $international_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $international_sale =round(array_sum($chart_data['sales']),2) ;
       $international_profit =round(array_sum($chart_data['profits']),2) ;
 
-      $chart_data = $this->data_fetch('Domestic',$start_date,$end_date,'recharge');   
+      $chart_data = $this->data_fetch('Domestic',$start_date,$end_date,'recharge');
       $domestic_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $domestic_sale =round(array_sum($chart_data['sales']) ,2);
       $domestic_profit =round(array_sum($chart_data['profits']),2) ;
+
+      $chart_data = $this->data_fetch('Bangladesh',$start_date,$end_date,'recharge');
+      $bangladesh_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
+      $bangladesh_sale =round(array_sum($chart_data['sales']) ,2);
+      $bangladesh_profit =round(array_sum($chart_data['profits']),2) ;
 
 
       $chart_data = $this->data_fetch('Pin',$start_date,$end_date,'recharge');
@@ -173,6 +179,7 @@ class ReportController extends Controller
       $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $all_sale =round(array_sum($chart_data['sales']),2);
       $all_profit =round(array_sum($chart_data['profits']),2);
+        // file_put_contents('test.txt',$international_profit." ".$domestic_profit." ".$pin_profit." ".$white_calling_profit." ".$all_profit);
 
       $chart_data = $this->data_fetch('sim',$start_date,$end_date,'sim');
       $sim_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
@@ -185,23 +192,26 @@ class ReportController extends Controller
       $cargo_profit =round(array_sum($chart_data['profits']),2);
 
      $top_reseller = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->select('reseller_id',DB::raw('format(sum(amount),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit') )->groupBy('reseller_id')->orderByRaw('CAST(sum(amount) as DECIMAL(8,2)) DESC')->limit(5)->get();
-     $top_reseller_info = []; 
+     $top_reseller_info = [];
      foreach($top_reseller as $d)
      {
          array_push($top_reseller_info,['reseller_id'=>$d->user->user_id,'reseller_name'=>$d->user->first_name.' '.$d->user->last_name,'sale'=>$d->sales,'profit'=>$d->profit]);
      }
      //file_put_contents('test.txt',json_encode($reseller_info));
 
-       
+
         $data = ['international_container'=>$international_chart,
         'domestic_container'=>$domestic_chart,
         'pin_container'=>$pin_chart,
+        'bangladesh_container'=>$bangladesh_chart,
         'white_calling_container'=>$white_calling_chart,
         'all_container'=>$all_chart,
         'international_sale'=>$international_sale,
         'international_profit'=>$international_profit,
         'domestic_sale'=>$domestic_sale,
         'domestic_profit'=>$domestic_profit,
+        'bangladesh_sale'=>$bangladesh_sale,
+        'bangladesh_profit'=>$bangladesh_profit,
         'pin_sale'=>$pin_sale,
         'pin_profit'=>$pin_profit,
         'white_calling_sale'=>$white_calling_sale,
@@ -214,14 +224,15 @@ class ReportController extends Controller
         'sim_profit'=>$sim_profit,
         'cargo_sale'=>$cargo_sale,
         'cargo_profit'=>$cargo_profit,
-        'top_reseller'=>$top_reseller_info
+        'top_reseller'=>$top_reseller_info,
 
-            
-    
+
+
+
     ];
       // array_push($data,);
-        
+
         echo json_encode($data) ;
-      
+
     }
 }

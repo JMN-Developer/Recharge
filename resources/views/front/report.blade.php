@@ -162,6 +162,20 @@ table.dataTable thead .sorting_asc{
                         </div>
                     </div>
 
+                    <div class="col-md-6 col-xl-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1">
+                                        <span class="text-muted text-uppercase fs-12 fw-bold">Bangaldesh</span>
+                                        <p style="margin-top:7px"><span style="font-weight: bold">Sale:</span><span id="bangladesh_sale"></span><span style="font-weight: bold;margin-left:10px">Profit:</span><span id="bangladesh_profit"></span></p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="col-md-6 col-xl-3">
                         <div class="card">
@@ -271,6 +285,30 @@ table.dataTable thead .sorting_asc{
                                 <div class="col-md-3" style="float: right">
                                     <div class="date_picker_pair mb-3">
 
+                                        <input type="text" class="form-control" name="daterange_white_calling" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
+
+
+                                      </div>
+                                  </div>
+                                <div class="dropdown float-end">
+
+                                </div>
+                                <h5 class="card-title mb-0 header-title">Bangladesh</h5>
+                                <div class="p-2 m-2 bg-white rounded shadow bangladesh_recharge_chart" style="margin-top: 50px !important">
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="col-md-3" style="float: right">
+                                    <div class="date_picker_pair mb-3">
+
                                         <input type="text" class="form-control" name="daterange_pin" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
 
 
@@ -314,6 +352,8 @@ table.dataTable thead .sorting_asc{
                             </div>
                         </div>
                     </div>
+
+
 
                     <div class="col-xl-12">
                         <div class="card">
@@ -805,6 +845,7 @@ function process_data(obj)
         $('.all_chart').append(obj.all_container)
         $('.international_recharge_chart').append(obj.international_container)
         $('.domestic_recharge_chart').append(obj.domestic_container)
+        $('.bangladesh_recharge_chart').append(obj.bangladesh_container)
         $('.pin_chart').append(obj.pin_container)
         $('.white_calling_chart').append(obj.white_calling_container)
         $('.sim_chart').append(obj.sim_container)
@@ -815,6 +856,10 @@ function process_data(obj)
         $('#international_profit').text(obj.international_profit)
         $('#domestic_sale').text(obj.domestic_sale)
         $('#domestic_profit').text(obj.domestic_profit)
+
+        $('#bangladesh_sale').text(obj.bangladesh_sale)
+        $('#bangladesh_profit').text(obj.bangladesh_profit)
+
         $('#pin_sale').text(obj.pin_sale)
         $('#pin_profit').text(obj.pin_profit)
         $('#white_calling_sale').text(obj.white_calling_sale)
@@ -861,6 +906,7 @@ function get_data(start,end)
             $('.cover-spin').hide(0)
             },
         success:function(data){
+            console.log(data);
         var obj = JSON.parse(data);
         process_data(obj)
         //obj[0].international_script;

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Events\TicketRequest;
 use App\Models\ticket_response;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Log;
 
 
 class TicketController extends Controller
@@ -48,15 +49,55 @@ class TicketController extends Controller
 
         return view('front.ticket-response',compact('ticket_response','ticket_details'));
     }
+    public function send_mail($ticket_no,$status,$service_name,$message)
+    {
+
+
+        $data = [
+            'ticket_id'=>$ticket_no,
+            'status'=>$status,
+            'type'=>'Admin',
+            'service_name'=>$service_name,
+            'user_name'=>'Admin',
+            'message'=>$message
+        ];
+
+        try {
+
+             Notification::route('mail','support@jmnation.com')
+                 ->notify(new TicketNotification($data));
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+
+        $data = [
+            'ticket_id'=>$ticket_no,
+            'status'=>$status,
+            'type'=>'User',
+            'service_name'=>$service_name,
+            'user_name'=>Auth::user()->first_name." ".Auth::user()->last_name,
+            'message'=>$message
+        ];
+
+        try {
+
+             Notification::route('mail',Auth::user()->email)
+                 ->notify(new TicketNotification($data));
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+    }
     public function ticket_submit(Request $request)
     {
         if($request->document)
         {
         $path = $request->document->store('image/ticketDocument', 'public');
+       // $file = storage_path() . "/app/public/image/ticketDocument" . $path;
         }
         else
         {
             $path = NULL;
+            //$file =NULL;
         }
         $date = date('dmyhis');
         $resller_id = str_pad(auth()->user()->id, 4, "0", STR_PAD_LEFT);
@@ -65,7 +106,8 @@ class TicketController extends Controller
             "reseller_id" => Auth::user()->id,
             'ticket_no'=>$ticket_no,
             "service_name" => $request->service,
-            'admin_notification'=>1
+            'admin_notification'=>1,
+            'status'=>'Pending'
 
         ]);
         ticket_response::create([
@@ -74,18 +116,8 @@ class TicketController extends Controller
             'document'=>$path,
             'user_id'=>Auth::user()->id
         ]);
-        $data = [
-            'from'=>'pointrecharge@gmail.com',
-            'message'=>$request->message
-        ];
+        $this->send_mail($ticket->ticket_no,$ticket->status,$request->service,$request->reseller_message);
 
-        try {
-
-             Notification::route('mail','nokibevon7@gmail.com')
-                 ->notify(new TicketNotification($data));
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
         event(new TicketRequest());
 
         return redirect()->route('ticket')->with('success','Ticket Submitted Successfully');
