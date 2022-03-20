@@ -17,7 +17,17 @@
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
 
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
-<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
+<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
+
+
+<!-- Select2 -->
+<link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+<!-- Theme style -->
+<link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+</head>
 <style>
     .date_picker_pair {
     width: 90%;
@@ -82,6 +92,9 @@ table.dataTable thead .sorting_asc{
                         <th style="background-color: black;color:white">Service</th>
                         <th style="background-color: black;color:white">Last Response</th>
                         <th style="background-color: black;color:white">Status</th>
+                        @if(auth()->user()->role == 'admin')
+                        <th style="background-color: black;color:white">Update Status</th>
+                        @endif
                         <th style="background-color: black;color:white">Action</th>
 
 
@@ -150,6 +163,21 @@ $(function() {
 
 });
 
+function update_status(id)
+{
+
+   var value = $('.status :selected').val();
+   $.ajax({
+            type: "GET",
+
+            url: 'ticket/update_ticket_status',
+            data: {'id': id,'status':value},
+            success: function(data){
+                location.reload()
+            }
+        });
+}
+
 function fetch_table()
 {
 
@@ -186,6 +214,9 @@ function fetch_table()
             {data:'service_name',name:'service_name'},
             {data:'last_response',name:'last_response'},
             {data:'status',name:'status'},
+            @if(Auth::user()->role == 'admin')
+            {data:'update_status',name:'update_status'},
+            @endif
             {data:'action',name:'action'},
 
 

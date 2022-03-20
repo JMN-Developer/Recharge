@@ -62,12 +62,8 @@ class ApiTestController extends Controller
         <PASSWORD>'.$this->epay.'</PASSWORD>
         <TERMINALID RETAILERACC="PNTRCG" STOREID="3D001">IT028215</TERMINALID>
         <LOCALDATETIME>'.Carbon::now('Europe/Berlin').'</LOCALDATETIME>
+        <TXID>18032022144955002320</TXID
 
-        <LISTOPTIONS>
-        <FROM>2022-03-05 06:00:00</FROM>
-        <UNTIL>2022-03-05 07:00:00</UNTIL>
-        <TRANSACTIONFILTER>SALE</TRANSACTIONFILTER>
-        </LISTOPTIONS>
         </REQUEST>';
         $client = new \GuzzleHttp\Client();
         $recharge_request = $client->post('https://precision.epayworldwide.com/up-interface',[
@@ -81,7 +77,7 @@ class ApiTestController extends Controller
 
         $body = $recharge_request->getBody();
         $xml = simplexml_load_string($body);
-
+        return json_encode($xml);
         foreach(json_decode(json_encode($xml->TXLIST)) as $data)
         {
 	//echo $xml->TXLIST;

@@ -310,6 +310,7 @@ Route::group(['prefix' => 'ticket'], function()
     Route::post('ticket_answer',[TicketController::class,'ticket_answer']);
     Route::get('ticket-response/{id}',[TicketController::class,'ticket_response_view']);
     Route::post('ticket_reply',[TicketController::class,'ticket_reply'])->name('ticket-reply');
+    Route::get('update_ticket_status',[TicketController::class,'update_ticket_status']);
 
 });
 

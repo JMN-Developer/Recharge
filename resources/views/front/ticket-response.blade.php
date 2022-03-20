@@ -29,6 +29,16 @@
 table.dataTable thead .sorting_asc{
     background-image: none !important;
 }
+.user-response{
+    background-color: #FDEFFC;
+}
+.admin-response{
+    background-color: #E7FBF7;
+}
+.title{
+    font-weight: bold
+}
+
 
 </style>
 

@@ -18,6 +18,14 @@ use Illuminate\Support\Facades\Log;
 class TicketController extends Controller
 {
     //
+
+    public function update_ticket_status(Request $request)
+    {
+        $id = $request->id;
+        ticket::where('id',$id)->update(['status'=>$request->status]);
+        return 'hello';
+        //file_put_contents('test.txt',$request->status);
+    }
     public function index()
     {
         return view('front.ticket');
@@ -38,6 +46,15 @@ class TicketController extends Controller
             'document'=>$path,
             'user_id'=>Auth::user()->id
         ]);
+        if(Auth::user()->role == 'admin')
+        {
+            ticket::where('id',$request->ticket_id)->update(['reseller_notification'=>1]);
+        }
+        else{
+            ticket::where('id',$request->ticket_id)->update(['admin_notification'=>1]);
+        }
+        event(new TicketRequest());
+
         return redirect()->back()->with('success','Response Submitted');
     }
     public function ticket_response_view(Request $request)
@@ -107,7 +124,7 @@ class TicketController extends Controller
             'ticket_no'=>$ticket_no,
             "service_name" => $request->service,
             'admin_notification'=>1,
-            'status'=>'Pending'
+            'status'=>'Open'
 
         ]);
         ticket_response::create([
@@ -226,12 +243,24 @@ class TicketController extends Controller
             return $text;
           })
 
+          ->addColumn('update_status', function($data){
+            $text ='<select class="status">
+                <option value="Close">Close</option>
+                <option value="Open">Open</option>
+            </select>
+            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="update_status('.$data->id.')">Update</a>';
+            return $text;
+          })
+
+
+
+
           ->addColumn('action', function($data){
             $text ='<a class="btn btn-primary" href="ticket/ticket-response/'.$data->ticket_no.'">Show Details</a>';
             return $text;
           })
 
-         ->rawColumns(['transaction_amount','description','reseller_name','last_response','action'])
+         ->rawColumns(['transaction_amount','description','reseller_name','last_response','action','update_status'])
         ->addIndexColumn()
         ->make(true);
         return $data;
