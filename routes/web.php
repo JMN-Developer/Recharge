@@ -300,7 +300,7 @@ Route::get('report',[ReportController::class,'index'])->name('report');
 Route::post('get_report_data',[ReportController::class,'get_report_data'])->name('get-report-data');
 Route::post('get_report_data_separate',[ReportController::class,'get_report_data_separate'])->name('get-report-data-separate');
 
-Route::group(['prefix' => 'ticket'], function()
+Route::group(['prefix' => 'ticket','middleware'=>['auth','user']], function()
 {
 
     Route::get('/',[TicketController::class,'index'])->name('ticket');

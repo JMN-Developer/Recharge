@@ -98,23 +98,23 @@ if (!function_exists('transaction_cargo')) {
     if (!function_exists('reseller_profit')) {
         function reseller_profit($amount)
         {
-            return $amount;
-        //    $extra_amount =  reseller_comission($amount);
-        //     if(auth()->user()->role == 'admin')
-        //     {
-        //         $profit = 0;
-        //     }
-        //     else
-        //     {
-        //         $profit = auth()->user()->reseller_profit->international_recharge_profit;
-        //         if(!$profit)
-        //         {
-        //             $profit = 20;
-        //         }
+            //return $amount;
+          // $extra_amount =  reseller_comission($amount);
+            if(auth()->user()->role == 'admin')
+            {
+                $profit = 0;
+            }
+            else
+            {
+                $profit = auth()->user()->reseller_profit->international_recharge_profit;
+                if(!$profit)
+                {
+                    $profit = 20;
+                }
 
-        //     }
-        //     $percentage_amount = round((($profit/100)*$amount),2);
-        //     return $percentage_amount;
+            }
+            $percentage_amount = round((($profit/100)*$amount),2);
+            return $percentage_amount;
         }
         }
         // if (!function_exists('get_current_balance')) {

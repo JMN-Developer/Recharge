@@ -22,8 +22,9 @@ class TicketController extends Controller
     public function update_ticket_status(Request $request)
     {
         $id = $request->id;
-        ticket::where('id',$id)->update(['status'=>$request->status]);
-        return 'hello';
+        ticket::where('id',$id)->update(['status'=>$request->status,'reseller_notification'=>1]);
+        event(new TicketRequest());
+
         //file_put_contents('test.txt',$request->status);
     }
     public function index()

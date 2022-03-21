@@ -78,10 +78,28 @@ class BangladeshiRecharge
             return $response->data->triggerAmount->list;
 
     }
+
+    public function query_recharge()
+    {
+
+        $guid ='20032022120404002313';
+        $vr_guid ='JMN-GP-4814950695';
+        //file_put_contents('test.txt',$amount);
+        try {
+            $data = $this->client->QueryRechargeStatus($this->client_id,$guid,$vr_guid);
+            //file_put_contents('test.txt',json_encode($data));
+            } catch(SoapFault $exception) {
+                $this->soap_exception_occured = true;
+                $this->exception = 'Soap Exception '.$exception;
+            }
+            //file_put_contents('create_recharge.txt',json_encode($data));
+            return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
+    }
     public function CreateRecharge($guid,$operator_id,$recipient_msisdn,$amount)
     {
-        $amount = ceil($amount);
         //file_put_contents('test.txt',$amount);
+        //$amount = ceil($amount);
+
         try {
             $data = $this->client->CreateRecharge($this->client_id,$this->client_pass,$guid,$operator_id,$recipient_msisdn,$amount,'prepaid');
             //file_put_contents('test.txt',json_encode($data));

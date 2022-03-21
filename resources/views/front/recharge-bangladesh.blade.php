@@ -89,6 +89,7 @@
                                         <label for="inputMobileNumber" class="form-label" style="">Amount in BDT</label>
                                         <input type="text" id="amount" class="form-control" name="amount" placeholder="Amount" onkeypress="return isNumberKeyDecimal(event)"  style="width: 84%">
                                         <input type="hidden" id="operator_id" >
+                                        <input type="hidden" id="bd_amount">
                                         <input type="hidden" id="operator_name" >
                                         <p style="color: red;font-weight:bold" id="bd_amount_field"><span id="main_amount"></span> Euro</p>
 
@@ -257,6 +258,7 @@
        $('.click-check-'+id).addClass('offer-card-after-click');
        $("#amount").val(offer_description);
        $('#main_amount').text(update_amount);
+       $("#bd_amount").val(amount);
        $("#bd_amount_field").show();
     }
 
@@ -616,8 +618,19 @@ $('.combo').append(offer_list)
    var formdata = new FormData();
     formdata.append('number',$('#receiverMobile').val().split(' ').join(''));
     formdata.append('amount', $('#main_amount').text());
+
     formdata.append('operator_id',$("#operator_id").val());
     formdata.append('operator_name',$("#operator_name").val());
+    var regExp = /[a-zA-Z]/g;
+    if(regExp.test($("#amount").val())){
+    var bd_amount = $("#bd_amount").val();
+    } else {
+        var bd_amount = $("#amount").val();
+
+    }
+    formdata.append('bd_amount',bd_amount);
+  // console.log(bd_amount);
+    //return;
     //formdata.append('updated_amount',$('#amount').val());
     formdata.append('service_charge',$("#service").val());
 

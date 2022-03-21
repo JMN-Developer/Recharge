@@ -65,14 +65,19 @@ class BangladeshRechargeController extends Controller
         Balance::where('type','ssl')->update(['balance'=>$current_balance['balance_info']]);
 
     }
+    public function query_recharge()
+    {
+        $data = $this->bangladeshi_recharge->query_recharge();
+        return json_encode($data);
+    }
 
     public function recharge(Request $request)
     {
        $amount = $request->amount;
        $rate = euro_rate_for_bd_recharge();
        $unit_rate = 100/$rate;
-       $bd_amount = $unit_rate*$amount;
-
+       $bd_amount = $request->bd_amount;// $unit_rate*$amount;
+       //ile_put_contents('test.txt',$bd_amount.' hell');
        $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_id = $request->operator_id;
@@ -157,6 +162,7 @@ class BangladeshRechargeController extends Controller
                 $d->update_amount =  round($d->amount*$unit_rate,4);
                 $d->operator_logo = DB::table('sim_operators')->where('operator',$operator_details['data']->operator_name)->first()->img;
             }
+           // file_put_contents('test.txt',json_encode($data));
 
             return ['status'=>true,'offer_data'=>$data,'operator_id'=>$operator_details['data']->operator_id,'operator_name'=>$operator_details['data']->operator_name];
         }
