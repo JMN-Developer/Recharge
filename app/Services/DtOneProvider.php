@@ -15,7 +15,7 @@ class DtOneProvider
     {
         $token = SecretStore::where('company_name','dtone')->first()->content;
         $this->access_token = Crypt::decrypt($token);
-        //file_put_contents('test.txt',token)
+        //file_put_contents('test.txt', $this->access_token);
     }
 
     public function fetch_product($operator_id)

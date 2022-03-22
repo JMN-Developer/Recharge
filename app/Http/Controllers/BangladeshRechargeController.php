@@ -77,7 +77,7 @@ class BangladeshRechargeController extends Controller
        $rate = euro_rate_for_bd_recharge();
        $unit_rate = 100/$rate;
        $bd_amount = $request->bd_amount;// $unit_rate*$amount;
-       //ile_put_contents('test.txt',$bd_amount.' hell');
+
        $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_id = $request->operator_id;

@@ -100,7 +100,8 @@ class DtOneController extends Controller
         $discount =$data->prices->retail->amount - $data->prices->wholesale->amount;
         $total_commission = reseller_comission($data->prices->retail->amount);
         $reseller_profit = reseller_profit($data->prices->retail->amount+$total_commission);
-        $admin_profit = $total_commission-$reseller_profit;
+        $admin_profit = ($data->prices->retail->amount+$total_commission)-$reseller_profit-$data->prices->wholesale->amount;
+        //$admin_profit = $total_commission-$reseller_profit;
         $log_data = 'Number = '.$number.' Amount = '.$data->prices->retail->amount+$total_commission.' R-Com = '.$reseller_profit.' A-Com = '.$admin_profit.' TXID = '.$txid;
         Log::channel('rechargelog')->info($log_data);
         $recharge = RechargeHistory::create([

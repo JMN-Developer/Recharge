@@ -106,13 +106,14 @@ if (!function_exists('transaction_cargo')) {
             }
             else
             {
-                $profit = auth()->user()->reseller_profit->international_recharge_profit;
+                $profit = auth()->user()->	admin_international_recharge_commission;
                 if(!$profit)
                 {
                     $profit = 20;
                 }
 
             }
+
             $percentage_amount = round((($profit/100)*$amount),2);
             return $percentage_amount;
         }
