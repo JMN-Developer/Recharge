@@ -309,7 +309,7 @@ $('.internet').append(offer_list)
 
     for (var i = 0; i < combo.length; i++){
         
-        var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${combo[i].amount},'${combo[i].description}',,'${internet[i].skuId}')">
+        var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${combo[i].amount},'${combo[i].description}','${combo[i].skuId}')">
 <div class="card offer-card click-check-`+i+`">
   <div class="card-body">
      <div class="d-flex">

@@ -213,7 +213,7 @@ class DtOneController extends Controller
     public function calculate_profit($amount)
     {
         $rate = euro_rate_for_bd_recharge();
-        $current_currency_rate = 96;// $this->bangladeshi_recharge->current_euro_rate();
+        $current_currency_rate = $this->bangladeshi_recharge->current_euro_rate();
         $currency_profit = $rate - (100/$current_currency_rate);
         $api_profit = (1.5/100)*$amount;
        // file_put_contents('test.txt',$current_currency_rate.' '.$currency_profit.' '.$company_profit);
@@ -248,7 +248,9 @@ class DtOneController extends Controller
        // file_put_contents('test.txt',$country_code);
         //return;
         $number = $request->number;
-        if(str_contains($number,'+880'))
+      //  file_put_contents('test.txt',$request->bd_amount);
+        //return;
+        if(str_contains($number,'+880') && $request->bd_amount!='undefined')
         {
             $change = [' ','+'];
             $number = str_replace($change,'',$number);
