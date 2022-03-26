@@ -28,9 +28,9 @@ class DtOneController extends Controller
     public function index(){
 
         if(a::user()->role == 'user'){
-            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->orWhere('type','Bangladesh')->latest()->take(5)->get();
+            $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->latest()->take(5)->get();
         }else{
-            $data = RechargeHistory::where('type','International')->orWhere('type','Bangladesh')->join('users','users.id','=','recharge_histories.reseller_id')
+            $data = RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
             ->select('recharge_histories.*','users.nationality')
             ->latest()
             ->take(5)
