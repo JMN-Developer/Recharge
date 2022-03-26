@@ -53,7 +53,7 @@ use App\Http\Controllers\ServiceController;
 |
 */
 //Route::view('registration','front.registration-form');
-Route::get('check_email',[Usercontroller::class,'check_email']);
+
 Route::get('/',[AuthController::class,'index'])->name('/');
 // Route::get('test-notification',[PpnController::class,'send_pin']);
 
@@ -69,31 +69,12 @@ Route::group(['prefix' => 'setting','middleware'=>['auth']], function()
     Route::get('/',[SettingsController::class,'index'])->name('setting');
 });
 
-Route::get('/sign-up',[UserController::class,'index']);
 
-Route::post('/create',[UserController::class,'create'])->name('create');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/l', function () {
 
 })->name('/a');
-Route::get('/add-reseller', function () {
-    return view('front.add-reseller');
-});
 
-Route::get('/reseller/edit/{id}',[UserController::class,'edit']);
-
-Route::post('/reseller/delete',[UserController::class,'destroy'])->name('delete-reseller');
-
-Route::post('/reseller/update/{id}',[UserController::class,'update']);
-
-Route::get('/resellers', function () {
-    if(Auth::user()->role == 'admin')
-    $show = User::where('role','user')->get();
-    else{
-        $show = User::where('role','user')->where('created_by',Auth::user()->id)->get();
-    }
-    return view('front.reseller',compact('show'));
-});
 
 Route::get('/recharge', function () {
     return view('front.recharge');
@@ -103,142 +84,182 @@ Route::get('/recharge', function () {
 //     return view('front.sim');
 // });
 
-Route::post('offer-check', function(Request $request){
-    $offer_detail = Offer::where('offer',$request->id)->first();
-    return response()->json($offer_detail, 200);
-})->name('offer-check');
-
-Route::get('offer-edit/{id}', function($id){
-    $operator = SimOperator::all();
-    $offer_detail = Offer::where('id',$id)->first();
-    return view('front.offer-edit',compact('offer_detail','operator'));
-});
-
-Route::post('check-products', function(Request $request){
-
-    $offer_detail = DomesticProduct::where('product', 'like', '%'.$request->id.'%')->where('type','recharge')->get();
-    return response()->json($offer_detail, 200);
-});
-Route::post('check-pins', function(Request $request){
-
-    if($request->id == 'EA')
-    {
-        $offer_detail = DB::table('domestic_pins')->where('operator', $request->id)->where('type','pin')->get();
-    }else {
-        $offer_detail = DB::table('domestic_pins')->where('operator', 'like', '%'.$request->id.'%')->where('type','pin')->get();
-    }
-    return response()->json($offer_detail, 200);
-});
-
-Route::get('/operator', [OperatorController::class,'index']);
-
-Route::post('/operator', [OperatorController::class,'store']);
-
-Route::get('/delete-operator/{id}', [OperatorController::class,'destroy']);
-
-
-Route::get('/offer', [OfferController::class,'index']);
-
-Route::post('/offer', [OfferController::class,'store']);
-
-Route::post('/offer-update/{id}', [OfferController::class,'update']);
-
-Route::get('/delete-offer/{id}', [OfferController::class,'destroy']);
 
 
 
 
-Route::get('/sim-orders', [SimController::class,'orders']);
 
 
 
 
-Route::post('/sim-order/update', [SimController::class,'sim_order_update']);
-
-//  CARGO NEW ORDER
 
 
-    //  CREATE NEW ORDER
+Route::group(['middleware'=>['auth','user']], function()
+{
+
+    Route::get('check_email',[Usercontroller::class,'check_email']);
+    Route::get('/sign-up',[UserController::class,'index']);
+
+    Route::post('/create',[UserController::class,'create'])->name('create');
+
+    Route::get('/add-reseller', function () {
+        return view('front.add-reseller');
+    });
+    
+    Route::get('/reseller/edit/{id}',[UserController::class,'edit']);
+    
+    Route::post('/reseller/delete',[UserController::class,'destroy'])->name('delete-reseller');
+    
+    Route::post('/reseller/update/{id}',[UserController::class,'update']);
+    
+    Route::get('/resellers', function () {
+        if(Auth::user()->role == 'admin')
+        $show = User::where('role','user')->get();
+        else{
+            $show = User::where('role','user')->where('created_by',Auth::user()->id)->get();
+        }
+        return view('front.reseller',compact('show'));
+    });
+
+
+    Route::post('offer-check', function(Request $request){
+        $offer_detail = Offer::where('offer',$request->id)->first();
+        return response()->json($offer_detail, 200);
+    })->name('offer-check');
+    
+    Route::get('offer-edit/{id}', function($id){
+        $operator = SimOperator::all();
+        $offer_detail = Offer::where('id',$id)->first();
+        return view('front.offer-edit',compact('offer_detail','operator'));
+    });
+    
+    Route::post('check-products', function(Request $request){
+
+        $offer_detail = DomesticProduct::where('product', 'like', '%'.$request->id.'%')->where('type','recharge')->get();
+        return response()->json($offer_detail, 200);
+    });
+    Route::post('check-pins', function(Request $request){
+
+        if($request->id == 'EA')
+        {
+            $offer_detail = DB::table('domestic_pins')->where('operator', $request->id)->where('type','pin')->get();
+        }else {
+            $offer_detail = DB::table('domestic_pins')->where('operator', 'like', '%'.$request->id.'%')->where('type','pin')->get();
+        }
+        return response()->json($offer_detail, 200);
+    });
+    Route::get('/operator', [OperatorController::class,'index']);
+
+    Route::post('/operator', [OperatorController::class,'store']);
+
+    Route::get('/delete-operator/{id}', [OperatorController::class,'destroy']);
+
+
+    Route::get('/offer', [OfferController::class,'index']);
+
+    Route::post('/offer', [OfferController::class,'store']);
+
+    Route::post('/offer-update/{id}', [OfferController::class,'update']);
+
+    Route::get('/delete-offer/{id}', [OfferController::class,'destroy']);
 
 
 
-//  PHONE START
+
+    Route::get('/sim-orders', [SimController::class,'orders']);
 
 
 
-Route::get('/phone/add-phone-view', [PhoneController::class,'AddPhoneView'])->name('add-phone-view');
 
-Route::get('/phone/edit/{id}', [PhoneController::class,'phoneedit'])->name('phone-edit');
+    Route::post('/sim-order/update', [SimController::class,'sim_order_update']);
 
-Route::get('/phone/delete/{id}', [PhoneController::class,'phonedelete'])->name('phone-delete');
+    Route::get('/phone/add-phone-view', [PhoneController::class,'AddPhoneView'])->name('add-phone-view');
 
-Route::post('/phone/add-phone', [PhoneController::class,'AddPhone'])->name('add-phone');
+    Route::get('/phone/edit/{id}', [PhoneController::class,'phoneedit'])->name('phone-edit');
 
-Route::post('/phone/update-phone/{id}', [PhoneController::class,'UpdatePhone'])->name('update-phone');
+    Route::get('/phone/delete/{id}', [PhoneController::class,'phonedelete'])->name('phone-delete');
 
-Route::get('/add-slider-view', [UserController::class,'AddsliderView'])->name('add-sldier-view');
+    Route::post('/phone/add-phone', [PhoneController::class,'AddPhone'])->name('add-phone');
 
-Route::get('/slider-view', [UserController::class,'sliderView'])->name('sldier-view');
+    Route::post('/phone/update-phone/{id}', [PhoneController::class,'UpdatePhone'])->name('update-phone');
 
-Route::get('/slider-edit/{id}', [UserController::class,'slideredit'])->name('slider-edit');
+    Route::get('/add-slider-view', [UserController::class,'AddsliderView'])->name('add-sldier-view');
 
-Route::get('/slider-delete/{id}', [UserController::class,'sliderdelete'])->name('slider-delete');
+    Route::get('/slider-view', [UserController::class,'sliderView'])->name('sldier-view');
 
-Route::post('/add-slider', [UserController::class,'slider'])->name('add-slider');
+    Route::get('/slider-edit/{id}', [UserController::class,'slideredit'])->name('slider-edit');
 
-Route::post('/edit-slider', [UserController::class,'updateslider'])->name('edit-slider');
+    Route::get('/slider-delete/{id}', [UserController::class,'sliderdelete'])->name('slider-delete');
+
+    Route::post('/add-slider', [UserController::class,'slider'])->name('add-slider');
+
+    Route::post('/edit-slider', [UserController::class,'updateslider'])->name('edit-slider');
 
 
-Route::post('/phone/update', [PhoneController::class,'updateorder'])->name('update-order');
+    Route::post('/phone/update', [PhoneController::class,'updateorder'])->name('update-order');
 
+    Route::get('domestic_product', function () {
+        if(Auth::check()){
+        if(Auth::user()->role == 'admin'){
+            return view('front.add-domestic');
+        }else{
+            return back();
+        }
+        }else{
+            return redirect('login');
+        }
+    });
+    
+    Route::post('/domestic_product', function (Request $request) {
+        $add = new DomesticProfit;
+        $add->ean = $request->ean;
+        $add->commission = $request->commission;
+        $add->save();
 
-//  PHONE END
-
-//  RECHARGES START
-
-Route::get('domestic_product', function () {
-    if(Auth::check()){
-    if(Auth::user()->role == 'admin'){
-        return view('front.add-domestic');
-    }else{
         return back();
-    }
-    }else{
-        return redirect('login');
-    }
+
+    });
+
+    Route::get('contact-info', function () {
+        return view('front.contact-info');
+    })->name('contact-info');
+    Route::get('wallet_notification_count',[WalletController::class,'wallet_notification_count']);
+
+    Route::get('sim_notification_count',[SimController::class,'sim_notification_count']);
+
+    Route::get('complain_notification_count',[TicketController::class,'complain_notification_count']);
+
+    Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
+
+    Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
+    Route::post('amount_request',[WalletController::class,'wallet_request']);
+    Route::post('approved_amount',[WalletController::class,'approved_amount']);
+    Route::get('get_requested_amount',[WalletController::class,'get_requested_amount']);
+    Route::get('report',[ReportController::class,'index'])->name('report');
+    Route::post('get_report_data',[ReportController::class,'get_report_data'])->name('get-report-data');
+    Route::post('get_report_data_separate',[ReportController::class,'get_report_data_separate'])->name('get-report-data-separate');
+    Route::get('transaction-history',[TransactionController::class,'index'])->name('transaction-history');
+    Route::get('service-controler',[ServiceController::class,'index'])->name('service-control');
+    Route::get('service-status-update',[ServiceController::class,'status_update'])->name('service-status-update');
+    Route::post('/add_balance',[BalanceController::class,'AddBalance'])->name('AddBalance');
+
+    Route::post('/add_cargo_due',[BalanceController::class,'AddDue']);
+
+    Route::post('/edit_cargo_due',[BalanceController::class,'EditDue']);
+
+    Route::post('/edit_sim_due',[BalanceController::class,'SimDue']);
+
+
+
+    Route::post('/edit_limit',[BalanceController::class,'EditLimit'])->name('EditLimit');
+    Route::post('/edit_limit_domestic',[BalanceController::class,'EditLimitDomestic'])->name('EditLimitDomestic');
+
+    Route::get('/change-phone-price', [BalanceController::class,'PriceDiscount']);
+
+    Route::post('/edit_wallet',[BalanceController::class,'edit_wallet']);
+
+
 });
-
-Route::post('/domestic_product', function (Request $request) {
-    $add = new DomesticProfit;
-    $add->ean = $request->ean;
-    $add->commission = $request->commission;
-    $add->save();
-
-    return back();
-
-});
-
-// Route::get('test-event', function () {
-//     event(new App\Events\DueRequest('Hello World'));
-//     return "Event has been sent!";
-// });
-
-Route::get('contact-info', function () {
-    return view('front.contact-info');
-})->name('contact-info');
-Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
-
-Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
-Route::post('amount_request',[WalletController::class,'wallet_request']);
-Route::post('approved_amount',[WalletController::class,'approved_amount']);
-Route::get('get_requested_amount',[WalletController::class,'get_requested_amount']);
-
-Route::get('wallet_notification_count',[WalletController::class,'wallet_notification_count']);
-
-Route::get('sim_notification_count',[SimController::class,'sim_notification_count']);
-
-Route::get('complain_notification_count',[TicketController::class,'complain_notification_count']);
-
 
 Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
 {
@@ -296,9 +317,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
 
 });
 
-Route::get('report',[ReportController::class,'index'])->name('report');
-Route::post('get_report_data',[ReportController::class,'get_report_data'])->name('get-report-data');
-Route::post('get_report_data_separate',[ReportController::class,'get_report_data_separate'])->name('get-report-data-separate');
+
 
 Route::group(['prefix' => 'ticket','middleware'=>['auth','user']], function()
 {
@@ -366,13 +385,7 @@ Route::group(['prefix' => 'cargo','middleware'=>['auth','user']], function()
 
 });
 
-Route::group(['middleware'=>['auth']], function()
-{
 
-
-    Route::get('transaction-history',[TransactionController::class,'index'])->name('transaction-history');
-
-});
 
 
 Route::group(['prefix' => 'phone','middleware'=>['auth']], function()
@@ -439,12 +452,7 @@ Route::group(['prefix' => 'ApiControl','middleware'=>['auth','admin']], function
 
 });
 
-Route::group(['middleware'=>['auth','admin']], function()
-{
-Route::get('service-controler',[ServiceController::class,'index'])->name('service-control');
-Route::get('service-status-update',[ServiceController::class,'status_update'])->name('service-status-update');
 
-});
 
 
 
@@ -487,28 +495,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 
-Route::group(['middleware'=>['auth','admin']], function()
-{
-    Route::post('/add_balance',[BalanceController::class,'AddBalance'])->name('AddBalance');
-
-    Route::post('/add_cargo_due',[BalanceController::class,'AddDue']);
-
-    Route::post('/edit_cargo_due',[BalanceController::class,'EditDue']);
-
-    Route::post('/edit_sim_due',[BalanceController::class,'SimDue']);
-
-
-
-    Route::post('/edit_limit',[BalanceController::class,'EditLimit'])->name('EditLimit');
-    Route::post('/edit_limit_domestic',[BalanceController::class,'EditLimitDomestic'])->name('EditLimitDomestic');
-
-    Route::get('/change-phone-price', [BalanceController::class,'PriceDiscount']);
-
-    Route::post('/edit_wallet',[BalanceController::class,'edit_wallet']);
-
-
-
-});
 
 
 

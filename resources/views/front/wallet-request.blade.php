@@ -93,7 +93,7 @@
                       <div class="form-group col-md-3">
                         <label for="inputPassword4">PAYMENT COPY</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="document" name="document">
+                            <input type="file" class="custom-file-input" id="document" name="document" required>
                             <label class="custom-file-label " for="customFile">Choose file</label>
                           </div>
                       </div>
