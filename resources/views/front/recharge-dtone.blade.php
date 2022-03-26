@@ -18,7 +18,47 @@
    <link rel="stylesheet" href="{{asset('css/autocomplete.css')}}">
    <link rel="stylesheet" href="{{asset('css/loader/index.css')}}">
    <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
-<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
+<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
+    
+<style>
+    .offer-card:hover{
+        border: 2px solid rebeccapurple
+    }
+
+    .offer-card-after-click{
+        border:2px  solid rebeccapurple
+    }
+    .nav>li>a {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+.nav-tabs>li>a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+}
+
+
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+        color: #555;
+    cursor: default;
+    background-color: #fff;
+     border: 1px solid #ddd;
+    border-bottom-color: transparent;
+
+    }
+    .nav-tabs>li {
+    float: left;
+    margin-bottom: -1px;
+
+    }
+
+</style>
+
+</head>
 
 @endsection
 @section('content')
@@ -49,7 +89,6 @@
                                             <select class="custom-select amount_list" name="amount" id="package" style="width: 85%">
 
                                              </select>
-
                                              <label class="form-label">Service Charge in EURO</label>
                                              <input type="number" step="any" id="service" name="service" class="form-control" placeholder="Enter Service Charge (Optional)" style="width: 84%">
 
@@ -58,77 +97,130 @@
                                         {{-- <button class="btn btn-primary" style="margin-bottom: 6px; float: right;">Verify</button> --}}
                                      </div>
 
+                                     <div class="amount_input_field">
+                                        <div class="mb-3 text-center">
+        
+                                            {{-- <img style="height:112px; margin-right:101px" id="operator_image" alt="Operator Logo Not Found" > --}}
+        
+                                         </div>
+                                        <div class="mb-3" >
+                                            <div class="text-center" style="background:#C62604;width:84%;margin-bottom:10px">
+                                                <p style="padding:5px;font-weight:bold;color:white;font-size:16px">Operator Name: <span id="operator_name"></span> </p>
+                                            </div>
+        
+                                            <div class="text-center" style="background:#C62604;width:84%;margin-bottom:10px">
+                                                <p style="padding:5px;font-weight:bold;color:white;font-size:16px">Profit : <span id="operator_name">{{ auth()->user()->admin_international_recharge_commission }}%</span> </p>
+                                            </div>
+        
+                                         </div>
+                                    </div>
+
 
                                  <button class="btn btn-info mt-3" style="width: 84%;" id="check_number">Continue</button>
 
                             </div>
                         </div>
-                            <div class="col-md-6 amount_input_field">
-                                <div class="mb-3 text-center">
-
-                                    {{-- <img style="height:112px; margin-right:101px" id="operator_image" alt="Operator Logo Not Found" > --}}
-
-                                 </div>
-                                <div class="mb-3" >
-                                    <div class="text-center" style="padding-top:10px;padding-bottom:1px;background:#C62604;width:84%;margin-bottom:10px">
-                                        <p style="font-weight:bold;color:white;font-size:18px">Operator Name: <span id="operator_name"></span> </p>
-                                    </div>
-
-                                    <div class="text-center" style="padding-top:10px;padding-bottom:1px;background:#C62604;width:84%;margin-bottom:10px">
-                                        <p style="font-weight:bold;color:white;font-size:18px">Profit : <span id="operator_name">{{ auth()->user()->admin_international_recharge_commission }}%</span> </p>
-                                    </div>
-
-                                 </div>
-                            </div>
+                        <div class="col-md-6">
+                            
+                                <div class="last_recharge_table">
+                                   <div class="last_recharge_table_head text-center">
+                                      <h5><strong>Last 5 Recharge</strong></h5>
+                                   </div>
+                                   <div class="card-body table-responsive p-0">
+                                      <table class="table table-sm table-bordered table-hover">
+                                         <thead>
+                                            <tr class="table-danger">
+                                               <th>Receiver</th>
+                                               <th>Operator</th>
+                                               <th>Amount</th>
+                                               <th>Profit</th>
+                                               <th class="text-center">Date</th>
+                                               <th class="text-center" >Action</th>
+                                               {{-- <th>Cost</th>
+                                               <th>Profit</th>
+                                               <th>Action</th> --}}
+                                            </tr>
+                                         </thead>
+                                         <tbody>
+                                            @foreach ($data as $item)
+                                            <tr class="bg-ocean">
+                                               <td>{{ $item->number }}</td>
+                                               <td>{{ $item->operator }}</td>
+                                               <td>{{ $item->amount }}</td>
+                                               @if(auth()->user()->role == 'admin')
+                                               <td>{{ $item->admin_com+$item->discount }}</td>
+                                               @else
+                                               <td>{{ $item->reseller_com }}</td>
+                                               @endif
+                                               <td class="text-center">{{ $item->created_at }}</td>
+                                               <td class="text-center"> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
+                                               {{-- <td>{{ $item->cost }}</td>
+        
+                                               <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td> --}}
+                                            </tr>
+                                            @endforeach
+                                         </tbody>
+                                      </table>
+                                   </div>
+                                </div>
+                             
+                        </div>
+                        
+                         
                         </div>
 
                      </div>
 
-                     <div class="col-md-12"  style="margin-top: 100px">
-                        <div class="last_recharge_table">
-                           <div class="last_recharge_table_head text-center">
-                              <h5><strong>Last 10 Recharge</strong></h5>
-                           </div>
-                           <div class="card-body table-responsive p-0">
-                              <table class="table table-sm table-bordered table-hover">
-                                 <thead>
-                                    <tr class="table-danger">
-                                       <th>Receiver</th>
-                                       <th>Operator</th>
-                                       <th>Amount</th>
-                                       <th>Profit</th>
-                                       <th class="text-center">Date</th>
-                                       <th class="text-center" >Action</th>
-                                       {{-- <th>Cost</th>
-                                       <th>Profit</th>
-                                       <th>Action</th> --}}
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                    @foreach ($data as $item)
-                                    <tr class="bg-ocean">
-                                       <td>{{ $item->number }}</td>
-                                       <td>{{ $item->operator }}</td>
-                                       <td>{{ $item->amount }}</td>
-                                       @if(auth()->user()->role == 'admin')
-                                       <td>{{ $item->admin_com+$item->discount }}</td>
-                                       @else
-                                       <td>{{ $item->reseller_com }}</td>
-                                       @endif
-                                       <td class="text-center">{{ $item->created_at }}</td>
-                                       <td class="text-center"> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td>
-                                       {{-- <td>{{ $item->cost }}</td>
+                   
 
-                                       <td> <a class="btn btn-success" href="recharge_invoice/{{ $item->id }}"> Invoice</a> </td> --}}
-                                    </tr>
-                                    @endforeach
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
+
+                     
+
                   </div>
+                  <div class="card card-outline card-primary offer_section" style="margin-top:10px ">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="active">
+                                <a href="#internet" data-toggle="tab">Internet</a>
+                            </li>
+    
+                            <li>
+                                <a href="#combo" data-toggle="tab">Combo</a>
+                            </li>
+                           
+    
+                        </ul>
+                        <div class="tab-content offer_list">
+    
+    
+                                <div  class="tab-pane active" id="internet">
+                                    <div class="row internet">
+    
+                                    </div>
+                                </div>
+    
+                                <div  class="tab-pane" id="combo">
+                                    <div class="row combo">
+    
+                                    </div>
+                                </div>
+                                <div  class="tab-pane " id="voice">
+                                    <div class="row voice">
+    
+                                    </div>
+    
+    
+                                </div>
+    
+    
+                        </div>
+    
+    
+                    </div>
+    
+                </div>
                </div>
+               
                <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -146,6 +238,7 @@
 @section('scripts')
 <!-- jQuery -->
 <script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- Bootstrap -->
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <!-- Theme JS -->
@@ -158,6 +251,97 @@
 @section('js')
 
 <script>
+    var offer_count = 0;
+  function offer_select(id,amount,offer_description,skuId)
+    {
+      $('.offer-card').removeClass('offer-card-after-click');
+       $('.click-check-'+id).addClass('offer-card-after-click');
+       $("#amount").val(offer_description);
+    //    $('#main_amount').text(update_amount);
+       $("#bd_amount").val(amount);
+       $("#bd_amount_field").show();
+
+            
+            var option_list = '<option value='+skuId+','+amount+'>'+amount+'Euro('+offer_description+')</option>'
+            if(offer_count>0)
+            $('.amount_list option:first').remove();
+            $('.amount_list').prepend(option_list);
+            $(".amount_list option:first").attr("selected", "selected");
+            offer_count++;
+    }
+
+  function processData(internet,combo)
+   {
+    $('.voice').empty();
+    $('.internet').empty();
+    $('.combo').empty();
+    for (var i = 0; i < internet.length; i++){
+        
+            var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${internet[i].amount},'${internet[i].description}','${internet[i].skuId}')">
+   <div class="card offer-card click-check-`+i+`">
+      <div class="card-body">
+         <div class="d-flex">
+            <div class="flex-grow-1">
+               <div class="row">
+                
+                  <div class="col-md-10">
+                     <div>
+                        <p>${internet[i].description}</p>
+                        <div class="row">
+                           <div class="col-md-6">
+                              <p style="width: 80px;font-size:14px" class="border rounded border-dark p-2"> <i class="fas fa-calendar-alt" style="color:rebeccapurple"></i><span style="margin-left:3px">${internet[i].validity}</span></p>
+                           </div>
+                           <div class="col-md-6">
+                              <p style="width: 80px;font-size:15px;color:white;background-color:rebeccapurple;font-weight:bold;text-align:center" class="border rounded border-dark p-2">${internet[i].amount} &euro;</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>`
+$('.internet').append(offer_list)
+      
+    }
+
+    for (var i = 0; i < combo.length; i++){
+        
+        var offer_list =  `<div class="col-md-6 col-xl-3" style="cursor: pointer" onclick="offer_select(`+i+`,${combo[i].amount},'${combo[i].description}',,'${internet[i].skuId}')">
+<div class="card offer-card click-check-`+i+`">
+  <div class="card-body">
+     <div class="d-flex">
+        <div class="flex-grow-1">
+           <div class="row">
+            
+              <div class="col-md-10">
+                 <div>
+                    <p>${combo[i].description}</p>
+                    <div class="row">
+                       <div class="col-md-6">
+                          <p style="width: 80px;font-size:14px" class="border rounded border-dark p-2"> <i class="fas fa-calendar-alt" style="color:rebeccapurple"></i><span style="margin-left:3px">${combo[i].validity}</span></p>
+                       </div>
+                       <div class="col-md-6">
+                          <p style="width: 80px;font-size:15px;color:white;background-color:rebeccapurple;font-weight:bold;text-align:center" class="border rounded border-dark p-2">${combo[i].amount} &euro;</p>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+</div>`
+$('.combo').append(offer_list)
+  
+}
+
+   }
+
+
       function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode
@@ -232,6 +416,7 @@
      $(".amount_input_field").hide();
     $("#calculation_section").hide();
     $("#recharge_number").hide();
+    $(".offer_section").hide();
     var input = document.querySelector("#receiverMobile");
   var intl =  window.intlTelInput(input,({
      // options here
@@ -260,7 +445,7 @@
             $('.cover-spin').hide(0)
             },
         success:function(responses){
-
+            $('.offer_section').show();
             if(responses.status==true)
             {
 
@@ -270,7 +455,7 @@
 
 
             for (var i = 0; i < skus.length; i++){
-                option_list+='<option value='+skus[i].skuId+','+skus[i].amount+'>'+skus[i].amount_text+'</option>'
+                option_list+='<option value='+skus[i].skuId+','+skus[i].amount+','+skus[i].bd_amount+ '>'+skus[i].amount_text+'</option>'
             }
             $('.amount_list').empty();
             $('.amount_list').append(option_list);
@@ -282,6 +467,7 @@
                 $('.cover-spin').hide(0);
 
                 $("#operator_name").text(responses.operator_name);
+               processData(responses.internet,responses.combo)
 
                 // $("#receiverMobile").attr('disabled',true);
                 // $('.iti__flag-container').attr('disabled',true);
@@ -358,11 +544,13 @@
    var sku = sku.split(',');
    var skuId = sku[0];
    var amount = sku[1];
+   var bd_amount = sku[2];
    var formdata = new FormData();
     formdata.append('number',$('#receiverMobile').val().split(' ').join(''));
     formdata.append('service_charge',$('#service').val());
     formdata.append('id', skuId);
     formdata.append('amount', amount);
+    formdata.append('bd_amount', bd_amount);
     formdata.append('countryCode', intl.getSelectedCountryData().iso2);
 
       $.ajax({
@@ -418,7 +606,7 @@
     $("#calculation_section").hide();
     $("#recharge_number").hide();
     $("#check_number").show();
-
+    $('.offer_section').hide();
    });
     $("#amount").keyup(function(){
         //var countryData = intl.getSelectedCountryData();

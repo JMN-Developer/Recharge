@@ -45,3 +45,4 @@ Route::get('epay-transaction-list',[ApiTestController::class,'epay_transaction_l
 Route::get('dtone-transaction',[DtOneController::class,'all_transaction']);
 Route::get('ean_profit',[ApiTestController::class,'ean_profit']);
 Route::get('bd_query_recharge',[BangladeshRechargeController::class,'query_recharge']);
+Route::get('test',[ApiTestController::class,'test']);

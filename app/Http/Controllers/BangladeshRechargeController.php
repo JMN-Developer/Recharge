@@ -75,8 +75,8 @@ class BangladeshRechargeController extends Controller
     {
        $amount = $request->amount;
        $rate = euro_rate_for_bd_recharge();
-       $unit_rate = 100/$rate;
-       $bd_amount = $request->bd_amount;// $unit_rate*$amount;
+    //    $unit_rate = 100/$rate;
+    //    $bd_amount = $request->bd_amount;// $unit_rate*$amount;
 
        $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
@@ -84,6 +84,8 @@ class BangladeshRechargeController extends Controller
         //file_put_contents('test.txt',$operator_id);
         $guid =  new GenerateTransactionId(Auth::user()->id,13);
         $guid =  $guid->transaction_id();
+        //file_put_contents('test.txt',$amount.' '.$bd_amount);
+        //return;
         //file_put_contents('test.txt',$request->operator_id);
       $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$msisdn,$bd_amount);
 
@@ -157,6 +159,7 @@ class BangladeshRechargeController extends Controller
             $rate = euro_rate_for_bd_recharge();
             $unit_rate = $rate/100;
             $data =  $this->bangladeshi_recharge->offer_details($operator_details['data']->operator_id);
+           // file_put_contents('test.txt',$operator_details['data']->operator_name);
             foreach($data as $d)
             {
                 $d->update_amount =  round($d->amount*$unit_rate,4);
