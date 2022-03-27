@@ -265,11 +265,13 @@
     var offer_count = 0;
   function offer_select(id,amount,offer_description,skuId)
     {
+ 
       $('.offer-card').removeClass('offer-card-after-click');
        $('.click-check-'+id).addClass('offer-card-after-click');
+   
        $("#amount").val(offer_description);
     //    $('#main_amount').text(update_amount);
-       $("#bd_amount").val(amount);
+    $("#main_amount").text(amount);
        $("#bd_amount_field").show();
 
             

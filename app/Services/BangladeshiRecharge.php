@@ -46,19 +46,20 @@ class BangladeshiRecharge
     {
         $date = date('Y-m-d');
         $currency_rate = currency_rate::where('updated_at','LIKE',$date.'%')->first();
-        if($currency_rate)
-        {
         return $currency_rate->eur;
-        }
-        else
-        {
-        $client = new \GuzzleHttp\Client(['http_errors' => false]);
-        $operator_request = $client->get('https://freecurrencyapi.net/api/v2/latest?apikey=7db968c0-956a-11ec-b831-1b1d53e27789&base_currency=EUR');
-        $response = $operator_request->getBody();
-        $response = json_decode($response);
-        currency_rate::where('id',1)->update(['eur'=>$response->data->BDT]);
-        return $response->data->BDT;
-        }
+        // if($currency_rate)
+        // {
+        // return $currency_rate->eur;
+        // }
+        // else
+        // {
+        // $client = new \GuzzleHttp\Client(['http_errors' => false]);
+        // $operator_request = $client->get('https://freecurrencyapi.net/api/v2/latest?apikey=7db968c0-956a-11ec-b831-1b1d53e27789&base_currency=EUR');
+        // $response = $operator_request->getBody();
+        // $response = json_decode($response);
+        // currency_rate::where('id',1)->update(['eur'=>$response->data->BDT]);
+        // return $response->data->BDT;
+        // }
 
     }
 
