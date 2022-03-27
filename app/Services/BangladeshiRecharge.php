@@ -45,7 +45,7 @@ class BangladeshiRecharge
     public function current_euro_rate()
     {
         $date = date('Y-m-d');
-        $currency_rate = currency_rate::where('updated_at','LIKE',$date.'%')->first();
+        $currency_rate = currency_rate::where('id',1)->first();
         return $currency_rate->eur;
         // if($currency_rate)
         // {
