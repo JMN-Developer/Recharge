@@ -91,6 +91,7 @@
                                         <input type="hidden" id="operator_id" >
                                         <input type="hidden" id="bd_amount">
                                         <input type="hidden" id="operator_name" >
+                                        <input type="hidden" id="exchange_rate">
                                         <p style="color: red;font-weight:bold" id="bd_amount_field"><span id="main_amount"></span> Euro</p>
 
                                              <label class="form-label">Service Charge in EURO</label>
@@ -276,20 +277,20 @@
 
    $(document).ready(function() {
 
-    $("#amount").keyup(function(){
-        var value = this.value;
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: 'bangladeshi_exchange_rate',
-            data: {'value': value},
-            success: function(data){
+    // $("#amount").keyup(function(){
+    //     var value = this.value;
+    //     $.ajax({
+    //         type: "GET",
+    //         dataType: "json",
+    //         url: 'bangladeshi_exchange_rate',
+    //         data: {'value': value},
+    //         success: function(data){
 
-                $("#main_amount").text(data);
+    //             $("#main_amount").text(data);
 
-            }
-        });
-    })
+    //         }
+    //     });
+    // })
 
 
 
@@ -524,6 +525,7 @@ $('.combo').append(offer_list)
                 $("#recharge_number").show();
                 $("#operator_id").val(responses.operator_id);
                 $("#operator_name").val(responses.operator_name);
+                $("#exchange_rate").val(responses.exchange_rate)
                 $(".offer_section").show();
                 $('.cover-spin').hide(0);
                 processData(responses.offer_data);
@@ -707,12 +709,12 @@ $('.combo').append(offer_list)
         var value = this.value;
         if(value)
         {
-        var currencyCode = $("#currency_code").val();
-        var calculation_text = (exchange_rate*value).toFixed(0)+" "+currencyCode+" will receive";
+        //var currencyCode = $("#currency_code").val();
+        var calculation_text = (exchange_rate*value).toFixed(3);
         //alert(calculation_text)
 
         $("#bd_amount_field").show();
-        $("#calculation").text(calculation_text);
+        $("#main_amount").text(calculation_text);
         }
         else{
             $("#bd_amount_field").hide();
