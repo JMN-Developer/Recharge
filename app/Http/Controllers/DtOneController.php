@@ -144,7 +144,9 @@ class DtOneController extends Controller
             $internet_data = $this->make_internet_data_list($internet_data);
             $combo_data = $this->make_bundle_data_list($combo_data);
             $operator_name = $data[0]->operator->name;
-            return ['status'=>true,'data'=>$data,'operator_name'=>$operator_name,'skus'=>$skus,'internet'=>$internet_data,'combo'=>$combo_data];
+            $rate = euro_rate_for_bd_recharge();
+            $unit_rate = $rate/100;
+            return ['status'=>true,'data'=>$data,'operator_name'=>$operator_name,'skus'=>$skus,'internet'=>$internet_data,'combo'=>$combo_data,'exchange_rate'=>$unit_rate];
         }
         else
         {
@@ -264,6 +266,11 @@ class DtOneController extends Controller
             $operator_details =  $this->bangladeshi_recharge->operatorInfo($number);
             if($operator_details['soap_exception_occured']==false)
             {
+                $rate = euro_rate_for_bd_recharge();
+                $unit_rate = $rate/100;
+                $amount = round($request->bd_amount*$unit_rate,3);
+                //file_put_contents('test.txt',$amount);
+                //return;
                 $operator_id = $operator_details['data']->operator_id;
                 $operator_name =  $operator_details['data']->operator_name;
                 $guid =  new GenerateTransactionId(Auth::user()->id,13);
@@ -274,7 +281,7 @@ class DtOneController extends Controller
                 $init_recharge =  $this->bangladeshi_recharge->InitRecharge($guid,$create_recharge['data']->vr_guid);
                  if($init_recharge['data']->recharge_status == 200)
                  {
-                  $recharge = $this->create_recharge_bangladesh($number,$request->amount,$request->bd_amount,$guid,$operator_name,$create_recharge['data']->vr_guid,$request->service_charge);
+                  $recharge = $this->create_recharge_bangladesh($number,$amount,$request->bd_amount,$guid,$operator_name,$create_recharge['data']->vr_guid,$request->service_charge);
                   UpdateWallet::update($recharge);
                    $this->update_balance_bangladesh();
                   return ['status'=>true,'message'=>'Recharge Successfull'];

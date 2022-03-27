@@ -85,10 +85,21 @@
                                     <input type="text" id="receiverMobile" class="form-control receiver_input_form" name="number" placeholder="Receiver Number" onkeypress="return isNumberKey(event)">
 
                                     <div class="amount_input_field">
-                                        <label for="inputMobileNumber" class="form-label" style="margin-right: 43px">Amount</label>
+                                        <div id="international_amount">
+                                            <label for="inputMobileNumber" class="form-label" style="margin-right: 43px">Amount</label>
                                             <select class="custom-select amount_list" name="amount" id="package" style="width: 85%">
 
                                              </select>
+                                        </div>
+                                        <div id="bangladesh_amount">
+                                            <label for="inputMobileNumber" class="form-label" style="">Amount in BDT</label>
+                                            <input type="text" id="amount" class="form-control" name="amount" placeholder="Amount" onkeypress="return isNumberKeyDecimal(event)"  style="width: 84%">
+                                            <input type="hidden" id="operator_id" >
+                                            <input type="hidden" id="bd_amount">
+                                            <input type="hidden" id="exchange_rate">
+                                         
+                                            <p style="color: red;font-weight:bold" id="bd_amount_field"><span id="main_amount"></span> Euro</p>
+                                        </div>
                                              <label class="form-label">Service Charge in EURO</label>
                                              <input type="number" step="any" id="service" name="service" class="form-control" placeholder="Enter Service Charge (Optional)" style="width: 84%">
 
@@ -417,6 +428,7 @@ $('.combo').append(offer_list)
     $("#calculation_section").hide();
     $("#recharge_number").hide();
     $(".offer_section").hide();
+    $("#bd_amount_field").hide();
     var input = document.querySelector("#receiverMobile");
   var intl =  window.intlTelInput(input,({
      // options here
@@ -446,6 +458,8 @@ $('.combo').append(offer_list)
             },
         success:function(responses){
             $('.offer_section').show();
+            
+            
             if(responses.status==true)
             {
 
@@ -467,6 +481,16 @@ $('.combo').append(offer_list)
                 $('.cover-spin').hide(0);
 
                 $("#operator_name").text(responses.operator_name);
+                $("#exchange_rate").val(responses.exchange_rate);
+                if(number.startsWith('+880'))
+                    {
+                        $("#bangladesh_amount").show();
+                        $("#international_amount").hide();
+                    }
+                    else{
+                        $("#bangladesh_amount").hide();
+                        $("#international_amount").show();
+                    }
                processData(responses.internet,responses.combo)
 
                 // $("#receiverMobile").attr('disabled',true);
@@ -601,6 +625,25 @@ $('.combo').append(offer_list)
 
    });
 
+   $("#amount").keyup(function(){
+        //var countryData = intl.getSelectedCountryData();
+        var exchange_rate = $('#exchange_rate').val();
+        var value = this.value;
+        if(value)
+        {
+        //var currencyCode = $("#currency_code").val();
+        var calculation_text = (exchange_rate*value).toFixed(3);
+        //alert(calculation_text)
+
+        $("#bd_amount_field").show();
+        $("#main_amount").text(calculation_text);
+        }
+        else{
+            $("#bd_amount_field").hide();
+        }
+
+        });
+
    $('#receiverMobile').keydown(function(){
     $(".amount_input_field").hide();
     $("#calculation_section").hide();
@@ -609,20 +652,20 @@ $('.combo').append(offer_list)
     $('.offer_section').hide();
    });
     $("#amount").keyup(function(){
-        //var countryData = intl.getSelectedCountryData();
-        var exchange_rate = $('#exchange_rate').val();
         var value = this.value;
-        if(value)
-        {
-        var currencyCode = $("#currency_code").val();
-        var calculation_text = (exchange_rate*value).toFixed(0)+" "+currencyCode+" will receive";
-        //alert(calculation_text)
-        $("#calculation_section").show();
-        $("#calculation").text(calculation_text);
-        }
-        else{
-            $("#calculation_section").hide();
-        }
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: 'bangladeshi_exchange_rate',
+            data: {'value': value},
+            success: function(data){
+
+                $("#main_amount").text(data);
+
+            }
+        });
+       
+        
 
         });
        $('.iti__flag-container').click(function() {

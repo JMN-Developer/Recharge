@@ -73,11 +73,14 @@ class BangladeshRechargeController extends Controller
 
     public function recharge(Request $request)
     {
-       $amount = $request->amount;
-       $rate = euro_rate_for_bd_recharge();
+        //$amount = $request->amount;
     //    $unit_rate = 100/$rate;
-    //    $bd_amount = $request->bd_amount;// $unit_rate*$amount;
-
+        $bd_amount = $request->bd_amount;// $unit_rate*$amount;
+        $rate = euro_rate_for_bd_recharge();
+        $unit_rate = $rate/100;
+        $amount = round($bd_amount*$unit_rate,3);
+        //file_put_contents('test.txt',$amount.' '.$bd_amount);
+        //return;
        $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_id = $request->operator_id;
@@ -153,6 +156,8 @@ class BangladeshRechargeController extends Controller
         $change = [' ','+'];
         $msisdn = str_replace($change,'',$request->number);
         $operator_details =  $this->bangladeshi_recharge->operatorInfo($msisdn);
+        $rate = euro_rate_for_bd_recharge();
+        $unit_rate = $rate/100;
 
         if($operator_details['soap_exception_occured']==false)
         {
@@ -167,7 +172,7 @@ class BangladeshRechargeController extends Controller
             }
            // file_put_contents('test.txt',json_encode($data));
 
-            return ['status'=>true,'offer_data'=>$data,'operator_id'=>$operator_details['data']->operator_id,'operator_name'=>$operator_details['data']->operator_name];
+            return ['status'=>true,'offer_data'=>$data,'operator_id'=>$operator_details['data']->operator_id,'operator_name'=>$operator_details['data']->operator_name,'exchange_rate'=>$unit_rate];
         }
         else
         {
