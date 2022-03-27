@@ -97,6 +97,7 @@
                                             <input type="hidden" id="operator_id" >
                                             <input type="hidden" id="bd_amount">
                                             <input type="hidden" id="exchange_rate">
+                                            <input type="hidden" id="sku_id">
                                          
                                             <p style="color: red;font-weight:bold" id="bd_amount_field"><span id="main_amount"></span> Euro</p>
                                         </div>
@@ -270,6 +271,7 @@
        $('.click-check-'+id).addClass('offer-card-after-click');
    
        $("#amount").val(offer_description);
+       $("#sku_id").val(skuId);
     //    $('#main_amount').text(update_amount);
     $("#main_amount").text(amount);
        $("#bd_amount_field").show();
@@ -569,6 +571,8 @@ $('.combo').append(offer_list)
     var sku = $(".amount_list :selected").val();
    var sku = sku.split(',');
    var skuId = sku[0];
+   if(skuId =='undefined')
+   var skuId = $("#sku_id").val();
    var amount = sku[1];
    var bd_amount = sku[2];
    var formdata = new FormData();

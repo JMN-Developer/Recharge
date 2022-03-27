@@ -122,6 +122,7 @@ class DtOneController extends Controller
         
         //$number = $request->number;
         $data = $this->dtone->lookup($number);
+       // file_put_contents('test.txt',json_encode($data));
 
 
         if($data['status']){
@@ -269,8 +270,8 @@ class DtOneController extends Controller
                 $rate = euro_rate_for_bd_recharge();
                 $unit_rate = $rate/100;
                 $amount = round($request->bd_amount*$unit_rate,3);
-                //file_put_contents('test.txt',$amount);
-                //return;
+                //file_put_contents('test.txt',$amount.);
+               
                 $operator_id = $operator_details['data']->operator_id;
                 $operator_name =  $operator_details['data']->operator_name;
                 $guid =  new GenerateTransactionId(Auth::user()->id,13);
@@ -308,6 +309,8 @@ class DtOneController extends Controller
         $skuId = $request->id;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
+        // file_put_contents('test.txt',$skuId);
+        // return;
         $data = $this->dtone->recharge($skuId,$txid,$number);
 
     //  //file_put_contents('test.txt',$tmp_data->responseCode);

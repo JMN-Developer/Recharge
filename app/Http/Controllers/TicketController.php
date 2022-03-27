@@ -33,6 +33,9 @@ class TicketController extends Controller
     }
     public function ticket_reply(Request $request)
     {
+        $ticket_info = ticket::where('id',$request->$ticket_id)->first();
+        $ticket_no = $ticket_info->ticket_no;
+        $service_name = $ticket_info->service_name;
         if($request->document)
         {
         $path = $request->document->store('image/ticketDocument', 'public');
@@ -50,14 +53,59 @@ class TicketController extends Controller
         if(Auth::user()->role == 'admin')
         {
             ticket::where('id',$request->ticket_id)->update(['reseller_notification'=>1]);
+            $this->send_mail_reply($ticket_no,$service_name,$request->reseller_message,$ticket_info->reseller->email);
         }
         else{
             ticket::where('id',$request->ticket_id)->update(['admin_notification'=>1]);
+            $this->send_mail_reply($ticket_no,$service_name,$request->reseller_message,'support@jmnation.com');
         }
         event(new TicketRequest());
+       
+        
+     
 
         return redirect()->back()->with('success','Response Submitted');
     }
+
+    public function send_mail_reply($ticket_no,$service_name,$message,$email)
+    {
+
+
+        $data = [
+            'ticket_id'=>$ticket_no,
+            'type'=>'reply',
+            'service_name'=>$service_name,
+            'user_name'=>'Admin',
+            'message'=>$message
+        ];
+
+        try {
+
+             Notification::route('mail','support@jmnation.com')
+                 ->notify(new TicketNotification($data));
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+
+        $data = [
+            'ticket_id'=>$ticket_no,
+            'status'=>$status,
+            'type'=>'User',
+            'service_name'=>$service_name,
+            'user_name'=>Auth::user()->first_name." ".Auth::user()->last_name,
+            'message'=>$message
+        ];
+
+        try {
+
+             Notification::route('mail',Auth::user()->email)
+                 ->notify(new TicketNotification($data));
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+    }
+
+
     public function ticket_response_view(Request $request)
     {
         $ticket_no = $request->id;
@@ -67,6 +115,8 @@ class TicketController extends Controller
 
         return view('front.ticket-response',compact('ticket_response','ticket_details'));
     }
+
+
     public function send_mail($ticket_no,$status,$service_name,$message)
     {
 

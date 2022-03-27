@@ -41,6 +41,16 @@ class TicketNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        if($this->ticket_data['type']=='reply')
+        {
+            return (new MailMessage)
+            ->greeting($this->ticket_data['user_name'])
+            ->subject('[Ticket ID: '.$this->ticket_data['ticket_id'].'] '.$this->ticket_data['service_name'])
+            ->line('You have a new message for your ticket.')
+            ->line($this->ticket_data['message']);
+           
+        }
+
         if($this->ticket_data['type']=='Admin')
         {
         return (new MailMessage)
