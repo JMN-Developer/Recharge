@@ -14,6 +14,7 @@ use App\Services\GenerateTransactionId;
 use App\Models\Balance;
 use Illuminate\Support\Facades\Log;
 use Auth;
+use DB;
 class DtOneController extends Controller
 {
     //
@@ -48,28 +49,21 @@ class DtOneController extends Controller
 
         return view('front.recharge-dtone',compact('data'));
     }
-    function make_sku_list($skus,$number)
+    function make_sku_list($skus)
     {
 
         $data = array();
         foreach($skus as $sku)
         {
-            if(str_contains($number,'+880')){
-                $rate = euro_rate_for_bd_recharge();
-                $unit_rate = $rate/100;
-                $value = $sku->destination->amount;
-                $updated_value = $value*$unit_rate;
-                $amount_text =  $updated_value." Euro &nbsp(&nbsp" .$sku->name." will be received )";
-                array_push($data,['skuId'=>$sku->id,'amount'=>$updated_value,'amount_text'=>$amount_text,'bd_amount'=>$sku->destination->amount]);
-            }
-            else{
+
+
                 $amount_text = $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount)."Euro &nbsp(&nbsp" .$sku->name." will be received )";
                 array_push($data,['skuId'=>$sku->id,'amount'=> $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount),'amount_text'=>$amount_text,'bd_amount'=>$sku->destination->amount]);
-            }
-            //$total_amount = floor($sku->minAmount * $sku->exchangeRate);
-           
 
-           
+            //$total_amount = floor($sku->minAmount * $sku->exchangeRate);
+
+
+
         }
         usort($data, function($a, $b) {
               return $a['amount'] <=> $b['amount'];
@@ -117,43 +111,59 @@ class DtOneController extends Controller
     {
 
         $number = $request->number;
-
         $countryIso = $request->countryIso;
-        
-        //$number = $request->number;
-        $data = $this->dtone->lookup($number);
-       // file_put_contents('test.txt',json_encode($data));
 
-
-        if($data['status']){
-            $data = $data['payload'];
-            $credit_data = [];
-            $internet_data = [];
-            $combo_data = [];
-            for($i=0;$i<sizeof($data);$i++)
+            if(str_contains($number,'+880')){
+                $change = [' ','+'];
+                $number = str_replace($change,'',$number);
+                $rate = euro_rate_for_bd_recharge();
+                $unit_rate = $rate/100;
+                $operator_details =  $this->bangladeshi_recharge->operatorInfo($number);
+                $bd_offer_data =  $this->bangladeshi_recharge->offer_details($operator_details['data']->operator_id);
+                $operator_name =$operator_details['data']->operator_name;
+                // file_put_contents('test.txt',$operator_details['data']->operator_name);
+                 foreach($bd_offer_data as $d)
+                 {
+                     $d->update_amount =  round($d->amount*$unit_rate,4);
+                     $d->operator_logo = DB::table('sim_operators')->where('operator',$operator_details['data']->operator_name)->first()->img;
+                 }
+                 return ['status'=>true,'operator_name'=>$operator_name,'exchange_rate'=>$unit_rate,'bd_offer_data'=>$bd_offer_data];
+            }
+            else
             {
-                if($data[$i]->tags[0] =='AIRTIME')
-                array_push($credit_data,$data[$i]);
-                if($data[$i]->tags[0] =='BUNDLE')
-                array_push($combo_data,$data[$i]);
-                if($data[$i]->tags[0] =='DATA')
-                array_push($internet_data,$data[$i]);
+                $data = $this->dtone->lookup($number);
+                if($data['status']){
+                    $data = $data['payload'];
+                    $credit_data = [];
+                    $internet_data = [];
+                    $combo_data = [];
+                    for($i=0;$i<sizeof($data);$i++)
+                    {
+                        if($data[$i]->tags[0] =='AIRTIME')
+                        array_push($credit_data,$data[$i]);
+                        if($data[$i]->tags[0] =='BUNDLE')
+                        array_push($combo_data,$data[$i]);
+                        if($data[$i]->tags[0] =='DATA')
+                        array_push($internet_data,$data[$i]);
+
+                    }
+                    $operator_name = $data[0]->operator->name;
+                    $skus = $this->make_sku_list($credit_data);
+                    $internet_data = $this->make_internet_data_list($internet_data);
+                    $combo_data = $this->make_bundle_data_list($combo_data);
+                    //file_put_contents('test.txt',json_encode($combo_data));
+                    return ['status'=>true,'data'=>$data,'operator_name'=>$operator_name,'skus'=>$skus,'internet'=>$internet_data,'combo'=>$combo_data];
+                }
+                else
+                {
+                    return ['status'=>false,'message'=>$data['payload']->errors[0]->message];
+                }
 
             }
-           // file_put_contents('test.txt',json_encode($credit_data));
-            $skus = $this->make_sku_list($credit_data,$number);
-            $internet_data = $this->make_internet_data_list($internet_data);
-            $combo_data = $this->make_bundle_data_list($combo_data);
-            $operator_name = $data[0]->operator->name;
-            $rate = euro_rate_for_bd_recharge();
-            $unit_rate = $rate/100;
-            return ['status'=>true,'data'=>$data,'operator_name'=>$operator_name,'skus'=>$skus,'internet'=>$internet_data,'combo'=>$combo_data,'exchange_rate'=>$unit_rate];
-        }
-        else
-        {
 
-            return ['status'=>false,'message'=>$data['payload']->errors[0]->message];
-        }
+
+
+
         //$data = (array) $data;
         //echo $data;
        // return $data;
@@ -260,7 +270,7 @@ class DtOneController extends Controller
         $number = $request->number;
       //  file_put_contents('test.txt',$request->bd_amount);
         //return;
-        if(str_contains($number,'+880') && $request->bd_amount!='undefined')
+        if(str_contains($number,'+880'))
         {
             $change = [' ','+'];
             $number = str_replace($change,'',$number);
@@ -271,11 +281,12 @@ class DtOneController extends Controller
                 $unit_rate = $rate/100;
                 $amount = round($request->bd_amount*$unit_rate,3);
                 //file_put_contents('test.txt',$amount.);
-               
+
                 $operator_id = $operator_details['data']->operator_id;
                 $operator_name =  $operator_details['data']->operator_name;
                 $guid =  new GenerateTransactionId(Auth::user()->id,13);
                 $guid =  $guid->transaction_id();
+
                 $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$number,$request->bd_amount);
                 if($create_recharge['data']->recharge_status=='100')
                 {
@@ -301,9 +312,9 @@ class DtOneController extends Controller
             {
                 return ['status'=>false,'message'=>$operator_details['exception']];
             }
-            
+
            // file_put_contents('test.txt',$request->bd_amount);
-            
+
 
         }
         $skuId = $request->id;

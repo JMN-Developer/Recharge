@@ -659,7 +659,7 @@ $('.combo').append(offer_list)
                 location.reload();
                 sessionStorage.setItem('success',true);
                 sessionStorage.setItem('message',response.message);
-                console.log(response.message);
+                //console.log(response.message);
             }
             else
             {
