@@ -259,10 +259,7 @@ class DtOneController extends Controller
     {
         //file_put_contents('test.txt',$request->amount);
         //file_put_contents('test.txt',$test);
-        if(!CheckRechargeAvail::check($request->amount,'International'))
-        {
-            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
-        }
+
 
         $country_code = $request->countryCode;
        // file_put_contents('test.txt',$country_code);
@@ -272,14 +269,21 @@ class DtOneController extends Controller
         //return;
         if(str_contains($number,'+880'))
         {
+
             $change = [' ','+'];
             $number = str_replace($change,'',$number);
+            $rate = euro_rate_for_bd_recharge();
+            $unit_rate = $rate/100;
+            $amount = round($request->bd_amount*$unit_rate,3);
+
+            if(!CheckRechargeAvail::check($amount,'International'))
+            {
+                return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+            }
             $operator_details =  $this->bangladeshi_recharge->operatorInfo($number);
             if($operator_details['soap_exception_occured']==false)
             {
-                $rate = euro_rate_for_bd_recharge();
-                $unit_rate = $rate/100;
-                $amount = round($request->bd_amount*$unit_rate,3);
+
                 //file_put_contents('test.txt',$amount.);
 
                 $operator_id = $operator_details['data']->operator_id;
@@ -317,6 +321,11 @@ class DtOneController extends Controller
 
 
         }
+        if(!CheckRechargeAvail::check($request->amount,'International'))
+        {
+            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+        }
+
         $skuId = $request->id;
         $transaction =  new GenerateTransactionId(a::user()->id,12);
         $txid = $transaction->transaction_id();
