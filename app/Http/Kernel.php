@@ -66,6 +66,11 @@ class Kernel extends HttpKernel
         'InternationalApi' => \App\Http\Middleware\InternationalApi::class,
         'admin' => \App\Http\Middleware\IsAdmin::class,
         'user' => \App\Http\Middleware\user::class,
+        'RechargeInternational' => \App\Http\Middleware\RechargeInternationalActive::class,
+        'RechargeDomestic' => \App\Http\Middleware\DomesticRechargeActive::class,
+        'RechargeBangladesh' => \App\Http\Middleware\RechargeBangladeshActive::class,
+        'PinActive' => \App\Http\Middleware\PinActive::class,
+        'WhiteCallingActive' => \App\Http\Middleware\WhiteCallingActive::class,
 
     ];
 }

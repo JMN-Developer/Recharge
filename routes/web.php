@@ -105,13 +105,13 @@ Route::group(['middleware'=>['auth','user']], function()
     Route::get('/add-reseller', function () {
         return view('front.add-reseller');
     });
-    
+
     Route::get('/reseller/edit/{id}',[UserController::class,'edit']);
-    
+
     Route::post('/reseller/delete',[UserController::class,'destroy'])->name('delete-reseller');
-    
+
     Route::post('/reseller/update/{id}',[UserController::class,'update']);
-    
+
     Route::get('/resellers', function () {
         if(Auth::user()->role == 'admin')
         $show = User::where('role','user')->get();
@@ -126,13 +126,13 @@ Route::group(['middleware'=>['auth','user']], function()
         $offer_detail = Offer::where('offer',$request->id)->first();
         return response()->json($offer_detail, 200);
     })->name('offer-check');
-    
+
     Route::get('offer-edit/{id}', function($id){
         $operator = SimOperator::all();
         $offer_detail = Offer::where('id',$id)->first();
         return view('front.offer-edit',compact('offer_detail','operator'));
     });
-    
+
     Route::post('check-products', function(Request $request){
 
         $offer_detail = DomesticProduct::where('product', 'like', '%'.$request->id.'%')->where('type','recharge')->get();
@@ -209,7 +209,7 @@ Route::group(['middleware'=>['auth','user']], function()
             return redirect('login');
         }
     });
-    
+
     Route::post('/domestic_product', function (Request $request) {
         $add = new DomesticProfit;
         $add->ean = $request->ean;
@@ -263,26 +263,57 @@ Route::group(['middleware'=>['auth','user']], function()
 
 Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
 {
+    Route::group(['middleware'=>['RechargeInternational']], function()
+    {
+        Route::get('dingconnect',[DingConnectController::class,'index']);
+        Route::get('international', [InternationalApiController::class,'index'])->name('international');
+        Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
+        Route::post('international_recharge',[RechargeController::class,'recharge'])->name('international_recharge');
+        Route::post('reloadly_operator_details',[ReloadlyController::class,'mobile_number_details'])->name('reloadly_operator_details');
+        Route::post('ppn_operator_details',[PpnController::class,'mobile_number_details'])->name('ppn_operator_details');
+        Route::post('dtone_operator_details',[DtOneController::class,'mobile_number_details'])->name('dtone_operator_details');
+        Route::post('reloadly_recharge',[ReloadlyController::class,'reloadly_recharge'])->name('reloadly_recharge');
+        Route::post('ppn_recharge',[PpnController::class,'recharge'])->name('ppn_recharge');
+        Route::post('dtone_recharge',[DtOneController::class,'recharge'])->name('dtone_recharge');
+        Route::post('ding_recharge',[RechargeController::class,'recharge'])->name('ding_recharge');
+    });
 
-    Route::get('dingconnect',[DingConnectController::class,'index']);
-   Route::get('international', [InternationalApiController::class,'index'])->name('international');
-   Route::get('recharge-bangladesh', [BangladeshRechargeController::class,'index'])->name('bangladesh');
-   Route::post('bangladeshi_operator_details',[BangladeshRechargeController::class,'mobile_number_details'])->name('bangladeshi_operator_details');
-   Route::post('bangladeshi_recharge',[BangladeshRechargeController::class,'recharge'])->name('bangladeshi_recharge');
+    Route::group(['middleware'=>['RechargeDomestic']], function()
+    {
+        Route::get('recharge-italy', [RechargeController::class,'RechargeDom'])->name('recharge-italy');
+        Route::post('domestic_recharge',[RechargeController::class,'domestic_recharge'])->name('domestic_recharge');
+    });
+
+    Route::group(['middleware'=>['RechargeBangladesh']], function()
+    {
+        Route::get('recharge-bangladesh', [BangladeshRechargeController::class,'index'])->name('bangladesh');
+        Route::post('bangladeshi_operator_details',[BangladeshRechargeController::class,'mobile_number_details'])->name('bangladeshi_operator_details');
+        Route::post('bangladeshi_recharge',[BangladeshRechargeController::class,'recharge'])->name('bangladeshi_recharge');
+    });
+    Route::group(['middleware'=>['PinActive']], function()
+    {
+        Route::get('pin', [PinController::class,'index'])->name('pin');
+        Route::get('recharge-gift-card', [RechargeController::class,'RechargeGiftCard'])->name('recharge-gift-card');
+        Route::get('recharge-calling-card', [RechargeController::class,'RechargeCallingCard'])->name('recharge-calling-card');
+        Route::post('domestic_pin',[PinController::class,'store'])->name('domestic-pin');
+    });
+    Route::group(['middleware'=>['WhiteCallingActive']], function()
+    {
+        Route::post('ppn_pin',[PpnController::class,'pin'])->name('ppn_pin');
+        Route::get('calling-card',[PpnController::class,'calling_card_index'])->name('calling-card');
+        Route::get('get_white_calling_table',[PpnController::class,'get_white_calling_table'])->name('get_white_calling_table');
+        Route::post('send_pin_to_email',[PpnController::class,'send_pin']);
+    });
 
 
 
-    Route::get('recharge-int', [RechargeController::class,'RechargeInt'])->name('recharge-int');
-    // Route::get('international2', [ReloadlyController::class,'index'])->name('recharge-reloadly');
-    // Route::get('international3', [PpnController::class,'index'])->name('recharge-ppn');
+
 
 
     Route::post('get_all_invoice',[RechargeController::class,'get_all_invoice'])->name('get_all_invoice');
     Route::get('all-invoice', [RechargeController::class,'invoices'])->name('recharge-invoice');
-    Route::get('recharge-italy', [RechargeController::class,'RechargeDom'])->name('recharge-italy');
-    Route::get('pin', [PinController::class,'index'])->name('pin');
-    Route::get('recharge-gift-card', [RechargeController::class,'RechargeGiftCard'])->name('recharge-gift-card');
-    Route::get('recharge-calling-card', [RechargeController::class,'RechargeCallingCard'])->name('recharge-calling-card');
+
+
     Route::get('print-all-invoice', [RechargeController::class,'PrintInvoice'])->name('print-all-invoice');
     Route::get('pin/all-invoice', [PinController::class,'invoices'])->name('pin-invoice');
     Route::post('filebytype',[RechargeController::class,'filebytype'])->name('filebytype');
@@ -294,24 +325,14 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
     Route::post('check-product',[RechargeController::class,'get_product'])->name('check-product');
     Route::post('estimate',[RechargeController::class,'estimate'])->name('estimate');
     Route::post('check-changed-product',[RechargeController::class,'get_changed_product'])->name('check-changed-product');
-    Route::post('international_recharge',[RechargeController::class,'recharge'])->name('international_recharge');
+
     Route::post('estimated',[RechargeController::class,'estimate'])->name('estimated');
-    Route::post('domestic_recharge',[RechargeController::class,'domestic_recharge'])->name('domestic_recharge');
+
     Route::get('load_recent_domestic_recharge',[RechargeController::class,'load_recent_domestice_recharge'])->name('load_recent_domestic_recharge');
     Route::get('recharge_invoice/{id}',[RechargeController::class,'invoice']);
-    Route::post('domestic_pin',[PinController::class,'store'])->name('domestic-pin');
+
     Route::get('pin_invoice/{id}',[PinController::class,'invoice']);
-    Route::post('reloadly_operator_details',[ReloadlyController::class,'mobile_number_details'])->name('reloadly_operator_details');
-    Route::post('ppn_operator_details',[PpnController::class,'mobile_number_details'])->name('ppn_operator_details');
-    Route::post('dtone_operator_details',[DtOneController::class,'mobile_number_details'])->name('dtone_operator_details');
-    Route::post('reloadly_recharge',[ReloadlyController::class,'reloadly_recharge'])->name('reloadly_recharge');
-    Route::post('ppn_recharge',[PpnController::class,'recharge'])->name('ppn_recharge');
-    Route::post('dtone_recharge',[DtOneController::class,'recharge'])->name('dtone_recharge');
-    Route::post('ding_recharge',[RechargeController::class,'recharge'])->name('ding_recharge');
-    Route::post('ppn_pin',[PpnController::class,'pin'])->name('ppn_pin');
-    Route::get('calling-card',[PpnController::class,'calling_card_index'])->name('calling-card');
-    Route::get('get_white_calling_table',[PpnController::class,'get_white_calling_table'])->name('get_white_calling_table');
-    Route::post('send_pin_to_email',[PpnController::class,'send_pin']);
+
     Route::get('check_daily_duplicate',[RechargeController::class,'check_daily_duplicate']);
     Route::get('bangladeshi_exchange_rate',[BangladeshRechargeController::class,'bangladeshi_exchange_rate']);
 

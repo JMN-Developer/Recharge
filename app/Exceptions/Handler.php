@@ -53,10 +53,10 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof NotFoundHttpException || $exception instanceof MethodNotAllowedHttpException || $exception instanceof ModelNotFoundException || $exception instanceof InvalidArgumentException || $exception instanceof ErrorException || $exception instanceof QueryException || $exception instanceof Error ||$exception instanceof BadMethodCallException ) {
 
-           // return response()->view('error.index', [], 500);
+            return response()->view('error.index', [], 500);
         }
-        //return parent::render($request, $exception);
-        return response()->view('error.index', [], 500);
+        return parent::render($request, $exception);
+        //return response()->view('error.index', [], 500);
     }
 
 }
