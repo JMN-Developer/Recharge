@@ -335,7 +335,7 @@
                           <h5>JM NATION</h5>
                         </td>
                         <td colspan="6" class="invoice_table_border" style="width: 77%;">
-                          <b>Italy Office :</b> Via GuglielmoMarconi,219,60125,Ancona, Email: pointrecharge2015@gmail.com, Mobile :393478678388, +393889883882, +8801908376350<br>
+                          <b>Italy Office :</b> Via GuglielmoMarconi,219,60125,Ancona, <b>Email:</b> pointrecharge2015@gmail.com, <b>Mobile</b> :393478678388, +393889883882, +8801908376350<br>
                             <b>Customer Service Number : +390712145611</b>
                         </td>
                       </tr>
