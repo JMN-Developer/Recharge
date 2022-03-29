@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="{{ asset('css/multiple_image_preview.css') }}">
   <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
   <style>
-      
+
   </style>
 
 </head>
@@ -72,9 +72,9 @@
                     </div>
                     @endif
                   <select name="offer" class="custom-select" id="offer">
-                   
+
                     <option value="No Offer" disabled selected hidden>Please Choose...</option>
- 
+
                     @foreach ($offer as $item)
                         <option value="{{ $item->offer }}">{{ $item->offer }}</option>
                     @endforeach
@@ -129,7 +129,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-10">
-             
+
                 <div class="row">
                   <div class="col-md-6">
                     <div class="mb-3">
@@ -225,7 +225,7 @@
                 </div> --}}
               </div>
               <div class="col-md-10 sim-act-form-right" style="margin-top: 10px">
-                
+
                 <div class="row">
                   <div class="col-6">
                     <div class="form-check bg-ash">
@@ -263,12 +263,12 @@
                     </div>
 
                   </div>
-                  
-                
+
+
                 </div>
                 <div class="card-body">
                   <div id="actions" class="row">
-                   
+
                   </div>
                   <div class="table table-striped files" id="previews">
                     <div id="template" class="row mt-2">
@@ -438,7 +438,7 @@ $.ajax({
 <script>
   $(function () {
 
-    
+
 
     //Initialize Select2 Elements
     $('.select2').select2()

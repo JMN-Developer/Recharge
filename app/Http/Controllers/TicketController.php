@@ -23,6 +23,12 @@ class TicketController extends Controller
     {
         $id = $request->id;
         ticket::where('id',$id)->update(['status'=>$request->status,'reseller_notification'=>1]);
+//file_put_contents('test.txt',$request->status);
+        if($request->status =='Close')
+        {
+            $ticket = ticket::where('id',$id)->first();
+           $this->send_ticket_closing_mail($ticket->ticket_no,$ticket->reseller->email,$ticket->reseller->first_name.' '.$ticket->reseller->last_name,$ticket->service_name);
+        }
         event(new TicketRequest());
 
         //file_put_contents('test.txt',$request->status);
@@ -33,7 +39,7 @@ class TicketController extends Controller
     }
     public function ticket_reply(Request $request)
     {
-        $ticket_info = ticket::where('id',$request->$ticket_id)->first();
+        $ticket_info = ticket::where('id',$request->ticket_id)->first();
         $ticket_no = $ticket_info->ticket_no;
         $service_name = $ticket_info->service_name;
         if($request->document)
@@ -53,21 +59,21 @@ class TicketController extends Controller
         if(Auth::user()->role == 'admin')
         {
             ticket::where('id',$request->ticket_id)->update(['reseller_notification'=>1]);
-            $this->send_mail_reply($ticket_no,$service_name,$request->reseller_message,$ticket_info->reseller->email);
+            $this->send_mail_reply($ticket_no,$service_name,$request->reseller_message,$ticket_info->reseller->email,$ticket_info->reseller->first_name.' '.$ticket_info->reseller->last_name);
         }
         else{
             ticket::where('id',$request->ticket_id)->update(['admin_notification'=>1]);
-            $this->send_mail_reply($ticket_no,$service_name,$request->reseller_message,'support@jmnation.com');
+            $this->send_mail_reply($ticket_no,$service_name,$request->reseller_message,'support@jmnation.com','Admin');
         }
         event(new TicketRequest());
-       
-        
-     
+
+
+
 
         return redirect()->back()->with('success','Response Submitted');
     }
 
-    public function send_mail_reply($ticket_no,$service_name,$message,$email)
+    public function send_mail_reply($ticket_no,$service_name,$message,$email,$name)
     {
 
 
@@ -75,35 +81,43 @@ class TicketController extends Controller
             'ticket_id'=>$ticket_no,
             'type'=>'reply',
             'service_name'=>$service_name,
-            'user_name'=>'Admin',
+            'user_name'=>$name,
             'message'=>$message
         ];
 
         try {
 
-             Notification::route('mail','support@jmnation.com')
+             Notification::route('mail',$email)
                  ->notify(new TicketNotification($data));
         } catch (\Throwable $th) {
             Log::info($th);
         }
+
+
+    }
+
+    public function send_ticket_closing_mail($ticket_no,$email,$user_name,$service_name)
+    {
+
 
         $data = [
             'ticket_id'=>$ticket_no,
-            'status'=>$status,
-            'type'=>'User',
+            'type'=>'closing',
+            'user_name'=>$user_name,
             'service_name'=>$service_name,
-            'user_name'=>Auth::user()->first_name." ".Auth::user()->last_name,
-            'message'=>$message
         ];
-
+        //file_put_contents('test.txt',json_encode($data));
         try {
 
-             Notification::route('mail',Auth::user()->email)
+             Notification::route('mail',$email)
                  ->notify(new TicketNotification($data));
         } catch (\Throwable $th) {
             Log::info($th);
         }
+
+
     }
+
 
 
     public function ticket_response_view(Request $request)
@@ -184,7 +198,7 @@ class TicketController extends Controller
             'document'=>$path,
             'user_id'=>Auth::user()->id
         ]);
-        $this->send_mail($ticket->ticket_no,$ticket->status,$request->service,$request->reseller_message);
+       $this->send_mail($ticket->ticket_no,$ticket->status,$request->service,$request->reseller_message);
 
         event(new TicketRequest());
 
@@ -307,7 +321,7 @@ class TicketController extends Controller
 
 
           ->addColumn('action', function($data){
-            $text ='<a class="btn btn-primary" href="ticket/ticket-response/'.$data->ticket_no.'">Show Details</a>';
+            $text ='<p class="text-center" style="margin:1px !important"><a class="btn btn-sm btn-primary" href="ticket/ticket-response/'.$data->ticket_no.'">Show Details</a></p>';
             return $text;
           })
 

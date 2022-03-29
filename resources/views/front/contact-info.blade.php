@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -29,8 +29,8 @@
     <div class="content-header">
       <div class="container-fluid">
         <div class="row">
-          
-         
+
+
         </div>
       </div><!-- /.container-fluid -->
     </div>

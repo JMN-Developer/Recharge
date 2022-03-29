@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -603,10 +603,10 @@
 @section('scripts')
 
 
-<!-- 
+<!--
 =======================
   REQUIRED SCRIPTS
-======================= 
+=======================
 -->
 
 <!-- jQuery -->

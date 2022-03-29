@@ -41,14 +41,25 @@ class TicketNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        if($this->ticket_data['type']=='closing')
+        {
+            return (new MailMessage)
+            ->greeting($this->ticket_data['user_name'])
+            ->subject('[Ticket ID: '.$this->ticket_data['ticket_id'].'] '.$this->ticket_data['service_name'])
+            ->line('This is a notification to let you know that we are changing the status of your ticket #'.$this->ticket_data['ticket_id'].' to Closed as we have not received a response from you in over 48 hours.')
+            ->line('Service: '.$this->ticket_data['service_name'])
+            ->line('Status: Closed');
+
+        }
+
         if($this->ticket_data['type']=='reply')
         {
             return (new MailMessage)
             ->greeting($this->ticket_data['user_name'])
             ->subject('[Ticket ID: '.$this->ticket_data['ticket_id'].'] '.$this->ticket_data['service_name'])
-            ->line('You have a new message for your ticket.')
+            ->line('You have a new response for your ticket.')
             ->line($this->ticket_data['message']);
-           
+
         }
 
         if($this->ticket_data['type']=='Admin')

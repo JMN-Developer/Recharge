@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -47,7 +47,7 @@
               <div class="retailer_switch d-inline-block">
                 <input type="checkbox" name="phone_order_price"  data-bootstrap-switch data-off-color="danger" data-on-color="success">
               </div>
-            </div> 
+            </div>
           </div>
         </div>
       </div><!-- /.container-fluid -->

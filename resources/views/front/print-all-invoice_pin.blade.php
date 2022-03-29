@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -73,7 +73,7 @@
                     <div class="card-tools">
                       <div class="input-group input-group-sm">
                         <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-                
+
                         <div class="input-group-append">
                           <button type="submit" class="btn btn-default">
                             <i class="fas fa-search"></i>
@@ -110,7 +110,7 @@
                     <div class="card-tools">
                       <div class="input-group input-group-sm">
                         <input type="text" name="table_search" data-table="table-info" class="form-control float-right light-table-filter" placeholder="Search">
-                    
+
                         {{-- <div class="input-group-append">
                           <button type="submit" class="btn btn-default">
                             <i class="fas fa-search"></i>
@@ -339,7 +339,7 @@
           </div>
         </div>
         <!-- /.row -->
-        
+
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

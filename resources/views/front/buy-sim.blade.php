@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -27,7 +27,7 @@
           <input type="hidden" name="sim_number" value="{{$data->sim_number}}">
 
           <input type="hidden" id="sim_id" value="{{$data->id}}">
-          
+
           <div class="reseller">
           <form id="myform" action="/buy-sim" method="post" enctype="multipart/form-data">
             @csrf
@@ -176,7 +176,7 @@ checkbox.on('click', function() {
     $.ajax({
      type: "POST",
      url: "{{ env('APP_URL') }}/offer-check/", // url to request
-     data:{ 
+     data:{
                 _token:'{{ csrf_token() }}',
                 id: value,
                 sim_id: sim

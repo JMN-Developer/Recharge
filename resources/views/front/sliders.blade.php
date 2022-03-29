@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -55,8 +55,8 @@
                         </td>
                         <td>{{ $item->link }}</td>
                         <td> <img src="{{ asset('storage/'.$item->image) }}" class="img-fluid" style="width: 200px "> </td>
-                        <td> 
-                          <a class="btn btn-primary" href="{{ route('slider-edit', $item->id) }}"> Edit</a> 
+                        <td>
+                          <a class="btn btn-primary" href="{{ route('slider-edit', $item->id) }}"> Edit</a>
                           <a class="btn btn-danger" href="{{ route('slider-delete', $item->id) }}"> Delete</a>
                         </td>
                       </tr>
@@ -70,7 +70,7 @@
           </div>
         </div>
         <!-- /.row -->
-        
+
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

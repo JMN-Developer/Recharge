@@ -23,7 +23,7 @@ thead {
           <h2 style="float: left">Re-Sellers</h2>
           <div class="reseller">
             <input type="search" class="light-table-filter" data-table="table-info" placeholder="Name,Email etc.">
- 
+
             <table class="table-info table">
                 <thead>
                 <tr>
@@ -45,26 +45,26 @@ thead {
                         <td>{{$item->email}}</td>
                         <td>{{$item->gender}}</td>
                         <td>{{$item->wallet}}</td>
-                        <td> 
-                            <a class="btn btn-danger" href="/reseller/delete/{{$item->id}}">Delete</a> 
-                            <a class="btn btn-success" href="/reseller/edit/{{$item->id}}">Edit</a> 
+                        <td>
+                            <a class="btn btn-danger" href="/reseller/delete/{{$item->id}}">Delete</a>
+                            <a class="btn btn-success" href="/reseller/edit/{{$item->id}}">Edit</a>
                         </td>
                       </tr>
                   @endforeach
                 </tbody>
             </table>
-         
+
         </section>
-         
+
             <script>
               /* Code By Webdevtrick ( https://webdevtrick.com ) */
 (function(document) {
     'use strict';
- 
+
     var TableFilter = (function(Arr) {
- 
+
         var _input;
- 
+
         function _onInputEvent(e) {
         _input = e.target;
         var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
@@ -74,12 +74,12 @@ thead {
         });
         });
         }
- 
+
         function _filter(row) {
         var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
         row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
         }
- 
+
         return {
         init: function() {
         var inputs = document.getElementsByClassName('light-table-filter');
@@ -89,16 +89,16 @@ thead {
         }
         };
     })(Array.prototype);
- 
+
     document.addEventListener('readystatechange', function() {
         if (document.readyState === 'complete') {
         TableFilter.init();
         }
     });
- 
+
 })(document);
             </script>
-         
+
       </div>
 
 

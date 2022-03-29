@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
-  
+
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
@@ -33,8 +33,8 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
               </div>
-              <div class="modal-body"> 
-                
+              <div class="modal-body">
+
               <form action="{{url('/edit_sim_due')}}" method="post">
                 @csrf
                 <div>
@@ -204,7 +204,7 @@
                 </table>
               </div>
             </div>
-            <!-- /.row --> 
+            <!-- /.row -->
             <div class="footer_pagination">
               <nav aria-label="Contacts Page Navigation">
                 <ul class="pagination justify-content-center m-0">
@@ -212,20 +212,20 @@
                   <!-- {{ $orders->links() }} -->
                 </ul>
               </nav>
-              
+
             </div>
 
             <!-- /.card-footer -->
           </div>
           <!-- /.card-body -->
         </div>
-        <!-- /.card -->  
+        <!-- /.card -->
       </div>
       <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
- 
+
   <script>
     /* Code By Webdevtrick ( https://webdevtrick.com ) */
 (function(document) {
@@ -281,11 +281,11 @@ TableFilter.init();
 <script src="{{asset('js/custom.js')}}"></script>
 <script>
   $(function(){
-      
+
      $(".cost_input").hide();
     //  var id = $('#status').find(':selected').data('id')
     $(".status").change(function(){
-     
+
       let value = $(this).find(':selected').val();
       var id =  $(this).find(':selected').data('id')
       // alert(value)
@@ -293,7 +293,7 @@ TableFilter.init();
       {
         $('#cost_input'+id).show()
         $("#cost_input"+id).attr('required',true);
-     
+
        // $("#cost_input"+order_id).show();
       }
       else
@@ -302,7 +302,7 @@ TableFilter.init();
         $("#cost_input"+id).attr('required',false);
       }
     })
-  })  
+  })
 </script>
 @endsection
 

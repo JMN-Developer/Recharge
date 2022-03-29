@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -39,7 +39,13 @@
 table.dataTable thead .sorting_asc{
     background-image: none !important;
 }
-
+table.dataTable.no-footer{
+    border-bottom:1px solid #dee2e6;
+}
+table{
+    color:#555;
+    font-size: 15px;
+}
 </style>
 
 
@@ -82,7 +88,7 @@ table.dataTable thead .sorting_asc{
                     <a class="btn btn-primary" href='{{ route('add-ticket-view') }}' style="margin-bottom: 20px">Open New Ticket</a>
                 </div>
                 <div class="recharge_input_table table-responsive p-0">
-                  <table class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
+                  <table class="table table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table">
                     <thead>
                       <tr>
                         @if(Auth::user()->role == 'admin')
@@ -165,7 +171,10 @@ $(function() {
 
 function update_status(id)
 {
-
+   // alert('hell')
+    var conf = confirm('Are you sure?');
+    if(conf == true)
+    {
    var value = $('.status :selected').val();
    $.ajax({
             type: "GET",
@@ -176,6 +185,7 @@ function update_status(id)
                 location.reload()
             }
         });
+    }
 }
 
 function fetch_table()

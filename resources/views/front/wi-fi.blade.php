@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -66,8 +66,8 @@
                       <td>{{ $item->offer }}</td>
                       <td class="text-center"><span class="badge bg-info">Active</span></td>
                       @if (Auth::user()->role == 'admin')
-                      <td> <a class="btn btn-success" href="/offer-edit/{{ $item->id }}">Edit</a> 
-                        <a class="btn btn-danger" href="/delete-offer/{{ $item->id }}">Delete</a> 
+                      <td> <a class="btn btn-success" href="/offer-edit/{{ $item->id }}">Edit</a>
+                        <a class="btn btn-danger" href="/delete-offer/{{ $item->id }}">Delete</a>
                       </td>
                       @endif
                     </tr>
@@ -81,7 +81,7 @@
           </div>
         </div>
         <!-- /.row -->
-        
+
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

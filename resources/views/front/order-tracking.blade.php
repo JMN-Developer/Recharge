@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
-  
+
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
@@ -57,7 +57,7 @@
             </form>
           </div>
         </div>
-        @if(Route::currentRouteName() != 'order-tracking-view')   
+        @if(Route::currentRouteName() != 'order-tracking-view')
         <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
           <thead>
             <tr>
@@ -90,7 +90,7 @@
             </tr>
           </thead>
           <tbody>
-            
+
             @foreach($orders as $order)
             <tr>
               <td>{{$order->ran_id}}</td>

@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="{{ asset('css/fontawesome-free/css/all.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('css/admin.min.css') }}">
-  
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}"> 
+
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
 @endsection
@@ -22,7 +22,7 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
-        
+
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
@@ -246,7 +246,7 @@
                       <td>{{ $data->weight }}</td>
                       {{-- <td></td>
                       <td></td> --}}
-                     
+
                       <td>{{ $data->total - $data->addiCharge }}</td>
                       <td>{{ $data->addiCharge }}</td>
                       <td>{{ $data->total }}</td>
@@ -258,7 +258,7 @@
           </div>
           <!-- /.card-body -->
         </div>
-        <!-- /.card -->  
+        <!-- /.card -->
       </div>
       <!-- /.container-fluid -->
     </section>

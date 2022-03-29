@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -59,7 +59,7 @@ thead {
                             @foreach ($operator as $item)
                                 <option value="{{$item->operator}}">{{$item->operator}}</option>
                             @endforeach
-                        </select>  
+                        </select>
                 </div>
                 <div class="col-md-5">
                     <label style="font-weight: bold; color:black">Costo al mese:</label>

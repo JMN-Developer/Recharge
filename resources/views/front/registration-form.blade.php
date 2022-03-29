@@ -70,7 +70,7 @@
                 <div class="form-wrapper">
                     <label for="">Address</label>
                     <textarea id="address" class="form-control" rows="4" required></textarea>
-                  
+
                 </div>
 
                 <div class="form-group">
@@ -265,7 +265,7 @@ var s_character = document.getElementById("s_character");
 
             });
             $("#registration_form").submit(function(event){
-               
+
                    event.preventDefault();
                     var first_name = $("#first_name").val();
                     var last_name = $("#last_name").val();
@@ -279,7 +279,7 @@ var s_character = document.getElementById("s_character");
                     var email = $("#email").val();
                     var company_name = $("#company_name").val();
                     var payment_method = $("#payment_method :selected").val();
-                    
+
                     var formdata = new FormData();
                     formdata.append('first_name',first_name);
                     formdata.append('last_name',last_name);

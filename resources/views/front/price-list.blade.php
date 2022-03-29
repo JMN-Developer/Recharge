@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 <head>
   <meta charset="utf-8">
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
-  
+
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
@@ -102,7 +102,7 @@
                           <button type="button" class="btn btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown">
                           </button>
                           <div class="dropdown-menu" role="menu">
-                            
+
                             <a href="{{ url ('price-edit', ['id' => $order->id]) }}" class="dropdown-item"><i class="fas fa-edit"></i>Edit</a>
                             <a class="dropdown-item" href="{{ url ('price-delete', ['id' => $order->id]) }}"><i class="fas fa-eye"></i>Delete</a>
                           </div>
@@ -114,7 +114,7 @@
                 </table>
               </div>
             </div>
-            <!-- /.row --> 
+            <!-- /.row -->
             <div class="footer_pagination">
               <nav aria-label="Contacts Page Navigation">
                 <ul class="pagination justify-content-center m-0">
@@ -122,14 +122,14 @@
                   <!-- {{ $orders->links() }} -->
                 </ul>
               </nav>
-              
+
             </div>
 
             <!-- /.card-footer -->
           </div>
           <!-- /.card-body -->
         </div>
-        <!-- /.card -->  
+        <!-- /.card -->
       </div>
       <!-- /.container-fluid -->
     </section>

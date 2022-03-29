@@ -1,4 +1,4 @@
-@extends('front.layout.courier')
+@extends('front.layout.master')
 @section('header')
 
 <head>
@@ -14,10 +14,10 @@
   <link rel="stylesheet" href="{{asset('css/tempusdominus-bootstrap-4.min.css')}}">
   <!-- Select2 -->
   <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
-  
+
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
-  
+
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
   <script type= "text/javascript" src="{{asset('js/countries.js')}}"></script>
@@ -112,7 +112,7 @@
 
 
             </div>
-            <!-- /.row -->   
+            <!-- /.row -->
             <div class="my-5">
               <button type="submit" class="btn btn-primary" style="width: 100%;">Send Pricing</button>
             </div>
@@ -120,7 +120,7 @@
           </form>
           <!-- /.card-body -->
         </div>
-        <!-- /.card -->  
+        <!-- /.card -->
       </div>
       <!-- /.container-fluid -->
     </section>
@@ -174,8 +174,8 @@
     });
 
   })
- 
-  
+
+
   $(function () {
       bsCustomFileInput.init();
     });
