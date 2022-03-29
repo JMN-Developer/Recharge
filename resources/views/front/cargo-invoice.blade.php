@@ -335,23 +335,22 @@
                           <h5>JM NATION</h5>
                         </td>
                         <td colspan="6" class="invoice_table_border" style="width: 77%;">
-                          <b>Italy Office :</b> Via Delle Ninfee 32,00172 , Email: infogbsm@gmail.com, Mobile :3883929293<br>
-                          <b>Dhaka Office :</b> 20 Novarun (Ground floor) Dilu Road, New Eskaton Dhaka-1000,Bangladesh
-                          Phone Number: +8801687595451, +01553906183 <b>Customer Service Number : +390697629541</b>
+                          <b>Italy Office :</b> Via GuglielmoMarconi,219,60125,Ancona, Email: pointrecharge2015@gmail.com, Mobile :393478678388, +393889883882, +8801908376350<br>
+                            <b>Customer Service Number : +390712145611</b>
                         </td>
                       </tr>
                       <tr>
                         <td colspan="8" class="invoice_table_border" style="padding: 10px 8px;">
                           <b>TERMS AND CONDITIONS :</b> <br>
                           <b>***Shipping time </b>Any delivery dates provide dby JM Nation are estimates. JM Nation reserves the right to make
-                          deliveries ininstalments. Sometimes due to customs clearance problem,your Consignment might be delayed for extra 60 working
-                          days from the actual arrival date. <b>***Lost & Damagedproducts</b> Duetounavoidable circumstances,goods maybe lost from customs.
-                          Inthis regard,shipper will getrefundof 80% ofthe consignment value. We will not be liable for any loss or damage to the
-                          consignment,or anydelayor mis deliveryifthecausewas anyofthefollowing:a) War,terrorism,riot,strike,lockout or anysimilar
+                          deliveries in instalments. Sometimes due to customs clearance problem,your Consignment might be delayed for extra 60 working
+                          days from the actual arrival date. <b>***Lost & Damagedproducts</b> Due to unavoidable circumstances,goods maybe lost from customs.
+                          In this regard,shipper will get refund of 80% ofthe consignment value. We will not be liable for any loss or damage to the
+                          consignment,or any delay or mis delivery if thecaus ewas any of the following:a) War,terrorism,riot,strike,lockout or anysimilar
                           action. b) Natural disasters (e.g. floods),poor or extreme weather conditions. c) The consignment being seized or detained by any
                           public authority. d) Incorrect or insuicient address given on the consignment note or manifest. This includes any comission or
                           ambiguity of information provided by you. e) Incorrect or insuicient packaging of the consignment. f) Natural wastage of a
-                          perishable or fragileconsignment. <b> ***Fines & Extra Charges </b> Shipper will bechargedextra charges for the following reasons:a) If the
+                          perishable or fragile consignment. <b> ***Fines & Extra Charges </b> Shipper will be charged extra charges for the following reasons:a) If the
                           actual weight of consignmentis higher from the weight provided by shipper in the invoice. b) If any Flammable items found in the
                           consignment,shipper will be fined €170 . c) If customs charged extra duties or taxes for the clearance.
                           <br>

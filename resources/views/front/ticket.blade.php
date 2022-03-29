@@ -92,16 +92,16 @@ table{
                     <thead>
                       <tr>
                         @if(Auth::user()->role == 'admin')
-                        <th style="background-color: black;color:white"  >Reseller</th>
+                        <th style="background-color: #212529;color:white"  >Reseller</th>
                         @endif
-                        <th style="background-color: black;color:white">Ticket Number</th>
-                        <th style="background-color: black;color:white">Service</th>
-                        <th style="background-color: black;color:white">Last Response</th>
-                        <th style="background-color: black;color:white">Status</th>
+                        <th style="background-color: #212529;color:white">Ticket Number</th>
+                        <th style="background-color: #212529;color:white">Service</th>
+                        <th style="background-color: #212529;color:white">Last Response</th>
+                        <th style="background-color: #212529;color:white">Status</th>
                         @if(auth()->user()->role == 'admin')
-                        <th style="background-color: black;color:white">Update Status</th>
+                        <th style="background-color: #212529;color:white">Update Status</th>
                         @endif
-                        <th style="background-color: black;color:white">Action</th>
+                        <th style="background-color: #212529;color:white">Action</th>
 
 
                       </tr>
