@@ -56,9 +56,10 @@ class WalletController extends Controller
             if ($item->status == "pending") {
                 $item->approved_date = "Pending";
             } else {
-                $item->approved_date = Carbon::parse($item->updated_at)->format(
+                $item->approved_date = Carbon::parse($item->approved_at)->format(
                     "Y-m-d"
                 );
+               // $item->approved_date = $item->updated_at;
             }
         }
         return $data;
@@ -168,6 +169,7 @@ class WalletController extends Controller
                     "reseller_notification" => 0,
                     "admin_notification" => 1,
                     "admin_message" => $admin_message,
+
                 ]);
             } else {
                 DueControl::create([
@@ -180,7 +182,9 @@ class WalletController extends Controller
                     "status" => $status,
                     "wallet_type" => $previous_record->wallet_type,
                     "previous_due" => $limit_usage,
-                    "decline_status" => 1
+                    "decline_status" => 1,
+                    'approved_at'=>Carbon::now()->toDateTimeString()
+
                 ]);
 
 
@@ -200,7 +204,8 @@ class WalletController extends Controller
                     "admin_notification" => 1,
                     "reseller_notification" => 0,
                     "admin_message" => $admin_message,
-                    'previous_due'=> $limit_usage
+                    'previous_due'=> $limit_usage,
+                    'approved_at'=>Carbon::now()->toDateTimeString()
                 ]);
 
             }

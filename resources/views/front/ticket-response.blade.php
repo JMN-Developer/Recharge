@@ -1,54 +1,54 @@
 @extends('front.layout.master')
 @section('header')
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <title>Ticket</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <title>Ticket</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-  <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel='stylesheet'>
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
 
-  <link rel="stylesheet" href="{{asset('css/style.css')}}">
-<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
-<style>
-    .date_picker_pair {
-    width: 90%;
-}
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
+  <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
 
-/* .sorting_disabled{
-    display: none !important;
-} */
-table.dataTable thead .sorting_asc{
-    background-image: none !important;
-}
-.user-response{
-    background-color: #FDEFFC;
-}
-.admin-response{
-    background-color: #E7FBF7;
-}
-.title{
-    font-weight: bold
-}
+</head>
+  <style>
+      .date_picker_pair {
+      width: 90%;
+  }
+
+  /* .sorting_disabled{
+      display: none !important;
+  } */
+  table.dataTable thead .sorting_asc{
+      background-image: none !important;
+  }
+  .user-response{
+      background-color: #FDEFFC;
+  }
+  .admin-response{
+      background-color: #E7FBF7;
+  }
+  .title{
+      font-weight: bold
+  }
 
 
-</style>
-
+  </style>
 
 @endsection
 
 @section('content')
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <section class="content">
         <div class="container-fluid">
           @if (\Session::has('success'))
@@ -176,7 +176,7 @@ table.dataTable thead .sorting_asc{
           </div>
           <!-- /.row -->
 
-        </div><!-- /.container-fluid -->
+        <!-- /.container-fluid -->
       </section>
       <!-- /.content -->
     </div>
@@ -185,24 +185,28 @@ table.dataTable thead .sorting_asc{
 
 
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
 
 @endsection
 
-
 @section('scripts')
+<!-- jQuery -->
 <script src="{{asset('js/jquery.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(function(){
-        $('.service').select2({
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
+<!-- Bootstrap -->
+<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('js/moment.min.js')}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-    placeholder: function(){
-        $(this).data('placeholder');
-    }
+<!-- Theme JS -->
+<script src="{{asset('js/admin.js')}}"></script>
+<!-- Custom JS -->
+<script src="{{asset('js/custom.js')}}"></script>
 
-    });
-    });
-</script>
+@endsection
+
+@section('js')
+
 @endsection
