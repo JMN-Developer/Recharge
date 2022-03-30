@@ -83,7 +83,7 @@ class PricingController extends Controller
         $w = $request->weight;
         $fixed_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','fixed')->first();
         $fixed_weight_limit = $fixed_data->weight_end;
-        $myfile = fopen("test.txt", "a+") or die("Unable to open file!");
+      //  $myfile = fopen("test.txt", "a+") or die("Unable to open file!");
         if($fixed_weight_limit>=$w)
         {
             $price = $fixed_data->total;
