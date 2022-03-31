@@ -46,6 +46,9 @@ table{
     color:#555;
     font-size: 15px;
 }
+.read {
+  background-color: #D7DBDD !important;
+}
 </style>
 
 
@@ -98,6 +101,7 @@ table{
                         <th style="background-color: #212529;color:white">Service</th>
                         <th style="background-color: #212529;color:white">Last Response</th>
                         <th style="background-color: #212529;color:white">Status</th>
+
                         @if(auth()->user()->role == 'admin')
                         <th style="background-color: #212529;color:white">Update Status</th>
                         @endif
@@ -206,6 +210,16 @@ function fetch_table()
             orderable: false
         },
         dom: 'Plfrtip',
+        createdRow: function( row, data, dataIndex ) {
+
+             if ( data.message_read_status == "Read" ) {
+         $(row).addClass('read');
+
+       }
+
+
+    },
+
         columnDefs: [
     { "orderable": false, "targets": "_all" } // Applies the option to all columns
   ],
@@ -224,6 +238,7 @@ function fetch_table()
             {data:'service_name',name:'service_name'},
             {data:'last_response',name:'last_response'},
             {data:'status',name:'status'},
+
             @if(Auth::user()->role == 'admin')
             {data:'update_status',name:'update_status'},
             @endif

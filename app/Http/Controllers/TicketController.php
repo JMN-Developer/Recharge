@@ -73,6 +73,54 @@ class TicketController extends Controller
         return redirect()->back()->with('success','Response Submitted');
     }
 
+    public function ticket_reopen(Request $request)
+    {
+        $id = $request->id;
+        ticket::where('id',$id)->update(['status'=>'Open','admin_notification'=>1]);
+        $ticket = ticket::where('id',$id)->first();
+        $this->send_ticket_closing_mail($ticket->ticket_no,$ticket->reseller->email,$ticket->reseller->first_name.' '.$ticket->reseller->last_name,$ticket->service_name);
+        event(new TicketRequest());
+    }
+
+    public function send_ticket_reopening_mail($ticket_no,$email,$user_name,$service_name)
+    {
+
+
+        $data = [
+            'ticket_id'=>$ticket_no,
+            'type'=>'Reopen User',
+            'user_name'=>$user_name,
+            'service_name'=>$service_name,
+        ];
+        //file_put_contents('test.txt',json_encode($data));
+        try {
+
+             Notification::route('mail',$email)
+                 ->notify(new TicketNotification($data));
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+
+        $data = [
+            'ticket_id'=>$ticket_no,
+            'type'=>'Reopen Admin',
+            'user_name'=>$user_name,
+            'service_name'=>$service_name,
+        ];
+        //file_put_contents('test.txt',json_encode($data));
+        try {
+
+             Notification::route('mail',$email)
+                 ->notify(new TicketNotification($data));
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+
+
+    }
+
+
+
     public function send_mail_reply($ticket_no,$service_name,$message,$email,$name)
     {
 
@@ -102,7 +150,22 @@ class TicketController extends Controller
 
         $data = [
             'ticket_id'=>$ticket_no,
-            'type'=>'closing',
+            'type'=>'Closing User',
+            'user_name'=>$user_name,
+            'service_name'=>$service_name,
+        ];
+        //file_put_contents('test.txt',json_encode($data));
+        try {
+
+             Notification::route('mail',$email)
+                 ->notify(new TicketNotification($data));
+        } catch (\Throwable $th) {
+            Log::info($th);
+        }
+
+        $data = [
+            'ticket_id'=>$ticket_no,
+            'type'=>'Closing Admin',
             'user_name'=>$user_name,
             'service_name'=>$service_name,
         ];
@@ -125,6 +188,14 @@ class TicketController extends Controller
         $ticket_no = $request->id;
         $ticket_details = ticket::where('ticket_no',$ticket_no)->first();
         $ticket_response = ticket_response::where('ticket_id',$ticket_details->id)->get();
+        if(Auth::user()->role == 'user')
+        ticket_response::where('ticket_id',$ticket_details->id)->update(['message_read_status_user'=>1]);
+        else
+        ticket_response::where('ticket_id',$ticket_details->id)->update(['message_read_status_admin'=>1]);
+        foreach($ticket_response as $data)
+        {
+            $data->response_time =$data->created_at.'('.$data->created_at->diffForHumans(Carbon::now()).')';
+        }
 
 
         return view('front.ticket-response',compact('ticket_response','ticket_details'));
@@ -244,11 +315,7 @@ class TicketController extends Controller
                 "reseller_notification" => 0,
             ]);
             $data = ticket::where("reseller_id", Auth::user()->id)
-                ->orderBy(
-                    DB::raw(
-                        'case when status= "pending" then 1 when status= "answered" then 2 when status="approved" then 3 end'
-                    )
-                )
+                ->latest()
                 ->select(['*']);
         } else {
             // ticket::where("admin_notification", 0)->update([
@@ -257,54 +324,39 @@ class TicketController extends Controller
             ticket::where("admin_notification", 1)->update([
                 "admin_notification" => 0,
             ]);
-            $data = ticket::orderBy(
-                DB::raw(
-                    'case when status= "pending" then 1 when status= "answered" then 2 when status="approved" then 3 end'
-                )
-            )->select(['*']);
+            $data = ticket::latest()->select(['*']);
         }
-        foreach ($data as $item) {
-            $response = ticket_response::where('tikcet_id',$item->id)->latest()->first()->updated_at;
-            $last_response =  Carbon::parse($response)->format(
-                "Y-m-d h:i:s"
-            );
-            $item->last_response = $last_response;
-            $item->requested_date = Carbon::parse($item->created_at)->format(
-                "Y-m-d h:i:s"
-            );
-            $item->reseller_name =
-                $item->reseller->first_name . " " . $item->reseller->last_name;
 
-        }
 
         return Datatables::eloquent($data)
-        ->addColumn('transaction_amount', function($data){
-            $text='';
-            if($data->transaction_type == 'credit')
-            $text.= '<p style="color:green;font-weight:bold">'.$data->amount.'</p>';
-            else
-            $text.= '<p style="color:red;font-weight:bold">-'.$data->amount.'</p>';
 
 
-            return $text;
-         })
-         ->addColumn('description', function($data){
-            if($data->transaction_type == 'credit')
-            $text = $data->transaction_wallet.' '.$data->wallet_type.' is credited with '.$data->amount.' Euro';
-            else
-            $text = $data->transaction_wallet.' '.$data->wallet_type.' is debited with '.$data->amount.' Euro';
-
-
-
-            return $text;
-         })
 
          ->addColumn('reseller_name', function($data){
            $text = $data->reseller->first_name." ".$data->reseller->last_name;
            return $text;
          })
          ->addColumn('last_response', function($data){
-            $text =$data->last_response->updated_at;
+            $text =  $data->last_response->updated_at;
+            return $text;
+          })
+          ->addColumn('message_read_status', function($data){
+              if(Auth::user()->role == 'admin')
+            $ticket_response = ticket_response::where('ticket_id',$data->id)->where('message_read_status_admin',0)->first();
+            else
+            $ticket_response = ticket_response::where('ticket_id',$data->id)->where('message_read_status_user',0)->first();
+
+            if($ticket_response)
+            $text = 'Unread';
+            else
+            $text = 'Read';
+            return $text;
+          })
+          ->addColumn('status', function($data){
+              if($data->status =='Open')
+            $text = '<p class="text-center" style="background-color:#BC0000;color:white">'.$data->status.'</p>';
+            else
+            $text = '<p class="text-center" style="background-color:#717D7E;color:white">'.$data->status.'</p>';
             return $text;
           })
 
@@ -325,7 +377,7 @@ class TicketController extends Controller
             return $text;
           })
 
-         ->rawColumns(['transaction_amount','description','reseller_name','last_response','action','update_status'])
+         ->rawColumns(['transaction_amount','description','reseller_name','last_response','action','update_status','status','message_read_status'])
         ->addIndexColumn()
         ->make(true);
         return $data;

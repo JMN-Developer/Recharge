@@ -351,6 +351,7 @@ Route::group(['prefix' => 'ticket','middleware'=>['auth','user']], function()
     Route::get('ticket-response/{id}',[TicketController::class,'ticket_response_view']);
     Route::post('ticket_reply',[TicketController::class,'ticket_reply'])->name('ticket-reply');
     Route::get('update_ticket_status',[TicketController::class,'update_ticket_status']);
+    Route::get('reopen',[TicketController::class,'ticket_reopen']);
 
 });
 

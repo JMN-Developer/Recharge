@@ -17,4 +17,11 @@ class ticket extends Model
     {
         return $this->hasOne('App\Models\ticket_response','ticket_id','id')->latestOfMany();
     }
+    public function message_status()
+    {
+        if(auth()->user()->role == 'Admin')
+        return $this->hasOne('App\Models\ticket_response','ticket_id','id')->where('message_read_status_admin');
+        else
+        return $this->hasOne('App\Models\ticket_response','ticket_id','id')->where('message_read_status_user');
+    }
 }

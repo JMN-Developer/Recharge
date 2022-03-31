@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
 
@@ -92,7 +93,7 @@
 
 
                       <div class="card-body pb-0">
-                          <p><span class="font-weight-bold p-2">Status:</span>{{ $ticket_details->status }}</p>
+                          <p><span class="font-weight-bold p-2">Status:</span>{{ $ticket_details->status }} @if($ticket_details->status == 'Close')<span><button onclick="re_open_ticket({{$ticket_details->id}})" class="btn btn-sm btn-primary" style="margin-left:10px">Re Open</button></span>@endif</p>
                           <p><span class="font-weight-bold p-2">Opened:</span>{{ $ticket_details->created_at }}</p>
                           <p><span class="font-weight-bold p-2">Response:</span>{{ $ticket_details->last_response->updated_at }}</p>
                       </div>
@@ -116,8 +117,9 @@
                 @foreach($ticket_response as $response)
                   @if($response->user->role == 'user')
                   <div class="card-body user-response pb-0" style="margin: 10px;border-radius:5px">
-                      <p class="title" >{{ $ticket_details->reseller->first_name." ". $ticket_details->reseller->last_name }} (Reseller)</p>
-                      <p>{{$response->message }}</p>
+                      <p class="title" >{{ $ticket_details->reseller->first_name." ". $ticket_details->reseller->last_name }} (Reseller) <span style="float: right">{{$response->response_time}}</span></p>
+
+                      <p >{{$response->message }}</p>
                       @if($response->document)
                       <div style="padding: 10px">
                           <img width="500px" height="270px" class="img-thumbnail" src="{{ asset("storage/$response->document ") }}">
@@ -129,7 +131,7 @@
                   </div>
                   @else
                   <div class="card-body admin-response pb-0" style="margin: 10px;border-radius:5px">
-                      <p class="title" >{{ $ticket_details->reseller->first_name." ". $ticket_details->reseller->last_name }} (Admin)</p>
+                      <p class="title" >Admin <span style="float: right">{{$response->response_time}}</span></p>
                       <p>{{$response->message }}</p>
                       @if($response->document)
                       <div style="padding: 10px">
@@ -145,7 +147,8 @@
 
 
               </div>
-              <div class="card">
+                @if($ticket_details->status == 'Open')
+                <div class="card">
                   <div class="card-body pb-0">
                       <form  action="{{ route('ticket-reply') }}" method="POST" enctype="multipart/form-data">
                           @csrf
@@ -169,6 +172,7 @@
                           </div>
                       </form>
                   </div>
+                  @endif
               </div>
               <!-- /.card -->
             </div>
@@ -194,6 +198,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
+<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
 <!-- Bootstrap -->
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('js/moment.min.js')}}"></script>
@@ -208,5 +213,76 @@
 @endsection
 
 @section('js')
+
+    <script>
+        $(function(){
+            var toast = document.querySelector('.iziToast');
+        var message = sessionStorage.getItem('message');
+        sessionStorage.removeItem('message');
+
+        if(toast)
+                {
+                iziToast.hide({}, toast);
+                }
+
+
+            if ( sessionStorage.getItem('success') ) {
+            sessionStorage.removeItem('success');
+
+
+            iziToast.success({
+                    backgroundColor:"Green",
+                    messageColor:'white',
+                    iconColor:'white',
+                    titleColor:'white',
+                    titleSize:'18',
+                    messageSize:'18',
+                    color:'white',
+                    position:'topCenter',
+                    timeout: 50000,
+                    title: 'Success',
+                    message: message,
+
+                });
+                //console.log(response.message);
+
+            }
+        });
+
+        function re_open_ticket(id)
+        {
+            swal({
+  title: "Are you sure?",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+
+    $.ajax({
+            type: "GET",
+
+            url: '/ticket/reopen',
+            data: {'id': id},
+            success: function(data){
+                location.reload()
+                sessionStorage.setItem('success',true);
+                sessionStorage.setItem('message','Your ticket is now Re-opened. You can contact through this ticket ');
+            }
+        });
+
+
+
+
+
+  } else {
+
+  }
+  });
+
+
+        }
+    </script>
 
 @endsection
