@@ -474,7 +474,7 @@ function showDiv() {
 
     }
     $("#rcountry").change(function(){
-
+        //alert(this.value);
     $("#weight").attr('disabled',false);
     $("#weight").attr('placeholder','Product Weight');
     get_total()
@@ -518,7 +518,8 @@ function showDiv() {
           success: function(data){
             $('#rcountry').append('<option></option>')
             $(data).each(function(index,item){
-      $('#rcountry').append('<option value='+item.country_name+'>'+item.country_name+'</option>');
+
+      $('#rcountry').append('<option value="'+item.country_name+'">'+item.country_name+'</option>');
     })
             // $(".myDIV").hide();
             // $('#total').val(data);
