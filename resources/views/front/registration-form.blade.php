@@ -309,7 +309,7 @@ var s_character = document.getElementById("s_character");
                         success:function(response){
                             swal("New user created successfully.")
                             .then((value) => {
-                                location.href='retailer-action'
+                                window.location.href=''
                             });
 
 

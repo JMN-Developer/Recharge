@@ -23,55 +23,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
 <html lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <style>
-
-
-        .notification {
-  background-color: #76D7C4;
-  color: white;
-  text-decoration: none;
-  padding: 6px 26px;
-  position: relative;
-  display: inline-block;
-  border-radius: 2px;
-  margin-left: 10px;
-}
-
-
-.notification:hover {
-  background: white;
-}
-
-.notification .badge {
-  position: absolute;
-  top: 4px;
-  right: -10px;
-  padding: 5px 10px;
-  border-radius: 50%;
-  background: red;
-  color: white;
-}
-
-.select2-container .select2-selection--single {
-    height: 38px !important;
-}
-.font-focus{
-    font-weight: bolder;
-}
-.select2-container--default .select2-results>.select2-results__options {
-    max-height: 471px
-}
-
-.badge {
-  position: absolute;
-  top: 5px;
-margin-left: 3px;
-  padding: 8px 10px !important;
-  border-radius: 50% !important;
-  background: red;
-  color: white;
-}
-    </style>
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
 </head>
 @yield('header')
 
@@ -644,13 +596,14 @@ margin-left: 3px;
                   @endif
 
                 </li>
-
+                @if (Auth::user()->reseller_permission == 1)
                 <li class="nav-item">
                   <a href="/retailer/retailer-action" class="@if(Route::currentRouteName() == 'retailer-action') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Retailer Action</p>
                   </a>
                 </li>
+                @endif
 
                 @if (Auth::user()->reseller_permission == 1)
                 <li class="nav-item">
@@ -662,6 +615,16 @@ margin-left: 3px;
                 @endif
               </ul>
             </li>
+            <li class="@if(Route::currentRouteName() == 'GeneralNotification') nav-item menu-open @endif nav-item">
+                <a href="{{ route('GeneralNotification') }}" class="@if(Route::currentRouteName() == 'GeneralNotification') nav-link active @endif nav-link">
+                  <i class="fas fa-wallet" aria-hidden="true"></i>
+                  <p>
+                    Notification <span class="badge general_notification_count">3</span>
+
+                  </p>
+                </a>
+              </li>
+
             <li class="@if(Route::currentRouteName() == 'setting') nav-item menu-open @endif nav-item">
                 <a href="{{ route('setting') }}" class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
                   <i class="fa fa-cog" aria-hidden="true"></i>
@@ -789,87 +752,24 @@ margin-left: 3px;
   REQUIRED SCRIPTS
 =======================
 -->
-
+<script src="{{ mix('/js/app.js') }}"></script>
+{{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
+<script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('js/moment.min.js')}}"></script>
+<script src="{{asset('js/admin.js')}}"></script>
+<script src="{{asset('js/autocomplete.js')}}"></script>
+<script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
+<script src="{{asset('js/custom.js')}}"></script>
+<script src="{{asset('js')}}/home.js?{{time()}}"></script>
   @yield('scripts')
+
   @yield('js')
-  <script src="{{ mix('/js/app.js') }}"></script>
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script>
 
-      $(function(){
-        notification_count();
-        sim_notification_count();
-        complain_notification_count();
-      });
-      $(".custom-file-input").on("change", function() {
-  var fileName = $(this).val().split("\\").pop();
-  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-});
-        var a = Echo.channel('events')
-            .listen('DueRequest', (e) => {
-                notification_count()
-                sim_notification_count();
-            });
-
-        var a = Echo.channel('events')
-            .listen('SimRequest', (e) => {
-              sim_notification_count();
-
-            });
-        var a = Echo.channel('events')
-            .listen('TicketRequest', (e) => {
-
-            complain_notification_count();
-
-            });
-
-
-        function notification_count()
-        {
-          $.ajax({
-              type: "GET",
-              dataType: "json",
-              url: '/wallet_notification_count',
-              success: function(data){
-              $('.wallet_notification_count').text(data)
-              }
-          });
-        }
-        function isNumberKeyDecimal(evt)
-{
-    var charCode = (evt.which) ? evt.which : event.keyCode
-    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
-        return false;
-    return true;
-}
-        function complain_notification_count()
-        {
-
-          $.ajax({
-              type: "GET",
-              dataType: "json",
-              url: '/complain_notification_count',
-              success: function(data){
-                console.log(data)
-              $('.complain_notification_count').text(data)
-              }
-          });
-        }
-
-        function sim_notification_count()
-        {
-          $.ajax({
-              type: "GET",
-              dataType: "json",
-              url: '/sim_notification_count',
-              success: function(data){
-
-              $('.sim_notification_count').text(data)
-              }
-          });
-        }
-  </script>
 
 </body>
 </html>
