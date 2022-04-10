@@ -49,7 +49,7 @@ class UserController extends Controller
         $users->codice_fiscale = $request->input('codice_fiscale');
         $users->gender = $request->input('gender');;
         $users->wallet = 0;
-        $users->created_by =Auth::user()->id;
+        $users->created_by = Auth::user()->id;
         $users->password = Hash::make($request['password']);
         $users->save();
         return ['status'=>true];
