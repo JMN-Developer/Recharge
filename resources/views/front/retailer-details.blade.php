@@ -414,13 +414,7 @@
 
 @section('scripts')
 <!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custome JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script>
   $(".confirm").confirm();

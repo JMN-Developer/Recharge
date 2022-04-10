@@ -83,8 +83,8 @@ class BangladeshiRecharge
     public function query_recharge()
     {
 
-        $guid ='20032022120404002313';
-        $vr_guid ='JMN-GP-4814950695';
+        $guid ='02042022101936002313';
+        $vr_guid ='JMN-GP-TR-5296449148';
         //file_put_contents('test.txt',$amount);
         try {
             $data = $this->client->QueryRechargeStatus($this->client_id,$guid,$vr_guid);

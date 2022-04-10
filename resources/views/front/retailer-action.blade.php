@@ -17,7 +17,9 @@
 
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
+<link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
+
+</head>
 @endsection
 
 @section('content')
@@ -48,67 +50,67 @@
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-bordered table-sm table-hover table-head-fixed text-nowrap text-center">
-                  <thead>
-                    <tr>
-                      <th style="background: #faaeae;">Name</th>
-                      @if(auth()->user()->role ='admin' || auth()->user()->recharge_permission == 1 )
-                      <th style="background: #faaeae;">Recharge</th>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->sim_permission == 1 )
-                      <th style="background: #faaeae;">SIM</th>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->cargo_permission == 1 )
-                      <th style="background: #faaeae;">Cargo</th>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->mobile_permission == 1 )
-                      <th style="background: #faaeae;">Mobile</th>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->reseller_permission == 1 )
-                      <th style="background: #faaeae;">Reseller</th>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->pin_permission == 1 )
-                      <th style="background: #faaeae;">Pin</th>
-                      @endif
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach($data as $retailer)
-                    <tr class="bg-ocean">
-                      <td>{{$retailer->first_name}}</td>
-                      @if(auth()->user()->role ='admin' || auth()->user()->recharge_permission == 1 )
-                      <td>
-                        <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>
-                      </td>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->sim_permission == 1 )
-                      <td>
-                        <input id="sim{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class sim" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->sim_permission ? 'checked' : '' }}>
-                      </td>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->cargo_permission == 1 )
-                      <td>
-                        <input id="cargo{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class cargo" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->cargo_permission ? 'checked' : '' }}>
-                      </td>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->mobile_permission == 1 )
-                      <td>
-                        <input id="phone{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class phone" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->mobile_permission ? 'checked' : '' }}>
-                      </td>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->reseller_permission == 1 )
-                      <td>
-                        <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class reseller" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->reseller_permission ? 'checked' : '' }}>
-                      </td>
-                      @endif
-                      @if(auth()->user()->role ='admin' || auth()->user()->pin_permission == 1 )
-                      <td>
-                        <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class pin" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->pin_permission ? 'checked' : '' }}>
-                      </td>
-                      @endif
-                    </tr>
-                    @endforeach
-                  </tbody>
-                </table>
+                    <thead>
+                      <tr>
+                        <th style="background: #faaeae;">Name</th>
+                        @if(auth()->user()->role =='admin' || auth()->user()->recharge_permission == 1 )
+                        <th style="background: #faaeae;">Recharge</th>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->sim_permission == 1 )
+                        <th style="background: #faaeae;">SIM</th>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->cargo_permission == 1 )
+                        <th style="background: #faaeae;">Cargo</th>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->mobile_permission == 1 )
+                        <th style="background: #faaeae;">Mobile</th>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->reseller_permission == 1 )
+                        <th style="background: #faaeae;">Reseller</th>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->pin_permission == 1 )
+                        <th style="background: #faaeae;">Pin</th>
+                        @endif
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach($data as $retailer)
+                      <tr class="bg-ocean">
+                        <td>{{$retailer->first_name}}</td>
+                        @if(auth()->user()->role =='admin' || auth()->user()->recharge_permission == 1 )
+                        <td>
+                          <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>
+                        </td>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->sim_permission == 1 )
+                        <td>
+                          <input id="sim{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class sim" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->sim_permission ? 'checked' : '' }}>
+                        </td>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->cargo_permission == 1 )
+                        <td>
+                          <input id="cargo{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class cargo" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->cargo_permission ? 'checked' : '' }}>
+                        </td>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->mobile_permission == 1 )
+                        <td>
+                          <input id="phone{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class phone" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->mobile_permission ? 'checked' : '' }}>
+                        </td>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->reseller_permission == 1 )
+                        <td>
+                          <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class reseller" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->reseller_permission ? 'checked' : '' }}>
+                        </td>
+                        @endif
+                        @if(auth()->user()->role =='admin' || auth()->user()->pin_permission == 1 )
+                        <td>
+                          <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class pin" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->pin_permission ? 'checked' : '' }}>
+                        </td>
+                        @endif
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
               </div>
               <!-- /.card-body -->
             </div>
@@ -263,11 +265,7 @@
 @section('scripts')
 <!-- jQuery -->
 
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
+
 <script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+
 @endsection

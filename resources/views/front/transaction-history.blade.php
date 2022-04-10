@@ -15,6 +15,7 @@
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   {{-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> --}}
   <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
@@ -536,22 +537,13 @@ table.dataTable thead .sorting_asc{
 
 @section('scripts')
 <!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-{{-- <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap.min.js"></script> --}}
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset('js/moment.min.js')}}"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
 
 @endsection
 

@@ -105,13 +105,7 @@
 -->
 
 <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="js/bootstrap.bundle.min.js"></script>
-<!-- Theme JS -->
-<script src="js/admin.js"></script>
-<!-- Custom JS -->
-<script src="js/custom.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
   <script>
     $(".confirm").confirm();

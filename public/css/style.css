@@ -15,9 +15,9 @@
       transform: rotate(10deg); }
     80% {
       -webkit-transform: rotate(-10deg);
-      transform: rotate(-10deg); } 
+      transform: rotate(-10deg); }
   }
-  
+
   @keyframes swing {
     0%, 30%, 50%, 70%, 100% {
       -webkit-transform: rotate(0deg);
@@ -33,15 +33,63 @@
       transform: rotate(10deg); }
     80% {
       -webkit-transform: rotate(-10deg);
-      transform: rotate(-10deg); } 
+      transform: rotate(-10deg); }
   }
+
+
+  .notification {
+    background-color: #76D7C4;
+    color: white;
+    text-decoration: none;
+    padding: 6px 26px;
+    position: relative;
+    display: inline-block;
+    border-radius: 2px;
+    margin-left: 10px;
+  }
+
+
+  .notification:hover {
+    background: white;
+  }
+
+  .notification .badge {
+    position: absolute;
+    top: 4px;
+    right: -10px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+  }
+
+  .select2-container .select2-selection--single {
+      height: 38px !important;
+  }
+  .font-focus{
+      font-weight: bolder;
+  }
+  .select2-container--default .select2-results>.select2-results__options {
+      max-height: 471px
+  }
+
+  .badge {
+    position: absolute;
+    top: 5px;
+  margin-left: 3px;
+    padding: 8px 10px !important;
+    border-radius: 50% !important;
+    background: red;
+    color: white;
+  }
+
   .sidebar ul.nav-sidebar li a:hover > i::before {
       display: inline-block;
       -webkit-animation: swing ease-in-out .5s 1 alternate;
       animation: swing ease-in-out .5s 1 alternate;
       color: aqua;
   }
-  
+
   .sidebar_profile_info{
       color: #c2c7d0;
       margin-top: -13px;
@@ -72,7 +120,7 @@
   .profile-info span{
       color: #ff544e;
   }
-  
+
   .nav-treeview{
       padding-left: 25px !important;
   }
@@ -98,10 +146,10 @@
   .brand-text strong{
       color: #cc8a3e;
   }
-  
-  
-  
-  
+
+
+
+
   /* Edit Profile */
   .profile_info_box{
       width: 550px;
@@ -136,12 +184,12 @@
       height: 30px;
       width: 30px;
   }
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   .current_balance{
       border: 3px solid #06c2a2;
       background-image: linear-gradient(to right top, #c1e99b, #8af099, #70e7bb, #00edc5, #1de7de);
@@ -234,13 +282,13 @@
       left: -30px;
       top: 20px;
   }
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   .phone_order_header{
       padding: 0 15px;
   }
@@ -259,7 +307,7 @@
   }
   @media only screen and (max-width: 472px){
       .order_page_header, .btn_card_group{
-      width: 100%; 
+      width: 100%;
       }
   }
   .btn_card_group .select2-container {
@@ -347,10 +395,10 @@
           padding: 0;
       }
   }
-  
-  
-  
-  
+
+
+
+
   /* Retailer */
   .rate_for_retailer {
       display: none!important;
@@ -361,7 +409,7 @@
   .show-retailer-price .rate_for_customer {
       display: none;
   }
-  
+
   .activation-additional-info {
       display: none;
   }
@@ -392,7 +440,7 @@
           width: 100% !important;
       }
   }
-  
+
   /* SIM Selling */
   .selling_search_group{
       display: flex;
@@ -424,10 +472,10 @@
       margin-top: 15px;
       }
   }
-  
-  
-  
-  
+
+
+
+
   .wifi-radio{
       background: #0caeee;
       padding: 0 5px;
@@ -451,7 +499,7 @@
       -ms-flex-pack: center;
       justify-content: center;
   }
-  
+
   .recharge-box{
       width: 100%;
       margin-top: 20px;
@@ -496,13 +544,13 @@
   .last_recharge_table .last_recharge_table_head h5{
       margin-top: 5px;
   }
-  
+
   @media only screen and (max-width: 767px){
       .last_recharge_table{
       margin-top: 30px;
       }
   }
-  
+
   .receiver_inputs .iti--allow-dropdown{
       width: 85%;
   }
@@ -581,55 +629,55 @@
       border-top-right-radius: 3px;
       margin-bottom: 8px;
   }
-  
-  
+
+
   /* Retailer Action */
   #retailerActiveBtn{
       width: 70px;
   }
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   /* Recharge Italy */
-  
-               
+
+
   .brand-dropdown{
-      display: none; 
+      display: none;
   }
-  
+
   #brandUlList{
       padding-left: 0px;
       position: relative;
   }
-  
+
   #brandUlList img, .btn-select img{
       width: 12px;
-      
+
   }
-  
+
   #brandUlList li{
       list-style: none;
       padding-top: 5px;
       padding-bottom: 5px;
       border-bottom: 1px solid rgba(0,0,0,.15);
   }
-  
+
   #brandUlList li:hover{
       background-color: #F4F3F3;
   }
-  
+
   #brandUlList li img{
       margin: 5px;
   }
-  
+
   #brandUlList li span, .btn-select li span{
       margin-left: 30px;
   }
-  
-  
+
+
   .brandUlLiContainer{
       display: none;
       width: 97%;
@@ -644,18 +692,18 @@
       left: 8px;
       z-index: 1;
   }
-  
+
   .open{
       display: show !important;
   }
-  
+
   .selected-brand{
       width: 100%;
       height: 40px;
       border-radius: 5px;
       background-color: #fff;
       border: 1px solid #ccc;
-      
+
   }
   .selected-brand li{
       list-style: none;
@@ -668,23 +716,23 @@
       border-radius: 5px;
       padding-right: 10px;
   }
-  
+
   .selected-brand:hover li{
       margin-left: 0px;
   }
-  
+
   .selected-brand:hover{
       background-color: #F4F3F3;
       border: 1px solid transparent;
       box-shadow: inset 0 0px 0px 1px #ccc;
-      
-      
+
+
   }
-  
+
   .selected-brand:focus{
       outline:none;
   }
-  
+
   /* Cargo New Order */
   .cargo_t-action_btn .dropdown-menu{
       left: -50px !important;
@@ -707,10 +755,10 @@
   .cargo_order_list_btn .fas{
       margin-right: 10px;
   }
-  
-  
-  
-  
+
+
+
+
   /* Tracking List */
   .tracking_report{
       background: #fff;
@@ -811,8 +859,8 @@
       width: 100%;
       }
   }
-  
-  
+
+
   /* Selling List */
   .fs-6{
       font-size: 12px;
@@ -820,8 +868,8 @@
   .selling_progress .progress{
       border-radius: 5px;
   }
-  
-  
+
+
   /* Recharge Invoice */
   .recharge_invoice .invoice{
       width: 300px;
@@ -834,9 +882,9 @@
       border-bottom: 1px solid #d8d8d8;
       margin-bottom: 10px;
   }
-  
-  
-  
+
+
+
   /* Cargo Invoice */
   .invoice_table .invoice_table_border{
       border: 1px solid #686868;
@@ -857,10 +905,10 @@
       border: none;
       width: 50%;
   }
-  
-  
-  
-  
+
+
+
+
   /* Gift Card */
   .gift_card_inner{
       width: 100%;
@@ -977,7 +1025,7 @@
   .card-bg-11{
       background: #000;
   }
-  
+
   .gift_card_form{
       max-width: 800px;
       margin: 20px auto;
@@ -999,17 +1047,17 @@
   .text-middle{
       padding-top: 50px;
   }
-  
-  
-  
-  
+
+
+
+
   /* Print All Invoice */
   .converter_section{
       display: flex;
       justify-content: space-between;
       margin-bottom: 20px;
   }
-  
+
   .converter_search-1{
       width: 150px;
   }
@@ -1027,7 +1075,7 @@
       margin-top: 5px;
       width: 23%;
       }
-  }  
+  }
   @media only screen and (max-width: 271px){
       .converter_btn-1 .btn{
       width: 100%;
@@ -1035,4 +1083,4 @@
   }
   .date_picker_pair{
       width: 200px;
-  }   
+  }

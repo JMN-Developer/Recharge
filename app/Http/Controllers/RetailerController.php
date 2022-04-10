@@ -42,7 +42,7 @@ class RetailerController extends Controller
         }else {
             $data = User::where('role','user')->where('created_by', Auth::user()->id)->get();
         }
-
+       // file_put_contents('test.txt',auth()->user()->role);
         return view('front.retailer-action',compact('data'));
     }
     public function RetailerSignUp($value='')

@@ -180,12 +180,6 @@ TableFilter.init();
 })(document);
 </script>
 <!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 @endsection

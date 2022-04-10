@@ -20,6 +20,7 @@ class DtOneProvider
 
     public function fetch_product($operator_id)
     {
+       // file_put_contents('test.txt', $operator_id);
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
         $operator_request = $client->get('https://dvs-api.dtone.com/v1/products?operator_id='.$operator_id.'&type=FIXED_VALUE_RECHARGE',['headers' => [
             'Authorization'     => 'Basic '.$this->access_token,
@@ -31,7 +32,7 @@ class DtOneProvider
             $operator_response = $operator_request->getBody();
            // file_put_contents('test.txt',$operator_response);
             $operator_response = json_decode($operator_response);
-
+            //file_put_contents('test.txt',sizeof($operator_response));
             return $operator_response;
     }
 

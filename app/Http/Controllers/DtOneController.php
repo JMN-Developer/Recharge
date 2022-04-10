@@ -147,6 +147,7 @@ class DtOneController extends Controller
                         array_push($internet_data,$data[$i]);
 
                     }
+                   // file_put_contents('test.txt',sizeof($credit_data));
                     $operator_name = $data[0]->operator->name;
                     $skus = $this->make_sku_list($credit_data);
                     $internet_data = $this->make_internet_data_list($internet_data);

@@ -199,11 +199,7 @@
 @section('scripts')
 <!-- jQuery -->
 
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
+
 <script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+
 @endsection

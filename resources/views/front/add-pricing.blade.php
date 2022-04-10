@@ -136,89 +136,13 @@
 @endsection
 
 @section('scripts')
-<!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Select2 -->
-<script src="{{asset('js/select2.full.min.js')}}"></script>
-<!-- Bootstrap4 Duallistbox -->
-<script src="{{asset('js/jquery.bootstrap-duallistbox.min.js')}}"></script>
-<!-- daterangepicker -->
-<script src="{{asset('js/moment.min.js')}}"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="{{asset('js/tempusdominus-bootstrap-4.min.js')}}"></script>
-<!-- BS-Custom-file-input -->
-<script src="{{asset('js/bs-custom-file-input.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+
 @endsection
 
 
 @section('js')
 <!-- Page specific script -->
-<script>
-  $(function () {
-    //Initialize Select2 Elements
-    $('.select2').select2()
-
-    //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
-    //Date picker
-    $('#customerBirthDate').datetimepicker({
-      format: 'yyyy-mm-dd'
-    });
-    $('#receiverBirthDate').datetimepicker({
-      format: 'yyyy-mm-dd'
-    });
-    $('#expectedDelivaryDate').datetimepicker({
-      format: 'yyyy-mm-dd'
-    });
-
-  })
-
-
-  $(function () {
-      bsCustomFileInput.init();
-    });
-
-  function myFunction() {
-   let totalCharge = document.getElementById("total");
-   let change = document.getElementById("total").value;
-   let countryCharge = document.getElementById("charge_for_country").value;
-   let weightCharge = document.getElementById("charge_for_weight").value;
-
-
-   totalCharge.setAttribute('value', parseInt(weightCharge) + parseInt(countryCharge));
-
-   // let totalCharge = document.getElementById("total");
-
-   console.log(change);
-   // totalCharge.setAttribute('value','')
-
-  }
-
-  function myFunction2() {
-   let totalCharge = document.getElementById("total");
-   let change = document.getElementById("total").value;
-   let countryCharge = document.getElementById("charge_for_country").value;
-   let weightCharge = document.getElementById("charge_for_weight").value;
-
-
-   totalCharge.setAttribute('value', parseInt(weightCharge) + parseInt(countryCharge));
-
-   // let totalCharge = document.getElementById("total");
-
-   console.log(change);
-   // totalCharge.setAttribute('value','')
-
-  }
-
-</script>
+<script src="{{asset('js')}}/cargoPricing.js?{{time()}}"></script>
 <script type="text/javascript">
 
 

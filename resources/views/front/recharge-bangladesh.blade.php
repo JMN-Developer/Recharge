@@ -214,41 +214,18 @@
    <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
 
 
 @endsection
 @section('scripts')
-<!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<script src="{{asset('js/autocomplete.js')}}"></script>
+
 <script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
 <!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+
 @endsection
 @section('js')
 
-<script>
-    // $('.nav-tabs li').on('click', function(e) {
-    //     console
-    //     e.preventDefault();
 
-    //     $(this).parent().addClass('active');
-    //     $(this).parent().siblings().removeClass('active');
-
-    //     target = $(this).attr('href');
-
-    //     $('.tab-content > div').not(target).hide();
-
-    //     $(target).fadeIn(600);
-
-    // });
-</script>
 <script>
     function offer_select(id,amount,update_amount,offer_description)
     {

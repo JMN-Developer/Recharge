@@ -265,15 +265,7 @@ TableFilter.init();
 
 @section('scripts')
 <!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Select2 -->
-<script src="{{asset('js/select2.full.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
 @endsection

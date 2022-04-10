@@ -24,6 +24,7 @@ use App\Http\Controllers\DingConnectController;
 use App\Http\Controllers\DtOneController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\InternationalApiController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\FlightController;
 use App\Models\ApiList;
@@ -225,6 +226,8 @@ Route::group(['middleware'=>['auth','user']], function()
     })->name('contact-info');
     Route::get('wallet_notification_count',[WalletController::class,'wallet_notification_count']);
 
+    Route::get('general_notification_count',[NotificationController::class,'general_notification_count']);
+
     Route::get('sim_notification_count',[SimController::class,'sim_notification_count']);
 
     Route::get('complain_notification_count',[TicketController::class,'complain_notification_count']);
@@ -406,7 +409,15 @@ Route::group(['prefix' => 'cargo','middleware'=>['auth','user']], function()
     Route::post('cargo_update',[OrderController::class,'update_status']);
 
 });
+Route::group(['prefix' => 'notification','middleware'=>['auth']], function()
+{
 
+    Route::get('create', [NotificationController::class,'create_notification'])->name('create-notification');
+    Route::post('send', [NotificationController::class, 'sendNotification'])->name('send_notification');
+    Route::get('show', [NotificationController::class,'index'])->name('GeneralNotification');
+
+
+});
 
 
 

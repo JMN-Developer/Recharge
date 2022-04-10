@@ -150,13 +150,7 @@
 <!-- /.register-box -->
 
 <!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custome JS -->
-<script src="{{asset('js/Custom.js')}}"></script>
+
 
 
 </body>
