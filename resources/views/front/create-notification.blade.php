@@ -83,7 +83,7 @@ table.dataTable thead .sorting_asc{
                             <div class="form-group col-md-6">
 
                                 <label for="inputPassword4">Reseller</label>
-                                <select  data-placeholder="Select an Option"  class="custom-select js-example-basic-multiple"  name="reseller[]" multiple='multiple'>
+                                <select  data-placeholder="Select an Option"  class="custom-select js-example-basic-multiple"  name="reseller[]" multiple='multiple' required>
                                     <option></option>
                                     @foreach($resellers as $reseller)
                                      <option value="{{$reseller->id}}">{{$reseller->first_name.' '.$reseller->last_name .'('.$reseller->user_id.')'}}</option>
@@ -100,7 +100,7 @@ table.dataTable thead .sorting_asc{
 
                       <div class="form-group col-md-6">
                         <label for="inputPassword4">Service</label>
-                        <select  data-placeholder="Select an Option"  class="custom-select service"  name="service">
+                        <select  data-placeholder="Select an Option"  class="custom-select service"  name="service" required>
                             <option></option>
 
                              <option value="International Recharge">International Recharge</option>
@@ -118,7 +118,7 @@ table.dataTable thead .sorting_asc{
 
                         <div class="form-group col-md-12">
                             <label for="inputPassword4">Message</label>
-                            <textarea id="message" class="form-control" rows="6" name="message"></textarea>
+                            <textarea id="message" class="form-control" rows="6" name="message" required ></textarea>
                           </div>
 
 
