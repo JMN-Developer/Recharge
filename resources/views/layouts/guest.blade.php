@@ -18,7 +18,9 @@
     <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
     <body>
         <div class="font-sans text-gray-900 antialiased">
+
             {{ $slot }}
+
         </div>
     </body>
 </html>

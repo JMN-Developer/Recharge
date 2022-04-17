@@ -53,6 +53,8 @@
                     <thead>
                       <tr>
                         <th style="background: #faaeae;">Name</th>
+                        <th style="background: #faaeae;">User Id</th>
+                        <th style="background: #faaeae;">Email</th>
                         @if(auth()->user()->role =='admin' || auth()->user()->recharge_permission == 1 )
                         <th style="background: #faaeae;">Recharge</th>
                         @endif
@@ -76,7 +78,9 @@
                     <tbody>
                       @foreach($data as $retailer)
                       <tr class="bg-ocean">
-                        <td>{{$retailer->first_name}}</td>
+                        <td>{{$retailer->first_name.' '.$retailer->last_name}}</td>
+                        <td>{{$retailer->user_id}}</td>
+                        <td>{{$retailer->email}}</td>
                         @if(auth()->user()->role =='admin' || auth()->user()->recharge_permission == 1 )
                         <td>
                           <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>

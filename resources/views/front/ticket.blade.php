@@ -94,6 +94,7 @@ table{
                   <table class="table table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table">
                     <thead>
                       <tr>
+                      <th style="background-color: #212529;color:white"  >Sl No</th>
                         @if(Auth::user()->role == 'admin')
                         <th style="background-color: #212529;color:white"  >Reseller</th>
                         @endif
@@ -134,20 +135,11 @@ table{
 
 @section('scripts')
 <!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
 <!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset('js/moment.min.js')}}"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
 
 @endsection
 
@@ -209,6 +201,7 @@ function fetch_table()
         searchPanes: {
             orderable: false
         },
+        
         dom: 'Plfrtip',
         createdRow: function( row, data, dataIndex ) {
 
@@ -228,9 +221,17 @@ function fetch_table()
             "url":get_ticket_data,
             "type":'get',
             },
+            
         deferRender: true,
+        language: {
+        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
+        },
+        fnRowCallback : function(nRow, aData, iDisplayIndex){
+                $("td:first", nRow).html(iDisplayIndex +1);
+               return nRow;
+            },
         columns: [
-            //   {data: 'sl_no'},
+            {data: 'id',name:'id'},
             @if(Auth::user()->role == 'admin')
             {data:'reseller_name',name:'reseller_name',orderable:false},
             @endif

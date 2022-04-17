@@ -48,10 +48,19 @@
     margin-left: 10px;
   }
 
-
+  .fa-spin{
+    color:#F8AC0B;
+    margin-top:20px;
+    font-weight: bolder
+  }
   .notification:hover {
     background: white;
   }
+  /* .antialiased{
+      background-color: red !important;
+  } */
+
+
 
   .notification .badge {
     position: absolute;

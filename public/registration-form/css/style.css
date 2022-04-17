@@ -19,12 +19,7 @@
     box-sizing: border-box
 }
 
-body {
-    font-family: muli-regular;
-    color: #666;
-    font-size: 13px;
-    margin: 0
-}
+
 
 textarea {
     padding: 10px !important;
@@ -68,13 +63,13 @@ a:hover {
     outline: none
 }
 
-.wrapper {
+/* .wrapper {
     min-height: 100vh;
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;
     align-items: center
-}
+} */
 
 .inner img {
     position: absolute;

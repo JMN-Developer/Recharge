@@ -154,12 +154,12 @@
                           @csrf
                           <div class="form-group col-md-12">
                               <label for="inputPassword4">Message</label>
-                              <textarea id="message" class="form-control" rows="6" name="reseller_message"></textarea>
+                              <textarea id="message" class="form-control" rows="6" name="reseller_message" required></textarea>
                               <input type='hidden' name="ticket_id" value="{{ $ticket_details->id }}">
                             </div>
 
                             <div class="form-group col-md-6">
-                              <label for="inputPassword4">Attachment</label>
+                              <label for="inputPassword4">Attachment(Optional)</label>
                               <div class="custom-file">
                                   <input type="file" class="custom-file-input" id="document" name="document">
                                   <label class="custom-file-label " for="customFile">Choose file</label>
@@ -167,6 +167,7 @@
                             </div>
                             <div class="form-group col-md-12">
                               <input type='submit' class="btn btn-primary" value="Submit" style="margin-top: 32px;">
+                              <button type="button" class="btn btn-danger" style="margin-top: 32px;" onclick="back()">Close</button>
                             </div>
 
                           </div>
@@ -194,27 +195,21 @@
 
 @section('scripts')
 <!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
-<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset('js/moment.min.js')}}"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
 
 @endsection
 
 @section('js')
-
+    
     <script>
+      function back() {
+      window.history.back()
+
+    }
         $(function(){
             var toast = document.querySelector('.iziToast');
         var message = sessionStorage.getItem('message');

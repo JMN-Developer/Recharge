@@ -81,7 +81,7 @@ class PricingController extends Controller
     public function SendPricing(Request $request)
     {
         $w = $request->weight;
-        $fixed_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','fixed')->first();
+        $fixed_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','fixed')->where('type','Goods')->first();
         $fixed_weight_limit = $fixed_data->weight_end;
       //  $myfile = fopen("test.txt", "a+") or die("Unable to open file!");
         if($fixed_weight_limit>=$w)
@@ -91,7 +91,7 @@ class PricingController extends Controller
         }
         else
         {
-            $variable_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','variable')->orderBy('weight_end','ASC')->get();
+            $variable_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','variable')->where('type','Goods')->orderBy('weight_end','ASC')->get();
             $variable_weight = $w - $fixed_weight_limit;//95
             $price = $fixed_data->total;
 
@@ -146,7 +146,7 @@ class PricingController extends Controller
 
     public function SendPricingForDocs(Request $request)
     {
-        $data = OrderRatings::where('country_name', '=', $request->country)->where('type', '=', $request->type)->get('total');
+        $data = OrderRatings::where('country_name', '=', $request->country)->where('type', '=', $request->type)->where('type','Documents')->get('total');
 
         if(count($data) < 1){
             $data = "No data";

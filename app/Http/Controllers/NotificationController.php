@@ -11,6 +11,7 @@ use App\Events\GeneralNotificationEvent;
 use Illuminate\Support\Carbon;
 use Illuminate\Notifications\DatabaseNotification;
 use DB;
+use Log;
 
 class NotificationController extends Controller
 {
@@ -32,7 +33,7 @@ class NotificationController extends Controller
           }
           else
           {
-            $notifications = DatabaseNotification::paginate(5);
+            $notifications = DatabaseNotification::latest()->paginate(5);
             foreach ($notifications as $notification) {
                 $notification_data = json_decode(json_encode($notification->data));
                 array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
@@ -66,8 +67,20 @@ class NotificationController extends Controller
 
         ];
         // //$userSchema->notify(new GeneralNotification($offerData));
-        Notification::send($users, new GeneralNotification($data));
-        event(new GeneralNotificationEvent());
+        try{
+            Notification::send($users, new GeneralNotification($data));
+        }
+        catch(Throwable $th){
+            Log::error("General Notification Error: ".$th);
+        }
+        try{
+            event(new GeneralNotificationEvent());
+        }
+        catch(\Throwable $th){
+            Log::error("General Event Error: ".$th);
+        }
+        return redirect()->route('GeneralNotification')->with('success','Ticket Submitted Successfully');
+
 // dd('Task completed!');
     }
     public function general_notification_count()

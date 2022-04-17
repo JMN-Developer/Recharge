@@ -76,7 +76,13 @@ class WalletController extends Controller
             'document'=>$path
 
         ]);
-        event(new DueRequest());
+        try{
+            event(new DueRequest());
+        }
+        catch(\Throwable $th){
+            Log::error("Wallet Event Error: ".$th);
+        }
+       
     }
 
     public function get_requested_amount(Request $request)

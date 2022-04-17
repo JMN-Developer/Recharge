@@ -10,6 +10,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{asset('css/fontawesome-free/css/all.min.css')}}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
 
@@ -42,47 +43,7 @@
                   <input type="text" class="form-control" name="daterange" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
                   <!-- <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" /> -->
                 </div>
-                {{-- <form action="/filebytype" method="POST">
-                @csrf
-                <div class="row">
-                  <div class="col-md-10">
-                    <div class="form-group offer_select_option">
-                      <label for="ExampleSelect">Tipo Ricarica</label>
-                      <select class="custom-select" id="ExampleSelect" name="type">
-                        <option value="all">All</option>
-                        <option value="International">Recharge International</option>
-                        <option value="Domestic">Recharge Domestic</option> --}}
-                        {{-- <option value="offer_table_two">Gift Card</option>
-                        <option value="offer_table_two">Calling Card</option> --}}
-                      {{-- </select>
-                    </div>
-                  </div>
-                  <div class="col-md-2">
-                    <input type="submit" value="Search" class="btn btn-success">
-                  </div>
-                </div>
-              </form> --}}
-                {{-- <div class="converter_section mt-5">
-                  <div class="converter_btn-1">
-                    <button type="button" class="btn btn-info btn-sm">Copy</button>
-                    <button type="button" class="btn btn-info btn-sm">Exel</button>
-                    <button type="button" class="btn btn-info btn-sm">CSV</button>
-                    <button type="button" class="btn btn-info btn-sm">PDF</button>
-                  </div>
-                  <div class="converter_search-1">
-                    <div class="card-tools">
-                      <div class="input-group input-group-sm">
-                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                        <div class="input-group-append">
-                          <button type="submit" class="btn btn-default">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> --}}
+       
                 <div class="agent_amount_table">
                   <table class="table table-sm table-bordered">
                     <thead class="table-danger">
@@ -111,11 +72,7 @@
                       <div class="input-group input-group-sm">
                         <input type="text" name="table_search" data-table="table-info" class="form-control float-right light-table-filter" placeholder="Search">
 
-                        {{-- <div class="input-group-append">
-                          <button type="submit" class="btn btn-default">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </div> --}}
+                      
                       </div>
                     </div>
                   </div>
@@ -150,186 +107,7 @@
                         @endif
                       </tr>
                       @endforeach
-                      {{-- <tr class="bg-sky">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-ocean">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-sky">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-ocean">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-sky">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-ocean">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-sky">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-ocean">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-sky">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-ocean">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-sky">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-ocean">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-sky">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-ocean">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr>
-                      <tr class="bg-sky">
-                        <td>
-                          <a type="button" href="recharge_invoice.html">
-                            <i class="fas fa-print"></i>
-                          </a>
-                          MBLSNAIRPIN_1627670629.8667
-                        </td>
-                        <td></td>
-                        <td>11.99 &euro;</td>
-                        <td>30-07-2021 20:43:49</td>
-                        <td>0.831 &euro;</td>
-                      </tr> --}}
+                     
                     </tbody>
                   </table>
                 </div>
@@ -390,18 +168,11 @@ TableFilter.init();
 @endsection
 
 @section('scripts')
-<!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset('js/moment.min.js')}}"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
+
 
 @endsection
 
@@ -427,7 +198,7 @@ $(function() {
       var url = '/pinfilebydate/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
       window.location = url;
        console.log('/pinfilebydate/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD'));
-    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end).format('YYYY-MM-DD');
+   
   });
 });
 </script>

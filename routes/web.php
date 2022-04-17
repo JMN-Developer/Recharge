@@ -414,7 +414,7 @@ Route::group(['prefix' => 'notification','middleware'=>['auth']], function()
 
     Route::get('create', [NotificationController::class,'create_notification'])->name('create-notification');
     Route::post('send', [NotificationController::class, 'sendNotification'])->name('send_notification');
-    Route::get('show', [NotificationController::class,'index'])->name('GeneralNotification');
+    Route::get('/', [NotificationController::class,'index'])->name('GeneralNotification');
 
 
 });

@@ -76,63 +76,15 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <script>
-    /* Code By Webdevtrick ( https://webdevtrick.com ) */
-(function(document) {
-'use strict';
 
-var TableFilter = (function(Arr) {
-
-var _input;
-
-function _onInputEvent(e) {
-_input = e.target;
-var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
-Arr.forEach.call(tables, function(table) {
-Arr.forEach.call(table.tBodies, function(tbody) {
-Arr.forEach.call(tbody.rows, _filter);
-});
-});
-}
-
-function _filter(row) {
-var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
-row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
-}
-
-return {
-init: function() {
-var inputs = document.getElementsByClassName('light-table-filter');
-Arr.forEach.call(inputs, function(input) {
-input.oninput = _onInputEvent;
-});
-}
-};
-})(Array.prototype);
-
-document.addEventListener('readystatechange', function() {
-if (document.readyState === 'complete') {
-TableFilter.init();
-}
-});
-
-})(document);
-  </script>
 @endsection
 
 @section('scripts')
 <!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{asset('js/moment.min.js')}}"></script>
+<
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
 
 @endsection
 
