@@ -148,7 +148,7 @@ class DtOneProvider
                     $transaction_report = $this->transaction($response->id);
                     if($transaction_report['status'] == true)
                     {
-                        if($transaction_report['payload']->status->class->message == 'COMPLETED' )
+                        if($transaction_report['payload']->status->class->message == 'COMPLETED' || $transaction_report['payload']->status->class->message == 'SUBMITTED' )
                         {
 
                         return ['payload'=>$transaction_report['payload'],'status'=>true];
