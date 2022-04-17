@@ -80,7 +80,7 @@ class DtOneProvider
             $status = $operator_request->getStatusCode();
 
             $operator_response = $operator_request->getBody();
-            // file_put_contents('test.txt',$operator_response);
+            //file_put_contents('test2.txt',$operator_response);
 
             $operator_response = json_decode($operator_response);
 
@@ -136,7 +136,7 @@ class DtOneProvider
                     ]
         ]);
         $status = $response->getStatusCode();
-
+        //file_put_contents('test.txt',$response->getBody());
         $response = json_decode($response->getBody());
 
 
@@ -148,7 +148,7 @@ class DtOneProvider
                     $transaction_report = $this->transaction($response->id);
                     if($transaction_report['status'] == true)
                     {
-                        if($transaction_report['payload']->status->message == 'COMPLETED' || $transaction_report['payload']->status->message == 'SUBMITTED' )
+                        if($transaction_report['payload']->status->class->message == 'COMPLETED' )
                         {
 
                         return ['payload'=>$transaction_report['payload'],'status'=>true];
