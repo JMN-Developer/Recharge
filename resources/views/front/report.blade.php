@@ -519,15 +519,34 @@ table.dataTable thead .sorting_asc{
 
 @section('scripts')
 
-<script src="{{ asset('dashboard/js/vendor.min.js')}}"></script>
-<script src="{{ asset('dashboard/libs/moment/min/moment.min.js')}}"></script>
+{{-- <script src="{{ asset('dashboard/js/vendor.min.js')}}"></script>
+
+<!-- optional plugins -->
+<script src="{{ asset('dashboard/libs/moment/min/moment.min.js')}}"></script> --}}
 <script src="{{ asset('dashboard/libs/apexcharts/apexcharts.min.js')}}"></script>
 <script src="{{ asset('dashboard/libs/flatpickr/flatpickr.min.js')}}"></script>
+
+<!-- page js -->
+{{-- <script src="{{ asset('dashboard/js/pages/dashboard.init.js')}}"></script> --}}
+
+<!-- App js -->
 <script src="{{ asset('dashboard/js/app.min.js')}}"></script>
+<!-- jQuery -->
+{{-- <script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
+<!-- Bootstrap -->
+--}}
+{{-- <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('js/moment.min.js')}}"></script> --}}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-
+<!-- Theme JS -->
+{{-- <script src="{{asset('js/admin.js')}}"></script>
+<!-- Custom JS -->
+<script src="{{asset('js/custom.js')}}"></script> --}}
 
 @endsection
 
@@ -887,7 +906,7 @@ function get_data(start,end)
             $('.cover-spin').hide(0)
             },
         success:function(data){
-            console.log(data);
+            //console.log(data);
         var obj = JSON.parse(data);
         process_data(obj)
         //obj[0].international_script;
