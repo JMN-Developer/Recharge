@@ -12,7 +12,7 @@
               body {
     font-family: 'Maven Pro', sans-serif !important;
     background-color: #374756 !important
-}	
+}
 
 @media print {
   .print_button {
@@ -20,10 +20,10 @@
   }
 }
             .header-elements{
-               
+
                 padding-bottom: 12px;
                 float: right;
-                
+
             }
 			.invoice-box {
 				max-width: 700px;
@@ -81,11 +81,11 @@
 				border-bottom: 1px solid #ddd;
 				font-weight: bold;
                 padding: 10px;
-               
+
 			}
 
 			.invoice-box table tr.details td {
-				
+
                 border-bottom: 1px solid #ddd;
 				font-weight: bold;
                 padding-bottom: 10px;
@@ -136,9 +136,9 @@
 
 	<body>
 		<div class="invoice-box">
-       
+
          <div class="header-elements"> <a href="{{ route('sim-invoice',['download'=>'pdf','id'=>$invoice->id]) }}"   type="button" class="btn btn-light btn-sm print_button"><i class="fa fa-file mr-2"></i> Download</a> <a type="button" onclick="window.print();return false;" class="btn btn-light btn-sm ml-3 print_button"><i class="fa fa-print mr-2"></i> Print</a> </div>
-           
+
 			<table cellpadding="0" cellspacing="0">
 				<tr class="top">
 					<td colspan="2">
@@ -151,7 +151,7 @@
 								<td style="text-align: right">
 									<p style="font-weight: bold;font-size:15px">Invoice:<span  style="font-weight: 500">{{ $invoice->invoice_no }}</span></p>
 								    <p style="font-weight: bold;font-size:15px">Date: <span style="font-weight: 500">{{ $invoice->date }}</span></p>
-								
+
 								</td>
 							</tr>
 						</table>
@@ -165,7 +165,7 @@
                             ACCURATI, COMPLETI VERITIERI</p>
 					</td>
 				</tr>
-                
+
 				<tr class="heading">
 					<td>First Name:<span class="info">{{$invoice->first}}</span></td>
 
@@ -190,22 +190,22 @@
 					<td>Nazionalità: <span class="info">{{$invoice->nationality}}</span></td>
 				</tr>
 				@php
-				$alt = DB::table('sim_orders')->where('iccid', $invoice->iccid)->latest()->first();
+				$alt = DB::table('sim_orders')->where('id', $invoice->id)->first();
 
-				$iccid = $alt->alt_iccid;
-				$sim_number = $alt->alt_sim_number;
-				$operator = $alt->alt_operator;
-				$ricarica = $alt->recharge;
-				$sim_number = $alt->sim_number; 
+				// $iccid = $alt->alt_iccid;
+				// $sim_number = $alt->alt_sim_number;
+				// $operator = $alt->alt_operator;
+				// $ricarica = $alt->recharge;
+				// $sim_number = $alt->sim_number;
 				@endphp
 
-				@if ($iccid != null)
+				@if ($alt->alt_iccid != null)
 				<tr class="heading">
-					<td> Protabilita Sim Number : <span class="info">{{$sim_number}}</span> </td>
-					<td>  Portabilita ICCID Number : <span class="info">{{$iccid}}</span> </td>
+					<td> Protabilita Sim Number : <span class="info">{{ $alt->alt_sim_number}}</span> </td>
+					<td>  Portabilita ICCID Number : <span class="info">{{$alt->alt_iccid}}</span> </td>
 				</tr>
 				<tr class="details">
-					<td> Portabilita Operator : <span class="info"> {{$operator}}</span> </td>
+					<td> Portabilita Operator : <span class="info"> {{$alt->alt_operator}}</span> </td>
 				</tr>
 				@endif
 
@@ -217,5 +217,5 @@
 			</table>
 		</div>
 	</body>
-	
+
 </html>

@@ -52,6 +52,7 @@
                   <thead>
                     <tr>
                       <th style="background: #faaeae;">#</th>
+                      <th style="background: #faaeae;">Operator</th>
                       <th style="background: #faaeae;">ICCID Number</th>
                       <th style="background: #faaeae;">Sim Number</th>
                       <th style="background: #faaeae;">Order Date</th>
@@ -69,7 +70,7 @@
                     @foreach ($data as $item)
                     <tr class="bg-ocean">
                       <td>{{ $loop->iteration }}</td>
-
+                      <td>{{ $item->operator }}</td>
                       <td>{{ $item->iccid }}</td>
                       <td>{{ $item->sim_number }}</td>
                       <td>{{ $item->created_at }}</td>

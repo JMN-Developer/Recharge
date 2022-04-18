@@ -156,6 +156,7 @@ class SimController extends Controller
         $id = $request->id;
         $data = SimOrder::where('id',$id)->first();
 
+
         $sim = sim::where('id',$data->sim_id)->first();
         $customer = new Party([
             'name'          => 'Ashley Medina',
@@ -165,7 +166,9 @@ class SimController extends Controller
                 'order number' => '> 654321 <',
             ],
         ]);
-
+        if($data->alt_operator)
+        $operator = SimOperator::where('operator', $data->alt_operator)->first();
+        else
         $operator = SimOperator::where('operator', $data->operator)->first();
 
         $digit = new NumberFormatter("en", NumberFormatter::SPELLOUT);
@@ -339,6 +342,15 @@ class SimController extends Controller
         }else {
             $data = SimOrder::where('reseller_id',Auth::user()->id)->with('users')->get();
         }
+        }
+        foreach($data as $d)
+        {
+            if($d->alt_sim_number)
+            $d->sim_number = $d->alt_sim_number;
+            if($d->alt_iccid)
+            $d->iccid = $d->alt_iccid;
+            if($d->alt_operator)
+            $d->operator = $d->alt_operator;
         }
         return view('front.sim-selling',compact('data'));
     }
