@@ -74,7 +74,8 @@ table.dataTable thead .sorting_asc{
                           <option value="all">All</option>
                           <option value="International">Recharge International</option>
                           <option value="Domestic">Recharge Domestic</option>
-                          
+                          <option value="Pin">Pin</option>
+
                         </select>
                       </div>
                   </div>
@@ -88,7 +89,7 @@ table.dataTable thead .sorting_asc{
                          @foreach ( $resellers as $data )
                              <option value="{{ $data->id }}">{{ $data->first_name." ".$data->last_name." (".$data->id.")" }}</option>
                          @endforeach
-                         
+
                         </select>
                       </div>
                   </div>
