@@ -47,8 +47,10 @@ class ReportController extends Controller
         return $chart_container;
     }
 
-    public function data_fetch($type,$start_date,$end_date,$service)
+    public function data_fetch($type,$start_date,$end_date,$service,$reseller_id)
     {
+
+      if($reseller_id == 'all'){
 
     if($type=='all')
      $datas = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('date')->get();
@@ -67,7 +69,31 @@ class ReportController extends Controller
        else if($service =='cargo')
        {
         $datas = Order::whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(total)-sum(addiCharge),2) as profit'))->groupBy('date')->get();
-       }
+        }
+        }
+    }
+    else
+    {
+
+        if($type=='all')
+        $datas = RechargeHistory::where('reseller_id',$reseller_id)->whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('date')->get();
+       else
+       {
+          if($service == 'recharge')
+          {
+
+           $datas = RechargeHistory::where('reseller_id',$reseller_id)->where('type',$type)->whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('date')->get();
+
+          }
+          else if($service == 'sim')
+          {
+           $datas = Sim::where('reseller_id',$reseller_id)->whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(original_price),2) as sales'),DB::raw('format(sum(buy_price),2) as profit'))->groupBy('date')->get();
+          }
+          else if($service =='cargo')
+          {
+           $datas = Order::where('reseller_id',$reseller_id)->whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(total)-sum(addiCharge),2) as profit'))->groupBy('date')->get();
+           }
+           }
     }
         $sale_data = [];
         $profit_data = [];
@@ -78,6 +104,7 @@ class ReportController extends Controller
             $profit_data[] = $d->profit;
             $date_data[] = $d->date;
         }
+
         return ['sales'=>$sale_data,'profits'=>$profit_data,'date'=>$date_data];
     }
 
@@ -148,45 +175,45 @@ class ReportController extends Controller
 
         $start_date =  Carbon::parse($request->start_date)->toDateTimeString();
         $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
-
-      $chart_data = $this->data_fetch('International',$start_date,$end_date,'recharge');
+        $reseller_id = $request->reseller_id;
+      $chart_data = $this->data_fetch('International',$start_date,$end_date,'recharge',$reseller_id);
       $international_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $international_sale =round(array_sum($chart_data['sales']),2) ;
       $international_profit =round(array_sum($chart_data['profits']),2) ;
 
-      $chart_data = $this->data_fetch('Domestic',$start_date,$end_date,'recharge');
+      $chart_data = $this->data_fetch('Domestic',$start_date,$end_date,'recharge',$reseller_id);
       $domestic_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $domestic_sale =round(array_sum($chart_data['sales']) ,2);
       $domestic_profit =round(array_sum($chart_data['profits']),2) ;
 
-      $chart_data = $this->data_fetch('Bangladesh',$start_date,$end_date,'recharge');
+      $chart_data = $this->data_fetch('Bangladesh',$start_date,$end_date,'recharge',$reseller_id);
       $bangladesh_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $bangladesh_sale =round(array_sum($chart_data['sales']) ,2);
       $bangladesh_profit =round(array_sum($chart_data['profits']),2) ;
 
 
-      $chart_data = $this->data_fetch('Pin',$start_date,$end_date,'recharge');
+      $chart_data = $this->data_fetch('Pin',$start_date,$end_date,'recharge',$reseller_id);
       $pin_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $pin_sale =round(array_sum($chart_data['sales']),2);
       $pin_profit = round(array_sum($chart_data['profits']),2);
 
-      $chart_data = $this->data_fetch('White Calling',$start_date,$end_date,'recharge');
+      $chart_data = $this->data_fetch('White Calling',$start_date,$end_date,'recharge',$reseller_id);
       $white_calling_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $white_calling_sale =round(array_sum($chart_data['sales']),2);
       $white_calling_profit =round(array_sum($chart_data['profits']),2);
 
-      $chart_data = $this->data_fetch('all',$start_date,$end_date,'recharge');
+      $chart_data = $this->data_fetch('all',$start_date,$end_date,'recharge',$reseller_id);
       $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $all_sale =round(array_sum($chart_data['sales']),2);
       $all_profit =round(array_sum($chart_data['profits']),2);
         // file_put_contents('test.txt',$international_profit." ".$domestic_profit." ".$pin_profit." ".$white_calling_profit." ".$all_profit);
 
-      $chart_data = $this->data_fetch('sim',$start_date,$end_date,'sim');
+      $chart_data = $this->data_fetch('sim',$start_date,$end_date,'sim',$reseller_id);
       $sim_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $sim_sale =round(array_sum($chart_data['sales']),2);
       $sim_profit =round(array_sum($chart_data['profits']),2);
 
-      $chart_data = $this->data_fetch('cargo',$start_date,$end_date,'cargo');
+      $chart_data = $this->data_fetch('cargo',$start_date,$end_date,'cargo',$reseller_id);
       $cargo_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $cargo_sale =round(array_sum($chart_data['sales']),2);
       $cargo_profit =round(array_sum($chart_data['profits']),2);

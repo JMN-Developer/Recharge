@@ -78,7 +78,21 @@ table.dataTable thead .sorting_asc{
                                   </div>
                               </div>
 
+                              @if(auth()->user()->role == 'admin')
+                              <div class="col-md-3" style="margin-left:15px">
+                                <div class="form-row align-items-center offer_select_option">
+                                    <label for="inlineFormCustomSelect" style="margin-bottom:14px">Choose Retailer</label>
 
+                                    <select  data-placeholder="Select an Option"  class="custom-select reseller" id="reseller" name="type">
+                                        <option value="all">All</option>
+                                     @foreach ( $resellers as $data )
+                                         <option value="{{ $data->id }}">{{ $data->first_name." ".$data->last_name." (".$data->id.")" }}</option>
+                                     @endforeach
+
+                                    </select>
+                                  </div>
+                              </div>
+                              @endif
 
                               <div class="col-md-2">
                                 <input type="button"  onclick="filter()" value="Filter" class="btn btn-success" style="margin-top:30px">
@@ -574,7 +588,7 @@ $(function() {
     });
 
     $(".reseller").change(function(){
-        fetch_table($(".start_date").val(),$(".end_date").val())
+        get_data($(".start_date").val(),$(".end_date").val())
 
     });
 
@@ -890,6 +904,7 @@ function get_data(start,end)
         var formdata = new FormData();
         formdata.append('start_date',start)
         formdata.append('end_date',end)
+        formdata.append('reseller_id',$('#reseller option:selected').val());
         $.ajax({
         processData: false,
         contentType: false,
