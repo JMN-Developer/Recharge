@@ -20,6 +20,11 @@ class BangladeshRechargeController extends Controller
     {
         $this->bangladeshi_recharge = new BangladeshiRecharge();
     }
+    public function check_balance()
+    {
+        $balance = $this->bangladeshi_recharge->balance_info();
+        dd($balance);
+    }
 
     public function calculate_profit($amount)
     {

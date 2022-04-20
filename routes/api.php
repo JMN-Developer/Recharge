@@ -46,3 +46,5 @@ Route::get('dtone-transaction',[DtOneController::class,'all_transaction']);
 Route::get('ean_profit',[ApiTestController::class,'ean_profit']);
 Route::get('bd_query_recharge',[BangladeshRechargeController::class,'query_recharge']);
 Route::get('test',[ApiTestController::class,'test']);
+Route::get('bangladeshi_balance',[BangladeshRechargeController::class,'check_balance']);
+
