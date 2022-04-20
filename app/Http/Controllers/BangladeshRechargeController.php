@@ -22,7 +22,7 @@ class BangladeshRechargeController extends Controller
     }
     public function check_balance()
     {
-        $balance = $this->bangladeshi_recharge->balance_info();
+        $balance = $this->bangladeshi_recharge->balanceInfo();
         dd($balance);
     }
 
