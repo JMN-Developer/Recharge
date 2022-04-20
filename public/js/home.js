@@ -1,4 +1,5 @@
 $(function(){
+  //  console.log('hello')
     notification_count();
     sim_notification_count();
     complain_notification_count();
@@ -31,11 +32,23 @@ var a = Echo.channel('events')
 
   var a = Echo.channel('events')
   .listen('GeneralNotificationEvent', (e) => {
-
+    toast_show();
   general_notification_count();
 
   });
 
+
+  function toast_show()
+  {
+    console.log('hello')
+    iziToast.warning({
+        title: 'Order',
+        message: 'You have new order',
+        close: true,
+        closeOnClick: true,
+         timeout: 0,
+    });
+  }
 
   function general_notification_count()
   {
@@ -48,6 +61,7 @@ var a = Echo.channel('events')
 
         }
     });
+
   }
 
   function notification_count()

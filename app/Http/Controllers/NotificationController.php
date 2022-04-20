@@ -67,12 +67,12 @@ class NotificationController extends Controller
 
         ];
         // //$userSchema->notify(new GeneralNotification($offerData));
-        try{
-            Notification::send($users, new GeneralNotification($data));
-        }
-        catch(Throwable $th){
-            Log::error("General Notification Error: ".$th);
-        }
+        // try{
+        //     Notification::send($users, new GeneralNotification($data));
+        // }
+        // catch(Throwable $th){
+        //     Log::error("General Notification Error: ".$th);
+        // }
         try{
             event(new GeneralNotificationEvent());
         }

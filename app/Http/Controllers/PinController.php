@@ -57,7 +57,8 @@ class PinController extends Controller
         $change = [' ','Mobile','mobile'];
         $operator = str_replace($change,'',$request->operator);
 
-
+        //file_put_contents('test.txt',$sku_amount[1]);
+       // return;
 
         $amount = $sku_amount['1']*100;
         $commission = DB::table('domestic_pins')->where('ean', $sku_amount['0'])->first()->commission;
@@ -65,7 +66,7 @@ class PinController extends Controller
         $amount = str_replace('.','',$amount);
 
 
-        if (a::user()->wallet >= $sku_amount['1'] || (a::user()->due - a::user()->limit_usage)>=$sku_amount['1'] || a::user()->role=='admin') {
+        if (CheckRechargeAvail::check($sku_amount[1],'Domestic')) {
             $transaction =  new GenerateTransactionId(a::user()->id,40);
               $txid = $transaction->transaction_id();
 
