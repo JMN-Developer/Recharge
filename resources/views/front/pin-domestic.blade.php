@@ -95,6 +95,9 @@
                         <option value="ROBLOX" data-thumbnail="{{ asset('images/roblox.png') }}">ROBLOX</option>
                         <option value="EA" data-thumbnail="{{ asset('images/ea.png') }}">EA</option>
                         <option value="FORK" data-thumbnail="{{ asset('images/fork.png') }}">THE FORK</option>
+                        <option value="STEAM" data-thumbnail="{{ asset('images/STREAM.jpeg') }}">STEAM</option>
+                        <option value="ZALANDO" data-thumbnail="{{ asset('images/ZALANDO.png') }}">ZALANDO</option>
+                        <option value="AIRBNB" data-thumbnail="{{ asset('images/Airbnb.png') }}">AIRBNB</option>
                       </select>
                     </div>
                     <div id="price">
