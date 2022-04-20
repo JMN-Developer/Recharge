@@ -374,7 +374,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                 <li class="nav-item">
                   <a href="{{ route('pin') }}" class="@if(Route::currentRouteName() == 'pin') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Pin</p>
+                    <p>Gift Card</p>
                   </a>
                 </li>
                 @endif
