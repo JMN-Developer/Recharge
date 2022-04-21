@@ -71,6 +71,11 @@ class Kernel extends HttpKernel
         'RechargeBangladesh' => \App\Http\Middleware\RechargeBangladeshActive::class,
         'PinActive' => \App\Http\Middleware\PinActive::class,
         'WhiteCallingActive' => \App\Http\Middleware\WhiteCallingActive::class,
+        'FlightActive' => \App\Http\Middleware\FlightActive::class,
+        'SimActive' => \App\Http\Middleware\SimActive::class,
+        'CargoActive' => \App\Http\Middleware\CargoActive::class,
+        'SupportActive' => \App\Http\Middleware\SupportActive::class,
+        'TransactionHistorytActive' => \App\Http\Middleware\TransactionHistorytActive::class,
 
     ];
 }

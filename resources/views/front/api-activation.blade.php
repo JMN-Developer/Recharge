@@ -167,171 +167,156 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-  <script>
-
-
-
-  $(function() {
-
-
-  })
-  </script>
-  <script>
-  $(function() {
-
-    get_data();
-
-
-function get_data()
-{
-
-    var added_row='';
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: '/ApiControl/get_data',
-        success: function(data){
-            var item = data;
-
-
-        for (var i = 0; i < item.length; i++){
-            var checked = item[i].status?'checked':'';
-        added_row = '<tr class="bg-ocean">'
-    + '<td>' + item[i].dummy_name +  '</td>'
-    + '<td><input  data-id="'+item[i].id+'" class="toggle-class international" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" '+checked+' ></td>'
-
-
-
-    if(item[i].type == 'International')
-      {
-        added_row+= '</tr>';
-    $('#international_table').append(added_row);
-      }
-      else if(item[i].type == 'Domestic')
-        {
-            added_row+= '</tr>';
-    $('#domestic_table').append(added_row);
-        }
-
-        else
-        {
-            var euro_input = '<input style="height:37px" id="euro_rate_per_hundred_bdt" onkeypress="return isNumberKeyDecimal(event)" type="text" value='+item[i].euro_rate_per_hundred_bdt+'><span style="margin-left:5px"><button onclick="euro_rate_save()" class="btn btn-primary">Save</button></span>';
-            added_row+='<td>'+euro_input+'</td>';
-            added_row+= '</tr>';
-
-    $('#bangladesh_table').append(added_row);
-        }
-
-
-    };
-
-
-    $('#international_table input').bootstrapToggle();
-    $('#domestic_table input').bootstrapToggle();
-    $('#bangladesh_table input[type="checkbox"]').bootstrapToggle();
-
-          //console.log(data.success)
-        }
-    });
-}
-
-
-$('.tab a').on('click', function(e) {
-
-    e.preventDefault();
-
-    $(this).parent().addClass('active');
-    $(this).parent().siblings().removeClass('active');
-
-    target = $(this).attr('href');
-
-    $('.tab-content > div').not(target).hide();
-
-    $(target).fadeIn(600);
-
-});
-
-$(document).on("blur", '#euro_rate_per_hundred_bdt', function(event) {
-    $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/ApiControl/update_euro_rate',
-            data: {'value':$("#euro_rate_per_hundred_bdt").val()},
-            success: function(data){
-            $('#international_table').empty();
-            $('#domestic_table').empty();
-            $('#bangladesh_table').empty();
-              get_data();
-              //console.log(data.success)
-            }
-        });
-})
-
-    $(document).on("change", '.international', function(event) {
-
-
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var id = $(this).data('id');
-
-
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/ApiControl/change_status',
-            data: {'status': status, 'id': id,'type':'International'},
-            success: function(data){
-            $('#international_table').empty();
-            $('#domestic_table').empty();
-            $('#bangladesh_table').empty();
-              get_data();
-              //console.log(data.success)
-            }
-        });
-    })
-
-
-
-
-  })
-  function euro_rate_save()
-{
-
-
-    swal({
-            text: "Euro Rate Updated",
-            icon: "success",
-            });
-
-    $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/ApiControl/update_euro_rate',
-            data: {'value':$("#euro_rate_per_hundred_bdt").val()},
-            success: function(data){
-
-            $('#international_table').empty();
-            $('#domestic_table').empty();
-            $('#bangladesh_table').empty();
-                get_data();
-
-              //console.log(data.success)
-            }
-        });
-}
-  </script>
 
 
 @endsection
 
 @section('scripts')
-<!-- jQuery -->
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+    <script>
+    $(function() {
+
+      get_data();
+
+
+  function get_data()
+  {
+
+      var added_row='';
+      $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: '/ApiControl/get_data',
+          success: function(data){
+              var item = data;
+
+
+          for (var i = 0; i < item.length; i++){
+              var checked = item[i].status?'checked':'';
+          added_row = '<tr class="bg-ocean">'
+      + '<td>' + item[i].dummy_name +  '</td>'
+      + '<td><input  data-id="'+item[i].id+'" class="toggle-class international" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" '+checked+' ></td>'
+
+
+
+      if(item[i].type == 'International')
+        {
+          added_row+= '</tr>';
+      $('#international_table').append(added_row);
+        }
+        else if(item[i].type == 'Domestic')
+          {
+              added_row+= '</tr>';
+      $('#domestic_table').append(added_row);
+          }
+
+          else
+          {
+              var euro_input = '<input style="height:37px" id="euro_rate_per_hundred_bdt" onkeypress="return isNumberKeyDecimal(event)" type="text" value='+item[i].euro_rate_per_hundred_bdt+'><span style="margin-left:5px"><button onclick="euro_rate_save()" class="btn btn-primary">Save</button></span>';
+              added_row+='<td>'+euro_input+'</td>';
+              added_row+= '</tr>';
+
+      $('#bangladesh_table').append(added_row);
+          }
+
+
+      };
+
+
+      $('#international_table input').bootstrapToggle();
+      $('#domestic_table input').bootstrapToggle();
+      $('#bangladesh_table input[type="checkbox"]').bootstrapToggle();
+
+            //console.log(data.success)
+          }
+      });
+  }
+
+
+  $('.tab a').on('click', function(e) {
+
+      e.preventDefault();
+
+      $(this).parent().addClass('active');
+      $(this).parent().siblings().removeClass('active');
+
+      target = $(this).attr('href');
+
+      $('.tab-content > div').not(target).hide();
+
+      $(target).fadeIn(600);
+
+  });
+
+  $(document).on("blur", '#euro_rate_per_hundred_bdt', function(event) {
+      $.ajax({
+              type: "GET",
+              dataType: "json",
+              url: '/ApiControl/update_euro_rate',
+              data: {'value':$("#euro_rate_per_hundred_bdt").val()},
+              success: function(data){
+              $('#international_table').empty();
+              $('#domestic_table').empty();
+              $('#bangladesh_table').empty();
+                get_data();
+                //console.log(data.success)
+              }
+          });
+  })
+
+      $(document).on("change", '.international', function(event) {
+
+
+          var status = $(this).prop('checked') == true ? 1 : 0;
+          var id = $(this).data('id');
+
+
+          $.ajax({
+              type: "GET",
+              dataType: "json",
+              url: '/ApiControl/change_status',
+              data: {'status': status, 'id': id,'type':'International'},
+              success: function(data){
+              $('#international_table').empty();
+              $('#domestic_table').empty();
+              $('#bangladesh_table').empty();
+                get_data();
+                //console.log(data.success)
+              }
+          });
+      })
+
+
+
+
+    })
+    function euro_rate_save()
+  {
+
+
+      swal({
+              text: "Euro Rate Updated",
+              icon: "success",
+              });
+
+      $.ajax({
+              type: "GET",
+              dataType: "json",
+              url: '/ApiControl/update_euro_rate',
+              data: {'value':$("#euro_rate_per_hundred_bdt").val()},
+              success: function(data){
+
+              $('#international_table').empty();
+              $('#domestic_table').empty();
+              $('#bangladesh_table').empty();
+                  get_data();
+
+                //console.log(data.success)
+              }
+          });
+  }
+    </script>
+
+
 @endsection

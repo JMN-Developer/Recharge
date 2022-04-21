@@ -88,15 +88,17 @@ Route::get('/recharge', function () {
 
 
 
-
-
-
-
-
-
-
-Route::group(['middleware'=>['auth','user']], function()
+Route::group(['middleware'=>['auth','TransactionHistoryActive']], function()
 {
+
+Route::get('transaction-history',[TransactionController::class,'index'])->name('transaction-history');
+
+});
+
+
+Route::group(['middleware'=>['auth']], function()
+{
+
 
     Route::get('check_email',[Usercontroller::class,'check_email']);
     Route::get('/sign-up',[UserController::class,'index']);
@@ -236,14 +238,11 @@ Route::group(['middleware'=>['auth','user']], function()
 
     Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
     Route::post('amount_request',[WalletController::class,'wallet_request']);
-    Route::post('approved_amount',[WalletController::class,'approved_amount']);
     Route::get('get_requested_amount',[WalletController::class,'get_requested_amount']);
     Route::get('report',[ReportController::class,'index'])->name('report');
     Route::post('get_report_data',[ReportController::class,'get_report_data'])->name('get-report-data');
     Route::post('get_report_data_separate',[ReportController::class,'get_report_data_separate'])->name('get-report-data-separate');
-    Route::get('transaction-history',[TransactionController::class,'index'])->name('transaction-history');
-    Route::get('service-controler',[ServiceController::class,'index'])->name('service-control');
-    Route::get('service-status-update',[ServiceController::class,'status_update'])->name('service-status-update');
+
     Route::post('/add_balance',[BalanceController::class,'AddBalance'])->name('AddBalance');
 
     Route::post('/add_cargo_due',[BalanceController::class,'AddDue']);
@@ -343,7 +342,7 @@ Route::group(['prefix' => 'recharge','middleware'=>['auth','user']], function()
 
 
 
-Route::group(['prefix' => 'ticket','middleware'=>['auth','user']], function()
+Route::group(['prefix' => 'ticket','middleware'=>['auth','SupportActive']], function()
 {
 
     Route::get('/',[TicketController::class,'index'])->name('ticket');
@@ -358,7 +357,7 @@ Route::group(['prefix' => 'ticket','middleware'=>['auth','user']], function()
 
 });
 
-Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
+Route::group(['prefix' => 'sim','middleware'=>['auth','user','SimActive']], function()
 {
     Route::get('sim_edit',[SimController::class,'sim_edit']);
     Route::get('sim-activation', [SimController::class,'index'])->name('sim-activation');
@@ -375,7 +374,7 @@ Route::group(['prefix' => 'sim','middleware'=>['auth','user']], function()
 });
 
 
-Route::group(['prefix' => 'cargo','middleware'=>['auth','user']], function()
+Route::group(['prefix' => 'cargo','middleware'=>['auth','user','CargoActive']], function()
 {
 
     Route::GET('price-edit/{id}', [PricingController::class,'EditPricing']);
@@ -431,7 +430,7 @@ Route::group(['prefix' => 'phone','middleware'=>['auth']], function()
 
 });
 
-Route::group(['prefix' => 'flights'], function()
+Route::group(['prefix' => 'flights','middleware'=>['auth','FlightActive']], function()
 {
     Route::get('{any}', function () {
         return view('front.add-flight');
@@ -473,6 +472,17 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
 
 });
 
+Route::group(['middleware'=>['auth','admin']], function()
+{
+
+
+    Route::get('service-controler',[ServiceController::class,'index'])->name('service-control');
+    Route::get('service-status-update',[ServiceController::class,'status_update'])->name('service-status-update');
+    Route::post('approved_amount',[WalletController::class,'approved_amount']);
+
+
+});
+
 Route::group(['prefix' => 'ApiControl','middleware'=>['auth','admin']], function()
 {
 
@@ -480,6 +490,7 @@ Route::group(['prefix' => 'ApiControl','middleware'=>['auth','admin']], function
     Route::get('update_euro_rate',[ApiSettingsController::class,'update_euro_rate'])->name('update_euro_rate');
     Route::get('get_data',[ApiSettingsController::class,'get_data'])->name('get_data');
     Route::get('api-activation', [ApiSettingsController::class,'ApiActivation'])->name('api-activation');
+
 
 
 

@@ -536,7 +536,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </ul>
             </li>
           @endif
-
+          @if ( service_permission('Flight',$services) == 1)
           <li class="@if(Route::currentRouteName() == 'add-flight') nav-item menu-open @endif nav-item">
             <a href="{{url('flights/')}}" target="_blank"  class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
               <i class="nav-icon fas fa-plane-departure"></i>
@@ -545,31 +545,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </p>
             </a>
           </li>
-
-          {{-- @if (Auth::user()->role=='admin')
-          <li class="@if(Route::currentRouteName() == 'add-flight') nav-item menu-open @endif nav-item">
-            <a href="#" class="@if(Route::currentRouteName() == 'add-flight') nav-link active menu-open @endif nav-link">
-              <i class="nav-icon fas fa-plane-departure"></i>
-
-              <p>
-                Flight
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-
-              <li class="nav-item">
-                <a href="{{ route('add-flight') }}" class="@if(Route::currentRouteName() == 'add-flight') nav-link active @endif nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add</p>
-                </a>
-              </li>
-
-            </ul>
-          </li>
-         @endif --}}
-
-
+          @endif
 
             <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
@@ -633,7 +609,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                   </p>
                 </a>
               </li>
-
+              @if ( service_permission('Transaction History',$services) == 1)
 
               <li class="@if(Route::currentRouteName() == 'transaction-history') nav-item menu-open @endif nav-item">
                 <a href="{{ route('transaction-history') }}" class="@if(Route::currentRouteName() == 'transaction-history') nav-link active @endif nav-link">
@@ -644,6 +620,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                   </p>
                 </a>
               </li>
+              @endif
               @if(auth()->user()->role == 'user')
               <li class="@if(Route::currentRouteName() == 'contact-info') nav-item menu-open @endif nav-item">
                 <a href="{{ route('contact-info') }}" class="@if(Route::currentRouteName() == 'contact-info') nav-link active @endif nav-link">
@@ -669,7 +646,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </li>
               @endif
 
-              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user')
+              @if(service_permission('Support',$services) == 1)
               <li class="@if(Route::currentRouteName() == 'ticket') nav-item menu-open @endif nav-item">
                 <a href="{{ route('ticket') }}" class="@if(Route::currentRouteName() == 'ticket') nav-link active @endif nav-link">
                   <i class="fas fa-wallet" aria-hidden="true"></i>
