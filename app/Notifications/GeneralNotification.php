@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 //use Notification;
 //use Illuminate\Support\Facades\Notification;
 
-class GeneralNotification extends Notification
+class GeneralNotification extends Notification implements ShouldQueue
 {
     use Queueable;
     private $data;
