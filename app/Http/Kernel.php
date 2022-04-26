@@ -75,7 +75,7 @@ class Kernel extends HttpKernel
         'SimActive' => \App\Http\Middleware\SimActive::class,
         'CargoActive' => \App\Http\Middleware\CargoActive::class,
         'SupportActive' => \App\Http\Middleware\SupportActive::class,
-        'TransactionHistorytActive' => \App\Http\Middleware\TransactionHistorytActive::class,
+        'TransactionHistoryActive' => \App\Http\Middleware\TransactionHistoryActive::class,
 
     ];
 }
