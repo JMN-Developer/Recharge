@@ -50,6 +50,18 @@ table.dataTable thead .sorting_asc{
 .select2-container--default .select2-search--inline .select2-search__field{
     color:black !important;
 }
+.select2-selection--multiple { max-height: 300px;overflow: scroll;overflow-x: hidden}
+
+.select2-selection__choice{
+    width: 100%;
+    background-color: #D4AC0D !important;
+    border-color: #131211 !important;
+    color: #fff !important;
+    padding: 0 10px !important;
+    margin-top: 0.31rem !important;
+
+}
+
 </style>
 
 
