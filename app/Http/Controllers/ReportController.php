@@ -20,6 +20,7 @@ class ReportController extends Controller
     //
     public function index()
     {
+
         if(a::user()->role == 'admin'){
             $data = RechargeHistory::latest()->get();
             $cost = $data->sum('amount');
@@ -52,15 +53,20 @@ class ReportController extends Controller
 
       if($reseller_id == 'all'){
 
-    if($type=='all')
+
+            if($type=='all'){
      $datas = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('date')->get();
-    else
+    //$myfile = fopen("test.txt", "a+") or die("Unable to open file!");
+         // fwrite($myfile,'ALL'.json_encode($datas)."\n");
+            }
+     else
     {
        if($service == 'recharge')
        {
 
         $datas = RechargeHistory::where('type',$type)->whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('date')->get();
-
+          // $myfile = fopen("test.txt", "a+") or die("Unable to open file!");
+           //fwrite($myfile,$type.' '.json_encode($datas)."\n");
        }
        else if($service == 'sim')
        {
@@ -84,6 +90,8 @@ class ReportController extends Controller
 
            $datas = RechargeHistory::where('reseller_id',$reseller_id)->where('type',$type)->whereBetween('created_at', [$start_date, $end_date])->select(DB::raw('DATE(created_at) as date'),DB::raw('format(sum(cost),2) as sales'),DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('date')->get();
 
+            //file_put_contents('test.txt','hell');
+
           }
           else if($service == 'sim')
           {
@@ -100,8 +108,8 @@ class ReportController extends Controller
         $date_data = [];
         foreach($datas as $d)
         {
-            $sale_data[]=$d->sales;
-            $profit_data[] = $d->profit;
+            $sale_data[]=str_replace(",","",$d->sales) ;
+            $profit_data[] =str_replace(",","",$d->profit);
             $date_data[] = $d->date;
         }
 
@@ -205,6 +213,7 @@ class ReportController extends Controller
       $chart_data = $this->data_fetch('all',$start_date,$end_date,'recharge',$reseller_id);
       $all_chart = $this->make_chart($chart_data['sales'],$chart_data['profits'],$chart_data['date']);
       $all_sale =round(array_sum($chart_data['sales']),2);
+      //file_put_contents('test2.txt',json_encode($chart_data['sales']));
       $all_profit =round(array_sum($chart_data['profits']),2);
         // file_put_contents('test.txt',$international_profit." ".$domestic_profit." ".$pin_profit." ".$white_calling_profit." ".$all_profit);
 

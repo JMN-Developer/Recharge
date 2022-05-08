@@ -1066,8 +1066,8 @@
                 <strong>Office 2: </strong> <br>
                 Via Aldo Fiorini, 42, <br>
                 60127 <br> Ancona(AN)<br>
-                <strong>Bangladesh Office: </strong> <br>
-                43/20 nobabgonj lean. Lalbagh, Dhaka-1211
+                {{-- <strong>Bangladesh Office: </strong> <br>
+                43/20 nobabgonj lean. Lalbagh, Dhaka-1211 --}}
                 <strong>Phone 1: </strong><a href="tel:+393897666667">+393897666667</a><br>
                 <strong>Phone 2: </strong><a href="tel:+393889883882">+393889883882</a><br>
                 <strong>Phone 3: </strong><a href="tel:+393478678388">+393478678388</a><br>
