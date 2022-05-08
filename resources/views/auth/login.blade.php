@@ -1,8 +1,44 @@
+<head>
+
+    <link href="{{asset('frontend')}}/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="{{asset('frontend')}}/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{asset('frontend')}}/assets/css/style.css" rel="stylesheet">
+    <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,600,700"
+    rel="stylesheet">
+    <style>
+
+    </style>
+
+</head>
+
+<header id="header" class="fixed-top d-flex align-items-center header-transparent" style="height:90px !important">
+    <div class="container d-flex align-items-center" style="background: linear-gradient(to right, #888 0%, #72cff3 100%);margin-left:103px;margin-right:103px;padding-top:5px;padding-bottom:5px">
+
+      <a href="{{ route('/') }}" class="logo me-auto" ><img src="{{asset('frontend')}}/assets/img/NEW_JM.png" alt="" class="img-fluid"></a>
+      <h1 class="logo me-auto"><a href="{{ route('/') }}"><span>JM</span> Nation</a></h1>
+
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a class="nav-link scrollto active" href="{{ route('/') }}">Home</a></li>
+          <li><a class="nav-link scrollto" href="{{ route('/') }}">About</a></li>
+          <li><a class="nav-link scrollto" href="{{ route('/') }}">Services</a></li>
+          <li><a class="nav-link scrollto" href="{{ route('/') }}">Features</a></li>
+          <li><a class="nav-link scrollto" href="{{ route('/') }}">Team</a></li>
+          <li><a class="nav-link scrollto" href="{{ route('/') }}">Pricing</a></li>
+          <li><a class="nav-link scrollto" href="{{ route('/') }}">Contact</a></li>
+          <li style="margin-left: 1rem;"><button type="button" class="btn btn-warning" onclick="location.href='login'">Log In</button></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+    </div>
+  </header>
+
 <x-guest-layout>
 
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <img src="{{ url('images/jm-transparent-logo.png') }}"  width="100px"/>
+
         </x-slot>
 
 
