@@ -151,7 +151,7 @@ Route::group(['middleware'=>['auth']], function()
         }
         return response()->json($offer_detail, 200);
     });
-    Route::get('/operator', [OperatorController::class,'index']);
+    Route::get('/operator', [OperatorController::class,'index'])->name('operator');
 
     Route::post('/operator', [OperatorController::class,'store']);
 

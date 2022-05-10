@@ -418,9 +418,11 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
           @if (Auth::user()->sim_permission == 1  && Auth::user()->role!='admin2' &&  service_permission('Sim',$services) == 1)
             <li class="@if(Route::currentRouteName() == 'sim-activation' ||
                           Route::currentRouteName() == 'sim-selling' ||
+                          Route::currentRouteName() == 'operator' ||
                           Route::currentRouteName() == 'wi-fi') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'sim-activation' ||
                           Route::currentRouteName() == 'sim-selling' ||
+                          Route::currentRouteName() == 'operator' ||
                           Route::currentRouteName() == 'wi-fi') nav-link active @endif nav-link">
                 <i class="nav-icon fas fa-sim-card"></i>
                 <p>
@@ -459,8 +461,8 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
             </li>
           @endif
           @if ((Auth::user()->cargo_permission == 1  && Auth::user()->role!='admin2') &&  service_permission('Cargo',$services) == 1)
-            <li class="@if(Route::currentRouteName() == 'cargo-new-order' || Route::currentRouteName() == 'order-list' || Route::currentRouteName() == 'order-tracking-view' || Route::currentRouteName() == 'order-invoice-view') nav-item menu-open @endif nav-item">
-              <a href="#" class="@if(Route::currentRouteName() == 'cargo-new-order' || Route::currentRouteName() == 'order-list' || Route::currentRouteName() == 'order-tracking-view' || Route::currentRouteName() == 'order-invoice-view') nav-link active @endif nav-link">
+            <li class="@if(Route::currentRouteName() == 'cargo-new-order' || Route::currentRouteName() == 'order-list' || Route::currentRouteName() == 'order-tracking-view' ||Route::currentRouteName() == 'pricing-list' || Route::currentRouteName() == 'order-invoice-view') nav-item menu-open @endif nav-item">
+              <a href="#" class="@if(Route::currentRouteName() == 'cargo-new-order' || Route::currentRouteName() == 'order-list' || Route::currentRouteName() == 'order-tracking-view' ||Route::currentRouteName() == 'pricing-list' || Route::currentRouteName() == 'order-invoice-view') nav-link active @endif nav-link">
                 <i class="nav-icon fas fa-truck"></i>
                 <p>
                   Cargo(Courier Service)
@@ -494,7 +496,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                 </li> --}}
                 @if (Auth::user()->role == 'admin')
                 <li class="nav-item">
-                  <a href="/cargo/pricing-list" class="@if(Route::currentRouteName() == 'add-new-pricing') nav-link active @endif nav-link">
+                  <a href="/cargo/pricing-list" class="@if(Route::currentRouteName() == 'pricing-list') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Manage Pricing</p>
                   </a>
@@ -504,7 +506,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
             </li>
           @endif
           @if (Auth::user()->mobile_permission == 1  && Auth::user()->role!='admin2' )
-            <li class="@if(Route::currentRouteName() == 'phone-order' || Route::currentRouteName() == 'selling-list') nav-item menu-open @endif nav-item">
+            <li class="@if(Route::currentRouteName() == 'phone-order' ||Route::currentRouteName() == 'add-phone-view' ||  Route::currentRouteName() == 'selling-list') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'phone-order' || Route::currentRouteName() == 'selling-list') nav-link active menu-open @endif nav-link">
                 <i class="nav-icon fas fa-mobile-alt"></i>
                 <p>

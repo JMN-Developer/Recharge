@@ -255,25 +255,19 @@
 @endsection
 
 @section('scripts')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!-- jQuery -->
-<script src="{{asset('js/jquery.min.js')}}"></script>
-<!-- Bootstrap -->
-<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+
+
+
 <!-- Select2 -->
 <script src="{{asset('js/select2.full.min.js')}}"></script>
 <!-- Bootstrap4 Duallistbox -->
 <script src="{{asset('js/jquery.bootstrap-duallistbox.min.js')}}"></script>
-<!-- daterangepicker -->
-<script src="{{asset('js/moment.min.js')}}"></script>
+
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="{{asset('js/tempusdominus-bootstrap-4.min.js')}}"></script>
 <!-- BS-Custom-file-input -->
 <script src="{{asset('js/bs-custom-file-input.min.js')}}"></script>
-<!-- Theme JS -->
-<script src="{{asset('js/admin.js')}}"></script>
-<!-- Custom JS -->
-<script src="{{asset('js/custom.js')}}"></script>
+
 @endsection
 
 

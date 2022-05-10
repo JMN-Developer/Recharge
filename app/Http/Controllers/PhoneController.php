@@ -60,7 +60,7 @@ class PhoneController extends Controller
 
 
         $Phones = new Phone;
-        $Phones->phone = $request->input('phone');        
+        $Phones->phone = $request->input('phone');
         $Phones->price = $request->input('price');
         $Phones->dis_price = $request->input('dis_price');
         $Phones->description = $request->input('description');
@@ -97,7 +97,7 @@ class PhoneController extends Controller
     }
 
     public function order(Request $request)
-    { 
+    {
         // if (Auth::user()->wallet >= $request->price) {
             $add = new PhoneOrder;
             $add->reseller_id = $request->reseller_id;
@@ -143,7 +143,7 @@ class PhoneController extends Controller
         $update = PhoneOrder::where('id', $request->id)->update([
             'status' => $request->status
         ]);
-        
+
         return back()->with('status', 'Status Updated Successfully!');
     }
 }

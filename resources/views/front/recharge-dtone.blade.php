@@ -255,6 +255,7 @@
 @section('scripts')
 
 <script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 @endsection

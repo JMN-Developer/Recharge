@@ -489,12 +489,12 @@ table.dataTable thead .sorting_asc{
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  
+
 @endsection
 
 @section('scripts')
 <!-- jQuery -->
-
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.25/api/sum().js" type="text/javascript"></script>
 

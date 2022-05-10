@@ -337,7 +337,10 @@ class TicketController extends Controller
            return $text;
          })
          ->addColumn('last_response', function($data){
+             if($data->last_response)
             $text =  $data->last_response->updated_at;
+            else
+            $text = 'Not Response Yet';
             return $text;
           })
           ->addColumn('message_read_status', function($data){
