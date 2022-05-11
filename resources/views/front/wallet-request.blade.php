@@ -124,7 +124,7 @@
                         <div class="form-group">
                           <label for="exampleInputEmail1">Requested Amount</label>
                          <div class="d-flex">
-                          <input type="text" class="form-control" id="requested_amount" aria-describedby="emailHelp" placeholder="Requested Amount" disabled><button value="accept_direct"  class="btn btn-sm btn-info" style="margin-left: 5px"><i class="fa fa-check"></i></button>
+                          <input type="text" class="form-control" id="requested_amount" aria-describedby="emailHelp" placeholder="Requested Amount" disabled><button value="accept_direct"  class="btn btn-sm btn-info" style="margin-left: 5px">Approve</button>
                         </div>
                         </div>
 
@@ -208,9 +208,9 @@
 
 @section('scripts')
 <!-- jQuery -->
-
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <script>
     let get_wallet_data = '{{route("get-wallet-data")}}';
     let user_role = '{{ auth()->user()->role }}';

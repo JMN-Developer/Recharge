@@ -59,8 +59,8 @@ table.dataTable thead .sorting_asc{
                     <div class="date_picker_pair mb-3">
                         <label for="inputSearchDate" class="form-label">Select Date</label>
                         <input type="text" class="form-control" name="daterange" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
-                        <input type="hidden" class='start_date'>
-                        <input type="hidden" class='end_date'>
+                        <input type="hidden" class='start_date' name='start_date'>
+                        <input type="hidden" class='end_date' name="end_date">
 
                         <!-- <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" /> -->
                       </div>

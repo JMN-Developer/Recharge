@@ -37,6 +37,9 @@
       border-radius: none;
       border-left: 6px solid #229954;
   }
+  .date_picker_pair {
+    width: 100% !important;
+}
 </style>
 
 
@@ -79,6 +82,58 @@
                 <div>
                     <a class="btn btn-primary" href='{{ route('create-notification') }}' style="margin-bottom: 20px">Create New</a>
                 </div>
+                <form method="GET" action="{{ route('GeneralNotification') }}">
+                <div class="row" style="margin-left:5px">
+                    <div class="col-md-3">
+                        <div class="date_picker_pair mb-3">
+                            <label for="inputSearchDate" class="form-label">Select Date</label>
+                            <input type="text" class="form-control" name="daterange" id="inputSearchDate" value="01/01/2018 - 01/15/2018">
+                            <input type="hidden" class='start_date' name='start_date'>
+                            <input type="hidden" class='end_date' name='end_date'>
+
+                            <!-- <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" /> -->
+                          </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-row align-items-center offer_select_option">
+                            <label for="inlineFormCustomSelect" style="margin-bottom:14px">Services</label>
+
+                            <select  data-placeholder="Select an Option"  class="custom-select service"  name="service" required>
+                                <option></option>
+                                <option value="all">All</option>
+                                <option value="International Recharge">International Recharge</option>
+                                <option value="Domestic Recharge">Domestic Recharge</option>
+                                <option value="Wallet Transaction">Wallet Transaction</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Cargo">Cargo</option>
+                                <option value="Flight">Flight</option>
+                                <option value="Others">Others</option>
+
+                            </select>
+                          </div>
+                      </div>
+
+                      <div class="col-md-3" style="margin-left:15px">
+                        <div class="form-row align-items-center offer_select_option">
+                            <label for="inlineFormCustomSelect" style="margin-bottom:14px">Choose Retailer</label>
+
+                            <select  data-placeholder="Select an Option"  class="custom-select reseller" id="reseller" name="retailer" required>
+                                <option></option>
+                                <option value="all">All</option>
+                             @foreach ( $resellers as $d )
+                                 <option value="{{ $d->id }}">{{ $d->first_name." ".$d->last_name." (".$d->id.")" }}</option>
+                             @endforeach
+
+                            </select>
+                          </div>
+                      </div>
+
+                      <div class="col-md-2">
+                        <input type="submit"   value="Search" class="btn btn-success" style="margin-top:30px">
+                      </div>
+                  </div>
+                </form>
                 @endif
                 <div class="recharge_input_table table-responsive p-0">
                     @foreach($data as $d)
@@ -95,7 +150,7 @@
                     @endforeach
                     <div style="float:right">
                         @if(auth()->user()->role =='user')
-                    {{$user->notifications()->paginate(5)->links()}}
+                    {{$user->notifications()->paginate(10)->links()}}
                     @else
                     {{$notifications->links()}}
                     @endif
@@ -133,5 +188,52 @@
 @endsection
 
 @section('js')
+<script>
+    $(function(){
+        $('.reseller').select2({
 
+placeholder: function(){
+    $(this).data('placeholder');
+}
+
+});
+
+$('.service').select2({
+
+placeholder: function(){
+    $(this).data('placeholder');
+}
+
+});
+
+
+var start = moment().subtract(29, 'days');
+  var end = moment();
+  $(".start_date").val(start.format('YYYY-MM-DD'));
+  $(".end_date").val(end.format('YYYY-MM-DD'));
+
+
+
+  $('input[name="daterange"]').daterangepicker({
+    startDate: start,
+    endDate: end,
+    ranges: {
+       'Today': [moment(), moment()],
+       'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+       'This Month': [moment().startOf('month'), moment().endOf('month')],
+       'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    }
+  }, function(start, end, label) {
+     // alert('hello')
+
+     $(".start_date").val(start.format('YYYY-MM-DD'));
+     $(".end_date").val(end.format('YYYY-MM-DD'));
+
+   //  fetch_table($(".start_date").val(),$(".end_date").val());
+
+  });
+    })
+</script>
 @endsection

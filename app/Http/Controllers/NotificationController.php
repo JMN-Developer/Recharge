@@ -17,8 +17,9 @@ class NotificationController extends Controller
 {
     //
 
-    public function index()
+    public function index(Request $request)
     {
+
         $notifications ='';
         $user_id = auth()->user()->id;
         $user = user::find($user_id);
@@ -26,14 +27,36 @@ class NotificationController extends Controller
         $data = [];
         if(auth()->user()->role == 'user')
         {
-        foreach ($user->notifications()->paginate(5) as $notification) {
+        foreach ($user->notifications()->paginate(10) as $notification) {
             $notification_data = json_decode(json_encode($notification->data));
             array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
         }
           }
           else
           {
-            $notifications = DatabaseNotification::latest()->paginate(5);
+            if($request->has('service'))
+            {
+            $start_date =  Carbon::parse($request->start_date)->toDateTimeString();
+            $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
+            $retailer_id = $request->retailer;
+            $service = $request->service;
+            if($retailer_id=='all' && $service == 'all')
+            {
+                $notifications = DatabaseNotification::whereBetween('created_at', [$start_date,$end_date])->latest()->paginate(10);
+            }
+            else if($retailer_id == 'all' && $service!='all')
+            {
+                $notifications = DatabaseNotification::where('data->service',$service)->whereBetween('created_at', [$start_date,$end_date])->latest()->paginate(10);
+            }
+            else if($retailer_id !='all' && $service!='all')
+            {
+            $notifications = DatabaseNotification::where('notifiable_id',$retailer_id)->where('data->service',$service)->whereBetween('created_at', [$start_date,$end_date])->latest()->paginate(10);
+            }
+           // file_put_contents('test.txt',$request->start_date.' '.$request->end_date);
+            }
+            else
+            $notifications = DatabaseNotification::latest()->paginate(10);
+
             foreach ($notifications as $notification) {
                 $notification_data = json_decode(json_encode($notification->data));
                 array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
@@ -41,7 +64,9 @@ class NotificationController extends Controller
           }
 
         $data = json_decode(json_encode($data));
-        return view('front.notification-list',compact('data','user','notifications'));
+        //file_put_contents('test.txt',json_encode($data));
+        $resellers = user::where('role','!=','admin')->latest()->get();
+        return view('front.notification-list',compact('data','user','notifications','resellers'));
     }
     public function create_notification()
     {
@@ -79,7 +104,7 @@ class NotificationController extends Controller
         catch(\Throwable $th){
             Log::error("General Event Error: ".$th);
         }
-        return redirect()->route('GeneralNotification')->with('success','Ticket Submitted Successfully');
+        return redirect()->route('GeneralNotification')->with('success','Notification Created Successfully');
 
 // dd('Task completed!');
     }
