@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
 
   <title>JM Nation</title>
   <meta name="description"
@@ -1094,7 +1095,7 @@
 
           <h4>Send us a message</h4>
 
-          <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+          <form id="mail_form" method="post" role="form" class="php-email-form">
             <div class="form-group">
               <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
             </div>
@@ -1105,7 +1106,7 @@
               <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
             </div>
             <div class="form-group mt-3">
-              <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+              <textarea class="form-control" id="message" name="message" rows="5" placeholder="Message" required></textarea>
             </div>
 
             <div class="text-center mt-3"><button type="submit" title="Send Message">Send Message</button></div>
@@ -1140,10 +1141,51 @@
 <script src="{{asset('frontend')}}/assets/vendor/php-email-form/validate.js"></script>
 <script src="{{asset('frontend')}}/assets/vendor/purecounter/purecounter.js"></script>
 <script src="{{asset('frontend')}}/assets/vendor/swiper/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
 <!-- Template Main JS File -->
 <script src="{{asset('frontend')}}/assets/js/main.js"></script>
 <script src="{{asset('frontend')}}/assets/js/script.js"></script>
+
+<script>
+  $(function()
+  {
+    $("#mail_form" ).submit(function( event ) {
+      event.preventDefault();
+      var name = $("#name").val();
+      var email = $("#email").val();
+      var subject = $("#subject").val();
+      var message = $("#message").val();
+     // alert(message);
+      //return;
+      var formData = new FormData();
+      formData.append('name',name);
+      formData.append('email',email);
+      formData.append('subject',subject);
+      formData.append('message',message);
+      
+      $.ajax({
+        processData: false,
+        contentType: false,
+        url: "send_frontpage_email",
+        type:"POST",
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         },
+        data: formData,
+     
+        success:function(response){
+           // $('.cover-spin').hide(0);
+
+
+        },
+       });
+     // alert(name+" "+email+" "+subject+" "+message);
+    
+});
+  })
+</script>
 
 </body>
 </div>

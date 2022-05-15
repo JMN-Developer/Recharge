@@ -43,22 +43,11 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\BangladeshRechargeController;
 use App\Http\Controllers\ServiceController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-//Route::view('registration','front.registration-form');
+
+
 
 Route::get('/',[AuthController::class,'index'])->name('/');
-// Route::get('test-notification',[PpnController::class,'send_pin']);
-
-// Route::get('test',[RechargeController::class,'data_test']);
+Route::post('send_frontpage_email',[FrontController::class,'send_frontpage_email'])->name('send_frontpage_email');
 
 Route::get('error-page', function () {
 
