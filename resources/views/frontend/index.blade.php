@@ -1142,6 +1142,7 @@
 <script src="{{asset('frontend')}}/assets/vendor/purecounter/purecounter.js"></script>
 <script src="{{asset('frontend')}}/assets/vendor/swiper/swiper-bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
 <!-- Template Main JS File -->
@@ -1176,7 +1177,11 @@
         data: formData,
      
         success:function(response){
-           // $('.cover-spin').hide(0);
+          swal("Message Send Successfully!")
+          .then((value) => {
+            location.reload()
+});
+          
 
 
         },

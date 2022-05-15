@@ -45,7 +45,10 @@ class FrontPageEmailNotification extends Notification
         return (new MailMessage)
         ->from($this->data['from'])
         ->subject('Front Page User Message')
-        ->line('Your have balance alert'.PHP_EOL.$this->balance_data['message']);
+        ->line('Name: '.$this->data['name'])
+        ->line('Subject: '.$this->data['subject'])
+        ->line('Email: '.$this->data['email'])
+        ->line('Message: '.$this->data['message']);
     }
 
     /**
