@@ -538,7 +538,8 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </ul>
             </li>
           @endif
-          @if ( service_permission('Flight',$services) == 1)
+          
+         
           <li class="@if(Route::currentRouteName() == 'add-flight') nav-item menu-open @endif nav-item">
             <a href="{{url('flights/')}}" target="_blank"  class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
               <i class="nav-icon fas fa-plane-departure"></i>
@@ -547,7 +548,8 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </p>
             </a>
           </li>
-          @endif
+        
+          
 
             <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
