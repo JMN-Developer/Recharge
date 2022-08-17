@@ -634,15 +634,7 @@ function fetch_table(start_date,end_date,retailer = 'all')
                 'retailer':retailer
 
             },
-            dataSrc: function ( data ) {
-
-            wallet = data.data[0].wallet;
-            limit = data.data[0].limit;
-            sim = data.data[0].sim;
-            cargo = data.data[0].cargo;
-
-            return data.data;
-            } ,
+           
 
 
             },
@@ -650,38 +642,16 @@ function fetch_table(start_date,end_date,retailer = 'all')
         columns: [
             //   {data: 'sl_no'},
             @if(Auth::user()->role == 'admin')
-            {data:'reseller_name',name:'reseller_name'},
+            {data:'reseller_name',name:'reseller_name',searchable:'true'},
              @endif
             {data:'transaction_id',name:'transaction_id',orderable:false},
-            {data:'transaction_source',name:'transaction_source'},
+            {data:'transaction_wallet',name:'transaction_wallet'},
             {data:'description',name:'description'},
             {data:'wallet_before_transaction',name:'wallet_before_transaction'},
             {data:'wallet_after_transaction',name:'wallet_after_transaction'},
             {data:'transaction_amount',name:'transaction_amount'},
 
-
-
-  ],
-
-
-  drawCallback: function () {
-            var api = this.api();
-
-        $( api.column( 0 ).footer() ).html(
-            'Wallet = '+wallet
-            );
-            $( api.column( 1 ).footer() ).html(
-                'Limit = '+limit
-            );
-            $( api.column( 2 ).footer() ).html(
-                'Cargo = '+cargo
-            );
-            $( api.column( 3 ).footer() ).html(
-                'Sim ='+sim
-            );
-           // datatable_sum(api, false);
-        }
-
+     ],
 
     });
 
@@ -691,17 +661,7 @@ function fetch_table(start_date,end_date,retailer = 'all')
     $('#tab-table-white-calling').DataTable().search( 'White Calling' ).draw();
     $('#tab-table-sim').DataTable().search( 'Sim' ).draw();
     $('#tab-table-cargo').DataTable().search( 'Cargo' ).draw();
-    function datatable_sum(dt_selector, is_calling_first) {
-        //col start from 0
-
-
-        $( dt_selector.column(4).footer() ).html(dt_selector.column( 4, {page:'all'} ).data().sum().toFixed(2));
-        $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));
-
-
-
-
-    }
+    
 
 }
 </script>
