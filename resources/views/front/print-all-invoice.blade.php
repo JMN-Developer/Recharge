@@ -326,12 +326,22 @@ function fetch_table(start_date,end_date)
   drawCallback: function () {
             var api = this.api();
 
+      @if(Auth::user()->role == 'admin')
+        $( api.column( 5 ).footer() ).html(
+          total_cost
+            );
+            $( api.column( 6 ).footer() ).html(
+          total_profit
+            );
+        @else
         $( api.column( 4 ).footer() ).html(
           total_cost
             );
             $( api.column( 5 ).footer() ).html(
           total_profit
             );
+        @endif   
+
             //datatable_sum(api, false);
         }
 

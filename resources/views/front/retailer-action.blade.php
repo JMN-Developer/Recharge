@@ -13,10 +13,10 @@
   <link rel="stylesheet" href="{{asset('css/admin.min.css')}}">
 
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script>
+   
 
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
 
 </head>
@@ -128,148 +128,149 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <script>
-
-  function check_eligble()
-  {
-    $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/retailer/checkStatus',
-            data: {'status': status, 'user_id': user_id},
-            success: function(data){
-
-            }
-        });
-  }
-  $(function() {
-    $('.recharge').change(function() {
-        var check = 0;
-
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var user_id = $(this).data('id');
 
 
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/retailer/changeStatus',
-            data: {'status': status, 'user_id': user_id},
-            success: function(data){
-
-                if(data.message =='error')
-                {
-                   // $(this).prop('unchecked')
-                    $('.recharge').bootstrapToggle('off')
-
-                    // alert('You do not have this access')
-                }
-            }
-        });
-    })
-  })
-  </script>
-  <script>
-  $(function() {
-    $('.sim').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var user_id = $(this).data('id');
-
-
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/retailer/changeSim',
-            data: {'status': status, 'user_id': user_id},
-            success: function(data){
-              console.log(data.success)
-            }
-        });
-    })
-  })
-  </script>
-  <script>
-  $(function() {
-    $('.cargo').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var user_id = $(this).data('id');
-        console.log('hello');
-
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/retailer/changeCargo',
-            data: {'status': status, 'user_id': user_id},
-            success: function(data){
-              console.log(data.success)
-            }
-        });
-    })
-  })
-  </script>
-  <script>
-  $(function() {
-    $('.phone').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var user_id = $(this).data('id');
-        console.log('hello');
-
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/retailer/changePhone',
-            data: {'status': status, 'user_id': user_id},
-            success: function(data){
-              console.log(data.success)
-            }
-        });
-    })
-  })
-  </script>
-  <script>
-  $(function() {
-    $('.reseller').change(function() {
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var user_id = $(this).data('id');
-        console.log('hello');
-
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: '/retailer/changeReseller',
-            data: {'status': status, 'user_id': user_id},
-            success: function(data){
-              console.log(data.success)
-            }
-        });
-    })
-  })
-  </script>
-  <script>
-    $(function() {
-      $('.pin').change(function() {
-          var status = $(this).prop('checked') == true ? 1 : 0;
-          var user_id = $(this).data('id');
-
-
-          $.ajax({
-              type: "GET",
-              dataType: "json",
-              url: '/retailer/changePin',
-              data: {'status': status, 'user_id': user_id},
-              success: function(data){
-                console.log(data.success)
-              }
-          });
-      })
-    })
-    </script>
 @endsection
 
 @section('scripts')
-<!-- jQuery -->
-
-
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
 
+@endsection
+@section('js')
+<script>
+
+function check_eligble()
+{
+  $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: '/retailer/checkStatus',
+          data: {'status': status, 'user_id': user_id},
+          success: function(data){
+
+          }
+      });
+}
+$(function() {
+
+  $('.recharge').change(function() {
+      
+      var check = 0;
+      var status = $(this).prop('checked') == true ? 1 : 0;
+      var user_id = $(this).data('id');
+      $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: '/retailer/changeStatus',
+          data: {'status': status, 'user_id': user_id},
+          success: function(data){
+
+              if(data.message =='error')
+              {
+                 // $(this).prop('unchecked')
+                  $('.recharge').bootstrapToggle('off')
+
+                  // alert('You do not have this access')
+              }
+          }
+      });
+  })
+})
+</script>
+<script>
+$(function() {
+  $('.sim').change(function() {
+      var status = $(this).prop('checked') == true ? 1 : 0;
+      var user_id = $(this).data('id');
+
+
+      $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: '/retailer/changeSim',
+          data: {'status': status, 'user_id': user_id},
+          success: function(data){
+            console.log(data.success)
+          }
+      });
+  })
+})
+</script>
+<script>
+$(function() {
+  $('.cargo').change(function() {
+      var status = $(this).prop('checked') == true ? 1 : 0;
+      var user_id = $(this).data('id');
+      console.log('hello');
+
+      $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: '/retailer/changeCargo',
+          data: {'status': status, 'user_id': user_id},
+          success: function(data){
+            console.log(data.success)
+          }
+      });
+  })
+})
+</script>
+<script>
+$(function() {
+  $('.phone').change(function() {
+      var status = $(this).prop('checked') == true ? 1 : 0;
+      var user_id = $(this).data('id');
+      console.log('hello');
+
+      $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: '/retailer/changePhone',
+          data: {'status': status, 'user_id': user_id},
+          success: function(data){
+            console.log(data.success)
+          }
+      });
+  })
+})
+</script>
+<script>
+$(function() {
+  $('.reseller').change(function() {
+      var status = $(this).prop('checked') == true ? 1 : 0;
+      var user_id = $(this).data('id');
+      console.log('hello');
+
+      $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: '/retailer/changeReseller',
+          data: {'status': status, 'user_id': user_id},
+          success: function(data){
+            console.log(data.success)
+          }
+      });
+  })
+})
+</script>
+<script>
+  $(function() {
+    $('.pin').change(function() {
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var user_id = $(this).data('id');
+
+
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '/retailer/changePin',
+            data: {'status': status, 'user_id': user_id},
+            success: function(data){
+              console.log(data.success)
+            }
+        });
+    })
+  })
+  </script>
 @endsection
