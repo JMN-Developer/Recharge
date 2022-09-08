@@ -39,7 +39,11 @@ class UserController extends Controller
         $users->nationality = $request->input('nationality');
         $users->email = $request->input('email');
         $users->address = $request->input('address');
-        $users->role = 'user';
+        if(Auth::user()->role == 'user')
+        $users->role = 'reseller';
+        else
+        $user->role = 'user';
+        
         $users->user_id ='JM-'.mt_rand(10000,99999);
 
         $users->payment_method = $request->input('payment_method');

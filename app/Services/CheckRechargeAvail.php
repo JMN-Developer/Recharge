@@ -52,16 +52,21 @@ class CheckRechargeAvail
         $instance = new CheckRechargeAvail();
         if(auth()->user()->role == 'admin')
         {
-
             return true;
         }
 
         $user_info = User::where('id',auth()->user()->id)->first();
         if($type == 'International')
         {
-        $current_wallet = $user_info->wallet;
-        $limit = $user_info->due;
-        $limit_usage = $user_info->limit_usage;
+            $current_wallet = $user_info->wallet;
+            $limit = $user_info->due;
+            $limit_usage = $user_info->limit_usage;
+            if($user_info->role =='reseller' ){
+                $parent_current_wallet = $user_info->parent->wallet;
+                $parent_limit = $user_info->parent->due;
+                $parent_limit_usage = $user_info->parent->limit_usage;
+            }
+           
 
         }
         else
@@ -69,31 +74,33 @@ class CheckRechargeAvail
             $current_wallet = $user_info->domestic_wallet;
             $limit = $user_info->domestic_due;
             $limit_usage = $user_info->domestic_limit_usage;
+            if($user_info->role == 'reseller'){
+                $parent_current_wallet = $user_info->parent->domestic_wallet;
+                $parent_limit = $user_info->parent->domestic_due;
+                $parent_limit_usage = $user_info->parent->domestic_limit_usage;
+            }
 
         }
         $due_limit = $limit-$limit_usage;
-        //file_put_contents('test.txt',$due_limit." ".$requested_amount." ".$current_wallet);
-        if($requested_amount>$current_wallet)
-        {
-            if($requested_amount>$due_limit+$current_wallet)
-            {
-              //  file_put_contents('test.txt','false');
+        if($user_info->role == 'reseller'){
+            $parent_due_limit = $parent_limit-$limit_usage;
+        }
+        
+    
+        if($requested_amount>$current_wallet){
+            if($requested_amount>$due_limit+$current_wallet){
                 return false;
             }
-            else
-            {
-                //
-               // $instance->send_alert_email();
+            else{
+                if($user_info->role == 'reseller'){
+                    if($requested_amount>$parent_due_limit+$parent_current_wallet){
+                        return false;
+                    }
+                }
                 return true;
             }
-
         }
 
-       // $instance->send_alert_email();
-        //file_put_contents('test.txt','true2');
       return true;
-
-
-
     }
 }

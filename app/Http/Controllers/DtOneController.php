@@ -24,7 +24,7 @@ class DtOneController extends Controller
     {
         $dtone = new DtOneProvider();
         $this->dtone = $dtone;
-        $this->bangladeshi_recharge = new BangladeshiRecharge();
+       // $this->bangladeshi_recharge = new BangladeshiRecharge();
     }
     public function index(){
 
@@ -55,14 +55,8 @@ class DtOneController extends Controller
         $data = array();
         foreach($skus as $sku)
         {
-
-
-                $amount_text = $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount)."Euro &nbsp(&nbsp" .$sku->name." will be received )";
-                array_push($data,['skuId'=>$sku->id,'amount'=> $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount),'amount_text'=>$amount_text,'bd_amount'=>$sku->destination->amount]);
-
-            //$total_amount = floor($sku->minAmount * $sku->exchangeRate);
-
-
+         $amount_text = $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount)."Euro &nbsp(&nbsp" .$sku->name." will be received )";
+         array_push($data,['skuId'=>$sku->id,'amount'=> $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount),'amount_text'=>$amount_text,'bd_amount'=>$sku->destination->amount]);
 
         }
         usort($data, function($a, $b) {

@@ -3,6 +3,7 @@
 use App\Models\RechargeHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Auth;
 // if (!function_exists('reseller_comission')) {
 // function reseller_comission($discount,$percentage=50)
 // {
@@ -18,12 +19,21 @@ if (!function_exists('reseller_comission')) {
         {
             $percentage = 0;
         }
+        else if(auth()->user()->role == 'user')
+        {   
+            $percentage = auth()->user()->admin_international_recharge_commission;
+        }
         else
         {
-            $percentage = auth()->user()->admin_international_recharge_commission;
-
+            $percentage = auth()->user()->parent->admin_international_recharge_commission;
         }
+        
+
         $percentage_amount = round((($percentage/100)*$amount),2);
+        if(Auth::user()->role == 'reseller'){
+         $percentage = auth()->user()->admin_international_recharge_commission;   
+         $percentage_amount = $percentage_amount+ round((($percentage/100)*($amount+$percentage_amount)),2);
+        }
         return $percentage_amount;
     }
     }

@@ -155,7 +155,6 @@ function check_eligble()
 $(function() {
 
   $('.recharge').change(function() {
-      
       var check = 0;
       var status = $(this).prop('checked') == true ? 1 : 0;
       var user_id = $(this).data('id');

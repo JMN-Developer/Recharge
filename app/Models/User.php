@@ -70,5 +70,10 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\ResellerProfit','reseller_id','id')->withDefault(['international_rechareg_profit'=>20,'domestic_recharge_profit'=>65]);
     }
+    public function parent()
+    {
+        return $this->belongsTo(User::class,'created_by');
+    }
+    
 
 }
