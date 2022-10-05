@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\ResellerProfit;
 use Auth;
 
-class RetailerController extends Controller`
+class RetailerController extends Controller
 {
     public function retailer_details()
     {
