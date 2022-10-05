@@ -864,36 +864,17 @@ class RechargeController extends Controller
             $balancequery = Balance::where('type','domestic')->first();
 
             $prof = DomesticProfit::where('ean',$sku_amount['0'])->first();
-
-
-
-
-
+            
             $balance = DB::table('balances')->where('type','domestic')->update([
                 'balance' => round(($xml2->LIMIT)/100,2),
             ]);
             if($xml2->RESULT == 0){
 
                 if(a::user()->role != 'admin'){
-                   // $reseller_commission = ($sku_amount['1']/100)*a::user()->reseller_profit->domestic_recharge_profit;
-                   // $admin_commission = ($sku_amount['1']/100)*a::user()->admin_recharge_commission;
                     $cost = $sku_amount['1']-$prof->commission;
-
-                   // $reseller_commission = round( ($prof->commission/100)*a::user()->admin_recharge_commission,2);
                     $reseller_commission = reseller_profit_domestic($prof->commission);
-                    //$reseller_commission = $admin_given_profit;
                     $admin_commission = $prof->commission - $reseller_commission;
-                    //$admin_commission = $admin_given_profit
-
-                    // $minus = a::user()->update([
-                    //     'wallet' => a::user()->wallet - $cost + $admin_given_profit,
-                    // ]);
-
                     $reseller = User::where('id',a::user()->created_by)->first();
-
-                    // $commission = User::where('id',a::user()->created_by)->update([
-                    //     'wallet' => $reseller->wallet + $reseller_commission
-                    // ]);
                 }else{
                     $reseller_commission = 0;
                     $admin_commission = 0;

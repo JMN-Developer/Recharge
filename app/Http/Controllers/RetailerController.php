@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\ResellerProfit;
 use Auth;
 
-class RetailerController extends Controller
+class RetailerController extends Controller`
 {
     public function retailer_details()
     {
@@ -36,16 +36,10 @@ class RetailerController extends Controller
 
     public function RetailerAction($value='')
     {
-        //  SHOVON WORKED HERE
         if (Auth::user()->role == 'admin' || Auth::user()->role == 'admin2' ) {
-            $data = User::where('role','!=','admin')->get();
+            $data = User::where('role','user')->get();
         }else {
-            $data = User::where('created_by', Auth::user()->id)
-                    ->where(function($query){
-                        return $query->where('role','user')
-                                    ->orWhere('role','reseller');
-                    })
-                    ->get();
+            $data = User::where('role','user')->where('created_by', Auth::user()->id)->get();
         }
        // file_put_contents('test.txt',auth()->user()->role);
         return view('front.retailer-action',compact('data'));

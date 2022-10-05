@@ -27,26 +27,23 @@ class DtOneController extends Controller
        // $this->bangladeshi_recharge = new BangladeshiRecharge();
     }
     public function index(){
-
-        if(a::user()->role == 'user'){
-            $data = RechargeHistory::where('reseller_id', a::user()->id)->where(function($q) {
-                $q->where('type','International')
-                  ->orWhere('type','Bangladesh');
-            })->latest()->take(5)->get();
-           // $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->latest()->take(5)->get();
-        }else{
-            $data = RechargeHistory::where(function($q) {
-                $q->where('type','International')
-                  ->orWhere('type','Bangladesh');
-            })->join('users','users.id','=','recharge_histories.reseller_id')
-            ->select('recharge_histories.*','users.nationality')
-            ->latest()
-            ->take(5)
-            ->get();
-
-
-        }
-
+       if(a::user()->role == 'admin'){
+        $data = RechargeHistory::where(function($q) {
+            $q->where('type','International')
+              ->orWhere('type','Bangladesh');
+        })->join('users','users.id','=','recharge_histories.reseller_id')
+        ->select('recharge_histories.*','users.nationality')
+        ->latest()
+        ->take(5)
+        ->get();
+       }
+       else{
+        $data = RechargeHistory::where('reseller_id', a::user()->id)->where(function($q) {
+            $q->where('type','International')
+              ->orWhere('type','Bangladesh');
+        })->latest()->take(5)->get();
+       }
+    
         return view('front.recharge-dtone',compact('data'));
     }
     function make_sku_list($skus)
@@ -171,16 +168,23 @@ class DtOneController extends Controller
     public function create_recharge($data,$number,$txid,$country_code,$service = 0)
     {
         $discount =$data->prices->retail->amount - $data->prices->wholesale->amount;
-        $total_commission = reseller_comission($data->prices->retail->amount);
-        $reseller_profit = reseller_profit($data->prices->retail->amount+$total_commission);
-        $admin_profit = ($data->prices->retail->amount+$total_commission)-$reseller_profit-$data->prices->wholesale->amount;
-        //$admin_profit = $total_commission-$reseller_profit;
-        $log_data = 'Number = '.$number.' Amount = '.$data->prices->retail->amount+$total_commission.' R-Com = '.$reseller_profit.' A-Com = '.$admin_profit.' TXID = '.$txid;
+        $reseller_commission = reseller_comission($data->prices->retail->amount);//2
+        $reseller_profit = reseller_profit($data->prices->retail->amount+$reseller_commission);//2.4
+        $sub_profit = 0;
+        $sub_commission = 0;
+        if(auth()->user()->role == 'reseller'){
+            $sub_commission = sub_commission($data->prices->retail->amount+$reseller_commission);//2.4
+            $sub_profit = sub_profit($data->prices->retail->amount+$reseller_commission+$sub_commission);
+
+        }
+        $admin_profit = ($data->prices->retail->amount+$reseller_commission)-$reseller_profit-$data->prices->wholesale->amount;
+        //$admin_profit = $reseller_commission-$reseller_profit;
+        $log_data = 'Number = '.$number.' Amount = '.$data->prices->retail->amount+$reseller_commission.' R-Com = '.$reseller_profit.' A-Com = '.$admin_profit.' TXID = '.$txid;
         Log::channel('rechargelog')->info($log_data);
         $recharge = RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$number,
-            'amount'=>$data->prices->retail->amount+$total_commission,
+            'amount'=>$data->prices->retail->amount+$reseller_commission+$sub_commission,
             'txid'=>$txid,
             'type'=>'International',
             'operator'=>$data->product->operator->name,
@@ -194,7 +198,9 @@ class DtOneController extends Controller
             'admin_com'=>$admin_profit,
             'deliveredAmount'=>floor($data->benefits[0]->amount->total_excluding_tax),
             'deliveredAmountCurrencyCode'=>$data->benefits[0]->unit,
-            'company_name'=>'International4'
+            'company_name'=>'International4',
+            'sub_com'=>$sub_commission,
+            'sub_profit'=>$sub_profit
 
         ]);
         return $recharge;
