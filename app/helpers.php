@@ -3,7 +3,6 @@
 use App\Models\RechargeHistory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
-use Auth;
 // if (!function_exists('reseller_comission')) {
 // function reseller_comission($discount,$percentage=50)
 // {
@@ -15,28 +14,31 @@ use Auth;
 if (!function_exists('reseller_comission')) {
     function reseller_comission($amount)
     {
-        if(auth()->user()->role == 'admin')
-        {
+        if(auth()->user()->role == 'admin'){
             $percentage = 0;
         }
-        else if(auth()->user()->role == 'user')
-        {   
+       
+        else{
             $percentage = auth()->user()->admin_international_recharge_commission;
         }
-        else
-        {
-            $percentage = auth()->user()->parent->admin_international_recharge_commission;
-        }
         
-
         $percentage_amount = round((($percentage/100)*$amount),2);
-        if(Auth::user()->role == 'reseller'){
-         $percentage = auth()->user()->admin_international_recharge_commission;   
-         $percentage_amount = $percentage_amount+ round((($percentage/100)*($amount+$percentage_amount)),2);
-        }
         return $percentage_amount;
     }
     }
+
+
+    if (!function_exists('sub_comission')) {
+        function sub_comission($amount)
+        {
+            $percentage = auth()->user()->parent->admin_international_recharge_commission;
+
+            $percentage_amount = round((($percentage/100)*$amount),2);
+
+            return $percentage_amount;
+        }
+        }
+    
 
     if (!function_exists('service_permission')) {
         function service_permission($service_name,$services)
@@ -106,28 +108,39 @@ if (!function_exists('transaction_cargo')) {
 
 
     if (!function_exists('reseller_profit')) {
-        function reseller_profit($amount)
-        {
-            //return $amount;
-          // $extra_amount =  reseller_comission($amount);
-            if(auth()->user()->role == 'admin')
-            {
+        function reseller_profit($amount){
+            if(auth()->user()->role == 'admin'){
                 $profit = 0;
             }
-            else
-            {
-                $profit = auth()->user()->	admin_international_recharge_commission;
-                if(!$profit)
-                {
+            else{
+                $profit = auth()->user()->admin_international_recharge_commission;
+                if(!$profit){
                     $profit = 20;
                 }
-
             }
 
             $percentage_amount = round((($profit/100)*$amount),2);
             return $percentage_amount;
+            }
         }
-        }
+
+
+    if (!function_exists('sub_profit')) {
+            function sub_profit($amount){
+                if(auth()->user()->role == 'admin'){
+                    $profit = 0;
+                }
+                else{
+                    $profit = auth()->user()->admin_international_recharge_commission;
+                    if(!$profit){
+                        $profit = 20;
+                    }
+                }
+    
+                $percentage_amount = round((($profit/100)*$amount),2);
+                return $percentage_amount;
+                }
+            } 
         // if (!function_exists('get_current_balance')) {
         //     function get_current_balance($amount)
         //     {
@@ -180,12 +193,23 @@ if (!function_exists('transaction_cargo')) {
                         {
                             $profit = 0;
                         }
-                        else
+                        else if(auth()->user()->role =='user')
                         {
-                            $profit = 65;
+                            $profit = auth()->user()->admin_recharge_commission;
 
                         }
-                        $percentage_amount = round((($profit/100)*$amount),2);
+                        else{
+                            $profit = auth()->user()->parent->admin_recharge_commission;
+                        }
+                        if(auth()->user()->role == 'reseller'){
+                            $percentage_amount = round((($profit/100)*$amount),2);
+                            $profit = auth()->user()->admin_recharge_commission;
+                            $percentage_amount = round((($profit/100)*$percentage_amount),2);
+                        }
+                        else{
+                            $percentage_amount = round((($profit/100)*$amount),2);
+                        }
+                        
                         return $percentage_amount;
                     }
                     }

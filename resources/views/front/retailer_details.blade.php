@@ -273,11 +273,11 @@
                                            <br>
 
                                            <label for="">Domestic Recharge Profit :</label><br>
-                                           <small>Default Admin Domestic Recharge Profit is {{$item->reseller_profit->domestic_recharge_profit }}</small>
+                                           <!-- <small>Default Admin Domestic Recharge Profit is {{$item->reseller_profit->domestic_recharge_profit }}</small> -->
 
                                            <input class="form-control"
                                            @if (Auth::user()->role == 'admin')
-                                           value="{{$item->reseller_profit->domestic_recharge_profit}}"
+                                           value="{{$item->admin_recharge_commission}}"
                                            @endif
                                             type="number" step="0.01" name="domestic_recharge_profit">
                                             <br>
