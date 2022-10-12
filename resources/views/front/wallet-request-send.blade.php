@@ -68,7 +68,6 @@
 
     <!-- Main content -->
     <section class="content">
-        @if(auth()->user()->role != 'admin')
         <div class="card card-solid">
             <div class="card-body pb-0">
                 <form  id="wallet_submit">
@@ -104,9 +103,7 @@
                   </form>
             </div>
         </div>
-        @endif
-
-
+      
         <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
@@ -162,25 +159,15 @@
                 <thead class="thead-dark" style="background:black;color:white">
                   <tr>
                     <th scope="col">#</th>
-                    @if(auth()->user()->role =='admin')
-                    <th scope="col">Reseller Name</th>
-                    <th scope="col">Previous Due</th>
-                    <th scope="col">Payment Copy</th>
-                    @else
+  
                     <th scope="col">Admin Message</th>
-                    @endif
-
-                    <th scope="col">Message</th>
                     <th scope="col">Requested Amount</th>
                     <th scope="col">Approved Amount</th>
                     <th scope="col">Requested Date</th>
                     <th scope="col">Approved Date</th>
                     <th scope="col">Wallet Type</th>
                     <th scope="col">Status</th>
-                    @if(auth()->user()->role =='admin')
-
-                    <th scope="col">Action</th>
-                    @endif
+                   
                   </tr>
                 </thead>
                 <tbody id="wallet_data">
@@ -281,190 +268,7 @@
 
     })
 
-    // $("#accept_direct").click(function(){
-    //   alert('hel')
-
-    // })
-
-
-    $( "#approved_form" ).submit(function( event ) {
-      event.preventDefault();
-      var approved_amount = $("#approved_amount").val();
-      var valid = true;
-      var status = 'approved';
-      var button_value = document.activeElement['value'];
-
-      if(button_value == 'accept')
-      {
-        if(!$("#approved_amount").val() )
-        {
-         if($.trim($('#admin_message').val()).length == 0 )
-        {
-          var data = 'Please fillup approved amount filed';
-          valid = false;
-        }
-        else
-        {
-            var data = 'Please click Decline button';
-          valid = false;
-        }
-        }
-      }
-      if(button_value == 'delete')
-      {
-        //alert($("#admin_message").val() );
-        if($.trim($('#admin_message').val()).length == 0 )
-        {
-          var data = 'Please fillup admin message filed';
-          valid = false;
-        }
-        status = 'declined';
-      }
-
-      if(button_value == 'accept_direct')
-      {
-        //alert($("#admin_message").val() );
-
-        approved_amount = $("#requested_amount").val();
-          valid = true;
-
-
-      }
-
-
-
-
-      if(valid )
-      {
-
-
-        swal({
-  title: "Are you sure?",
-  icon: "warning",
-  buttons: true,
-  dangerMode: true,
-})
-.then((willDelete) => {
-  if (willDelete) {
-
-    var formdata = new FormData();
-        formdata.append('id',$("#due_id").val());
-        formdata.append('approved_amount',approved_amount);
-        formdata.append('admin_message',$("#admin_message").val());
-        formdata.append('status',status);
-        $.ajax({
-        processData: false,
-        contentType: false,
-        url: "/approved_amount",
-        type:"POST",
-        headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-         },
-        data: formdata,
-        beforeSend: function () {
-            $('.cover-spin').show(0)
-            },
-        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
-            $('.cover-spin').hide(0)
-            },
-        success:function(response){
-            iziToast.success({
-                    backgroundColor:"Green",
-                    messageColor:'white',
-                    iconColor:'white',
-                    titleColor:'white',
-                    titleSize:'18',
-                    messageSize:'18',
-                    color:'white',
-                    position:'topCenter',
-                    timeout: 10000,
-                    title: 'Success',
-                    message: "Updated Successfully",
-
-                });
-            get_data();
-            $("#edit").modal('hide');
-            $("#admin_message").val('');
-            $("#approved_amount").val('');
-            $("#requested_amount").val('');
-
-
-        },
-       });
-  } else {
-
-  }
-  });
-
-      }
-      else
-      {
-        swal("Error!",data, "error");
-      }
-
-
-    })
-    function approved_direct(id)
-    {
-
-        var status = 'approved';
-        var approved_amount =$("."+id+"-requested-amount").html();
-        swal({
-  title: "Are you sure?",
-  icon: "warning",
-  buttons: true,
-  dangerMode: true,
-})
-.then((willDelete) => {
-  if (willDelete) {
-
-    var formdata = new FormData();
-        formdata.append('id',id);
-        formdata.append('approved_amount',approved_amount);
-        formdata.append('status',status);
-        $.ajax({
-        processData: false,
-        contentType: false,
-        url: "/approved_amount",
-        type:"POST",
-        headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-         },
-        data: formdata,
-        beforeSend: function () {
-            $('.cover-spin').show(0)
-            },
-        complete: function () { // Set our complete callback, adding the .hidden class and hiding the spinner.
-            $('.cover-spin').hide(0)
-            },
-        success:function(response){
-            iziToast.success({
-                    backgroundColor:"Green",
-                    messageColor:'white',
-                    iconColor:'white',
-                    titleColor:'white',
-                    titleSize:'18',
-                    messageSize:'18',
-                    color:'white',
-                    position:'topCenter',
-                    timeout: 10000,
-                    title: 'Success',
-                    message: "Updated Successfully",
-
-                });
-            get_data();
-            $("#edit").modal('hide');
-            $("#admin_message").val('');
-            $("#approved_amount").val('');
-            $("#requested_amount").val('');
-
-        },
-       });
-  } else {
-
-  }
-  });
-    }
+    
     function approve_amount(id)
     {
         $("#due_id").val(id);
@@ -520,20 +324,10 @@
             {
                 class_name = 'red';
             }
-            admin_column = '<td class="text-center"><button onclick="approve_amount('+item[i].id+')" class="btn btn-success" ><i class="fa fa-edit"></i></button><span><button onclick="approved_direct('+item[i].id+')" class="btn btn-info" ><i class="fa fa-check"></i></button></span></td>';
             added_row = '<tr class="bg-ocean">'
         + '<td>' + Number(i+1) +  '</td>'
         ;
-        if(user_role == 'admin')
-        {
-            added_row+='<td>' + item[i].reseller_name +  '</td>'
-            +'<td>' + item[i].limit_usage +  '</td>'
-             +'<td>'+image+'</td>'
-        }
-        else
-        {
-            added_row+='<td>' + item[i].admin_message +  '</td>'
-        }
+        
         added_row+=
         '<td>' + item[i].message +  '</td>'
         + '<td ><p class="'+item[i].id+'-requested-amount">' + item[i].requested_amount +  '</p></td>'
@@ -543,18 +337,7 @@
         + '<td>' + item[i].wallet_type +  '</td>'
         + '<td class="'+class_name+'" style="font-weight:bold">' + item[i].status +  '</td>'
         ;
-        if(user_role == 'admin')
-        {
-            if(item[i].status != 'approved' && item[i].decline_status == 0)
-            {
-                added_row+=admin_column
-            }
-            else
-            {
-                added_row+='<td></td>';
-            }
-        }
-
+       
 
         + '</tr>';
         $('#wallet_data').append(added_row)

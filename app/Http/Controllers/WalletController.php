@@ -11,37 +11,53 @@ use App\Events\DueRequest;
 use App\Models\User;
 use App\Services\UpdateWallet;
 use DB;
+use Illuminate\Support\Facades\Log;
 
 class WalletController extends Controller
 {
     //
     public function index()
     {
-        return view("front.wallet-request");
+        return view("front.wallet-request-send");
+    }
+    public function wallet_request_receive()
+    {
+        return view("front.wallet-request-receive");
     }
     public function get_wallet_data()
     {
-        if (auth()->user()->role != "admin") {
-            DueControl::where("reseller_id", Auth::user()->id)->update([
-                "reseller_notification" => 1,
-            ]);
-            $data = DueControl::where("reseller_id", Auth::user()->id)
-                ->orderBy(
-                    DB::raw(
-                        'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
-                    )
-                )
-                ->get();
-        } else {
-            DueControl::where("admin_notification", 0)->update([
-                "admin_notification" => 1,
-            ]);
-            $data = DueControl::orderBy(
+        if(auth()->user()->role == 'admin'){
+            // DueControl::where("reseller_id", Auth::user()->id)->update([
+            //     "reseller_notification" => 1,
+            // ]);
+            $data = DueControl::where("reseller_type", 'user')
+            ->orderBy(
                 DB::raw(
                     'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
                 )
-            )->get();
+            )
+            ->get();
         }
+        else if(auth()->user()->role =='user'){
+
+            $data = DueControl::where("reseller_type", 'reseller')->where('reseller_parent',Auth::user()->id)
+            ->orderBy(
+                DB::raw(
+                    'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
+                )
+            )
+            ->get();
+        }
+        else{
+            $data = DueControl::where("reseller_id", Auth::user()->id)
+            ->orderBy(
+                DB::raw(
+                    'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
+                )
+            )
+            ->get();
+        }
+
         foreach ($data as $item) {
             $item->requested_date = Carbon::parse($item->created_at)->format(
                 "Y-m-d"
@@ -73,7 +89,9 @@ class WalletController extends Controller
             "message" => $request->message,
             "wallet_type" => $request->wallet_type,
             "reseller_notification" => 1,
-            'document'=>$path
+            'document'=>$path,
+            "reseller_type" =>Auth::user()->role,
+            'reseller_parent' =>Auth::user()->parent->id
 
         ]);
         try{
@@ -243,7 +261,7 @@ class WalletController extends Controller
         //     $this->update_limit($previous_record->reseller_id,$approved_amount,$previous_record->wallet_type);
         // }
 
-        event(new DueRequest());
+        //event(new DueRequest());
     }
     public function wallet_notification_count()
     {

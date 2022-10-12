@@ -64,7 +64,6 @@ class CheckRechargeAvail
             if($user_info->role =='reseller' ){
                 $parent_current_wallet = $user_info->parent->wallet;
                 $parent_limit = $user_info->parent->due;
-                $parent_limit_usage = $user_info->parent->limit_usage;
             }
            
 
@@ -77,7 +76,6 @@ class CheckRechargeAvail
             if($user_info->role == 'reseller'){
                 $parent_current_wallet = $user_info->parent->domestic_wallet;
                 $parent_limit = $user_info->parent->domestic_due;
-                $parent_limit_usage = $user_info->parent->domestic_limit_usage;
             }
 
         }

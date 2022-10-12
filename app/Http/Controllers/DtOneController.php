@@ -256,6 +256,56 @@ class DtOneController extends Controller
 
     }
 
+    public function bangladeshi_recharge($number,$request)
+    {
+        $change = [' ','+'];
+        $number = str_replace($change,'',$number);
+        $rate = euro_rate_for_bd_recharge();
+        $unit_rate = $rate/100;
+        $amount = round($request->bd_amount*$unit_rate,3);
+
+        if(!CheckRechargeAvail::check($amount,'International'))
+        {
+            return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
+        }
+        $operator_details =  $this->bangladeshi_recharge->operatorInfo($number);
+        if($operator_details['soap_exception_occured']==false)
+        {
+
+            //file_put_contents('test.txt',$amount.);
+
+            $operator_id = $operator_details['data']->operator_id;
+            $operator_name =  $operator_details['data']->operator_name;
+            $guid =  new GenerateTransactionId(Auth::user()->id,13);
+            $guid =  $guid->transaction_id();
+
+            $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$number,$request->bd_amount);
+            if($create_recharge['data']->recharge_status=='100')
+            {
+            $init_recharge =  $this->bangladeshi_recharge->InitRecharge($guid,$create_recharge['data']->vr_guid);
+             if($init_recharge['data']->recharge_status == 200)
+             {
+              $recharge = $this->create_recharge_bangladesh($number,$amount,$request->bd_amount,$guid,$operator_name,$create_recharge['data']->vr_guid,$request->service_charge);
+              UpdateWallet::update($recharge);
+               $this->update_balance_bangladesh();
+              return ['status'=>true,'message'=>'Recharge Successfull'];
+             }
+             else
+             {
+              return ['status'=>false,'message'=>$init_recharge['data']->message];
+             }
+          }
+          else
+          {
+              return ['status'=>false,'message'=>$create_recharge['data']->message];
+          }
+        }
+        else
+        {
+            return ['status'=>false,'message'=>$operator_details['exception']];
+        }
+    }
+
     public function recharge(Request $request)
     {
         //file_put_contents('test.txt',$request->amount);
@@ -270,56 +320,8 @@ class DtOneController extends Controller
         //return;
         if(str_contains($number,'+880'))
         {
-
-            $change = [' ','+'];
-            $number = str_replace($change,'',$number);
-            $rate = euro_rate_for_bd_recharge();
-            $unit_rate = $rate/100;
-            $amount = round($request->bd_amount*$unit_rate,3);
-
-            if(!CheckRechargeAvail::check($amount,'International'))
-            {
-                return ['status'=>false,'message'=>'Insufficient wallet & Limit. Please contact with admin'];
-            }
-            $operator_details =  $this->bangladeshi_recharge->operatorInfo($number);
-            if($operator_details['soap_exception_occured']==false)
-            {
-
-                //file_put_contents('test.txt',$amount.);
-
-                $operator_id = $operator_details['data']->operator_id;
-                $operator_name =  $operator_details['data']->operator_name;
-                $guid =  new GenerateTransactionId(Auth::user()->id,13);
-                $guid =  $guid->transaction_id();
-
-                $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$number,$request->bd_amount);
-                if($create_recharge['data']->recharge_status=='100')
-                {
-                $init_recharge =  $this->bangladeshi_recharge->InitRecharge($guid,$create_recharge['data']->vr_guid);
-                 if($init_recharge['data']->recharge_status == 200)
-                 {
-                  $recharge = $this->create_recharge_bangladesh($number,$amount,$request->bd_amount,$guid,$operator_name,$create_recharge['data']->vr_guid,$request->service_charge);
-                  UpdateWallet::update($recharge);
-                   $this->update_balance_bangladesh();
-                  return ['status'=>true,'message'=>'Recharge Successfull'];
-                 }
-                 else
-                 {
-                  return ['status'=>false,'message'=>$init_recharge['data']->message];
-                 }
-              }
-              else
-              {
-                  return ['status'=>false,'message'=>$create_recharge['data']->message];
-              }
-            }
-            else
-            {
-                return ['status'=>false,'message'=>$operator_details['exception']];
-            }
-
-           // file_put_contents('test.txt',$request->bd_amount);
-
+             $data = $this->bangladeshi_recharge($number,$request);
+            return ['status'=>$data['status'],'message'=>$data['message']];
 
         }
         if(!CheckRechargeAvail::check($request->amount,'International'))

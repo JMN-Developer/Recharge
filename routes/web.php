@@ -223,7 +223,8 @@ Route::group(['middleware'=>['auth']], function()
 
     Route::get('complain_notification_count',[TicketController::class,'complain_notification_count']);
 
-    Route::get('wallet-request',[WalletController::class,'index'])->name('wallet-request');
+    Route::get('wallet-request-send',[WalletController::class,'index'])->name('wallet-request-send');
+    Route::get('wallet-request-receive',[WalletController::class,'wallet_request_receive'])->name('wallet-request-receive');
 
     Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
     Route::post('amount_request',[WalletController::class,'wallet_request']);
@@ -436,7 +437,7 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
 
     Route::get('retailer-details', [RetailerController::class,'RetailerDetail'])->name('retailer-details');
 
-    Route::get('retailer-sign-up', [RetailerController::class,''])->name('retailer-sign-up');
+    Route::get('retailer-sign-up', [RetailerController::class,'RetailerSignUp'])->name('retailer-sign-up');
 
     Route::get('changeStatus', [RetailerController::class,'changeStatus']);
     Route::get('checkStatus', [RetailerController::class,'checkStatus']);
@@ -461,7 +462,7 @@ Route::group(['prefix' => 'retailer','middleware'=>['auth']], function()
 
 });
 
-Route::group(['middleware'=>['auth','admin']], function()
+Route::group(['middleware'=>['auth']], function()
 {
 
 

@@ -206,7 +206,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
           @if ( Auth::user()->role == 'admin2' )
             <p class='text-center' style="color: #b9ff38;">JM Nation </p>
           @endif
-            @if (auth()->user()->role =='user' )
+            @if (auth()->user()->role =='user' || auth()->user()->role == 'reseller' )
             {{-- <p>   <a href="{{ route('wallet-request') }}" class="notification">
                 <span style="font-weight:bold;color:black">WR</span>
                 <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
@@ -625,7 +625,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                 </a>
               </li>
               @endif
-              @if(auth()->user()->role == 'user')
+              @if(auth()->user()->role == 'user' || auth()->user()->role == 'reseller')
               <li class="@if(Route::currentRouteName() == 'contact-info') nav-item menu-open @endif nav-item">
                 <a href="{{ route('contact-info') }}" class="@if(Route::currentRouteName() == 'contact-info') nav-link active @endif nav-link">
                   <i class="fa fa-address-book" aria-hidden="true"></i>
@@ -662,15 +662,60 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </li>
               @endif
 
-              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user'  )
-              <li class="@if(Route::currentRouteName() == 'wallet-request') nav-item menu-open @endif nav-item">
-                <a href="{{ route('wallet-request') }}" class="@if(Route::currentRouteName() == 'wallet-request') nav-link active @endif nav-link">
+              <!-- @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user' || auth()->user()->role == 'reseller'   )
+              <li class="@if(Route::currentRouteName() == 'wallet-request-send') nav-item menu-open @endif nav-item">
+                <a href="{{ route('wallet-request-send') }}" class="@if(Route::currentRouteName() == 'wallet-request-send') nav-link active @endif nav-link">
                   <i class="fas fa-wallet" aria-hidden="true"></i>
                   <p>
                     Wallet Request<span class="badge wallet_notification_count">3</span>
 
                   </p>
                 </a>
+              </li>
+              @endif -->
+
+              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user' || auth()->user()->role == 'reseller' )
+              <li class="@if(Route::currentRouteName() == 'wallet-request-send') nav-item menu-open @endif nav-item">
+                <a href="#" class="@if(Route::currentRouteName() == 'wallet-request-send') nav-link active @endif nav-link">
+                  <i class="fas fa-wallet" aria-hidden="true"></i>
+                  <p>
+                    Wallet Request
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  @if(auth()->user()->role!='admin')
+                  <li class="nav-item">
+
+                    <a href="{{ route('wallet-request-send') }}" class="@if(Route::currentRouteName() == 'wallet-request-send') nav-link active @endif nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Send Request</p>
+                    </a>
+
+
+                  </li>
+                  @endif
+                  <li class="nav-item">
+
+                    <a href="{{ route('wallet-request-receive') }}" class="@if(Route::currentRouteName() == 'wallet-request-receive') nav-link active @endif nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Receive Request New </p>
+                    </a>
+
+
+                  </li>
+
+                    <li class="nav-item">
+
+                    <a href="{{ route('wallet-request-receive') }}" class="@if(Route::currentRouteName() == 'wallet-request-receive') nav-link active @endif nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Receive Request Approved </p>
+                    </a>
+
+
+                  </li>
+
+                </ul>
               </li>
               @endif
 
