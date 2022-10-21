@@ -70,9 +70,11 @@ class BangladeshRechargeController extends Controller
         Balance::where('type','ssl')->update(['balance'=>$current_balance['balance_info']]);
 
     }
-    public function query_recharge()
+    public function query_recharge(Request $request)
     {
-        $data = $this->bangladeshi_recharge->query_recharge();
+        $transaction_id = $request->transaction_id;
+        $transaction_id_company = RechargeHistory::where('txid',$transaction_id)->first()->transaction_id_company;
+        $data = $this->bangladeshi_recharge->query_recharge($transaction_id,$transaction_id_company);
         return json_encode($data);
     }
 

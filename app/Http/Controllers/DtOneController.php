@@ -280,7 +280,7 @@ class DtOneController extends Controller
             $guid =  $guid->transaction_id();
 
             $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid,$operator_id,$number,$request->bd_amount);
-            if($create_recharge['data']->recharge_status=='100')
+            if($create_recharge['data']->recharge_status==100)
             {
             $init_recharge =  $this->bangladeshi_recharge->InitRecharge($guid,$create_recharge['data']->vr_guid);
              if($init_recharge['data']->recharge_status == 200)

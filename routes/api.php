@@ -44,7 +44,7 @@ Route::post('get_products',[ApiTestController::class,'get_products']);
 Route::get('epay-transaction-list',[ApiTestController::class,'epay_transaction_list']);
 Route::get('dtone-transaction',[DtOneController::class,'all_transaction']);
 Route::get('ean_profit',[ApiTestController::class,'ean_profit']);
-Route::get('bd_query_recharge',[BangladeshRechargeController::class,'query_recharge']);
+Route::post('bd_query_recharge',[BangladeshRechargeController::class,'query_recharge']);
 Route::get('test',[ApiTestController::class,'test']);
 Route::get('bangladeshi_balance',[BangladeshRechargeController::class,'check_balance']);
 
