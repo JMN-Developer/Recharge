@@ -31,6 +31,7 @@ class AddAgentComissionToRechargeHistoriesTable extends Migration
     {
         Schema::table('recharge_histories', function (Blueprint $table) {
             //
+            $table->dropColumn(['sub_com','sub_profit','sub_recharge_source','sub_recharge_source']);
         });
     }
 }
