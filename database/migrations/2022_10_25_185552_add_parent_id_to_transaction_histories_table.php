@@ -28,6 +28,7 @@ class AddParentIdToTransactionHistoriesTable extends Migration
     {
         Schema::table('transaction_histories', function (Blueprint $table) {
             //
+            $table->dropColumn(['parent_id']);
         });
     }
 }

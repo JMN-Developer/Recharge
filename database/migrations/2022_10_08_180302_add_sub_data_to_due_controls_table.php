@@ -29,6 +29,7 @@ class AddSubDataToDueControlsTable extends Migration
     {
         Schema::table('due_controls', function (Blueprint $table) {
             //
+            $table->dropColumn(['reseller_type','reseller_parent']);
         });
     }
 }
