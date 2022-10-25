@@ -42,7 +42,7 @@ class UserController extends Controller
         if(Auth::user()->role == 'user')
         $users->role = 'reseller';
         else
-        $user->role = 'user';
+        $user->role = 'use';
         
         $users->user_id ='JM-'.mt_rand(10000,99999);
 
