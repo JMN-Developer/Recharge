@@ -27,6 +27,17 @@ if (!function_exists('reseller_comission')) {
     }
     }
 
+    if (!function_exists('parent_comission')) {
+        function parent_comission($amount)
+        {
+            $percentage = auth()->user()->parent->admin_international_recharge_commission;
+
+            $percentage_amount = round((($percentage/100)*$amount),2);
+
+            return $percentage_amount;
+        }
+        }
+    
 
     if (!function_exists('sub_comission')) {
         function sub_comission($amount)

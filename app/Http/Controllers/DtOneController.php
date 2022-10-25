@@ -24,7 +24,7 @@ class DtOneController extends Controller
     {
         $dtone = new DtOneProvider();
         $this->dtone = $dtone;
-        //$this->bangladeshi_recharge = new BangladeshiRecharge();
+        $this->bangladeshi_recharge = new BangladeshiRecharge();
     }
     public function index(){
        if(a::user()->role == 'admin'){
@@ -52,8 +52,16 @@ class DtOneController extends Controller
         $data = array();
         foreach($skus as $sku)
         {
-         $amount_text = $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount)."Euro &nbsp(&nbsp" .$sku->name." will be received )";
-         array_push($data,['skuId'=>$sku->id,'amount'=> $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount),'amount_text'=>$amount_text,'bd_amount'=>$sku->destination->amount]);
+         if(auth()->user()->role =='reseller')
+         {
+            $amount_text = $sku->prices->retail->amount+parent_comission($sku->prices->retail->amount)+reseller_comission($sku->prices->retail->amount+parent_comission($sku->prices->retail->amount))."Euro &nbsp(&nbsp" .$sku->name." will be received )";
+            array_push($data,['skuId'=>$sku->id,'amount'=> $sku->prices->retail->amount+parent_comission($sku->prices->retail->amount)+reseller_comission($sku->prices->retail->amount+parent_comission($sku->prices->retail->amount)),'amount_text'=>$amount_text,'bd_amount'=>$sku->destination->amount]);
+         }
+         else{
+            $amount_text = $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount)."Euro &nbsp(&nbsp" .$sku->name." will be received )";
+            array_push($data,['skuId'=>$sku->id,'amount'=> $sku->prices->retail->amount+reseller_comission($sku->prices->retail->amount),'amount_text'=>$amount_text,'bd_amount'=>$sku->destination->amount]);
+         }   
+         
 
         }
         usort($data, function($a, $b) {
