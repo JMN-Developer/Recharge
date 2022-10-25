@@ -25,13 +25,58 @@ class NotificationController extends Controller
         $user = user::find($user_id);
         $user->unreadNotifications->markAsRead();
         $data = [];
-        if(auth()->user()->role == 'user')
+        if(auth()->user()->role == 'reseller')
         {
-        foreach ($user->notifications()->paginate(10) as $notification) {
-            $notification_data = json_decode(json_encode($notification->data));
-            array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
+            foreach ($user->notifications()->paginate(10) as $notification) {
+                $notification_data = json_decode(json_encode($notification->data));
+                array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
+            }
         }
-          }
+        else if(auth()->user()->role == 'user'){
+            if($request->has('service'))
+            {
+            $start_date =  Carbon::parse($request->start_date)->toDateTimeString();
+            $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
+            $retailer_id = $request->retailer;
+            $service = $request->service;
+            if($retailer_id=='all' && $service == 'all')
+            {
+                $notifications = DatabaseNotification::whereBetween('created_at', [$start_date,$end_date])->where(function($query){
+                    $query->whereJsonContains('data',['send_from'=>auth()->user()->id])
+                          ->orWhere('notifiable_id',auth()->user()->id);
+                        
+                })->latest()->paginate(10);
+            }
+            else if($retailer_id == 'all' && $service!='all')
+            {
+                $notifications = DatabaseNotification::where('data->service',$service)->whereBetween('created_at', [$start_date,$end_date])->where(function($query){
+                    $query->whereJsonContains('data',['send_from'=>auth()->user()->id])
+                          ->orWhere('notifiable_id',auth()->user()->id);
+                        
+                })->latest()->paginate(10);
+            }
+            else if($retailer_id !='all' && $service!='all')
+            {
+            $notifications = DatabaseNotification::where('notifiable_id',$retailer_id)->where('data->service',$service)->whereBetween('created_at', [$start_date,$end_date])->where(function($query){
+                $query->whereJsonContains('data',['send_from'=>auth()->user()->id])
+                      ->orWhere('notifiable_id',auth()->user()->id);
+                    
+            })->latest()->paginate(10);
+            }
+           // file_put_contents('test.txt',$request->start_date.' '.$request->end_date);
+            }
+            else
+            $notifications = DatabaseNotification::whereJsonContains('data',['send_from'=>$user_id])->orWhere(function($query){
+                $query->whereJsonContains('data',['send_from'=>auth()->user()->id])
+                      ->orWhere('notifiable_id',auth()->user()->id);
+                    
+            })->latest()->paginate(10);
+
+            foreach ($notifications as $notification) {
+                $notification_data = json_decode(json_encode($notification->data));
+                array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
+            }
+        }  
           else
           {
             if($request->has('service'))
@@ -70,7 +115,10 @@ class NotificationController extends Controller
     }
     public function create_notification()
     {
+        if(auth()->user()->role =='admin')
         $resellers = User::get();
+        else
+        $resellers = User::where('created_by',auth()->user()->id)->get();
         //$user = User::find(23);
         //$user->unreadNotifications->markAsRead();
         return view('front.create-notification',compact('resellers'));
@@ -88,7 +136,8 @@ class NotificationController extends Controller
         //file_put_contents('test.txt',json_encode($users));
         $data = [
             'service' => $request->service,
-            'message'=>$request->message
+            'message'=>$request->message,
+            'send_from'=>auth()->user()->id
 
         ];
         //$userSchema->notify(new GeneralNotification($offerData));
@@ -99,7 +148,7 @@ class NotificationController extends Controller
             Log::error("General Notification Error: ".$th);
         }
         try{
-            event(new GeneralNotificationEvent());
+            //event(new GeneralNotificationEvent());
         }
         catch(\Throwable $th){
             Log::error("General Event Error: ".$th);

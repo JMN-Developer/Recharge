@@ -33,7 +33,8 @@ class GeneralNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database','mail'];
+        //return ['database','mail'];
+        return ['database'];
     }
 
     /**
@@ -67,7 +68,8 @@ class GeneralNotification extends Notification implements ShouldQueue
     {
         return [
             'service' => $this->data['service'],
-            'message'=>$this->data['message']
+            'message'=>$this->data['message'],
+            'send_from'=>$this->data['send_from']
         ];
     }
 }

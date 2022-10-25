@@ -55,24 +55,61 @@
                         <th style="background: #faaeae;">Name</th>
                         <th style="background: #faaeae;">User Id</th>
                         <th style="background: #faaeae;">Email</th>
-                        @if(auth()->user()->role =='admin' || auth()->user()->recharge_permission == 1 )
-                        <th style="background: #faaeae;">Recharge</th>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->sim_permission == 1 )
-                        <th style="background: #faaeae;">SIM</th>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->cargo_permission == 1 )
-                        <th style="background: #faaeae;">Cargo</th>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->mobile_permission == 1 )
-                        <th style="background: #faaeae;">Mobile</th>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->reseller_permission == 1 )
-                        <th style="background: #faaeae;">Reseller</th>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->pin_permission == 1 )
-                        <th style="background: #faaeae;">Pin</th>
-                        @endif
+                        
+                       @if(auth()->user()->role=='admin')
+                         
+                            <th style="background: #faaeae;">Recharge</th>
+                           
+                            <th style="background: #faaeae;">SIM</th>
+                           
+                            <th style="background: #faaeae;">Cargo</th>
+                           
+                            <th style="background: #faaeae;">Mobile</th>
+                          
+                            <th style="background: #faaeae;">Reseller</th>
+            
+                            <th style="background: #faaeae;">Pin</th>
+                       @elseif (auth()->user()->role=='user')
+                          @if( auth()->user()->recharge_permission == 1 )
+                            <th style="background: #faaeae;">Recharge</th>
+                            @endif
+                            @if( auth()->user()->sim_permission == 1 )
+                            <th style="background: #faaeae;">SIM</th>
+                            @endif
+                            @if( auth()->user()->cargo_permission == 1 )
+                            <th style="background: #faaeae;">Cargo</th>
+                            @endif
+                            @if( auth()->user()->mobile_permission == 1 )
+                            <th style="background: #faaeae;">Mobile</th>
+                            @endif
+                            @if( auth()->user()->reseller_permission == 1 )
+                            <th style="background: #faaeae;">Reseller</th>
+                            @endif
+                            @if( auth()->user()->pin_permission == 1 )
+                            <th style="background: #faaeae;">Pin</th>
+                            @endif
+                       @else
+
+                          @if( auth()->user()->recharge_permission == 1 && auth()->user()->parent->recharge_permission == 1)
+                              <th style="background: #faaeae;">Recharge</th>
+                              @endif
+                              @if( auth()->user()->sim_permission == 1 &&  auth()->user()->parent->sim_permission == 1 )
+                              <th style="background: #faaeae;">SIM</th>
+                              @endif
+                              @if( auth()->user()->cargo_permission == 1 && auth()->user()->parent->cargo_permission == 1 )
+                              <th style="background: #faaeae;">Cargo</th>
+                              @endif
+                              @if( auth()->user()->mobile_permission == 1 && auth()->user()->parnet->mobile_permission == 1 )
+                              <th style="background: #faaeae;">Mobile</th>
+                              @endif
+                              @if( auth()->user()->reseller_permission == 1 &&  auth()->user()->parent->reseller_permission == 1)
+                              <th style="background: #faaeae;">Reseller</th>
+                              @endif
+                              @if( auth()->user()->pin_permission == 1 && auth()->user()->parent->pin_permission == 1 )
+                              <th style="background: #faaeae;">Pin</th>
+                              @endif
+                       @endif
+                       
                       </tr>
                     </thead>
                     <tbody>
@@ -81,36 +118,99 @@
                         <td>{{$retailer->first_name.' '.$retailer->last_name}}</td>
                         <td>{{$retailer->user_id}}</td>
                         <td>{{$retailer->email}}</td>
-                        @if(auth()->user()->role =='admin' || auth()->user()->recharge_permission == 1 )
-                        <td>
-                          <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>
-                        </td>
+
+                        @if(auth()->user()->role=='admin')
+                          
+                              <td>
+                                <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>
+                              </td>
+                             
+                             
+                              <td>
+                                <input id="sim{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class sim" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->sim_permission ? 'checked' : '' }}>
+                              </td>
+                             
+                              <td>
+                                <input id="cargo{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class cargo" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->cargo_permission ? 'checked' : '' }}>
+                              </td>
+                            
+                              <td>
+                                <input id="phone{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class phone" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->mobile_permission ? 'checked' : '' }}>
+                              </td>
+                             
+                              <td>
+                                <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class reseller" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->reseller_permission ? 'checked' : '' }}>
+                              </td>
+                              
+                              <td>
+                                <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class pin" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->pin_permission ? 'checked' : '' }}>
+                              </td>
+                              
+                        @elseif(auth()->user()->role=='user')
+                            @if( auth()->user()->recharge_permission == 1 )
+                            <td>
+                              <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->sim_permission == 1 )
+                            <td>
+                              <input id="sim{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class sim" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->sim_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->cargo_permission == 1 )
+                            <td>
+                              <input id="cargo{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class cargo" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->cargo_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->mobile_permission == 1 )
+                            <td>
+                              <input id="phone{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class phone" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->mobile_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->reseller_permission == 1 )
+                            <td>
+                              <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class reseller" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->reseller_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->pin_permission == 1 )
+                            <td>
+                              <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class pin" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->pin_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                        @else
+                        @if( auth()->user()->recharge_permission == 1 && auth()->user()->parent->recharge_permission == 1)
+                            <td>
+                              <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->sim_permission == 1 && auth()->user()->parent->sim_permission == 1 )
+                            <td>
+                              <input id="sim{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class sim" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->sim_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->cargo_permission == 1 && auth()->user()->parent->cargo_permission == 1 )
+                            <td>
+                              <input id="cargo{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class cargo" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->cargo_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->mobile_permission == 1 && auth()->user()->parent->mobile_permission == 1 )
+                            <td>
+                              <input id="phone{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class phone" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->mobile_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->reseller_permission == 1 && auth()->user()->parent->reseller_permission == 1 )
+                            <td>
+                              <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class reseller" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->reseller_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
+                            @if( auth()->user()->pin_permission == 1 && auth()->user()->parent->reseller_permission == 1)
+                            <td>
+                              <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class pin" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->pin_permission ? 'checked' : '' }}>
+                            </td>
+                            @endif
                         @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->sim_permission == 1 )
-                        <td>
-                          <input id="sim{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class sim" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->sim_permission ? 'checked' : '' }}>
-                        </td>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->cargo_permission == 1 )
-                        <td>
-                          <input id="cargo{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class cargo" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->cargo_permission ? 'checked' : '' }}>
-                        </td>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->mobile_permission == 1 )
-                        <td>
-                          <input id="phone{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class phone" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->mobile_permission ? 'checked' : '' }}>
-                        </td>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->reseller_permission == 1 )
-                        <td>
-                          <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class reseller" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->reseller_permission ? 'checked' : '' }}>
-                        </td>
-                        @endif
-                        @if(auth()->user()->role =='admin' || auth()->user()->pin_permission == 1 )
-                        <td>
-                          <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class pin" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->pin_permission ? 'checked' : '' }}>
-                        </td>
-                        @endif
+
+                        
                       </tr>
                       @endforeach
                     </tbody>

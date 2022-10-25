@@ -78,7 +78,7 @@
               <!-- /.card-header -->
 
               <div class="p-3" style="background-color:#F7F9F9">
-                  @if(auth()->user()->role =='admin')
+                  @if(auth()->user()->role !='reseller')
                 <div>
                     <a class="btn btn-primary" href='{{ route('create-notification') }}' style="margin-bottom: 20px">Create New</a>
                 </div>
@@ -149,7 +149,7 @@
 
                     @endforeach
                     <div style="float:right">
-                        @if(auth()->user()->role =='user')
+                        @if(auth()->user()->role !='admin')
                     {{$user->notifications()->paginate(10)->links()}}
                     @else
                     {{$notifications->links()}}

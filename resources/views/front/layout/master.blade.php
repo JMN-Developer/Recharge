@@ -550,7 +550,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
           </li>
         
           
-
+            @if(auth()->user()->role !='reseller')
             <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
                 <i class="nav-icon fas fa-users"></i>
@@ -595,6 +595,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                 @endif
               </ul>
             </li>
+            @endif
             <li class="@if(Route::currentRouteName() == 'GeneralNotification') nav-item menu-open @endif nav-item">
                 <a href="{{ route('GeneralNotification') }}" class="@if(Route::currentRouteName() == 'GeneralNotification') nav-link active @endif nav-link">
                   <i class="fas fa-wallet" aria-hidden="true"></i>
@@ -604,7 +605,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                   </p>
                 </a>
               </li>
-
+              @if(auth()->user()->role !='reseller')
             <li class="@if(Route::currentRouteName() == 'setting') nav-item menu-open @endif nav-item">
                 <a href="{{ route('setting') }}" class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
                   <i class="fa fa-cog" aria-hidden="true"></i>
@@ -613,6 +614,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                   </p>
                 </a>
               </li>
+              @endif
               @if ( service_permission('Transaction History',$services) == 1)
 
               <li class="@if(Route::currentRouteName() == 'transaction-history') nav-item menu-open @endif nav-item">
@@ -695,25 +697,29 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
 
                   </li>
                   @endif
+
+                  @if(auth()->user()->role!='reseller')
                   <li class="nav-item">
 
-                    <a href="{{ route('wallet-request-receive') }}" class="@if(Route::currentRouteName() == 'wallet-request-receive') nav-link active @endif nav-link">
+                    <a href="{{ route('wallet-request-receive-new') }}" class="@if(Route::currentRouteName() == 'wallet-request-receive-new') nav-link active @endif nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Receive Request New </p>
                     </a>
 
 
                   </li>
+                
 
                     <li class="nav-item">
 
-                    <a href="{{ route('wallet-request-receive') }}" class="@if(Route::currentRouteName() == 'wallet-request-receive') nav-link active @endif nav-link">
+                    <a href="{{ route('wallet-request-receive-approved') }}" class="@if(Route::currentRouteName() == 'wallet-request-receive-approved') nav-link active @endif nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Receive Request Approved </p>
                     </a>
 
 
                   </li>
+                  @endif
 
                 </ul>
               </li>

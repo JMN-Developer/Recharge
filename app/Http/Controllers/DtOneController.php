@@ -24,7 +24,7 @@ class DtOneController extends Controller
     {
         $dtone = new DtOneProvider();
         $this->dtone = $dtone;
-        $this->bangladeshi_recharge = new BangladeshiRecharge();
+       // $this->bangladeshi_recharge = new BangladeshiRecharge();
     }
     public function index(){
        if(a::user()->role == 'admin'){
@@ -161,38 +161,35 @@ class DtOneController extends Controller
 
             }
 
-
-
-
-        //$data = (array) $data;
-        //echo $data;
-       // return $data;
-       //file_put_contents('test.txt',$data->id);
-
-       // file_put_contents('test.txt',$number." ".$countryIso);
     }
 
 
     public function create_recharge($data,$number,$txid,$country_code,$service = 0)
     {
         $discount =$data->prices->retail->amount - $data->prices->wholesale->amount;
-        $reseller_commission = reseller_comission($data->prices->retail->amount);//2
-        $reseller_profit = reseller_profit($data->prices->retail->amount+$reseller_commission);//2.4
-        $sub_profit = 0;
-        $sub_commission = 0;
-        if(auth()->user()->role == 'reseller'){
-            $sub_commission = sub_commission($data->prices->retail->amount+$reseller_commission);//2.4
-            $sub_profit = sub_profit($data->prices->retail->amount+$reseller_commission+$sub_commission);
+
+        if(auth()->user()->role =='reseller'){
+            $parent_comission = parent_comission($data->prices->retail->amount);
+            $parent_profit = parent_profit($data->prices->retail->amount+$parent_comission); 
+            $reseller_commission = reseller_comission($data->prices->retail->amount+$parent_comission);
+            $reseller_profit = reseller_profit($data->prices->retail->amount+$reseller_commission+$parent_comission);
+            $admin_profit = $discount+$parent_comission-$parent_profit; 
+            $sub_profit = $parent_profit-$reseller_profit;
 
         }
-        $admin_profit = ($data->prices->retail->amount+$reseller_commission)-$reseller_profit-$data->prices->wholesale->amount;
-        //$admin_profit = $reseller_commission-$reseller_profit;
+        else{
+            $reseller_commission = reseller_comission($data->prices->retail->amount);//reseller_com = 0.11
+            $reseller_profit = reseller_profit($data->prices->retail->amount+$reseller_commission);//reseller_profit = 0.132
+            $admin_profit = $discount+$reseller_commission-$reseller_profit;
+            $sub_profit = 0;
+        }
+        
         $log_data = 'Number = '.$number.' Amount = '.$data->prices->retail->amount+$reseller_commission.' R-Com = '.$reseller_profit.' A-Com = '.$admin_profit.' TXID = '.$txid;
         Log::channel('rechargelog')->info($log_data);
         $recharge = RechargeHistory::create([
             'reseller_id'=>a::user()->id,
             'number'=>$number,
-            'amount'=>$data->prices->retail->amount+$reseller_commission+$sub_commission,
+            'amount'=>$data->prices->retail->amount+$reseller_commission,
             'txid'=>$txid,
             'type'=>'International',
             'operator'=>$data->product->operator->name,
@@ -207,7 +204,6 @@ class DtOneController extends Controller
             'deliveredAmount'=>floor($data->benefits[0]->amount->total_excluding_tax),
             'deliveredAmountCurrencyCode'=>$data->benefits[0]->unit,
             'company_name'=>'International4',
-            'sub_com'=>$sub_commission,
             'sub_profit'=>$sub_profit
 
         ]);
@@ -318,7 +314,6 @@ class DtOneController extends Controller
     {
         //file_put_contents('test.txt',$request->amount);
         //file_put_contents('test.txt',$test);
-
 
         $country_code = $request->countryCode;
        // file_put_contents('test.txt',$country_code);

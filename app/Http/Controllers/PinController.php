@@ -127,16 +127,26 @@ class PinController extends Controller
 
 
             if(a::user()->role != 'admin'){
-
+                if(auth()->user()->role =='reseller'){
+                    $cost = $sku_amount['1'] - $prof->commission;
+                    $parent_commission = parent_profit_pin($prof->commission);
+                    $admin_commission = $prof->commission - $parent_commission;
+                    $reseller_commission = reseller_profit_pin($parent_commission); 
+                    $sub_profit = $parent_commission - $reseller_commission; 
+                }
+                else{
                 $reseller_commission = reseller_profit_pin($commission);
                 $admin_commission = $commission -  $reseller_commission;
                 $cost = $sku_amount['1']-$commission;
+                $sub_profit = 0;
+                }
 
 
             }else{
                 $reseller_commission = 0;
                 $admin_commission = 0;
                 $cost = $sku_amount['1']-$commission;
+                $sub_profit = 0;
             }
 
             $product = db::table('domestic_pins')->where('ean',$sku_amount['0'])->first();
@@ -173,6 +183,7 @@ class PinController extends Controller
         $create->pin_note = $note;
 
         $create->pin_product = $product->product;
+        $create->sub_profit = $sub_profit;
 
         $create->save();
 

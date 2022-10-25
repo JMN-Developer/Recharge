@@ -871,14 +871,27 @@ class RechargeController extends Controller
             if($xml2->RESULT == 0){
 
                 if(a::user()->role != 'admin'){
-                    $cost = $sku_amount['1']-$prof->commission;
-                    $reseller_commission = reseller_profit_domestic($prof->commission);
-                    $admin_commission = $prof->commission - $reseller_commission;
-                    $reseller = User::where('id',a::user()->created_by)->first();
+                    if(auth()->user()->role =='reseller'){
+                        $cost = $sku_amount['1'] - $prof->commission;
+                        $parent_commission = parent_profit_domestic($prof->commission);
+                        $admin_commission = $prof->commission - $parent_commission;
+                        $reseller_commission = reseller_profit_domestic($parent_commission); 
+                        $sub_profit = $parent_commission - $reseller_commission; 
+
+                    }
+                    else{
+                        $cost = $sku_amount['1'] - $prof->commission;
+                        $reseller_commission = reseller_profit_domestic($prof->commission);
+                        $admin_commission = $prof->commission - $reseller_commission; 
+                        $sub_profit = 0;
+                    }
+
+                    
                 }else{
                     $reseller_commission = 0;
                     $admin_commission = 0;
                     $cost = $sku_amount['1']-$prof->commission;
+                    $sub_profit = 0;
                 }
 
                 $log_data = 'Number = '.$request->number.' Amount = '.$sku_amount['1'].' R-Com = '.$reseller_commission.' A-Com = '.$admin_commission.' TXID = '.$xml2->TXID;
@@ -895,6 +908,7 @@ class RechargeController extends Controller
                 $create->status = 'completed';
                 $create->cost = $cost;
                 $create->company_name = 'Domestic1';
+                $create->sub_profit = $sub_profit;
                 $create->save();
                 UpdateWallet::update($create);
                 return ['status'=>true,'message'=>'Your Recharge Has Been Sucessfull!'];

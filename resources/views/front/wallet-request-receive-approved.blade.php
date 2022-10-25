@@ -171,7 +171,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 <script>
-    let get_wallet_data = '{{route("get-wallet-data")}}';
+     let get_wallet_data = '{{route("get-wallet-data",["type"=>"approved"])}}';
     let user_role = '{{ auth()->user()->role }}';
 </script>
 <script>

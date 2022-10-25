@@ -224,9 +224,10 @@ Route::group(['middleware'=>['auth']], function()
     Route::get('complain_notification_count',[TicketController::class,'complain_notification_count']);
 
     Route::get('wallet-request-send',[WalletController::class,'index'])->name('wallet-request-send');
-    Route::get('wallet-request-receive',[WalletController::class,'wallet_request_receive'])->name('wallet-request-receive');
+    Route::get('wallet-request-receive-new',[WalletController::class,'wallet_request_receive_new'])->name('wallet-request-receive-new');
+    Route::get('wallet-request-receive-approved',[WalletController::class,'wallet_request_receive_approved'])->name('wallet-request-receive-approved');
 
-    Route::get('get-wallet-data',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
+    Route::get('get-wallet-data/{type}',[WalletController::class,'get_wallet_data'])->name('get-wallet-data');
     Route::post('amount_request',[WalletController::class,'wallet_request']);
     Route::get('get_requested_amount',[WalletController::class,'get_requested_amount']);
     Route::get('report',[ReportController::class,'index'])->name('report');

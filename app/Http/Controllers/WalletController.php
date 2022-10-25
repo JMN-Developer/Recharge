@@ -20,33 +20,60 @@ class WalletController extends Controller
     {
         return view("front.wallet-request-send");
     }
-    public function wallet_request_receive()
+    public function wallet_request_receive_new()
     {
-        return view("front.wallet-request-receive");
+        return view("front.wallet-request-receive-new");
     }
-    public function get_wallet_data()
+
+    public function wallet_request_receive_approved()
+    {
+        return view("front.wallet-request-receive-approved");
+    }
+    public function get_wallet_data($type)
     {
         if(auth()->user()->role == 'admin'){
             // DueControl::where("reseller_id", Auth::user()->id)->update([
             //     "reseller_notification" => 1,
             // ]);
-            $data = DueControl::where("reseller_type", 'user')
+            if($type =='new'){
+            $data = DueControl::where("reseller_type", 'user')->where('status','pending')
             ->orderBy(
                 DB::raw(
                     'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
                 )
             )
             ->get();
+                }
+                else{
+                    $data = DueControl::where("reseller_type", 'user')->where('status','!=','pending')
+                    ->orderBy(
+                        DB::raw(
+                            'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
+                        )
+                    )
+                    ->get();
+                }
         }
         else if(auth()->user()->role =='user'){
 
-            $data = DueControl::where("reseller_type", 'reseller')->where('reseller_parent',Auth::user()->id)
+            if($type == 'new'){
+            $data = DueControl::where("reseller_type", 'reseller')->where('status','pending')->where('reseller_parent',Auth::user()->id)
             ->orderBy(
                 DB::raw(
                     'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
                 )
             )
             ->get();
+                }
+                else{
+                    $data = DueControl::where("reseller_type", 'reseller')->where('status','!=','pending')->where('reseller_parent',Auth::user()->id)
+                    ->orderBy(
+                        DB::raw(
+                            'case when status= "pending" then 1 when status= "declined" then 2 when status="approved" then 3 end'
+                        )
+                    )
+                    ->get();
+                }
         }
         else{
             $data = DueControl::where("reseller_id", Auth::user()->id)
