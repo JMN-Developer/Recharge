@@ -18,7 +18,6 @@ class AddAgentComissionToRechargeHistoriesTable extends Migration
             $table->float('sub_com')->default(0);
             $table->float('sub_profit')->default(0);
             $table->string('sub_recharge_source')->nullable();
-            $table->string('sub_recharge_source')->nullable();
         });
     }
 
