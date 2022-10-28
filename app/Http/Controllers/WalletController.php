@@ -55,6 +55,7 @@ class WalletController extends Controller
                     )
                     ->get();
                 }
+                
         }
         else if(auth()->user()->role =='sub'){
             if($type == 'send'){
