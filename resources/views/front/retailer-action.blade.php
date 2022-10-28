@@ -69,7 +69,7 @@
                             <th style="background: #faaeae;">Reseller</th>
             
                             <th style="background: #faaeae;">Pin</th>
-                       @elseif (auth()->user()->role=='user')
+                       @elseif (auth()->user()->parent->role=='admin')
                           @if( auth()->user()->recharge_permission == 1 )
                             <th style="background: #faaeae;">Recharge</th>
                             @endif
@@ -146,7 +146,7 @@
                                 <input id="reseller{{$retailer->id}}" data-id="{{$retailer->id}}" class="toggle-class pin" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->pin_permission ? 'checked' : '' }}>
                               </td>
                               
-                        @elseif(auth()->user()->role=='user')
+                        @elseif(auth()->user()->parent->role=='admin')
                             @if( auth()->user()->recharge_permission == 1 )
                             <td>
                               <input data-id="{{$retailer->id}}" class="toggle-class recharge" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $retailer->recharge_permission ? 'checked' : '' }}>

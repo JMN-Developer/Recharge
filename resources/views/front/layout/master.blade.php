@@ -206,7 +206,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
           @if ( Auth::user()->role == 'admin2' )
             <p class='text-center' style="color: #b9ff38;">JM Nation </p>
           @endif
-            @if (auth()->user()->role =='user' || auth()->user()->role == 'reseller' )
+            @if (auth()->user()->role !='admin')
             {{-- <p>   <a href="{{ route('wallet-request') }}" class="notification">
                 <span style="font-weight:bold;color:black">WR</span>
                 <span id="wallet_notification_count" class="badge wallet_notification_count"></span>
@@ -561,7 +561,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  @if(auth()->user()->role=='user' )
+                  @if(auth()->user()->parent->role=='sub' )
                   {{-- <a href="{{ route('retailer-details') }}" class="@if(Route::currentRouteName() == 'retailer-details') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Retailer Details</p>

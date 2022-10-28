@@ -54,7 +54,7 @@ class WalletController extends Controller
                     ->get();
                 }
         }
-        else if(auth()->user()->role =='user'){
+        else if(auth()->user()->parent->role =='sub'){
 
             if($type == 'new'){
             $data = DueControl::where("reseller_type", 'reseller')->where('status','pending')->where('reseller_parent',Auth::user()->id)

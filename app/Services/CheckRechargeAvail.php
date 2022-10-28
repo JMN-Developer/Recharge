@@ -61,7 +61,7 @@ class CheckRechargeAvail
             $current_wallet = $user_info->wallet;
             $limit = $user_info->due;
             $limit_usage = $user_info->limit_usage;
-            if($user_info->role =='reseller' ){
+            if($user_info->parent->role =='sub' ){
                 $parent_current_wallet = $user_info->parent->wallet;
                 $parent_limit = $user_info->parent->due;
             }
@@ -73,14 +73,14 @@ class CheckRechargeAvail
             $current_wallet = $user_info->domestic_wallet;
             $limit = $user_info->domestic_due;
             $limit_usage = $user_info->domestic_limit_usage;
-            if($user_info->role == 'reseller'){
+            if($user_info->parent->role == 'sub'){
                 $parent_current_wallet = $user_info->parent->domestic_wallet;
                 $parent_limit = $user_info->parent->domestic_due;
             }
 
         }
         $due_limit = $limit-$limit_usage;
-        if($user_info->role == 'reseller'){
+        if($user_info->role->parent == 'sub'){
             $parent_due_limit = $parent_limit-$limit_usage;
         }
         
@@ -90,7 +90,7 @@ class CheckRechargeAvail
                 return false;
             }
             else{
-                if($user_info->role == 'reseller'){
+                if($user_info->role->parent == 'sub'){
                     if($requested_amount>$parent_due_limit+$parent_current_wallet){
                         return false;
                     }

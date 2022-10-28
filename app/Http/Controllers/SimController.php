@@ -134,7 +134,7 @@ class SimController extends Controller
             ->make(true);
         }
 
-        if(Auth::user()->role =='user')
+        if(Auth::user()->role =='reseller')
         {
             return view('front.sim-activation',compact('show','total'));
         }

@@ -52,7 +52,7 @@ class DtOneController extends Controller
         $data = array();
         foreach($skus as $sku)
         {
-         if(auth()->user()->role =='reseller')
+         if(auth()->user()->parent->role =='sub')
          {
             $amount_text = $sku->prices->retail->amount+parent_comission($sku->prices->retail->amount)+reseller_comission($sku->prices->retail->amount+parent_comission($sku->prices->retail->amount))."Euro &nbsp(&nbsp" .$sku->name." will be received )";
             array_push($data,['skuId'=>$sku->id,'amount'=> $sku->prices->retail->amount+parent_comission($sku->prices->retail->amount)+reseller_comission($sku->prices->retail->amount+parent_comission($sku->prices->retail->amount)),'amount_text'=>$amount_text,'bd_amount'=>$sku->destination->amount]);
@@ -168,7 +168,7 @@ class DtOneController extends Controller
     {
         $discount =$data->prices->retail->amount - $data->prices->wholesale->amount;
 
-        if(auth()->user()->role =='reseller'){
+        if(auth()->user()->parent->role =='sub'){
             $parent_comission = parent_comission($data->prices->retail->amount);
             $parent_profit = parent_profit($data->prices->retail->amount+$parent_comission); 
             $reseller_commission = reseller_comission($data->prices->retail->amount+$parent_comission);
