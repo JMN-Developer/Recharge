@@ -13,9 +13,9 @@ class RetailerController extends Controller
     public function retailer_details()
     {
         if (Auth::user()->role == 'admin') {
-            $data = User::where('role','user')->orderBy('limit_usage','DESC')->get();
+            $data = User::orderBy('limit_usage','DESC')->get();
         }else {
-            $data = User::where('role','user')->where('created_by', Auth::user()->id)->orderBy('limit_usage','DESC')->get();
+            $data = User::where('role','sub')->where('created_by', Auth::user()->id)->orderBy('limit_usage','DESC')->get();
         }
         // dd($data);
         return view('front.retailer_details',compact('data'));

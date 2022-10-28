@@ -27,7 +27,7 @@ class PinController extends Controller
      */
     public function index()
     {
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','pin')->latest()->take(10)->get();
         }else{
             $data = RechargeHistory::where('type','pin')->latest()->take(10)->get();

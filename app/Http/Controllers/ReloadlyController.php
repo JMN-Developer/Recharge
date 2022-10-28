@@ -29,7 +29,7 @@ class ReloadlyController extends Controller
     {
 
 
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->latest()->take(10)->get();
         }else{
             $data = RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')

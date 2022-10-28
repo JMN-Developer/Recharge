@@ -76,7 +76,7 @@ class SimController extends Controller
     public function index(Request $request)
     {
 
-        if(Auth::user()->role == 'user'){
+        if(Auth::user()->role != 'admin'){
             $show = sim::where('status', 'available')
             ->where('reseller_id',Auth::user()->id)
             ->join('users','users.id','=','sims.reseller_id')

@@ -25,14 +25,14 @@ class NotificationController extends Controller
         $user = user::find($user_id);
         $user->unreadNotifications->markAsRead();
         $data = [];
-        if(auth()->user()->role == 'reseller')
+        if(auth()->user()->parent->role == 'sub')
         {
             foreach ($user->notifications()->paginate(10) as $notification) {
                 $notification_data = json_decode(json_encode($notification->data));
                 array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
             }
         }
-        else if(auth()->user()->role == 'user'){
+        else if(auth()->user()->role == 'sub'){
             if($request->has('service'))
             {
             $start_date =  Carbon::parse($request->start_date)->toDateTimeString();

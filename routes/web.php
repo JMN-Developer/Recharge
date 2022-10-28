@@ -245,6 +245,7 @@ Route::group(['middleware'=>['auth']], function()
 
 
     Route::post('/edit_limit',[BalanceController::class,'EditLimit'])->name('EditLimit');
+    Route::post('/edit_role',[UserController::class,'EditRole'])->name('EditLimit');
     Route::post('/edit_limit_domestic',[BalanceController::class,'EditLimitDomestic'])->name('EditLimitDomestic');
 
     Route::get('/change-phone-price', [BalanceController::class,'PriceDiscount']);

@@ -67,6 +67,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Id</th>
                     <th scope="col" style="width: 18%">Reseller Name</th>
+                    <th scope="col" style="width: 18%">Role</th>
                     <th scope="col">Email</th>
                     <th scope="col">International Balance</th>
                     <th scope="col">Domestic Balance</th>
@@ -86,6 +87,14 @@
                         <td>{{$i++}}</td>
                         <td>{{ $item->user_id }}</td>
                         <td>{{ $item->first_name }} {{ $item->last_name }}</td>
+                        <td>{{$item->role}}
+                        <br>
+                              <span>
+                                <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#boom-role-{{$item->id}}" class="btn btn-sm btn-info mt-1">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                              </span>
+                        </td>
                         <td>{{ $item->email }}</td>
                         <td class="text-center font-weight-bold">{{ $item->wallet }}</td>
                         <td class="text-center font-weight-bold">{{ $item->domestic_wallet }}</td>
@@ -188,6 +197,40 @@
                                           <input class="form-control" type="number" step="0.01" name="due">
                                           <button class="btn btn-success btn-sm mt-3"  type="submit">Edit International Limit For {{$item->first_name}}</button>
                                         </div>
+                                      </form>
+                                  </div>
+
+                              </div>
+                            </div>
+                          </div>
+
+
+                          <div class="modal fade bd-example-modal-sm" id="boom-role-{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit User Role</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form action="{{url('/edit_role')}}" method="post">
+                                        @csrf
+                                        
+                                          <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
+                                          <select class="form-select" aria-label="Default select example" name="role">
+                                            @if($item->role =='reseller')
+                                            <option value="reseller" selected>{{$item->role}}</option>
+                                            <option value="sub" >Sub</option>
+                                            @else
+                                            <option value="sub" selected>{{$item->role}}</option>
+                                            <option value="reseller">Reseller</option>
+                                            @endif
+                                         
+                                        </select>
+                                          <button class="btn btn-success btn-sm mt-3"  type="submit">Edit Role For {{$item->first_name}}</button>
+                                        
                                       </form>
                                   </div>
 

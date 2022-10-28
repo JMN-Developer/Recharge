@@ -70,7 +70,7 @@ class RechargeController extends Controller
     public function RechargeInt($value='')
     {
         $stage = 'initial';
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
         }else{
             $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
@@ -90,7 +90,7 @@ class RechargeController extends Controller
 
     public function RechargeDom($value='')
     {
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'user'){
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->latest()->get();
         }else{
             $data =RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
@@ -279,7 +279,7 @@ class RechargeController extends Controller
     $datas = $request->all();
     $datas['number'] = $number;
     $stage = 'check_number';
-    if(a::user()->role == 'user'){
+    if(a::user()->role != 'admin'){
         $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->latest()->get();
     }else{
         $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
@@ -317,7 +317,7 @@ class RechargeController extends Controller
     // $datas = $request->all();
     $datas['number'] = $number;
     $stage = 'check_number';
-    if(a::user()->role == 'user'){
+    if(a::user()->role != 'admin'){
         $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->latest()->get();
     }else{
         $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
@@ -435,7 +435,7 @@ class RechargeController extends Controller
         // dd($prods);
         $stage = 'get_product';
 
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
         }else{
             $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
@@ -478,7 +478,7 @@ class RechargeController extends Controller
         // dd($prods);
         $stage = 'get_product';
 
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->take(10)->get();
         }else{
             $data =RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
@@ -741,7 +741,7 @@ class RechargeController extends Controller
     public function load_recent_domestice_recharge()
     {
 
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data =RechargeHistory::where('reseller_id', a::user()->id)->where('type','Domestic')->take(10)->latest()->get();
         }else{
             $data =RechargeHistory::where('type','Domestic')->join('users','users.id','=','recharge_histories.reseller_id')
@@ -752,7 +752,7 @@ class RechargeController extends Controller
         }
         foreach($data as $item)
         {
-            if(a::user()->role == 'user')
+            if(a::user()->role != 'admin')
             {
                 $item->profit = $item->reseller_com;
             }

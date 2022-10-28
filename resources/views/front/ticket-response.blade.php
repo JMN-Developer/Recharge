@@ -115,7 +115,7 @@
                 </div>
 
                 @foreach($ticket_response as $response)
-                  @if($response->user->role == 'user')
+                  @if($response->user->role != 'admin')
                   <div class="card-body user-response pb-0" style="margin: 10px;border-radius:5px">
                       <p class="title" >{{ $ticket_details->reseller->first_name." ". $ticket_details->reseller->last_name }} (Reseller) <span style="float: right">{{$response->response_time}}</span></p>
 

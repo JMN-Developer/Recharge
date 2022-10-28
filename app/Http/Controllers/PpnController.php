@@ -31,7 +31,7 @@ class PpnController extends Controller
     public function index()
     {
 
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','International')->latest()->take(10)->get();
         }else{
             $data = RechargeHistory::where('type','International')->join('users','users.id','=','recharge_histories.reseller_id')
@@ -285,7 +285,7 @@ class PpnController extends Controller
 
     public function get_white_calling_table()
     {
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','White Calling')->latest()->take(10)->get();
         }else{
             $data = RechargeHistory::where('type','White Calling')->join('users','users.id','=','recharge_histories.reseller_id')

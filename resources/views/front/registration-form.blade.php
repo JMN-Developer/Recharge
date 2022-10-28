@@ -165,6 +165,19 @@
                           </select>
                     </div>
                 </div>
+                @if(auth()->user()->role == 'admin')
+                <div class="form-group">
+                    <div class="form-wrapper">
+                        <label for="">User Role</label>
+                        <select id="role" class="form-select form-control" aria-label="Default select example">
+
+                            <option value="reseller">Reseller</option>
+                            <option value="sub">Sub</option>
+
+                          </select>
+                    </div>
+                </div>
+                @endif
 
                 <button type="submit">Register Now</button>
             </form>
@@ -300,6 +313,7 @@ var s_character = document.getElementById("s_character");
                 }
         });
         $("#registration_form").submit(function(event){
+                
                event.preventDefault();
                 var first_name = $("#first_name").val();
                 var last_name = $("#last_name").val();
@@ -313,6 +327,7 @@ var s_character = document.getElementById("s_character");
                 var email = $("#email").val();
                 var company_name = $("#company_name").val();
                 var payment_method = $("#payment_method :selected").val();
+                var role = $("#role :selected").val();
                 var formdata = new FormData();
                 formdata.append('first_name',first_name);
                 formdata.append('last_name',last_name);
@@ -326,6 +341,7 @@ var s_character = document.getElementById("s_character");
                 formdata.append('password',password);
                 formdata.append('company_name',company_name);
                 formdata.append('payment_method',payment_method);
+                formdata.append('role',role);
                 if(email_valid && password_valid)
                 {
                     $.ajax({
@@ -340,7 +356,7 @@ var s_character = document.getElementById("s_character");
                     success:function(response){
                         swal("New user created successfully.")
                         .then((value) => {
-                            window.location.href=''
+                            window.location.href='/'
                         });
                     },
                 });

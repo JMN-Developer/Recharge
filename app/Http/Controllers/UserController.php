@@ -10,6 +10,7 @@ use App\Models\Slider;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Log;
 
 
 class UserController extends Controller
@@ -29,8 +30,15 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function EditRole(Request $request)
+    {
+        User::where('id',$request->user_id)->update(['role'=>$request->role]);
+        return back()->with('success','Role Updated');
+    }
     public function create(Request $request)
     {
+        Log::info('hello');
 
         $users = new User;
         $users->first_name = $request->input('first_name');
@@ -39,10 +47,10 @@ class UserController extends Controller
         $users->nationality = $request->input('nationality');
         $users->email = $request->input('email');
         $users->address = $request->input('address');
-        if(Auth::user()->role == 'user')
+        if(Auth::user()->role == 'sub')
         $users->role = 'reseller';
         else
-        $user->role = 'use';
+        $users->role = $request->input('role');
         
         $users->user_id ='JM-'.mt_rand(10000,99999);
 

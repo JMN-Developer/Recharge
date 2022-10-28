@@ -627,7 +627,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
                 </a>
               </li>
               @endif
-              @if(auth()->user()->role == 'user' || auth()->user()->role == 'reseller')
+              @if(auth()->user()->role != 'admin' )
               <li class="@if(Route::currentRouteName() == 'contact-info') nav-item menu-open @endif nav-item">
                 <a href="{{ route('contact-info') }}" class="@if(Route::currentRouteName() == 'contact-info') nav-link active @endif nav-link">
                   <i class="fa fa-address-book" aria-hidden="true"></i>
@@ -676,7 +676,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </li>
               @endif -->
 
-              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'user' || auth()->user()->role == 'reseller' )
+              @if(auth()->user()->role == 'admin' || auth()->user()->role == 'sub' || auth()->user()->role == 'reseller' )
               <li class="@if(Route::currentRouteName() == 'wallet-request-send') nav-item menu-open @endif nav-item">
                 <a href="#" class="@if(Route::currentRouteName() == 'wallet-request-send') nav-link active @endif nav-link">
                   <i class="fas fa-wallet" aria-hidden="true"></i>

@@ -14,4 +14,9 @@ class DueControl extends Model
     {
         return $this->belongsTo('App\Models\User','reseller_id','id');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo('App\Models\User','reseller_parrent','id');
+    }
 }

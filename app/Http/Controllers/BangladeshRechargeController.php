@@ -137,7 +137,7 @@ class BangladeshRechargeController extends Controller
     public function index()
     {
         //dd($this->bangladeshi_recharge->balanceInfo());
-        if(Auth::user()->role == 'user'){
+        if(Auth::user()->role != 'admin'){
             $data = RechargeHistory::where('reseller_id', Auth::user()->id)->where('type','Bangladesh')->latest()->take(10)->get();
         }else{
             $data = RechargeHistory::where('type','Bangladesh')->join('users','users.id','=','recharge_histories.reseller_id')
