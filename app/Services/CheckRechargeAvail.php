@@ -80,7 +80,7 @@ class CheckRechargeAvail
 
         }
         $due_limit = $limit-$limit_usage;
-        if($user_info->role->parent == 'sub'){
+        if($user_info->parent->role == 'sub'){
             $parent_due_limit = $parent_limit-$limit_usage;
         }
         
@@ -90,7 +90,7 @@ class CheckRechargeAvail
                 return false;
             }
             else{
-                if($user_info->role->parent == 'sub'){
+                if($user_info->parent->role == 'sub'){
                     if($requested_amount>$parent_due_limit+$parent_current_wallet){
                         return false;
                     }

@@ -267,7 +267,7 @@ class PpnController extends Controller
 
     public function calling_card_index()
     {
-        if(a::user()->role == 'user'){
+        if(a::user()->role != 'admin'){
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type','=','White Calling')->latest()->take(10)->get();
 
         }else{

@@ -188,10 +188,10 @@ class TicketController extends Controller
         $ticket_no = $request->id;
         $ticket_details = ticket::where('ticket_no',$ticket_no)->first();
         $ticket_response = ticket_response::where('ticket_id',$ticket_details->id)->get();
-        if(Auth::user()->role == 'user')
-        ticket_response::where('ticket_id',$ticket_details->id)->update(['message_read_status_user'=>1]);
-        else
+        if(Auth::user()->role == 'admin')
         ticket_response::where('ticket_id',$ticket_details->id)->update(['message_read_status_admin'=>1]);
+        else
+        ticket_response::where('ticket_id',$ticket_details->id)->update(['message_read_status_user'=>1]);
         foreach($ticket_response as $data)
         {
             $data->response_time =$data->created_at.'('.$data->created_at->diffForHumans(Carbon::now()).')';
