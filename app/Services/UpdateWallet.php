@@ -72,7 +72,7 @@ class UpdateWallet
         ]);
     }
 
-    public function update_agent($recharge){
+    public static function update_agent($recharge){
         if ($recharge->type == 'International' || $recharge->type == 'White Calling' || $recharge->type == 'Bangladesh'){
 
             $total_cost = $recharge->amount - $recharge->reseller_com - $recharge->sub_profit;
@@ -205,7 +205,7 @@ class UpdateWallet
         if (auth()->user()->role != 'admin')
         {
             if(auth()->user()->parent->role =='sub'){
-                $this->update_agent($recharge);
+                self::update_agent($recharge);
             }
             if ($recharge->type == 'International' || $recharge->type == 'White Calling' || $recharge->type == 'Bangladesh'){
                 $total_cost = $recharge->amount - $recharge->reseller_com;//reseller_com = reseller_profit
