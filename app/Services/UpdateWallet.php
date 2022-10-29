@@ -230,7 +230,7 @@ class UpdateWallet
                         $wallet_after_transaction = $user->limit_usage;
                         RechargeHistory::where('id', $recharge->id)
                             ->update(['recharge_source' => 'Limit']);
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id,$user->parent->role=='sub'?$user->parent->id:NULL);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id,auth()->user()->parent->role=='sub'?$user->parent->id:NULL);
 
                     }
                     else
@@ -245,10 +245,10 @@ class UpdateWallet
                         $wallet_after_transaction = 0;
                         RechargeHistory::where('id', $recharge->id)
                             ->update(['recharge_source' => 'Limit:' . $wallet_deduct . ',' . 'Wallet:' . $current_balance]);
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id,$user->parent->role=='sub'?$user->parent->id:NULL);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id,auth()->user()->parent->role=='sub'?$user->parent->id:NULL);
                         $wallet_before_transaction = 0;
                         $wallet_after_transaction = auth()->user()->limit_usage;
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id,$user->parent->role=='sub'?$user->parent->id:NULL);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id,auth()->user()->parent->role=='sub'?$user->parent->id:NULL);
                     }
                 }
                 else
@@ -264,7 +264,7 @@ class UpdateWallet
 
                     RechargeHistory::where('id', $recharge->id)
                         ->update(['recharge_source' => 'Wallet']);
-                    UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id,$user->parent->role=='sub'?$user->parent->id:NULL);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id,auth()->user()->parent->role=='sub'?$user->parent->id:NULL);
                 }
 
             }
@@ -294,7 +294,7 @@ class UpdateWallet
                         //$user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$total_cost]);
                         RechargeHistory::where('id', $recharge->id)
                             ->update(['recharge_source' => 'Limit']);
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id,$user->parent->role=='sub'?$user->parent->id:NULL);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id,auth()->user()->parent->role=='sub'?$user->parent->id:NULL);
 
                     }
                     else
@@ -309,10 +309,10 @@ class UpdateWallet
                         $wallet_after_transaction = 0;
                         RechargeHistory::where('id', $recharge->id)
                             ->update(['recharge_source' => 'Limit:' . $wallet_deduct . ',' . 'Wallet:' . $current_balance]);
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id,$user->parent->role=='sub'?$user->parent->id:NULL);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id,auth()->user()->parent->role=='sub'?$user->parent->id:NULL);
                         $wallet_before_transaction = 0;
                         $wallet_after_transaction = auth()->user()->domestic_limit_usage;
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id,$user->parent->role=='sub'?$user->parent->id:NULL);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id,auth()->user()->parent->role=='sub'?$user->parent->id:NULL);
                     }
                 }
                 else
@@ -328,7 +328,7 @@ class UpdateWallet
 
                     RechargeHistory::where('id', $recharge->id)
                         ->update(['recharge_source' => 'Wallet']);
-                    UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id,$user->parent->role=='sub'?$user->parent->id:NULL);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id,auth()->user()->parent->role=='sub'?$user->parent->id:NULL);
                 }
             }
 
