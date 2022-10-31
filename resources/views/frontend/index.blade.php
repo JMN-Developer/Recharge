@@ -539,23 +539,7 @@
               </div>
             </div>
 
-            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
-              <div class="member">
-                <img src="{{asset('frontend')}}/assets/img/team-2.jpg" class="img-fluid" alt="">
-                <div class="member-info">
-                  <div class="member-info-content">
-                    <h4>MD. Saiful Islam</h4>
-                    <span>CMO</span>
-                    <div class="social">
-                      <a href=""><i class="bi bi-twitter"></i></a>
-                      <a href=""><i class="bi bi-facebook"></i></a>
-                      <a href=""><i class="bi bi-instagram"></i></a>
-                      <a href=""><i class="bi bi-linkedin"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
 
           </div>
 
@@ -1165,7 +1149,7 @@
       formData.append('email',email);
       formData.append('subject',subject);
       formData.append('message',message);
-      
+
       $.ajax({
         processData: false,
         contentType: false,
@@ -1175,19 +1159,19 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
          },
         data: formData,
-     
+
         success:function(response){
           swal("Message Send Successfully!")
           .then((value) => {
             location.reload()
 });
-          
+
 
 
         },
        });
      // alert(name+" "+email+" "+subject+" "+message);
-    
+
 });
   })
 </script>
