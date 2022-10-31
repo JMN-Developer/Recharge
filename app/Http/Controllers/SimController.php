@@ -79,11 +79,12 @@ class SimController extends Controller
             $total = $show->count();
             $operator = SimOperator::all();
             $user = User::where('created_by', 2)->where('role', '!=', 'admin')->get();
-            $total = $show->count();
+
         } else {
             $show = sim::where('reseller_id', Auth::user()->id)
                 ->latest()
                 ->get();
+            $total = $show->count();
 
         }
 
@@ -120,7 +121,7 @@ class SimController extends Controller
                 ->make(true);
         }
 
-        if (Auth::user()->role == 'reseller') {
+        if (Auth::user()->role != 'admin') {
             return view('front.sim-activation', compact('show', 'total'));
         } else {
             return view('front.sim-activation', compact('show', 'operator', 'user', 'total'));
