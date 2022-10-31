@@ -32,10 +32,13 @@ class TransactionController extends Controller
 
                 if ($request->retailer == 'all') {
 
-                    $data = TransactionHistory::where('parent_id', Auth::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                    $data = TransactionHistory::whereBetween('created_at', [$start_date, $end_date])->where(function ($query) {
+                        $query->where('parent_id', Auth::user()->id)
+                            ->orWhere('reseller_id', Auth::user()->id);
+                    })->latest()->select(['*']);
                 } else {
                     $user_id = $request->retailer;
-                    $data = TransactionHistory::where('parent_id', Auth::user()->id)->where('reseller_id', $user_id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
+                    $data = TransactionHistory::where('reseller_id', $user_id)->whereBetween('created_at', [$start_date, $end_date])->latest()->select(['*']);
 
                 }
             } else {
