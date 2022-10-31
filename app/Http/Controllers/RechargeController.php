@@ -894,7 +894,7 @@ class RechargeController extends Controller
                     } elseif ($type == 'International') {
                         $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', '!=', 'Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     } else {
-                        $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', 'Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                        $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', 'Domestic')->where('type', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     }
 
                 } else {
@@ -902,9 +902,9 @@ class RechargeController extends Controller
                         $data = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
 
                     } elseif ($type == 'International') {
-                        $data = RechargeHistory::where('type', '!=', 'Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                        $data = RechargeHistory::where('type', '!=', 'Domestic')->where('type', '!=', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     } else {
-                        $data = RechargeHistory::where('type', 'Domestic')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                        $data = RechargeHistory::where('type', 'Domestic')->where('type', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     }
 
                 }
