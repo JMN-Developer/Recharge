@@ -1,13 +1,11 @@
 <?php
 
 namespace App\Services;
-use SoapClient;
-use Auth;
-use App\Services\GenerateTransactionId;
+
 use App\Models\currency_rate;
-use SebastianBergmann\Environment\Console;
-use Illuminate\Support\Facades\Crypt;
 use App\Models\SecretStore;
+use Illuminate\Support\Facades\Crypt;
+use SoapClient;
 
 /**
  * Class BangladeshiRecharge
@@ -24,7 +22,7 @@ class BangladeshiRecharge
 
     public function __construct()
     {
-        $token = SecretStore::where('company_name','SSL')->first()->content;
+        $token = SecretStore::where('company_name', 'SSL')->first()->content;
         $this->client_pass = Crypt::decrypt($token);
         // $options = [
         //     'cache_wsdl'     => WSDL_CACHE_NONE,
@@ -34,18 +32,16 @@ class BangladeshiRecharge
             $this->client = new SoapClient($this->wsdl_path);
             $this->soap_exception_occured = false;
             $this->exception = '';
-            } catch(SoapFault $exception) {
+        } catch (SoapFault $exception) {
             $this->soap_exception_occured = true;
-            $this->exception = 'Soap Exception '.$exception;
-            }
-
-
+            $this->exception = 'Soap Exception ' . $exception;
+        }
 
     }
     public function current_euro_rate()
     {
         $date = date('Y-m-d');
-        $currency_rate = currency_rate::where('id',1)->first();
+        $currency_rate = currency_rate::where('id', 1)->first();
         return $currency_rate->eur;
         // if($currency_rate)
         // {
@@ -63,122 +59,117 @@ class BangladeshiRecharge
 
     }
 
-
     public function offer_details($operator_id)
     {
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
-        $operator_request = $client->get('http://vrapi.sslwireless.com/rest/specialAmount/v2/?client_id=JMNationAPI&connection_type=prepaid&lang=en&operator_id='.$operator_id);
+        $operator_request = $client->get('http://vrapi.sslwireless.com/rest/specialAmount/v2/?client_id=JMNationAPI&connection_type=prepaid&lang=en&operator_id=' . $operator_id);
 
-           // $status = $operator_request->getStatusCode();
+        // $status = $operator_request->getStatusCode();
 
-            $response = $operator_request->getBody();
-            //file_put_contents('test.txt',$response);
+        $response = $operator_request->getBody();
+        //file_put_contents('test.txt',$response);
 
-            $response = json_decode($response);
-            //file_put_contents('test.txt',json_encode($response->data->triggerAmount->list));
-            return $response->data->triggerAmount->list;
+        $response = json_decode($response);
+        //file_put_contents('test.txt',json_encode($response->data->triggerAmount->list));
+        return $response->data->triggerAmount->list;
 
     }
 
-    public function query_recharge($guid,$vr_guid)
+    public function query_recharge($guid, $vr_guid)
     {
 
         //$guid ='15102022194536002313';
         //$vr_guid ='JMN-AB-5257857353';
         //file_put_contents('test.txt',$amount);
         try {
-            $data = $this->client->QueryRechargeStatus($this->client_id,$guid,$vr_guid);
+            $data = $this->client->QueryRechargeStatus($this->client_id, $guid, $vr_guid);
             //file_put_contents('test.txt',json_encode($data));
-            } catch(SoapFault $exception) {
-                $this->soap_exception_occured = true;
-                $this->exception = 'Soap Exception '.$exception;
-            }
-            //file_put_contents('create_recharge.txt',json_encode($data));
-            return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
+        } catch (SoapFault $exception) {
+            $this->soap_exception_occured = true;
+            $this->exception = 'Soap Exception ' . $exception;
+        }
+        //file_put_contents('create_recharge.txt',json_encode($data));
+        return ['data' => $data, 'soap_exception_occured' => $this->soap_exception_occured, 'exception' => $this->exception];
     }
-    public function CreateRecharge($guid,$operator_id,$recipient_msisdn,$amount)
+    public function CreateRecharge($guid, $operator_id, $recipient_msisdn, $amount)
     {
         //file_put_contents('test.txt',$amount);
         //$amount = ceil($amount);
 
         try {
-            $data = $this->client->CreateRecharge($this->client_id,$this->client_pass,$guid,$operator_id,$recipient_msisdn,$amount,'prepaid');
+            $data = $this->client->CreateRecharge($this->client_id, $this->client_pass, $guid, $operator_id, $recipient_msisdn, $amount, 'prepaid');
             //file_put_contents('test.txt',json_encode($data));
-            } catch(SoapFault $exception) {
-                $this->soap_exception_occured = true;
-                $this->exception = 'Soap Exception '.$exception;
-            }
-            //file_put_contents('create_recharge.txt',json_encode($data));
-            return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
+        } catch (SoapFault $exception) {
+            $this->soap_exception_occured = true;
+            $this->exception = 'Soap Exception ' . $exception;
+        }
+        //file_put_contents('create_recharge.txt',json_encode($data));
+        return ['data' => $data, 'soap_exception_occured' => $this->soap_exception_occured, 'exception' => $this->exception];
     }
-    public function InitRecharge($guid,$vr_guid)
+    public function InitRecharge($guid, $vr_guid)
     {
         try {
-            $data = $this->client->InitRecharge($this->client_id,$this->client_pass,$guid,$vr_guid);
+            $data = $this->client->InitRecharge($this->client_id, $this->client_pass, $guid, $vr_guid);
             //file_put_contents('test.txt',json_encode($data));
-            } catch(SoapFault $exception) {
-                $this->soap_exception_occured = true;
-                $this->exception = 'Soap Exception '.$exception;
-            }
-            //file_put_contents('init_recharge.txt',json_encode($data));
-            return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
+        } catch (SoapFault $exception) {
+            $this->soap_exception_occured = true;
+            $this->exception = 'Soap Exception ' . $exception;
+        }
+        //file_put_contents('init_recharge.txt',json_encode($data));
+        return ['data' => $data, 'soap_exception_occured' => $this->soap_exception_occured, 'exception' => $this->exception];
     }
 
     public function balanceInfo()
     {
         try {
             $data = $this->client->GetBalanceInfo($this->client_id);
-            } catch(SoapFault $exception) {
-                $this->soap_exception_occured = true;
-                $this->exception = 'Soap Exception '.$exception;
-            }
+        } catch (SoapFault $exception) {
+            $this->soap_exception_occured = true;
+            $this->exception = 'Soap Exception ' . $exception;
+        }
 
-            return ['balance_info'=>$data->available_credit,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
+        return ['balance_info' => $data->available_credit, 'soap_exception_occured' => $this->soap_exception_occured, 'exception' => $this->exception];
     }
 
     public function operatorInfo($msisdn)
     {
-       $verify =  $this->verifyMsisdn($msisdn);
-       if($verify['data']==0)
-       {
-        return ['exception'=>'Phone number is not valid','soap_exception_occured'=>true];
-       }
+        $verify = $this->verifyMsisdn($msisdn);
+        if ($verify['data'] == 0) {
+            return ['exception' => 'Phone number is not valid', 'soap_exception_occured' => true];
+        }
 
         try {
-            $data = $this->client->FindOperatorInfo($this->client_id,$msisdn);
-            } catch(SoapFault $exception) {
-                $this->soap_exception_occured = true;
-                $this->exception = 'Soap Exception '.$exception;
-            }
+            $data = $this->client->FindOperatorInfo($this->client_id, $msisdn);
+        } catch (SoapFault $exception) {
+            $this->soap_exception_occured = true;
+            $this->exception = 'Soap Exception ' . $exception;
+        }
 
-            return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
+        return ['data' => $data, 'soap_exception_occured' => $this->soap_exception_occured, 'exception' => $this->exception];
     }
 
     public function verifyMsisdn($msisdn)
     {
         try {
-            $data = $this->client->VerifyMSISDN($this->client_id,$msisdn);
-            } catch(SoapFault $exception) {
-                $this->soap_exception_occured = true;
-                $this->exception = 'Soap Exception '.$exception;
-            }
+            $data = $this->client->VerifyMSISDN($this->client_id, $msisdn);
+        } catch (SoapFault $exception) {
+            $this->soap_exception_occured = true;
+            $this->exception = 'Soap Exception ' . $exception;
+        }
 
-            return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
+        return ['data' => $data, 'soap_exception_occured' => $this->soap_exception_occured, 'exception' => $this->exception];
     }
 
     public function getOperatorLimit($telco_id)
     {
         try {
-            $data = $this->client->GetOperatorLimits($this->client_id,$telco_id);
-            } catch(SoapFault $exception) {
-                $this->soap_exception_occured = true;
-                $this->exception = 'Soap Exception '.$exception;
-            }
+            $data = $this->client->GetOperatorLimits($this->client_id, $telco_id);
+        } catch (SoapFault $exception) {
+            $this->soap_exception_occured = true;
+            $this->exception = 'Soap Exception ' . $exception;
+        }
 
-            return ['data'=>$data,'soap_exception_occured'=>$this->soap_exception_occured,'exception'=>$this->exception];
+        return ['data' => $data, 'soap_exception_occured' => $this->soap_exception_occured, 'exception' => $this->exception];
     }
-
-
-
 
 }

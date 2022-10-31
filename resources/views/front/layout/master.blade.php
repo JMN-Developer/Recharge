@@ -1,23 +1,21 @@
 <?php
-  use Carbon\Carbon;
-  $admin_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
+use Carbon\Carbon;
+$admin_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
     ->whereMonth('created_at', Carbon::now()->month)
-    ->where('type','International')
+    ->where('type', 'International')
     ->sum('admin_com');
-  $reseller_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
-    ->where('reseller_id',Auth::user()->id)
-    ->where('type','International')
+$reseller_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
+    ->where('reseller_id', Auth::user()->id)
+    ->where('type', 'International')
     ->whereMonth('created_at', Carbon::now()->month)
     ->sum('reseller_com');
 
 $current_wallet = App\Models\User::sum('wallet');
 $current_limit = App\Models\User::sum('due');
 $current_limit_usage = App\Models\User::sum('limit_usage');
-$services = App\Models\service_control::get(['service_name','permission'])->toArray();
+$services = App\Models\service_control::get(['service_name', 'permission'])->toArray();
 
-
-
-$total_due = $current_wallet+($current_limit-$current_limit_usage);
+$total_due = $current_wallet + ($current_limit - $current_limit_usage);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -538,8 +536,8 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </ul>
             </li>
           @endif
-          
-         
+
+
           <li class="@if(Route::currentRouteName() == 'add-flight') nav-item menu-open @endif nav-item">
             <a href="{{url('flights/')}}" target="_blank"  class="@if(Route::currentRouteName() == 'setting') nav-link active @endif nav-link">
               <i class="nav-icon fas fa-plane-departure"></i>
@@ -548,8 +546,8 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               </p>
             </a>
           </li>
-        
-          
+
+
             @if(auth()->user()->role !='reseller')
             <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
@@ -677,7 +675,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
               @endif -->
 
               @if(auth()->user()->role == 'admin' || auth()->user()->role == 'sub' || auth()->user()->role == 'reseller' )
-              <li class="@if(Route::currentRouteName() == 'wallet-request-send') nav-item menu-open @endif nav-item">
+              <li class="@if(Route::currentRouteName() == 'wallet-request-send' || Route::currentRouteName() == 'wallet-request-receive-new' || Route::currentRouteName() == 'wallet-request-receive-approved' ) nav-item menu-open @endif nav-item">
                 <a href="#" class="@if(Route::currentRouteName() == 'wallet-request-send') nav-link active @endif nav-link">
                   <i class="fas fa-wallet" aria-hidden="true"></i>
                   <p>
@@ -708,7 +706,7 @@ $total_due = $current_wallet+($current_limit-$current_limit_usage);
 
 
                   </li>
-                
+
 
                     <li class="nav-item">
 

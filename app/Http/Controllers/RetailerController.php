@@ -3,63 +3,59 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\ResellerProfit;
+use App\Models\User;
 use Auth;
+use Illuminate\Http\Request;
 
 class RetailerController extends Controller
 {
     public function retailer_details()
     {
         if (Auth::user()->role == 'admin') {
-            $data = User::orderBy('limit_usage','DESC')->get();
-        }else {
-            $data = User::where('role','sub')->where('created_by', Auth::user()->id)->orderBy('limit_usage','DESC')->get();
+            $data = User::orderBy('limit_usage', 'DESC')->get();
+        } else {
+            $data = User::where('role', 'sub')->where('created_by', Auth::user()->id)->orderBy('limit_usage', 'DESC')->get();
         }
         // dd($data);
-        return view('front.retailer_details',compact('data'));
+        return view('front.retailer_details', compact('data'));
     }
 
-
-
-    public function RetailerDetail($value='')
+    public function RetailerDetail($value = '')
     {
         if (Auth::user()->role == 'admin') {
-            $data = User::where('role','user')->get();
-        }else {
-            $data = User::where('role','user')->where('created_by', Auth::user()->id)->get();
+            $data = User::where('role', 'user')->get();
+        } else {
+            $data = User::where('role', 'user')->where('created_by', Auth::user()->id)->get();
         }
         // dd($data);
-        return view('front.retailer-details',compact('data'));
+        return view('front.retailer-details', compact('data'));
     }
 
-    public function RetailerAction($value='')
+    public function RetailerAction($value = '')
     {
-        if (Auth::user()->role == 'admin' || Auth::user()->role == 'admin2' ) {
-            $data = User::where('role','!=','admin')->get();
-        }else {
+        if (Auth::user()->role == 'admin' || Auth::user()->role == 'admin2') {
+            $data = User::where('role', '!=', 'admin')->get();
+        } else {
             $data = User::where('created_by', Auth::user()->id)->get();
         }
-       // file_put_contents('test.txt',auth()->user()->role);
-        return view('front.retailer-action',compact('data'));
+        // file_put_contents('test.txt',auth()->user()->role);
+        return view('front.retailer-action', compact('data'));
     }
-    public function RetailerSignUp($value='')
+    public function RetailerSignUp($value = '')
     {
         return view('front.registration-form');
     }
     public function changeStatus(Request $request)
     {
 
-
         $user = User::find($request->user_id);
         $user->recharge_permission = $request->status;
         $user->save();
 
-        return response()->json(['message'=>'success']);
+        return response()->json(['message' => 'success']);
 
     }
-
 
     public function changeSim(Request $request)
     {
@@ -67,7 +63,7 @@ class RetailerController extends Controller
         $user->sim_permission = $request->status;
         $user->save();
 
-        return response()->json(['success'=>'Status change successfully.']);
+        return response()->json(['success' => 'Status change successfully.']);
     }
     public function changeCargo(Request $request)
     {
@@ -75,7 +71,7 @@ class RetailerController extends Controller
         $user->cargo_permission = $request->status;
         $user->save();
 
-        return response()->json(['success'=>'Status change successfully.']);
+        return response()->json(['success' => 'Status change successfully.']);
     }
     public function changePhone(Request $request)
     {
@@ -83,7 +79,7 @@ class RetailerController extends Controller
         $user->mobile_permission = $request->status;
         $user->save();
 
-        return response()->json(['success'=>'Status change successfully.']);
+        return response()->json(['success' => 'Status change successfully.']);
     }
 
     public function changeReseller(Request $request)
@@ -92,7 +88,7 @@ class RetailerController extends Controller
         $user->reseller_permission = $request->status;
         $user->save();
 
-        return response()->json(['success'=>'Status change successfully.']);
+        return response()->json(['success' => 'Status change successfully.']);
     }
     public function changePin(Request $request)
     {
@@ -100,7 +96,7 @@ class RetailerController extends Controller
         $user->pin_permission = $request->status;
         $user->save();
 
-        return response()->json(['success'=>'Status change successfully.']);
+        return response()->json(['success' => 'Status change successfully.']);
     }
     public function AddCom(Request $request)
     {
@@ -113,7 +109,7 @@ class RetailerController extends Controller
                 'admin_international_recharge_commission' => $request->international_recharge,
                 'admin_pin_commission' => $request->pin,
             ]);
-            $user = ResellerProfit::where('reseller_id',$request->user_id)->first();
+            $user = ResellerProfit::where('reseller_id', $request->user_id)->first();
             // if($user)
             // {
             // ResellerProfit::where('reseller_id',$request->user_id)->update([
@@ -131,7 +127,7 @@ class RetailerController extends Controller
             //     ]);
             // }
 
-        }else{
+        } else {
             $user = User::where('id', $request->user_id)->update([
                 'mobile' => $request->mobile,
                 'sim' => $request->sim,
@@ -141,10 +137,9 @@ class RetailerController extends Controller
                 'pin' => $request->pin,
             ]);
 
-
         }
 
-        return back()->with('status','Commission Set Suucessfully!');
+        return back()->with('status', 'Commission Set Suucessfully!');
 
     }
 }

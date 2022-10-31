@@ -307,9 +307,8 @@ table.dataTable thead .sorting_asc{
                                 <div class="dropdown float-end">
 
                                 </div>
-                                <h5 class="card-title mb-0 header-title">Bangladesh</h5>
+                                <h5 class="card-title mb-0 header-title">Bangladeshs</h5>
                                 <div class="p-2 m-2 bg-white rounded shadow bangladesh_recharge_chart" style="margin-top: 50px !important">
-
 
                                 </div>
 
@@ -855,6 +854,7 @@ function process_data(obj)
         $('.international_recharge_chart').empty();
         $('.domestic_recharge_chart').empty();
         $('.pin_chart').empty();
+        $('.bangladesh_recharge_chart').empty();
         $('.white_calling_chart').empty();
         $('.all_chart').append(obj.all_container)
         $('.international_recharge_chart').append(obj.international_container)

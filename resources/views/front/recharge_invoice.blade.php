@@ -247,32 +247,5 @@
   <!-- /.content-wrapper -->
   @endsection
   @section('scripts')
-  <!-- jQuery -->
-  <script src="{{asset('js/jquery.min.js')}}"></script>
-  <!-- Bootstrap -->
-  <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-  <!-- Theme JS -->
-  <script src="{{asset('js/admin.js')}}"></script>
-  <script src="{{asset('plugin/intl-tel-input/js/intlTelInput.js')}}"></script>
-  <!-- Custom JS -->
-  <script src="{{asset('js/custom.js')}}"></script>
-  @endsection
-  @section('js')
-  <script>
-     // Vanilla Javascript
-     var input = document.querySelector("#receiverMobile");
-     window.intlTelInput(input,({
-       // options here
-     }));
 
-     $(document).ready(function() {
-         $('.iti__flag-container').click(function() {
-           var countryCode = $('.iti__selected-flag').attr('title');
-           var countryCode = countryCode.replace(/[^0-9]/g,'')
-           $('#receiverMobile').val("");
-           $('#receiverMobile').val("+"+countryCode+" "+ $('#receiverMobile').val());
-        });
-     });
-   </script>
   @endsection
-

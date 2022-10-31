@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
-use Auth;
 use App\Services\UpdateWallet;
+use Auth;
 use DB;
-
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -17,14 +16,12 @@ class OrderController extends Controller
     {
         $ordeaars = Order::all();
         $ooyeh = count($ordeaars);
-       // $randomNumber = $ooyeh.random_int(1000, 9999).$ooyeh;
+        // $randomNumber = $ooyeh.random_int(1000, 9999).$ooyeh;
 
-
-        if(!empty($request->label)){
+        if (!empty($request->label)) {
             $request->file('label')->store('public');
             $labelFileName = $request->label->hashName();
         }
-
 
         $orders = new Order;
         $orders->reseller_id = $request->input('reseller_id');
@@ -50,29 +47,26 @@ class OrderController extends Controller
         $orders->addiCharge = $request->input('addiCharge');
         $orders->total = $request->input('total');
 
-        $main_price = $orders->total-$orders->addiCharge;
+        $main_price = $orders->total - $orders->addiCharge;
         $orders->weight = $request->input('weight');
         // $orders->perKg = $request->input('perKg');
         // $orders->cusCharge = $request->input('cusCharge');
         // $orders->homeDeliveryCharge = $request->input('homeDeliveryCharge');
 
-        if($orders->delivery_condition == 'Goods')
-        {
+        if ($orders->delivery_condition == 'Goods') {
 
-            $orders->agent_comm = round(((Auth::user()->cargo_goods_profit/100)*$main_price),2);
-         }
-         else
-         {
+            $orders->agent_comm = round(((Auth::user()->cargo_goods_profit / 100) * $main_price), 2);
+        } else {
 
-            $orders->agent_comm = round(((Auth::user()->cargo_documents_profit/100)*$main_price),2);
-         }
+            $orders->agent_comm = round(((Auth::user()->cargo_documents_profit / 100) * $main_price), 2);
+        }
 
         // $orders->delivery_way = $request->input('delivery_way');
         // $orders->departure_airport = $request->input('departure_airport');
         // $orders->arrival_airport = $request->input('arrival_airport');
         $orders->product1 = $request->input('product1');
         $orders->quantity1 = $request->input('qty1');
-        if(!empty($labelFileName)){
+        if (!empty($labelFileName)) {
             $orders->label = $labelFileName;
         }
         $orders->status = 'available';
@@ -80,53 +74,42 @@ class OrderController extends Controller
         $user = User::where('id', $orders->reseller_id)->first();
         $total = $request->total;
 
-        if($orders->delivery_condition == 'Goods')
-        {
-            $this->update_cargo_wallet($main_price,Auth::user()->cargo_goods_profit,$orders->id);
-         }
-         else
-         {
-            $this->update_cargo_wallet($main_price,Auth::user()->cargo_documents_profit,$orders->id);
-         }
-
-
+        if ($orders->delivery_condition == 'Goods') {
+            $this->update_cargo_wallet($main_price, Auth::user()->cargo_goods_profit, $orders->id);
+        } else {
+            $this->update_cargo_wallet($main_price, Auth::user()->cargo_documents_profit, $orders->id);
+        }
 
         return back()->with('status', 'Order Created Successfully!');
 
     }
 
-
-    public function update_cargo_wallet($cargo_price,$percentage,$id)
+    public function update_cargo_wallet($cargo_price, $percentage, $id)
     {
         // $user = User::where('id',$reseller_id)->first();
-        $cargo_price = $cargo_price -  round((($percentage/100)*$cargo_price),2);
+        $cargo_price = $cargo_price - round((($percentage / 100) * $cargo_price), 2);
         $wallet_before_transaction = auth()->user()->cargo_wallet;
-       // User::where('id',Auth::user()->id)->update(['cargo_wallet'=>Auth::user()->cargo_wallet+$cargo_price]);
-        $user = tap(DB::table('users')->where('id', Auth::user()->id)) ->update(['cargo_wallet'=>Auth::user()->cargo_wallet+$cargo_price])->first();
-        $wallet_after_transaction =$user->cargo_wallet;
-        UpdateWallet::create_transaction($id,'debit','Cargo',$wallet_before_transaction,$wallet_after_transaction,$cargo_price,'wallet',Auth::user()->id);
+        // User::where('id',Auth::user()->id)->update(['cargo_wallet'=>Auth::user()->cargo_wallet+$cargo_price]);
+        $user = tap(DB::table('users')->where('id', Auth::user()->id))->update(['cargo_wallet' => Auth::user()->cargo_wallet + $cargo_price])->first();
+        $wallet_after_transaction = $user->cargo_wallet;
+        UpdateWallet::create_transaction($id, 'debit', 'Cargo', $wallet_before_transaction, $wallet_after_transaction, $cargo_price, 'wallet', Auth::user()->id);
     }
 
     public function update_status(Request $request)
     {
 
-
-        if($request->status =='confirmed')
-        {
+        if ($request->status == 'confirmed') {
             $update = Order::where('id', $request->id)->update([
                 'status' => $request->status,
-                'cost'=>$request->cost
+                'cost' => $request->cost,
             ]);
-        }
-        else
-        {
-        $update = Order::where('id', $request->id)->update([
-            'status' => $request->status
-        ]);
+        } else {
+            $update = Order::where('id', $request->id)->update([
+                'status' => $request->status,
+            ]);
         }
 
         return back()->with('status', 'Status Updated Successfully!');
     }
-
 
 }

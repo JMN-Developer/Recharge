@@ -20,151 +20,131 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
 
-        $notifications ='';
+        $notifications = '';
         $user_id = auth()->user()->id;
         $user = user::find($user_id);
         $user->unreadNotifications->markAsRead();
         $data = [];
-        if(auth()->user()->parent->role == 'sub')
-        {
+        if (auth()->user()->parent->role == 'sub') {
             foreach ($user->notifications()->paginate(10) as $notification) {
                 $notification_data = json_decode(json_encode($notification->data));
-                array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
+                array_push($data, ['service' => $notification_data->service, 'message' => $notification_data->message, 'time' => $notification->created_at . '(' . $notification->created_at->diffForHumans(Carbon::now()) . ')', 'read_status' => $notification->read_at]);
+            }
+        } else if (auth()->user()->role == 'sub') {
+            if ($request->has('service')) {
+                $start_date = Carbon::parse($request->start_date)->toDateTimeString();
+                $end_date = Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
+                $retailer_id = $request->retailer;
+                $service = $request->service;
+                if ($retailer_id == 'all' && $service == 'all') {
+                    $notifications = DatabaseNotification::whereBetween('created_at', [$start_date, $end_date])->where(function ($query) {
+                        $query->whereJsonContains('data', ['send_from' => auth()->user()->id])
+                            ->orWhere('notifiable_id', auth()->user()->id);
+
+                    })->latest()->paginate(10);
+                } else if ($retailer_id == 'all' && $service != 'all') {
+                    $notifications = DatabaseNotification::where('data->service', $service)->whereBetween('created_at', [$start_date, $end_date])->where(function ($query) {
+                        $query->whereJsonContains('data', ['send_from' => auth()->user()->id])
+                            ->orWhere('notifiable_id', auth()->user()->id);
+
+                    })->latest()->paginate(10);
+                } else if ($retailer_id != 'all' && $service != 'all') {
+                    $notifications = DatabaseNotification::where('notifiable_id', $retailer_id)->where('data->service', $service)->whereBetween('created_at', [$start_date, $end_date])->where(function ($query) {
+                        $query->whereJsonContains('data', ['send_from' => auth()->user()->id])
+                            ->orWhere('notifiable_id', auth()->user()->id);
+
+                    })->latest()->paginate(10);
+                }
+                // file_put_contents('test.txt',$request->start_date.' '.$request->end_date);
+            } else
+                $notifications = DatabaseNotification::whereJsonContains('data', ['send_from' => $user_id])->orWhere(function ($query) {
+                    $query->whereJsonContains('data', ['send_from' => auth()->user()->id])
+                        ->orWhere('notifiable_id', auth()->user()->id);
+
+                })->latest()->paginate(10);
+
+            foreach ($notifications as $notification) {
+                $notification_data = json_decode(json_encode($notification->data));
+                array_push($data, ['service' => $notification_data->service, 'message' => $notification_data->message, 'time' => $notification->created_at . '(' . $notification->created_at->diffForHumans(Carbon::now()) . ')', 'read_status' => $notification->read_at]);
+            }
+        } else {
+            if ($request->has('service')) {
+                $start_date = Carbon::parse($request->start_date)->toDateTimeString();
+                $end_date = Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
+                $retailer_id = $request->retailer;
+                $service = $request->service;
+                if ($retailer_id == 'all' && $service == 'all') {
+                    $notifications = DatabaseNotification::whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+                } else if ($retailer_id == 'all' && $service != 'all') {
+                    $notifications = DatabaseNotification::where('data->service', $service)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+                } else if ($retailer_id != 'all' && $service != 'all') {
+                    $notifications = DatabaseNotification::where('notifiable_id', $retailer_id)->where('data->service', $service)->whereBetween('created_at', [$start_date, $end_date])->latest()->paginate(10);
+                }
+                // file_put_contents('test.txt',$request->start_date.' '.$request->end_date);
+            } else
+                $notifications = DatabaseNotification::latest()->paginate(10);
+
+            foreach ($notifications as $notification) {
+                $notification_data = json_decode(json_encode($notification->data));
+                array_push($data, ['service' => $notification_data->service, 'message' => $notification_data->message, 'time' => $notification->created_at . '(' . $notification->created_at->diffForHumans(Carbon::now()) . ')', 'read_status' => $notification->read_at]);
             }
         }
-        else if(auth()->user()->role == 'sub'){
-            if($request->has('service'))
-            {
-            $start_date =  Carbon::parse($request->start_date)->toDateTimeString();
-            $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
-            $retailer_id = $request->retailer;
-            $service = $request->service;
-            if($retailer_id=='all' && $service == 'all')
-            {
-                $notifications = DatabaseNotification::whereBetween('created_at', [$start_date,$end_date])->where(function($query){
-                    $query->whereJsonContains('data',['send_from'=>auth()->user()->id])
-                          ->orWhere('notifiable_id',auth()->user()->id);
-                        
-                })->latest()->paginate(10);
-            }
-            else if($retailer_id == 'all' && $service!='all')
-            {
-                $notifications = DatabaseNotification::where('data->service',$service)->whereBetween('created_at', [$start_date,$end_date])->where(function($query){
-                    $query->whereJsonContains('data',['send_from'=>auth()->user()->id])
-                          ->orWhere('notifiable_id',auth()->user()->id);
-                        
-                })->latest()->paginate(10);
-            }
-            else if($retailer_id !='all' && $service!='all')
-            {
-            $notifications = DatabaseNotification::where('notifiable_id',$retailer_id)->where('data->service',$service)->whereBetween('created_at', [$start_date,$end_date])->where(function($query){
-                $query->whereJsonContains('data',['send_from'=>auth()->user()->id])
-                      ->orWhere('notifiable_id',auth()->user()->id);
-                    
-            })->latest()->paginate(10);
-            }
-           // file_put_contents('test.txt',$request->start_date.' '.$request->end_date);
-            }
-            else
-            $notifications = DatabaseNotification::whereJsonContains('data',['send_from'=>$user_id])->orWhere(function($query){
-                $query->whereJsonContains('data',['send_from'=>auth()->user()->id])
-                      ->orWhere('notifiable_id',auth()->user()->id);
-                    
-            })->latest()->paginate(10);
-
-            foreach ($notifications as $notification) {
-                $notification_data = json_decode(json_encode($notification->data));
-                array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
-            }
-        }  
-          else
-          {
-            if($request->has('service'))
-            {
-            $start_date =  Carbon::parse($request->start_date)->toDateTimeString();
-            $end_date =  Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
-            $retailer_id = $request->retailer;
-            $service = $request->service;
-            if($retailer_id=='all' && $service == 'all')
-            {
-                $notifications = DatabaseNotification::whereBetween('created_at', [$start_date,$end_date])->latest()->paginate(10);
-            }
-            else if($retailer_id == 'all' && $service!='all')
-            {
-                $notifications = DatabaseNotification::where('data->service',$service)->whereBetween('created_at', [$start_date,$end_date])->latest()->paginate(10);
-            }
-            else if($retailer_id !='all' && $service!='all')
-            {
-            $notifications = DatabaseNotification::where('notifiable_id',$retailer_id)->where('data->service',$service)->whereBetween('created_at', [$start_date,$end_date])->latest()->paginate(10);
-            }
-           // file_put_contents('test.txt',$request->start_date.' '.$request->end_date);
-            }
-            else
-            $notifications = DatabaseNotification::latest()->paginate(10);
-
-            foreach ($notifications as $notification) {
-                $notification_data = json_decode(json_encode($notification->data));
-                array_push($data,['service'=>$notification_data->service,'message'=>$notification_data->message,'time'=>$notification->created_at.'('.$notification->created_at->diffForHumans(Carbon::now()).')','read_status'=>$notification->read_at]);
-            }
-          }
 
         $data = json_decode(json_encode($data));
         //file_put_contents('test.txt',json_encode($data));
-        $resellers = user::where('role','!=','admin')->latest()->get();
-        return view('front.notification-list',compact('data','user','notifications','resellers'));
+        $resellers = user::where('role', '!=', 'admin')->latest()->get();
+        return view('front.notification-list', compact('data', 'user', 'notifications', 'resellers'));
     }
     public function create_notification()
     {
-        if(auth()->user()->role =='admin')
-        $resellers = User::get();
+        if (auth()->user()->role == 'admin')
+            $resellers = User::get();
         else
-        $resellers = User::where('created_by',auth()->user()->id)->get();
+            $resellers = User::where('created_by', auth()->user()->id)->get();
         //$user = User::find(23);
         //$user->unreadNotifications->markAsRead();
-        return view('front.create-notification',compact('resellers'));
+        return view('front.create-notification', compact('resellers'));
     }
-    public function sendNotification(Request $request) {
+    public function sendNotification(Request $request)
+    {
         $resellers = $request->reseller;
         $reseller_id = [];
-        for($i=0;$i<sizeof($resellers);$i++)
-        {
-            array_push($reseller_id,$resellers[$i]);
+        for ($i = 0; $i < sizeof($resellers); $i++) {
+            array_push($reseller_id, $resellers[$i]);
         }
-        $users = User::whereIn('id',$reseller_id)->get();
+        $users = User::whereIn('id', $reseller_id)->get();
 
         // $userSchema = User::get();
         //file_put_contents('test.txt',json_encode($users));
         $data = [
             'service' => $request->service,
-            'message'=>$request->message,
-            'send_from'=>auth()->user()->id
+            'message' => $request->message,
+            'send_from' => auth()->user()->id
 
         ];
         //$userSchema->notify(new GeneralNotification($offerData));
-        try{
+        try {
             Notification::send($users, new GeneralNotification($data));
+        } catch (Throwable $th) {
+            Log::error("General Notification Error: " . $th);
         }
-        catch(Throwable $th){
-            Log::error("General Notification Error: ".$th);
-        }
-        try{
+        try {
             //event(new GeneralNotificationEvent());
+        } catch (\Throwable $th) {
+            Log::error("General Event Error: " . $th);
         }
-        catch(\Throwable $th){
-            Log::error("General Event Error: ".$th);
-        }
-        return redirect()->route('GeneralNotification')->with('success','Notification Created Successfully');
+        return redirect()->route('GeneralNotification')->with('success', 'Notification Created Successfully');
 
-// dd('Task completed!');
+        // dd('Task completed!');
     }
     public function general_notification_count()
     {
         if (auth()->user()->role == "admin") {
             $data = 0;
         } else {
-            $data = auth()->user()->unreadNotifications()->count() ;
+            $data = auth()->user()->unreadNotifications()->count();
         }
-            //$data = 5;
+        //$data = 5;
         return $data;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\SimOperator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class OperatorController extends Controller
@@ -17,7 +17,7 @@ class OperatorController extends Controller
     {
         $data = SimOperator::latest()->get();
 
-        return view('front.operator',compact('data'));
+        return view('front.operator', compact('data'));
     }
 
     /**
@@ -37,19 +37,18 @@ class OperatorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { 
-        if($request->img != null){
+    {
+        if ($request->img != null) {
             $path = $request->img->store('operator', 'public');
             $data = SimOperator::create([
                 'operator' => $request->operator,
-                'img' => $path
+                'img' => $path,
             ]);
-        }else{
+        } else {
             $data = SimOperator::create([
                 'operator' => $request->operator,
             ]);
         }
-        
 
         return redirect('/operator');
     }
@@ -97,7 +96,7 @@ class OperatorController extends Controller
     public function destroy($id)
     {
         SimOperator::where('id', $id)->delete();
-        
+
         return redirect('/operator');
     }
 }

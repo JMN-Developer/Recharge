@@ -3,29 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Order;
-use App\Models\User;
 use App\Models\OrderRatings;
+use App\Models\User;
 use Auth;
-
+use Illuminate\Http\Request;
 
 class CargoController extends Controller
 {
     public function NewOrderView(Request $request)
     {
-        $orders = Order::where('email', 'LIKE', '%'.$request->email.'%')->get();
+        $orders = Order::where('email', 'LIKE', '%' . $request->email . '%')->get();
         $OrderRatings = OrderRatings::all();
         // dd($OrderRatings);
         // dd($orders);
-        return view('front.new-order-new', compact('orders','OrderRatings'));
+        return view('front.new-order-new', compact('orders', 'OrderRatings'));
     }
 
     public function Search(Request $request)
     {
         // dd($request->email);
-        if($request->email) {
-            $orders = Order::where('email', 'LIKE', '%'.$request->email.'%')->paginate(10);
+        if ($request->email) {
+            $orders = Order::where('email', 'LIKE', '%' . $request->email . '%')->paginate(10);
             // dd($orders);
         }
         if (empty($request->email)) {
@@ -40,11 +39,11 @@ class CargoController extends Controller
         return view('front.add-new-order');
     }
 
-    public function OrderList($value='')
+    public function OrderList($value = '')
     {
-        if(Auth::user()->role == 'admin'){
+        if (Auth::user()->role == 'admin') {
             $orders = Order::paginate(10);
-        }else{
+        } else {
             $orders = Order::where('reseller_id', Auth::user()->id)->paginate(10);
         }
         return view('front.order-list', compact('orders'));
@@ -53,9 +52,9 @@ class CargoController extends Controller
     public function OrderTrackingView(Request $request)
     {
 
-        if(Auth::user()->role == 'admin'){
+        if (Auth::user()->role == 'admin') {
             $orders = Order::where('order_id', '=', $request->order_no)->get();
-        }else{
+        } else {
             $orders = Order::where('order_id', '=', $request->order_no)->where('reseller_id', Auth::user()->id)->get();
         }
         // dd($orders);
@@ -65,34 +64,32 @@ class CargoController extends Controller
     public function OrderTracking(Request $request)
     {
         // echo "Order Tracking";
-        if($request->order_no){
+        if ($request->order_no) {
             if (Auth::user()->role == 'admin') {
-                $orders = Order::where('order_id', 'LIKE', '%'.$request->order_no.'%')->get();
+                $orders = Order::where('order_id', 'LIKE', '%' . $request->order_no . '%')->get();
                 // dd($orders);
                 if (count($orders) > 0) {
                     $agent = User::where('id', $orders[0]->reseller_id)->first();
-                    return view('front.order-tracking', compact('orders','agent'));
-                }else {
+                    return view('front.order-tracking', compact('orders', 'agent'));
+                } else {
 
                     return back()->with('error', 'Invalid Order Number!');
                 }
 
-
-            }else {
-                $orders = Order::where('order_id', 'LIKE', '%'.$request->order_no.'%')->where('reseller_id', Auth::user()->id)->get();
+            } else {
+                $orders = Order::where('order_id', 'LIKE', '%' . $request->order_no . '%')->where('reseller_id', Auth::user()->id)->get();
 
                 $count = $orders->count();
-                if($count > 0){
+                if ($count > 0) {
                     $agent = User::where('id', $orders['0']->reseller_id)->first();
-                    return view('front.order-tracking', compact('orders','agent'));
-                }else {
+                    return view('front.order-tracking', compact('orders', 'agent'));
+                } else {
                     $agent['nationality'] = null;
                     return back()->with('error', 'Invalid Order Number!');
                 }
             }
 
         }
-
 
     }
 
@@ -102,7 +99,7 @@ class CargoController extends Controller
 
         $agent = User::where('id', $order->reseller_id)->first();
 
-        return view('front.cargo-invoice', compact('order','agent'));
+        return view('front.cargo-invoice', compact('order', 'agent'));
     }
 
     public function OrderView($id)
@@ -111,7 +108,7 @@ class CargoController extends Controller
 
         $agent = User::where('id', $data->reseller_id)->first();
 
-        return view('front.cargo_view_order',compact('data','agent'));
+        return view('front.cargo_view_order', compact('data', 'agent'));
 
     }
 
@@ -128,14 +125,12 @@ class CargoController extends Controller
         $request->file('label')->store('public');
         $labelFileName = $request->label->hashName();
 
-        $update = Order::where('id',$request->id)->update([
-            'label' => $labelFileName
+        $update = Order::where('id', $request->id)->update([
+            'label' => $labelFileName,
         ]);
 
         return back()->with('success', "Label Updated Successfully!");
 
     }
-
-
 
 }

@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
-use App\Http\Requests\CreateProfileRequest;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Slider;
+use App\Models\User;
 use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Log;
-
 
 class UserController extends Controller
 {
@@ -33,8 +30,8 @@ class UserController extends Controller
 
     public function EditRole(Request $request)
     {
-        User::where('id',$request->user_id)->update(['role'=>$request->role]);
-        return back()->with('success','Role Updated');
+        User::where('id', $request->user_id)->update(['role' => $request->role]);
+        return back()->with('success', 'Role Updated');
     }
     public function create(Request $request)
     {
@@ -47,24 +44,25 @@ class UserController extends Controller
         $users->nationality = $request->input('nationality');
         $users->email = $request->input('email');
         $users->address = $request->input('address');
-        if(Auth::user()->role == 'sub')
-        $users->role = 'reseller';
-        else
-        $users->role = $request->input('role');
-        
-        $users->user_id ='JM-'.mt_rand(10000,99999);
+        if (Auth::user()->role == 'sub') {
+            $users->role = 'reseller';
+        } else {
+            $users->role = $request->input('role');
+        }
+
+        $users->user_id = 'JM-' . mt_rand(10000, 99999);
 
         $users->payment_method = $request->input('payment_method');
         $users->company = $request->input('company_name');
         $users->contact_number = $request->input('phone');
 
         $users->codice_fiscale = $request->input('codice_fiscale');
-        $users->gender = $request->input('gender');;
+        $users->gender = $request->input('gender');
         $users->wallet = 0;
         $users->created_by = Auth::user()->id;
         $users->password = Hash::make($request['password']);
         $users->save();
-        return ['status'=>true];
+        return ['status' => true];
         //return redirect('/login')->with('status', 'Registered Successfully!');
     }
 
@@ -98,9 +96,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $data = User::where('id',$id)->first();
+        $data = User::where('id', $id)->first();
 
-        return view('front.edit_profile',compact('data'));
+        return view('front.edit_profile', compact('data'));
     }
 
     /**
@@ -121,39 +119,36 @@ class UserController extends Controller
         // ]);
         //file_put_contents('test.txt','hello');
 
-
-        if($request->password != null){
+        if ($request->password != null) {
             $password = Hash::make($request->password);
 
-            $data = User::where('id',$id)->update([
+            $data = User::where('id', $id)->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'vat_number' => $request->vat_number,
                 'gender' => $request->gender,
                 'address' => $request->address,
                 'contact_number' => $request->phone,
-                'codice_fiscale' =>$request->codice_fiscale,
+                'codice_fiscale' => $request->codice_fiscale,
                 'nationality' => $request->company,
                 'password' => $password,
 
-
             ]);
-        }else{
-            $data = User::where('id',$id)->update([
+        } else {
+            $data = User::where('id', $id)->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'vat_number' => $request->vat_number,
                 'gender' => $request->gender,
                 'address' => $request->address,
                 'contact_number' => $request->phone,
-                'codice_fiscale' =>$request->codice_fiscale,
+                'codice_fiscale' => $request->codice_fiscale,
                 'nationality' => $request->company,
-
 
             ]);
         }
 
-       // return back();
+        // return back();
         return redirect('/retailer/retailer-details-admin');
     }
 
@@ -168,13 +163,12 @@ class UserController extends Controller
         $id = $request->id;
         User::where('id', $id)->delete();
 
-       // return back();
+        // return back();
     }
 
     public function slider(Request $request)
     {
         $path = $request->image->store('slider/uploads', 'public');
-
 
         $Phones = new Slider;
         $Phones->link = $request->input('link');
@@ -186,37 +180,31 @@ class UserController extends Controller
     public function check_email(Request $request)
     {
         $email = $request->email;
-        $user = User::where('email',$email)->first();
-        if($user)
-        {
-            return ['status'=>true];
-        //file_put_contents('test.txt',$request->email." ".'exist');
-        //return 'exist';
-        }
-        else
-        {
-            return ['status'=>false];
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            return ['status' => true];
+            //file_put_contents('test.txt',$request->email." ".'exist');
+            //return 'exist';
+        } else {
+            return ['status' => false];
             //file_put_contents('test.txt',$request->email." ".'not exist');
             //return 'not_exist';
         }
-
 
     }
 
     public function updateslider(Request $request)
     {
         $data = Slider::where('id', $request->id)->first();
-        if($request->image != null){
+        if ($request->image != null) {
             $path = $request->image->store('slider/uploads', 'public');
-        }else{
+        } else {
             $path = $data->image;
         }
 
-
-
         $Phones = Slider::where('id', $request->id)->update([
             'link' => $request->input('link'),
-            'image' => $path
+            'image' => $path,
         ]);
 
         return back()->with('status', 'Sldier Updated Successfully!');
@@ -230,18 +218,18 @@ class UserController extends Controller
     public function sliderView()
     {
         $data = Slider::latest()->get();
-        return view('front.sliders',compact('data'));
+        return view('front.sliders', compact('data'));
     }
 
     public function slideredit($id)
     {
-        $data = Slider::where('id',$id)->first();
-        return view('front.edit-slider',compact('data'));
+        $data = Slider::where('id', $id)->first();
+        return view('front.edit-slider', compact('data'));
     }
 
     public function sliderdelete($id)
     {
-        $data = Slider::where('id',$id)->delete();
-        return back()->with('status','Slider Deleted Successfully!');
+        $data = Slider::where('id', $id)->delete();
+        return back()->with('status', 'Slider Deleted Successfully!');
     }
 }

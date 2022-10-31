@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\OrderRatings;
+use Illuminate\Http\Request;
 
 class PricingController extends Controller
 {
@@ -12,8 +12,7 @@ class PricingController extends Controller
     {
         $orders = OrderRatings::paginate(10);
 
-        return view('front.price-list',compact('orders'));
-
+        return view('front.price-list', compact('orders'));
 
         // $prices->type = $request->input('type');
         // $prices->weight_start = $request->input('weight_start');
@@ -36,7 +35,7 @@ class PricingController extends Controller
     {
         $prices = new OrderRatings;
         $prices->type = $request->input('type');
-        $prices->charge_type  = $request->input('charge_type');
+        $prices->charge_type = $request->input('charge_type');
         $prices->weight_start = $request->input('weight_start');
         $prices->weight_end = $request->input('weight_end');
         $prices->charge_for_weight = $request->input('charge_for_weight');
@@ -54,12 +53,12 @@ class PricingController extends Controller
 
         $orders = OrderRatings::find($id);
         // dd($orders);
-        return view('front.edit-pricing',compact('orders'));
+        return view('front.edit-pricing', compact('orders'));
 
     }
     public function EditPricingForReal(Request $request, $id)
     {
-        $prices = OrderRatings::find($id); ;
+        $prices = OrderRatings::find($id);
         $prices->type = $request->input('type');
         $prices->weight_start = $request->input('weight_start');
         $prices->weight_end = $request->input('weight_end');
@@ -81,50 +80,36 @@ class PricingController extends Controller
     public function SendPricing(Request $request)
     {
         $w = $request->weight;
-        $fixed_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','fixed')->where('type','Goods')->first();
+        $fixed_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type', 'fixed')->where('type', 'Goods')->first();
         $fixed_weight_limit = $fixed_data->weight_end;
-      //  $myfile = fopen("test.txt", "a+") or die("Unable to open file!");
-        if($fixed_weight_limit>=$w)
-        {
+        //  $myfile = fopen("test.txt", "a+") or die("Unable to open file!");
+        if ($fixed_weight_limit >= $w) {
             $price = $fixed_data->total;
             return response($price);
-        }
-        else
-        {
-            $variable_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type','variable')->where('type','Goods')->orderBy('weight_end','ASC')->get();
-            $variable_weight = $w - $fixed_weight_limit;//95
+        } else {
+            $variable_data = OrderRatings::where('country_name', '=', $request->country)->where('charge_type', 'variable')->where('type', 'Goods')->orderBy('weight_end', 'ASC')->get();
+            $variable_weight = $w - $fixed_weight_limit; //95
             $price = $fixed_data->total;
 
-            foreach($variable_data as $data)
-            {
+            foreach ($variable_data as $data) {
 
-                $remaining_weight = $w - $data->weight_end;//105-100
+                $remaining_weight = $w - $data->weight_end; //105-100
 
-
-
-
-                if($remaining_weight<0)
-                {
-                    $price +=$variable_weight*$data->total;
+                if ($remaining_weight < 0) {
+                    $price += $variable_weight * $data->total;
 
                     return response($price);
-                }
-                else
-                {
-                    $deduct_weight = $data->weight_end -$data->weight_start+1;//900
-                    $price +=$deduct_weight*$data->total;
-                    $variable_weight -=$deduct_weight;
-
+                } else {
+                    $deduct_weight = $data->weight_end - $data->weight_start + 1; //900
+                    $price += $deduct_weight * $data->total;
+                    $variable_weight -= $deduct_weight;
 
                 }
-
-
 
             }
-            if($variable_weight>0)
-            {
+            if ($variable_weight > 0) {
                 $size = sizeof($variable_data);
-                $price += $variable_data[$size-1]->total*$variable_weight;
+                $price += $variable_data[$size - 1]->total * $variable_weight;
                 return $price;
 
             }
@@ -136,9 +121,9 @@ class PricingController extends Controller
         // $data = $data[0]->total;
         // $data = OrderRatings::where('country_name', '=', $request->country)->where('type', '=', $request->type)->get('total');
 
-        if(count($data) < 1){
+        if (count($data) < 1) {
             $data = "No data";
-        }else{
+        } else {
             $data = $data[0]->total;
         }
         return response($data);
@@ -146,11 +131,11 @@ class PricingController extends Controller
 
     public function SendPricingForDocs(Request $request)
     {
-        $data = OrderRatings::where('country_name', '=', $request->country)->where('type', '=', $request->type)->where('type','Documents')->get('total');
+        $data = OrderRatings::where('country_name', '=', $request->country)->where('type', '=', $request->type)->where('type', 'Documents')->get('total');
 
-        if(count($data) < 1){
+        if (count($data) < 1) {
             $data = "No data";
-        }else{
+        } else {
             $data = $data[0]->total;
         }
 
