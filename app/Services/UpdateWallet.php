@@ -76,7 +76,7 @@ class UpdateWallet
                     $wallet_after_transaction = $user->limit_usage;
                     RechargeHistory::where('id', $recharge->id)
                         ->update(['sub_recharge_source' => 'Limit']);
-                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->parent->id);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id, $user->parent->id);
 
                 } else {
                     $wallet_deduct = $total_cost - $current_balance;
@@ -90,10 +90,10 @@ class UpdateWallet
                     $wallet_after_transaction = 0;
                     RechargeHistory::where('id', $recharge->id)
                         ->update(['sub_recharge_source' => 'Limit:' . $wallet_deduct . ',' . 'Wallet:' . $current_balance]);
-                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->parent->id);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id, $user->parent->id);
                     $wallet_before_transaction = 0;
                     $wallet_after_transaction = auth()->user()->limit_usage;
-                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->parent->id);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id, $user->parent->id);
                 }
             } else {
                 $updated_balance = $current_balance - $total_cost;
@@ -108,7 +108,7 @@ class UpdateWallet
 
                 RechargeHistory::where('id', $recharge->id)
                     ->update(['sub_recharge_source' => 'Wallet']);
-                UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id);
+                UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id, $user->parent->id);
             }
 
         } else {
@@ -134,7 +134,7 @@ class UpdateWallet
                     //$user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$total_cost]);
                     RechargeHistory::where('id', $recharge->id)
                         ->update(['recharge_source' => 'Limit']);
-                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id, $user->parent->id);
 
                 } else {
                     $wallet_deduct = $total_cost - $current_balance;
@@ -149,10 +149,10 @@ class UpdateWallet
                     $wallet_after_transaction = 0;
                     RechargeHistory::where('id', $recharge->id)
                         ->update(['recharge_source' => 'Limit:' . $wallet_deduct . ',' . 'Wallet:' . $current_balance]);
-                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id, $user->parent->id, );
                     $wallet_before_transaction = 0;
                     $wallet_after_transaction = auth()->user()->domestic_limit_usage;
-                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id, $user->parent->id);
                 }
             } else {
 
@@ -167,7 +167,7 @@ class UpdateWallet
 
                 RechargeHistory::where('id', $recharge->id)
                     ->update(['recharge_source' => 'Wallet']);
-                UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id);
+                UpdateWallet::create_transaction($recharge->id, 'Debit (Recharege By ' . $recharge->user->user_id . ')', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id, $user->parent->id);
             }
         }
     }
@@ -199,7 +199,7 @@ class UpdateWallet
                         $wallet_after_transaction = $user->limit_usage;
                         RechargeHistory::where('id', $recharge->id)
                             ->update(['recharge_source' => 'Limit']);
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id, auth()->user()->parent->role == 'sub' ? $user->parent->id : null);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id, $user->parent->id);
 
                     } else {
                         $wallet_deduct = $total_cost - $current_balance;
@@ -214,10 +214,10 @@ class UpdateWallet
                         $wallet_after_transaction = 0;
                         RechargeHistory::where('id', $recharge->id)
                             ->update(['recharge_source' => 'Limit:' . $wallet_deduct . ',' . 'Wallet:' . $current_balance]);
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id, auth()->user()->parent->role == 'sub' ? $user->parent->id : null);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id, $user->parent->id);
                         $wallet_before_transaction = 0;
                         $wallet_after_transaction = auth()->user()->limit_usage;
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id, auth()->user()->parent->role == 'sub' ? $user->parent->id : null);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id, $user->parent->id);
                     }
                 } else {
                     $updated_balance = $current_balance - $total_cost;
@@ -232,7 +232,7 @@ class UpdateWallet
 
                     RechargeHistory::where('id', $recharge->id)
                         ->update(['recharge_source' => 'Wallet']);
-                    UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id, auth()->user()->parent->role == 'sub' ? $user->parent->id : null);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id, $user->parent->id);
                 }
 
             } else {
@@ -259,7 +259,7 @@ class UpdateWallet
                         //$user = User::where('id',auth()->user()->id)->updateOrCreate(['limit_usage'=>$current_limit_usage+$total_cost]);
                         RechargeHistory::where('id', $recharge->id)
                             ->update(['recharge_source' => 'Limit']);
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id, auth()->user()->parent->role == 'sub' ? $user->parent->id : null);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'limit', $user->id, $user->parent->id);
 
                     } else {
                         $wallet_deduct = $total_cost - $current_balance;
@@ -273,10 +273,10 @@ class UpdateWallet
                         $wallet_after_transaction = 0;
                         RechargeHistory::where('id', $recharge->id)
                             ->update(['recharge_source' => 'Limit:' . $wallet_deduct . ',' . 'Wallet:' . $current_balance]);
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id, auth()->user()->parent->role == 'sub' ? $user->parent->id : null);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_before_transaction, 'main wallet', $user->id, $user->parent->id);
                         $wallet_before_transaction = 0;
                         $wallet_after_transaction = auth()->user()->domestic_limit_usage;
-                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id, auth()->user()->parent->role == 'sub' ? $user->parent->id : null);
+                        UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost - $wallet_after_transaction, 'limit', $user->id, $user->parent->id);
                     }
                 } else {
 
@@ -290,7 +290,7 @@ class UpdateWallet
 
                     RechargeHistory::where('id', $recharge->id)
                         ->update(['recharge_source' => 'Wallet']);
-                    UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id, auth()->user()->parent->role == 'sub' ? $user->parent->id : null);
+                    UpdateWallet::create_transaction($recharge->id, 'Debit', $recharge->type, $wallet_before_transaction, $wallet_after_transaction, $total_cost, 'wallet', $user->id, $user->parent->id);
                 }
             }
 
