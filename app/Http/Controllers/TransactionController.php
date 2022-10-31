@@ -73,11 +73,7 @@ class TransactionController extends Controller
         }
         if (auth()->user()->role == 'admin') {
             $resellers = User::get();
-        }
-        else if{
-            
-        } 
-        else {
+        } else if (auth()->user()->role == 'sub') {
             $resellers = User::where('created_by', auth()->user()->id)->get();
         }
 
