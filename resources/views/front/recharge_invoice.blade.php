@@ -124,7 +124,7 @@
                           </tr>
                           <tr>
                             <td>Retailer Name</td>
-                            <td><strong>{{ $data->user->nationality}}</strong></td>
+                            <td><strong>{{ $data->user->first_name.' '.$data->user->last_name}}</strong></td>
                           </tr>
                           @if ($data->type == 'International' || $data->type == 'Bangladesh')
                           <tr>
@@ -188,7 +188,7 @@
                             @php
                               $agent = DB::table('users')->where('id', $data->reseller_id)->first();
                             @endphp
-                            <td><strong>{{ $agent->nationality }}</strong></td>
+                            <td><strong>{{ $agent->first_name.' '.$agent->last_name }}</strong></td>
                           </tr>
                           @endif
                           <tr>

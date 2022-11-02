@@ -61,7 +61,7 @@ if (!function_exists('reseller_comission')) {
             }
             return null;
         }
-        }
+    }
 
 
 
