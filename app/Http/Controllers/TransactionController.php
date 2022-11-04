@@ -78,8 +78,9 @@ class TransactionController extends Controller
             $resellers = User::get();
         } else if (auth()->user()->role == 'sub') {
             $resellers = User::where('created_by', auth()->user()->id)->get();
+        } else {
+            $resellers = [];
         }
-        $resellers = [];
 
         return view('front.transaction-history', compact('resellers'));
     }

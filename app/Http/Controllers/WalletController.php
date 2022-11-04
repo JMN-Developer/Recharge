@@ -47,7 +47,7 @@ class WalletController extends Controller
 
         } else if (auth()->user()->role == 'sub') {
             if ($type == 'send') {
-                $data = DueControl::where("reseller_id", Auth::user()->id)->where('status', 'pending')
+                $data = DueControl::where("reseller_id", Auth::user()->id)
                     ->latest()
                     ->get();
 
@@ -144,7 +144,7 @@ class WalletController extends Controller
         }
     }
 
-    public function create_transaction($id, $transaction_source, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, $wallet_type, $reseller_id)
+    public function create_transaction($id, $transaction_source, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, $wallet_type, $reseller_id, $parent_id)
     {
 
         UpdateWallet::create_transaction(
@@ -155,7 +155,8 @@ class WalletController extends Controller
             $wallet_after_transaction,
             $approved_amount,
             $wallet_type,
-            $reseller_id
+            $reseller_id,
+            $parent_id
         );
 
     }
@@ -238,15 +239,15 @@ class WalletController extends Controller
 
             $wallet_before_transaction = $limit_usage;
             $wallet_after_transaction = 0;
-            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $limit_usage, 'limit', $previous_record->reseller_id);
+            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $limit_usage, 'limit', $previous_record->reseller_id, Auth::user()->parent->id);
             $wallet_before_transaction = $wallet;
             $wallet_after_transaction = $approved_amount + $wallet;
-            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, 'wallet', $previous_record->reseller_id);
+            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, 'wallet', $previous_record->reseller_id, Auth::user()->parent->id);
 
         } else {
             $wallet_before_transaction = $wallet;
             $wallet_after_transaction = $approved_amount + $wallet;
-            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, 'wallet', $previous_record->reseller_id);
+            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, 'wallet', $previous_record->reseller_id, Auth::user()->parent->id);
 
         }
         // if($approved_amount>=$limit_usage){

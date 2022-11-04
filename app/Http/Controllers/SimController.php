@@ -11,7 +11,6 @@ use App\Models\User;
 use App\Services\UpdateWallet;
 use Auth;
 use DataTables;
-use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use LaravelDaily\Invoices\Classes\Buyer;
@@ -201,7 +200,7 @@ class SimController extends Controller
             'operator' => $request->operator,
             'iccid' => $request->iccid,
             'sim_number' => $request->sim_number,
-            'buy_date' => Carbon\Carbon::now(),
+            'buy_date' => now(),
             'buy_price' => $request->buy_price,
             'reseller_id' => $request->re_seller,
             'original_price' => $request->original_price,
@@ -244,9 +243,10 @@ class SimController extends Controller
 
     public function update_sim_wallet($sim_price, $reseller_id, $id)
     {
-        $user = User::where('id', $reseller_id)->first();
+        $user = User::find($reseller_id);
         $wallet_before_transaction = $user->sim_wallet;
-        $user = tap(DB::table('users')->where('id', $reseller_id))->update(['sim_wallet' => $user->sim_wallet + $sim_price])->first();
+        $user->sim_wallet = (float) $user->sim_wallet + (float) $sim_price;
+        $user->save();
         $wallet_after_transaction = $user->sim_wallet;
         // User::where('id',$reseller_id)->update(['sim_wallet'=>$user->sim_wallet+$sim_price]);
         UpdateWallet::create_transaction($id, 'debit', 'Sim', $wallet_before_transaction, $wallet_after_transaction, $sim_price, 'wallet', $reseller_id);

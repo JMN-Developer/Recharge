@@ -103,7 +103,7 @@
                   </form>
             </div>
         </div>
-      
+
         <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
@@ -159,7 +159,7 @@
                 <thead class="thead-dark" style="background:black;color:white">
                   <tr>
                     <th scope="col">#</th>
-  
+
                     <th scope="col">Admin Message</th>
                     <th scope="col">Requested Amount</th>
                     <th scope="col">Approved Amount</th>
@@ -167,7 +167,7 @@
                     <th scope="col">Approved Date</th>
                     <th scope="col">Wallet Type</th>
                     <th scope="col">Status</th>
-                   
+
                   </tr>
                 </thead>
                 <tbody id="wallet_data">
@@ -268,7 +268,7 @@
 
     })
 
-    
+
     function approve_amount(id)
     {
         $("#due_id").val(id);
@@ -327,7 +327,7 @@
             added_row = '<tr class="bg-ocean">'
         + '<td>' + Number(i+1) +  '</td>'
         ;
-        
+
         added_row+=
         '<td>' + item[i].message +  '</td>'
         + '<td ><p class="'+item[i].id+'-requested-amount">' + item[i].requested_amount +  '</p></td>'
@@ -337,7 +337,7 @@
         + '<td>' + item[i].wallet_type +  '</td>'
         + '<td class="'+class_name+'" style="font-weight:bold">' + item[i].status +  '</td>'
         ;
-       
+
 
         + '</tr>';
         $('#wallet_data').append(added_row)

@@ -207,8 +207,8 @@ class DtOneController extends Controller
 
         $admin_profit = $this->calculate_profit($amount);
         $cost = $amount - $admin_profit;
-        // $log_data = 'Number = '.$number.' Amount = '.$amount.' R-Com = '.$service.' A-Com = '.$admin_profit.' TXID = '.$txid;
-        // Log::channel('rechargelog')->info($log_data);
+        $log_data = 'Number = ' . $number . ' Amount = ' . $amount . ' R-Com = ' . $service . ' A-Com = ' . $admin_profit . ' TXID = ' . $txid;
+        Log::channel('rechargelog')->info($log_data);
         $recharge = RechargeHistory::create([
             'reseller_id' => Auth::user()->id,
             'number' => $number,
