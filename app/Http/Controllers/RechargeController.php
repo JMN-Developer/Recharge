@@ -894,7 +894,7 @@ class RechargeController extends Controller
                     } elseif ($type == 'International') {
                         $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', '!=', 'Domestic')->where('type', '!=', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     } else {
-                        $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', 'Domestic')->where('type', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                        $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', '!=', 'International')->where('type', '!=', 'White Calling')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     }
 
                 } else {
@@ -904,7 +904,7 @@ class RechargeController extends Controller
                     } elseif ($type == 'International') {
                         $data = RechargeHistory::where('type', '!=', 'Domestic')->where('type', '!=', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     } else {
-                        $data = RechargeHistory::where('type', 'Domestic')->where('type', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                        $data = RechargeHistory::where('type', '!=', 'International')->where('type', '!=', 'White Calling')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     }
 
                 }
@@ -923,9 +923,9 @@ class RechargeController extends Controller
                 if ($type == 'all') {
                     $data = RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 } elseif ($type == 'International') {
-                    $data = RechargeHistory::where('type', '!=', 'Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                    $data = RechargeHistory::where('type', '!=', 'Domestic')->where('type', '!=', 'pin')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 } else {
-                    $data = RechargeHistory::where('type', 'Domestic')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                    $data = RechargeHistory::where('type', '!=', 'International')->where('type', '!=', 'White Calling')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 }
 
                 $total_cost = $data->sum('amount') + $data->sum('service');

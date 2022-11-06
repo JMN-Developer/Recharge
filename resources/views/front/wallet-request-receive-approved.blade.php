@@ -68,7 +68,7 @@
 
     <!-- Main content -->
     <section class="content">
-        
+
 
 
         <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -126,7 +126,7 @@
                 <thead class="thead-dark" style="background:black;color:white">
                   <tr>
                     <th scope="col">#</th>
-                  
+
                     <th scope="col">Reseller Name</th>
                     <th scope="col">Previous Due</th>
                     <th scope="col">Payment Copy</th>
@@ -139,7 +139,7 @@
                     <th scope="col">Status</th>
 
                     <th scope="col">Action</th>
-                  
+
                   </tr>
                 </thead>
                 <tbody id="wallet_data">
@@ -496,7 +496,7 @@
         added_row+=
         '<td>' + item[i].message +  '</td>'
         + '<td ><p class="'+item[i].id+'-requested-amount">' + item[i].requested_amount +  '</p></td>'
-        + '<td>' + item[i].approved_amount +  '</td>'
+        + '<td>' + item[i].original_approved_amount +  '</td>'
         + '<td>' + item[i].requested_date +  '</td>'
         + '<td>' + item[i].approved_date +  '</td>'
         + '<td>' + item[i].wallet_type +  '</td>'

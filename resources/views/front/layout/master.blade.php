@@ -559,11 +559,11 @@ $total_due = $current_wallet + ($current_limit - $current_limit_usage);
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  @if(auth()->user()->parent->role=='sub' )
-                  {{-- <a href="{{ route('retailer-details') }}" class="@if(Route::currentRouteName() == 'retailer-details') nav-link active @endif nav-link">
+                  @if(auth()->user()->role=='sub' )
+                 <a href="{{ route('retailer-details') }}" class="@if(Route::currentRouteName() == 'retailer-details') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Retailer Details</p>
-                  </a> --}}
+                  </a>
                   @elseif(auth()->user()->role=='admin')
 
                   <a href="{{ route('retailer-details-admin') }}" class="@if(Route::currentRouteName() == 'retailer-details-admin') nav-link active @endif nav-link">

@@ -164,6 +164,7 @@ class WalletController extends Controller
     {
         $id = $request->id;
         $approved_amount = $request->approved_amount;
+        $original_approved_amount = $request->approved_amount;
         $admin_message = $request->admin_message;
         $status = $request->status;
         $previous_record = DueControl::where("id", $id)->first();
@@ -201,6 +202,7 @@ class WalletController extends Controller
                     "reseller_id" => $previous_record->reseller_id,
                     "requested_amount" => $previous_record->requested_amount,
                     "approved_amount" => $approved_amount,
+                    'original_approved_amount' => $original_approved_amount,
                     "message" => $admin_message,
                     "reseller_notification" => 0,
                     "admin_notification" => 1,
@@ -224,6 +226,7 @@ class WalletController extends Controller
             } else {
                 DueControl::where("id", $id)->update([
                     "approved_amount" => $approved_amount,
+                    'original_approved_amount' => $original_approved_amount,
                     "status" => $status,
                     "admin_notification" => 1,
                     "reseller_notification" => 0,

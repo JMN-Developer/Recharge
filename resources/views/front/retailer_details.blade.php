@@ -67,7 +67,9 @@
                     <th scope="col">#</th>
                     <th scope="col">Id</th>
                     <th scope="col" style="width: 18%">Reseller Name</th>
+                    @if(auth()->user()->role =='admin')
                     <th scope="col" style="width: 18%">Role</th>
+                    @endif
                     <th scope="col">Email</th>
                     <th scope="col">International Balance</th>
                     <th scope="col">Domestic Balance</th>
@@ -81,12 +83,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <?php $i=1 ?>
+                    <?php $i = 1?>
                     @foreach ($data as $item)
                     <tr>
                         <td>{{$i++}}</td>
                         <td>{{ $item->user_id }}</td>
                         <td>{{ $item->first_name }} {{ $item->last_name }}</td>
+                        @if(auth()->user()->role =='admin')
                         <td>{{$item->role}}
                         <br>
                               <span>
@@ -95,6 +98,7 @@
                                   </button>
                               </span>
                         </td>
+                        @endif
                         <td>{{ $item->email }}</td>
                         <td class="text-center font-weight-bold">{{ $item->wallet }}</td>
                         <td class="text-center font-weight-bold">{{ $item->domestic_wallet }}</td>
@@ -217,7 +221,7 @@
                                   <div class="modal-body">
                                     <form action="{{url('/edit_role')}}" method="post">
                                         @csrf
-                                        
+
                                           <input class="form-control" type="hidden" name="user_id" value="{{$item->id}}">
                                           <select class="form-select" aria-label="Default select example" name="role">
                                             @if($item->role =='reseller')
@@ -227,10 +231,10 @@
                                             <option value="sub" selected>{{$item->role}}</option>
                                             <option value="reseller">Reseller</option>
                                             @endif
-                                         
+
                                         </select>
                                           <button class="btn btn-success btn-sm mt-3"  type="submit">Edit Role For {{$item->first_name}}</button>
-                                        
+
                                       </form>
                                   </div>
 

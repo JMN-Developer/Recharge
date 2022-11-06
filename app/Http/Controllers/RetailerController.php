@@ -15,7 +15,7 @@ class RetailerController extends Controller
         if (Auth::user()->role == 'admin') {
             $data = User::orderBy('limit_usage', 'DESC')->get();
         } else {
-            $data = User::where('role', 'sub')->where('created_by', Auth::user()->id)->orderBy('limit_usage', 'DESC')->get();
+            $data = [];
         }
         // dd($data);
         return view('front.retailer_details', compact('data'));
@@ -23,13 +23,13 @@ class RetailerController extends Controller
 
     public function RetailerDetail($value = '')
     {
-        if (Auth::user()->role == 'admin') {
-            $data = User::where('role', 'user')->get();
+        if (Auth::user()->role == 'sub') {
+            $data = User::where('created_by', Auth::user()->id)->orderBy('limit_usage', 'DESC')->get();
         } else {
-            $data = User::where('role', 'user')->where('created_by', Auth::user()->id)->get();
+            $data = [];
         }
         // dd($data);
-        return view('front.retailer-details', compact('data'));
+        return view('front.retailer_details', compact('data'));
     }
 
     public function RetailerAction($value = '')

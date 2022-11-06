@@ -331,7 +331,7 @@
         added_row+=
         '<td>' + item[i].message +  '</td>'
         + '<td ><p class="'+item[i].id+'-requested-amount">' + item[i].requested_amount +  '</p></td>'
-        + '<td>' + item[i].approved_amount +  '</td>'
+        + '<td>' + item[i].original_approved_amount +  '</td>'
         + '<td>' + item[i].requested_date +  '</td>'
         + '<td>' + item[i].approved_date +  '</td>'
         + '<td>' + item[i].wallet_type +  '</td>'
