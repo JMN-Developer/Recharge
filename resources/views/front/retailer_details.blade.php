@@ -153,7 +153,7 @@
                         </td>
 
                     </tr>
-                    @if (Auth::user()->role == 'admin')
+                    @if (Auth::user()->role != 'reseller')
                         <div class="modal fade bd-example-modal-sm" id="edit{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-sm">
                             <div class="modal-content">

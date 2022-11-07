@@ -21,7 +21,7 @@ class RetailerController extends Controller
         return view('front.retailer_details', compact('data'));
     }
 
-    public function RetailerDetail($value = '')
+    public function RetailerDetail()
     {
         if (Auth::user()->role == 'sub') {
             $data = User::where('created_by', Auth::user()->id)->orderBy('limit_usage', 'DESC')->get();
