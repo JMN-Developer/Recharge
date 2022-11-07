@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\ResellerProfit;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -100,44 +99,14 @@ class RetailerController extends Controller
     }
     public function AddCom(Request $request)
     {
-        if (Auth::user()->role == 'admin') {
-            $user = User::where('id', $request->user_id)->update([
+        User::where('id', $request->user_id)->update([
 
-                'cargo_goods_profit' => $request->cargo_goods_profit,
-                'cargo_documents_profit' => $request->cargo_documents_profit,
-                'admin_recharge_commission' => $request->domestic_recharge_profit,
-                'admin_international_recharge_commission' => $request->international_recharge,
-                'admin_pin_commission' => $request->pin,
-            ]);
-            $user = ResellerProfit::where('reseller_id', $request->user_id)->first();
-            // if($user)
-            // {
-            // ResellerProfit::where('reseller_id',$request->user_id)->update([
-            //     'reseller_id'=>$request->user_id,
-            //     'international_recharge_profit'=>$request->international_recharge_profit,
-            //     'domestic_recharge_profit'=>$request->domestic_recharge_profit,
-            // ]);
-            // }
-            // else
-            // {
-            //     ResellerProfit::create([
-            //         'reseller_id'=>$request->user_id,
-            //         'international_recharge_profit'=>$request->international_recharge_profit,
-            //         'domestic_recharge_profit'=>$request->domestic_recharge_profit,
-            //     ]);
-            // }
-
-        } else {
-            $user = User::where('id', $request->user_id)->update([
-                'mobile' => $request->mobile,
-                'sim' => $request->sim,
-                'cargo' => $request->cargo,
-                'recharge' => $request->recharge,
-                'international_recharge' => $request->international_recharge,
-                'pin' => $request->pin,
-            ]);
-
-        }
+            'cargo_goods_profit' => $request->cargo_goods_profit,
+            'cargo_documents_profit' => $request->cargo_documents_profit,
+            'admin_recharge_commission' => $request->domestic_recharge_profit,
+            'admin_international_recharge_commission' => $request->international_recharge,
+            'admin_pin_commission' => $request->pin,
+        ]);
 
         return back()->with('status', 'Commission Set Suucessfully!');
 
