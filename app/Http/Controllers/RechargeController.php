@@ -882,7 +882,8 @@ class RechargeController extends Controller
 
         $start_date = Carbon::parse($request->start_date)->toDateTimeString();
         $end_date = Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
-
+        $total_cost = 0;
+        $total_profit = 0;
         $type = $request->type;
         $reseller_id = $request->retailer_id;
         if ($request->ajax()) {
@@ -910,7 +911,6 @@ class RechargeController extends Controller
                 }
 
                 $total_cost = $data->sum('amount');
-                $total_profit = 0;
                 foreach ($data as $value) {
                     if ($value->amount != 0) {
                         $total_profit += $value->admin_com;
