@@ -790,7 +790,6 @@ $total_due = $current_wallet + ($current_limit - $current_limit_usage);
 <script src="{{asset('js/moment.min.js')}}"></script>
 <script src="{{asset('js/admin.js')}}"></script>
 <script src="{{asset('js/autocomplete.js')}}"></script>
-<script src="{{asset('js/jquery.min.js')}}"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>

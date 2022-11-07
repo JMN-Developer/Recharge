@@ -191,7 +191,7 @@ class ReportController extends Controller
         $cargo_sale = round(array_sum($chart_data['sales']), 2);
         $cargo_profit = round(array_sum($chart_data['profits']), 2);
 
-        $top_reseller = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->select('reseller_id', DB::raw('format(sum(amount),2) as sales'), DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('reseller_id')->orderByRaw('CAST(sum(amount) as DECIMAL(8,2)) DESC')->limit(5)->get();
+        $top_reseller = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->select('reseller_id', DB::raw('format(sum(amount),2) as sales'), DB::raw('format(sum(admin_com)+sum(discount),2) as profit'))->groupBy('reseller_id')->orderByRaw('CAST(sum(amount) as DECIMAL(8,2)) DESC')->limit(15)->get();
         $top_reseller_info = [];
         foreach ($top_reseller as $d) {
             array_push($top_reseller_info, ['reseller_id' => $d->user->user_id, 'reseller_name' => $d->user->first_name . ' ' . $d->user->last_name, 'sale' => $d->sales, 'profit' => $d->profit]);

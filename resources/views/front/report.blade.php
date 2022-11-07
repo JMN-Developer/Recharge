@@ -481,7 +481,7 @@ table.dataTable thead .sorting_asc{
                                 {{-- <a href="#" class="btn btn-primary btn-sm float-end">
                                     <i class='uil uil-export me-1'></i> Export
                                 </a> --}}
-                                <h5 class="card-title mt-0 mb-0 header-title">Top 5 Reseller</h5>
+                                <h5 class="card-title mt-0 mb-0 header-title">Top 15 Reseller</h5>
 
                                 <div class="table-responsive mt-4">
                                     <table class="table table-hover table-nowrap mb-0">
