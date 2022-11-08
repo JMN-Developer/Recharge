@@ -113,7 +113,7 @@ class UpdateWallet
 
         } else {
 
-            $total_cost = $recharge->amount - $recharge->reseller_com;
+            $total_cost = $recharge->amount - $recharge->sub_profit;
 
             $user_info = User::where('id', auth()->user()->parent
                     ->id)
