@@ -56,7 +56,7 @@ class UpdateWallet
     {
         if ($recharge->type == 'International' || $recharge->type == 'White Calling' || $recharge->type == 'Bangladesh') {
 
-            $total_cost = $recharge->amount - $recharge->reseller_com - $recharge->sub_profit;
+            $total_cost = $recharge->amount - $recharge->reseller_com - $recharge->sub_profit; //14.3-4.29-0.11 = 9.9
             $user_info = User::where('id', auth()->user()->parent
                     ->id)
                     ->first();
@@ -113,9 +113,7 @@ class UpdateWallet
 
         } else {
 
-            $total_cost = $recharge->amount -
-
-                ($recharge->reseleer_com + $recharge->sub_profit);
+            $total_cost = $recharge->amount - ($recharge->reseleer_com + $recharge->sub_profit);
 
             $user_info = User::where('id', auth()->user()->parent
                     ->id)
@@ -239,7 +237,7 @@ class UpdateWallet
 
             } else {
 
-                $total_cost = $recharge->amount - $recharge->reseller_com;
+                $total_cost = $recharge->amount - $recharge->reseller_com; // 10-0.09 = 9.91
 
                 $user_info = User::where('id', auth()->user()
                         ->id)

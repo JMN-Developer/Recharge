@@ -164,15 +164,17 @@ class DtOneController extends Controller
 
         if (auth()->user()->parent->role == 'sub') {
             /*
-            $parent_comission = parent_comission($data->prices->retail->amount) = 2
-            $parent_profit = parent_profit($data->prices->retail->amount + $parent_comission) = (10+2) = 2.4
-            $reseller_commission = reseller_comission($data->prices->retail->amount + $parent_comission); = (10+2) = 2.4
-            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission + $parent_comission) = (10+2.4+2) = 2.88;
-            $admin_profit = $discount + $parent_comission - $parent_profit; 2+2 - 2.4 = 1.6
-            $sub_profit = $parent_profit - $reseller_profit = 2.4-2.88 = - 0.48
+            $parent_comission = parent_comission($data->prices->retail->amount) = (10) = 1
+            $parent_profit = parent_profit($data->prices->retail->amount + $parent_comission) = (10+1) = 1.1
+            $reseller_commission = reseller_comission($data->prices->retail->amount + $parent_comission); = (10+1) = 3.3
+            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission + $parent_comission) = (10+3.3+1) = 4.29
+            $admin_profit = $discount + $parent_comission - $parent_profit; = 2+1-1.1 = 1.9
+            $sub_profit = $parent_profit+$reseller_comission - $reseller_profit  =1.1+3.3-4.29 = 0.11
+            $sub_profit = 2*$parent_profit-$reseller_profit =2*1.1 - 4.29 = -2.09
 
             $admin_deduct = 8
             $sub_dedcut = $amount+$reseller_com-$reseller_profit = 12-2.4 = 9.6
+
             $reseller_deduct = $amount
 
              */
@@ -182,12 +184,14 @@ class DtOneController extends Controller
             $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission + $parent_comission);
             $admin_profit = $discount + $parent_comission - $parent_profit;
             $sub_profit = $parent_profit - $reseller_profit;
+            $total_amount = $data->prices->retail->amount + $parent_comission + $reseller_commission; //14.4
 
         } else {
-            $reseller_commission = reseller_comission($data->prices->retail->amount); //2
-            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission); //2.4
-            $admin_profit = $discount + $reseller_commission - $reseller_profit;
+            $reseller_commission = reseller_comission($data->prices->retail->amount); //1
+            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission); //1.1
+            $admin_profit = $discount + $reseller_commission - $reseller_profit; //2+1-1.1 = 1.9
             $sub_profit = 0;
+            $total_amount = $data->prices->retail->amount + $reseller_commission; //11 = 11-1.1 = 9.9
 
         }
 
@@ -196,7 +200,7 @@ class DtOneController extends Controller
         $recharge = RechargeHistory::create([
             'reseller_id' => a::user()->id,
             'number' => $number,
-            'amount' => $data->prices->retail->amount + $reseller_commission,
+            'amount' => $total_amount,
             'txid' => $txid,
             'type' => 'International',
             'operator' => $data->product->operator->name,

@@ -821,16 +821,16 @@ class RechargeController extends Controller
 
                 if (a::user()->role != 'admin') {
                     if (auth()->user()->parent->role == 'sub') {
-                        $cost = $sku_amount['1'] - $prof->commission;
-                        $parent_commission = parent_profit_domestic($prof->commission);
-                        $admin_commission = $prof->commission - $parent_commission;
-                        $reseller_commission = reseller_profit_domestic($parent_commission);
-                        $sub_profit = $parent_commission - $reseller_commission;
+                        $cost = $sku_amount['1'] - $prof->commission; // 9.74
+                        $parent_commission = parent_profit_domestic($prof->commission); // .13
+                        $admin_commission = $prof->commission - $parent_commission; // .13
+                        $reseller_commission = reseller_profit_domestic($parent_commission); //.09
+                        $sub_profit = $parent_commission - $reseller_commission; // 0.13-0.09 = 0.04
 
                     } else {
-                        $cost = $sku_amount['1'] - $prof->commission;
-                        $reseller_commission = reseller_profit_domestic($prof->commission);
-                        $admin_commission = $prof->commission - $reseller_commission;
+                        $cost = $sku_amount['1'] - $prof->commission; //10- .26 = 9.74
+                        $reseller_commission = reseller_profit_domestic($prof->commission); // (.26) = .13
+                        $admin_commission = $prof->commission - $reseller_commission; //.26-.13 = .13
                         $sub_profit = 0;
                     }
 
@@ -846,9 +846,9 @@ class RechargeController extends Controller
                 $create = new RechargeHistory();
                 $create->reseller_id = a::user()->id;
                 $create->number = $request->number;
-                $create->amount = $sku_amount['1'];
+                $create->amount = $sku_amount['1']; //10
                 $create->operator = $operator;
-                $create->reseller_com = $reseller_commission;
+                $create->reseller_com = $reseller_commission; //.13
                 $create->admin_com = $admin_commission;
                 $create->txid = $xml2->TXID;
                 $create->type = 'Domestic';
