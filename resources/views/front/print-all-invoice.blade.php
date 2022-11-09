@@ -118,7 +118,17 @@ table.dataTable thead .sorting_asc{
                         <th style="background-color: black;color:white">Data</th>
                         <th style="background-color: black;color:white">Genere</th>
                         <th  style="background-color: black;color:white">Importo</th>
+                        @if(Auth::user()->role == 'admin')
+                        <th  style="background-color: black;color:white">Admin Profit</th>
+                        <th  style="background-color: black;color:white">Discount</th>
+                        <th  style="background-color: black;color:white">Reseller Profit</th>
+                        @else
+
                         <th  style="background-color: black;color:white">Profit</th>
+                        <th  style="background-color: black;color:white">Service Charge</th>
+
+                        @endif
+
                         <th  style="background-color: black;color:white">Invoice</th>
 
                       </tr>
@@ -136,9 +146,16 @@ table.dataTable thead .sorting_asc{
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col">Total</th>
-                            <th scope="col">0</th>
-                            <th scope="col">0</th>
-                            <th></th>
+                            <th scope="col"></th>
+                            @if(Auth::user()->role == 'admin')
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            @else
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            @endif
+                            <th scope="col"></th>
 
 
                           </tr>
@@ -290,12 +307,18 @@ function fetch_table(start_date,end_date)
             "type":'POST',
             dataSrc: function ( data ) {
              if(data.data.length != 0){
-           total_profit = data.data[0].total_profit;
-           total_cost = data.data[0].total_cost;
+              total_cost = data.data[0].total_cost;
+           total_admin_profit = data.data[0].total_admin_profit;
+           total_reseller_profit = data.data[0].total_reseller_profit;
+           total_discount = data.data[0].total_discount;
+           total_service_charge = data.data[0].total_service_charge;
            }
            else{
-            total_profit = 0
-            total_cost = 0
+            total_cost = 0;
+            total_admin_profit = 0;
+           total_reseller_profit = 0;
+           total_discount = 0;
+           total_service_charge = 0;
            }
            return data.data;
 
@@ -321,7 +344,14 @@ function fetch_table(start_date,end_date)
             {data:'date',name:'date'},
             {data:'recharge_type',name:'type'},
             {data:'amount',name:'amount'},
-            {data:'profit',name:'profit'},
+            @if(Auth::user()->role == 'admin')
+            {data:'admin_com',name:'admin_com'},
+            {data:'discount',name:'discount'},
+            {data:'reseller_com',name:'reseller_com'},
+            @else
+            {data:'service',name:'service'},
+            {data:'reseller_com',name:'reseller_com'},
+            @endif
             {data:'invoice',name:'invoice'}
 
 
@@ -336,14 +366,22 @@ function fetch_table(start_date,end_date)
           total_cost
             );
             $( api.column( 6 ).footer() ).html(
-          total_profit
+          total_admin_profit
+            );
+            $( api.column( 7 ).footer() ).html(
+          total_discount
+            );
+
+            $( api.column( 8 ).footer() ).html(
+          total_admin_profit
+
             );
         @else
         $( api.column( 4 ).footer() ).html(
           total_cost
             );
             $( api.column( 5 ).footer() ).html(
-          total_profit
+          total_reseller_profit
             );
         @endif
 

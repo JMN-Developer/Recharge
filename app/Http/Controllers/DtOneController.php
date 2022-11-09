@@ -163,6 +163,19 @@ class DtOneController extends Controller
         $discount = $data->prices->retail->amount - $data->prices->wholesale->amount;
 
         if (auth()->user()->parent->role == 'sub') {
+            /*
+            $parent_comission = parent_comission($data->prices->retail->amount) = 2
+            $parent_profit = parent_profit($data->prices->retail->amount + $parent_comission) = (10+2) = 2.4
+            $reseller_commission = reseller_comission($data->prices->retail->amount + $parent_comission); = (10+2) = 2.4
+            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission + $parent_comission) = (10+2.4+2) = 2.88;
+            $admin_profit = $discount + $parent_comission - $parent_profit; 2+2 - 2.4 = 1.6
+            $sub_profit = $parent_profit - $reseller_profit = 2.4-2.88 = - 0.48
+
+            $admin_deduct = 8
+            $sub_dedcut = $amount+$reseller_com-$reseller_profit = 12-2.4 = 9.6
+            $reseller_deduct = $amount
+
+             */
             $parent_comission = parent_comission($data->prices->retail->amount);
             $parent_profit = parent_profit($data->prices->retail->amount + $parent_comission);
             $reseller_commission = reseller_comission($data->prices->retail->amount + $parent_comission);
@@ -171,10 +184,11 @@ class DtOneController extends Controller
             $sub_profit = $parent_profit - $reseller_profit;
 
         } else {
-            $reseller_commission = reseller_comission($data->prices->retail->amount); //reseller_com = 0.11
-            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission); //reseller_profit = 0.132
+            $reseller_commission = reseller_comission($data->prices->retail->amount); //2
+            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission); //2.4
             $admin_profit = $discount + $reseller_commission - $reseller_profit;
             $sub_profit = 0;
+
         }
 
         $log_data = 'Number = ' . $number . ' Amount = ' . $data->prices->retail->amount + $reseller_commission . ' R-Com = ' . $reseller_profit . ' A-Com = ' . $admin_profit . ' TXID = ' . $txid;

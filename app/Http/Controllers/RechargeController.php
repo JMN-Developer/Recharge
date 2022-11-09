@@ -883,7 +883,10 @@ class RechargeController extends Controller
         $start_date = Carbon::parse($request->start_date)->toDateTimeString();
         $end_date = Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
         $total_cost = 0;
-        $total_profit = 0;
+        $total_reseller_profit = 0;
+        $total_admin_profit = 0;
+        $total_service_charge = 0;
+        $total_discount = 0;
         $type = $request->type;
         $reseller_id = $request->retailer_id;
         if ($request->ajax()) {
@@ -910,14 +913,14 @@ class RechargeController extends Controller
 
                 }
 
-                $total_cost = $data->sum('amount');
-                foreach ($data as $value) {
-                    if ($value->amount != 0) {
-                        $total_profit += $value->admin_com;
-                    } else {
-                        $total_profit += $value->discount;
-                    }
-                }
+                // $total_cost = $data->sum('amount');
+                // foreach ($data as $value) {
+                //     if ($value->amount != 0) {
+                //         $total_profit += $value->admin_com;
+                //     } else {
+                //         $total_profit += $value->discount;
+                //     }
+                // }
 
             } else {
                 if ($type == 'all') {
@@ -928,33 +931,29 @@ class RechargeController extends Controller
                     $data = RechargeHistory::where('type', '!=', 'International')->where('type', '!=', 'White Calling')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 }
 
-                $total_cost = $data->sum('amount') + $data->sum('service');
-                $total_profit = $data->sum('reseller_com');
-
             }
 
-            foreach ($data as $value) {
-                $value->total_profit = round($total_profit, 2);
-                $value->total_cost = round($total_cost, 2);
-            }
+            $total_cost = $data->sum('amount');
+            $total_service_charge = $data->sum('service');
+            $total_reseller_profit = $data->sum('reseller_com');
+            $total_admin_profit = $data->sum('reseller_com');
+            $total_discount = $data->sum('discount');
+
+            // foreach ($data as $value) {
+            //     $value->total_profit = round($total_profit, 2);
+            //     $value->total_cost = round($total_cost, 2);
+            // }
+
+            $data[0]['total_cost'] = round($total_cost);
+            $data[0]['total_service_charge'] = round($total_service_charge);
+            $data[0]['total_reseller_profit'] = round($total_reseller_profit);
+            $data[0]['total_admin_profit'] = round($total_admin_profit);
+            $data[0]['total_discount'] = round($total_discount);
 
             return Datatables::of($data)
 
                 ->addIndexColumn()
-                ->addColumn('profit', function ($data) {
 
-                    if (a::user()->role == 'admin') {
-                        if ($data->admin_com != 0) {
-                            return round($data->admin_com, 2);
-                        } else {
-                            return round($data->discount, 2);
-                        }
-
-                    } else {
-                        return round($data->reseller_com, 2);
-                    }
-
-                })
                 ->addColumn('number', function ($data) {
                     if ($data->number) {
                         return $data->number;
