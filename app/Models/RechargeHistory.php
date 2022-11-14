@@ -11,7 +11,12 @@ class RechargeHistory extends Model
     protected $guarded = [];
     public function user()
     {
-        return $this->hasOne('App\Models\User','id','reseller_id')->withDefault();
+        return $this->hasOne('App\Models\User', 'id', 'reseller_id')->withDefault();
+    }
+
+    public function getAdminComAttribute($amount)
+    {
+        return round($amount, 2);
     }
 
 }

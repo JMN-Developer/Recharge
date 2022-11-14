@@ -936,19 +936,18 @@ class RechargeController extends Controller
             $total_cost = $data->sum('amount');
             $total_service_charge = $data->sum('service');
             $total_reseller_profit = $data->sum('reseller_com');
-            $total_admin_profit = $data->sum('reseller_com');
-            $total_discount = $data->sum('discount');
+            $total_admin_profit = $data->sum('admin_com');
 
             // foreach ($data as $value) {
             //     $value->total_profit = round($total_profit, 2);
             //     $value->total_cost = round($total_cost, 2);
             // }
-
+            if(sizeof($data)>0){
             $data[0]['total_cost'] = round($total_cost);
             $data[0]['total_service_charge'] = round($total_service_charge);
             $data[0]['total_reseller_profit'] = round($total_reseller_profit);
             $data[0]['total_admin_profit'] = round($total_admin_profit);
-            $data[0]['total_discount'] = round($total_discount);
+            }
 
             return Datatables::of($data)
 

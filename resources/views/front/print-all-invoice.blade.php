@@ -120,10 +120,9 @@ table.dataTable thead .sorting_asc{
                         <th  style="background-color: black;color:white">Importo</th>
                         @if(Auth::user()->role == 'admin')
                         <th  style="background-color: black;color:white">Admin Profit</th>
-                        <th  style="background-color: black;color:white">Discount</th>
                         <th  style="background-color: black;color:white">Reseller Profit</th>
+                        <th  style="background-color: black;color:white">Service Charge</th>
                         @else
-
                         <th  style="background-color: black;color:white">Profit</th>
                         <th  style="background-color: black;color:white">Service Charge</th>
 
@@ -310,14 +309,12 @@ function fetch_table(start_date,end_date)
               total_cost = data.data[0].total_cost;
            total_admin_profit = data.data[0].total_admin_profit;
            total_reseller_profit = data.data[0].total_reseller_profit;
-           total_discount = data.data[0].total_discount;
            total_service_charge = data.data[0].total_service_charge;
            }
            else{
             total_cost = 0;
             total_admin_profit = 0;
            total_reseller_profit = 0;
-           total_discount = 0;
            total_service_charge = 0;
            }
            return data.data;
@@ -345,9 +342,10 @@ function fetch_table(start_date,end_date)
             {data:'recharge_type',name:'type'},
             {data:'amount',name:'amount'},
             @if(Auth::user()->role == 'admin')
+
             {data:'admin_com',name:'admin_com'},
-            {data:'discount',name:'discount'},
             {data:'reseller_com',name:'reseller_com'},
+            {data:'service',name:'service'},
             @else
             {data:'service',name:'service'},
             {data:'reseller_com',name:'reseller_com'},
@@ -363,25 +361,31 @@ function fetch_table(start_date,end_date)
 
       @if(Auth::user()->role == 'admin')
         $( api.column( 5 ).footer() ).html(
-          total_cost
+          total_cost.toFixed(2)
             );
             $( api.column( 6 ).footer() ).html(
-          total_admin_profit
+          total_admin_profit.toFixed(2)
             );
+
             $( api.column( 7 ).footer() ).html(
-          total_discount
+          total_reseller_profit.toFixed(2)
+
             );
 
             $( api.column( 8 ).footer() ).html(
-          total_admin_profit
+              total_service_charge.toFixed(2)
 
             );
         @else
         $( api.column( 4 ).footer() ).html(
-          total_cost
+          total_cost.toFixed(2)
             );
             $( api.column( 5 ).footer() ).html(
-          total_reseller_profit
+          total_reseller_profit.toFixed(2)
+            );
+
+            $( api.column( 6 ).footer() ).html(
+              total_service_charge.toFixed(2)
             );
         @endif
 
@@ -390,20 +394,7 @@ function fetch_table(start_date,end_date)
 
 
     });
-    function datatable_sum(dt_selector, is_calling_first) {
 
-
-        //col start from 0
-        @if(Auth::user()->role == 'admin')
-        $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));
-        $( dt_selector.column(6).footer() ).html(dt_selector.column( 6, {page:'all'} ).data().sum().toFixed(2));
-        @else
-        $( dt_selector.column(4).footer() ).html(dt_selector.column( 4, {page:'all'} ).data().sum().toFixed(2));
-        $( dt_selector.column(5).footer() ).html(dt_selector.column( 5, {page:'all'} ).data().sum().toFixed(2));
-        @endif
-
-
-    }
 
 }
 </script>
