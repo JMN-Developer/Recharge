@@ -886,7 +886,7 @@ class RechargeController extends Controller
         $total_reseller_profit = 0;
         $total_admin_profit = 0;
         $total_service_charge = 0;
-        $total_discount = 0;
+        $t = 0;
         $type = $request->type;
         $reseller_id = $request->retailer_id;
         if ($request->ajax()) {

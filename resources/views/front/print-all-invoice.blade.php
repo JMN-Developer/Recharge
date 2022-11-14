@@ -347,8 +347,8 @@ function fetch_table(start_date,end_date)
             {data:'reseller_com',name:'reseller_com'},
             {data:'service',name:'service'},
             @else
-            {data:'service',name:'service'},
             {data:'reseller_com',name:'reseller_com'},
+            {data:'service',name:'service'},
             @endif
             {data:'invoice',name:'invoice'}
 
