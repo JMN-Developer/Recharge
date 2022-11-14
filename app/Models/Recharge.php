@@ -15,6 +15,7 @@ class Recharge extends Model
         'amount',
         'recharge_id',
         'user_id',
-        'status'
+        'status',
     ];
-}
+
+   
