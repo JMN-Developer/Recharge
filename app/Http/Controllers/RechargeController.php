@@ -922,7 +922,8 @@ class RechargeController extends Controller
                 //     }
                 // }
 
-            } else {
+            } else if (a::user()->role == 'reseller') {
+
                 if ($type == 'all') {
                     $data = RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 } elseif ($type == 'International') {
@@ -931,6 +932,30 @@ class RechargeController extends Controller
                     $data = RechargeHistory::where('type', '!=', 'International')->where('type', '!=', 'White Calling')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 }
 
+            } else {
+                if ($reseller_id) {
+                    //file_put_contents('test.txt',$request->retailer_id);
+                    if ($type == 'all') {
+                        $data = RechargeHistory::where('reseller_id', $reseller_id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                    } elseif ($type == 'International') {
+                        $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', '!=', 'Domestic')->where('type', '!=', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                    } else {
+                        $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', '!=', 'International')->where('type', '!=', 'White Calling')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                    }
+
+                } else {
+                    if ($type == 'all') {
+                        $data = RechargeHistory::with(['user.parent' => function ($query) {
+                            $query->where('id', a::user()->id);
+                        }])->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+
+                    } elseif ($type == 'International') {
+                        $data = RechargeHistory::where('type', '!=', 'Domestic')->where('type', '!=', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                    } else {
+                        $data = RechargeHistory::where('type', '!=', 'International')->where('type', '!=', 'White Calling')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                    }
+
+                }
             }
 
             $total_cost = $data->sum('amount');
@@ -942,11 +967,11 @@ class RechargeController extends Controller
             //     $value->total_profit = round($total_profit, 2);
             //     $value->total_cost = round($total_cost, 2);
             // }
-            if(sizeof($data)>0){
-            $data[0]['total_cost'] = round($total_cost);
-            $data[0]['total_service_charge'] = round($total_service_charge);
-            $data[0]['total_reseller_profit'] = round($total_reseller_profit);
-            $data[0]['total_admin_profit'] = round($total_admin_profit);
+            if (sizeof($data) > 0) {
+                $data[0]['total_cost'] = round($total_cost);
+                $data[0]['total_service_charge'] = round($total_service_charge);
+                $data[0]['total_reseller_profit'] = round($total_reseller_profit);
+                $data[0]['total_admin_profit'] = round($total_admin_profit);
             }
 
             return Datatables::of($data)

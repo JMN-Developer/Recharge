@@ -210,7 +210,7 @@ class WalletController extends Controller
                     "wallet_type" => $previous_record->wallet_type,
                     "previous_due" => $limit_usage,
                     "decline_status" => 1,
-                    'approved_at' => Carbon::now()->toDateTimeString(),
+                    'approved_at' => Carbon::now()->timezone('Europe/Stockholm')->toDateTimeString(),
 
                 ]);
 
@@ -232,7 +232,7 @@ class WalletController extends Controller
                     "reseller_notification" => 0,
                     "admin_message" => $admin_message,
                     'previous_due' => $limit_usage,
-                    'approved_at' => Carbon::now()->toDateTimeString(),
+                    'approved_at' => Carbon::now()->timezone('Europe/Stockholm')->toDateTimeString(),
                 ]);
 
             }
