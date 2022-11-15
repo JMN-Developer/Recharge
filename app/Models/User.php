@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
@@ -34,7 +33,7 @@ class User extends Authenticatable
         'role',
         'gender',
         'nationality',
-        'created_by'
+        'created_by',
     ];
 
     /**
@@ -68,12 +67,11 @@ class User extends Authenticatable
     ];
     public function reseller_profit()
     {
-        return $this->hasOne('App\Models\ResellerProfit','reseller_id','id')->withDefault(['international_rechareg_profit'=>20,'domestic_recharge_profit'=>65]);
+        return $this->hasOne('App\Models\ResellerProfit', 'reseller_id', 'id')->withDefault(['international_rechareg_profit' => 20, 'domestic_recharge_profit' => 65]);
     }
     public function parent()
     {
-        return $this->belongsTo(User::class,'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
-    
 
 }

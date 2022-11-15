@@ -122,10 +122,13 @@ table.dataTable thead .sorting_asc{
                         <th  style="background-color: black;color:white">Admin Profit</th>
                         <th  style="background-color: black;color:white">Reseller Profit</th>
                         <th  style="background-color: black;color:white">Service Charge</th>
-                        @else
+                        @elseif(Auth::user()->role == 'reseller')
                         <th  style="background-color: black;color:white">Profit</th>
                         <th  style="background-color: black;color:white">Service Charge</th>
-
+                        @else
+                        <th  style="background-color: black;color:white">Own Profit</th>
+                        <th  style="background-color: black;color:white">Admin Profit</th>
+                        <th  style="background-color: black;color:white">Reseller Profit</th>
                         @endif
 
                         <th  style="background-color: black;color:white">Invoice</th>
@@ -150,7 +153,11 @@ table.dataTable thead .sorting_asc{
                             <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
+                            @elseif(Auth::user()->role == 'reseller')
+                            <th scope="col"></th>
+                            <th scope="col"></th>
                             @else
+                            <th scope="col"></th>
                             <th scope="col"></th>
                             <th scope="col"></th>
                             @endif
@@ -346,9 +353,13 @@ function fetch_table(start_date,end_date)
             {data:'admin_com',name:'admin_com'},
             {data:'reseller_com',name:'reseller_com'},
             {data:'service',name:'service'},
-            @else
+            @elseif(Auth::user()->role == 'reseller')
             {data:'reseller_com',name:'reseller_com'},
             {data:'service',name:'service'},
+            @else
+              {data:'own_com',name:'own_com'},
+              {data:'sub_profit',name:'sub_profit'},
+              {data:'reseller_com',name:'reseller_com'},
             @endif
             {data:'invoice',name:'invoice'}
 
@@ -361,31 +372,42 @@ function fetch_table(start_date,end_date)
 
       @if(Auth::user()->role == 'admin')
         $( api.column( 5 ).footer() ).html(
-          total_cost.toFixed(2)
+          total_cost
             );
             $( api.column( 6 ).footer() ).html(
-          total_admin_profit.toFixed(2)
+          total_admin_profit
             );
 
             $( api.column( 7 ).footer() ).html(
-          total_reseller_profit.toFixed(2)
+          total_reseller_profit
 
             );
 
             $( api.column( 8 ).footer() ).html(
-              total_service_charge.toFixed(2)
+              total_service_charge
 
             );
-        @else
+        @elseif(Auth::user()->role == 'reseller')
         $( api.column( 4 ).footer() ).html(
-          total_cost.toFixed(2)
+          total_cost
             );
             $( api.column( 5 ).footer() ).html(
-          total_reseller_profit.toFixed(2)
+          total_reseller_profit
             );
 
             $( api.column( 6 ).footer() ).html(
-              total_service_charge.toFixed(2)
+              total_service_charge
+            );
+        @else
+        $( api.column( 4 ).footer() ).html(
+          total_cost
+            );
+            $( api.column( 5 ).footer() ).html(
+          total_reseller_profit
+            );
+
+            $( api.column( 6 ).footer() ).html(
+              total_service_charge
             );
         @endif
 

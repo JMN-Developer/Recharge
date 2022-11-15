@@ -18,4 +18,4 @@ class Recharge extends Model
         'status',
     ];
 
-   
+}

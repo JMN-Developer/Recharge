@@ -113,7 +113,7 @@ class UpdateWallet
 
         } else {
 
-            $total_cost = $recharge->amount - ($recharge->reseleer_com + $recharge->sub_profit);
+            $total_cost = $recharge->amount - ($recharge->reseller_com + $recharge->sub_profit);
 
             $user_info = User::where('id', auth()->user()->parent
                     ->id)
@@ -125,7 +125,7 @@ class UpdateWallet
             // file_put_contents('test.txt',$discount." ".$reseller_profit." ".$total_cost." ".$current_balance." ".$updated_balance);
             if ($current_balance < $total_cost) {
                 if ($current_balance <= 0) {
-                    $wallet_before_transaction = auth()->user()->domestic_limit_usage;
+                    $wallet_before_transaction = $user_info->domestic_limit_usage;
 
                     $user = User::find(auth()->user()->created_by);
                     $user->domestic_limit_usage = $current_limit_usage + $total_cost;

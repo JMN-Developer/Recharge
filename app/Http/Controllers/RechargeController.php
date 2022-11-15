@@ -886,6 +886,7 @@ class RechargeController extends Controller
         $total_reseller_profit = 0;
         $total_admin_profit = 0;
         $total_service_charge = 0;
+        $total_own_profit = 0;
         $t = 0;
         $type = $request->type;
         $reseller_id = $request->retailer_id;
@@ -945,9 +946,10 @@ class RechargeController extends Controller
 
                 } else {
                     if ($type == 'all') {
-                        $data = RechargeHistory::with(['user.parent' => function ($query) {
-                            $query->where('id', a::user()->id);
-                        }])->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
+                        $data = RechargeHistory::whereHas('user', function ($query) {
+                            $query->where('created_by', a::user()->id)
+                                ->orWhere('id', a::user()->id);
+                        })->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
 
                     } elseif ($type == 'International') {
                         $data = RechargeHistory::where('type', '!=', 'Domestic')->where('type', '!=', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
@@ -962,6 +964,7 @@ class RechargeController extends Controller
             $total_service_charge = $data->sum('service');
             $total_reseller_profit = $data->sum('reseller_com');
             $total_admin_profit = $data->sum('admin_com');
+            $total_sub_profit = $data->sum('sub_profit');
 
             // foreach ($data as $value) {
             //     $value->total_profit = round($total_profit, 2);
@@ -972,6 +975,7 @@ class RechargeController extends Controller
                 $data[0]['total_service_charge'] = round($total_service_charge);
                 $data[0]['total_reseller_profit'] = round($total_reseller_profit);
                 $data[0]['total_admin_profit'] = round($total_admin_profit);
+                $data[0]['total_sub_profit'] = round($total_sub_profit);
             }
 
             return Datatables::of($data)
@@ -997,9 +1001,10 @@ class RechargeController extends Controller
 
                 })
                 ->addColumn('reseller_name', function ($data) {
-                    return $data->user->first_name . " " . $data->user->last_name . "(" . $data->user->user_id . ")";
+                    return $data->user ? $data->user->first_name . " " . $data->user->last_name . "(" . $data->user->user_id . ")" : '';
 
                 })
+
                 ->addColumn('recharge_type', function ($data) {
                     if (a::user()->role == 'admin') {
                         $text = $data->company_name;
@@ -1009,11 +1014,19 @@ class RechargeController extends Controller
 
                     return $text;
                 })
+                ->addColumn('own_com', function ($data) {
+                    if ($data->sub_profit == 0) {
+                        $own_com = 0;
+                    } else {
+                        $own_com = $data->reseller_com;
+                    }
+                    return $own_com;
+                })
                 ->addColumn('invoice', function ($data) {
                     $button = '<a class="btn btn-success" href="recharge_invoice/' . $data->id . '"> Invoice</a>';
                     return $button;
                 })
-                ->rawColumns(['invoice', 'total_cost'])
+                ->rawColumns(['invoice', 'own_com'])
                 ->make(true);
         }
     }
