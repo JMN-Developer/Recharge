@@ -110,7 +110,7 @@ table.dataTable thead .sorting_asc{
                   <table class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
                     <thead>
                       <tr>
-                        @if(Auth::user()->role == 'admin')
+                        @if(Auth::user()->role == 'admin' || Auth::user()->role == 'sub' )
                         <th style="background-color: black;color:white"  >Reseller</th>
                         @endif
                         <th style="background-color: black;color:white"  >Requestld</th>
@@ -141,7 +141,7 @@ table.dataTable thead .sorting_asc{
 
                     <tfoot class="thead-dark" style="background-color: black" >
                         <tr>
-                          @if(Auth::user()->role == 'admin')
+                          @if(Auth::user()->role == 'admin' || Auth::user()->role == 'sub')
                           <th scope="col"></th>
                           @endif
                             <th scope="col"></th>
@@ -317,12 +317,16 @@ function fetch_table(start_date,end_date)
            total_admin_profit = data.data[0].total_admin_profit;
            total_reseller_profit = data.data[0].total_reseller_profit;
            total_service_charge = data.data[0].total_service_charge;
+           total_own_profit = data.data[0].total_own_profit;
+           total_sub_profit = data.data[0].total_sub_profit;
            }
            else{
             total_cost = 0;
             total_admin_profit = 0;
            total_reseller_profit = 0;
            total_service_charge = 0;
+           total_own_profit = 0;
+           total_sub_profit = 0;
            }
            return data.data;
 
@@ -340,7 +344,7 @@ function fetch_table(start_date,end_date)
         deferRender: true,
         columns: [
             //   {data: 'sl_no'},
-            @if(Auth::user()->role == 'admin')
+            @if(Auth::user()->role == 'admin' || Auth::user()->role == 'sub')
             {data:'reseller_name',name:'reseller_name',orderable:false},
             @endif
             {data:'txid',name:'txid',orderable:false},
@@ -359,7 +363,7 @@ function fetch_table(start_date,end_date)
             @else
               {data:'own_com',name:'own_com'},
               {data:'sub_profit',name:'sub_profit'},
-              {data:'reseller_com',name:'reseller_com'},
+              {data:'sub_reseller_com',name:'sub_reseller_com'},
             @endif
             {data:'invoice',name:'invoice'}
 
@@ -399,15 +403,19 @@ function fetch_table(start_date,end_date)
               total_service_charge
             );
         @else
-        $( api.column( 4 ).footer() ).html(
+        $( api.column( 5 ).footer() ).html(
           total_cost
             );
-            $( api.column( 5 ).footer() ).html(
-          total_reseller_profit
+            $( api.column( 6 ).footer() ).html(
+          total_own_profit
             );
 
-            $( api.column( 6 ).footer() ).html(
-              total_service_charge
+            $( api.column( 7 ).footer() ).html(
+              total_sub_profit
+            );
+
+            $( api.column( 8 ).footer() ).html(
+              total_reseller_profit
             );
         @endif
 
