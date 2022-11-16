@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RechargeHistory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 // if (!function_exists('reseller_comission')) {
@@ -189,6 +190,18 @@ if (!function_exists('parent_profit_white_calling')) {
         }
         $percentage_amount = round((($profit / 100) * $amount), 2);
         return $percentage_amount;
+    }
+}
+
+if (!function_exists('check_recurrent_recharge')) {
+    function check_recurrent_recharge($number)
+    {
+
+        $avail = RechargeHistory::whereBetween('created_at', [now()->subMinutes(3), now()])->where('number', $number)->first();
+        if ($avail) {
+            return false;
+        }
+        return true;
     }
 }
 

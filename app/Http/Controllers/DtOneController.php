@@ -163,21 +163,7 @@ class DtOneController extends Controller
         $discount = $data->prices->retail->amount - $data->prices->wholesale->amount;
 
         if (auth()->user()->parent->role == 'sub') {
-            /*
-            $parent_comission = parent_comission($data->prices->retail->amount) = (10) = 1
-            $parent_profit = parent_profit($data->prices->retail->amount + $parent_comission) = (10+1) = 1.1
-            $reseller_commission = reseller_comission($data->prices->retail->amount + $parent_comission); = (10+1) = 3.3
-            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission + $parent_comission) = (10+3.3+1) = 4.29
-            $admin_profit = $discount + $parent_comission - $parent_profit; = 2+1-1.1 = 1.9
-            $sub_profit = $parent_profit+$reseller_comission - $reseller_profit  =1.1+3.3-4.29 = 0.11
-            $sub_profit = 2*$parent_profit-$reseller_profit =2*1.1 - 4.29 = -2.09
 
-            $admin_deduct = 8
-            $sub_dedcut = $amount+$reseller_com-$reseller_profit = 12-2.4 = 9.6
-
-            $reseller_deduct = $amount
-
-             */
             $parent_comission = parent_comission($data->prices->retail->amount);
             $parent_profit = parent_profit($data->prices->retail->amount + $parent_comission);
             $reseller_commission = reseller_comission($data->prices->retail->amount + $parent_comission);
@@ -278,6 +264,9 @@ class DtOneController extends Controller
         $rate = euro_rate_for_bd_recharge();
         $unit_rate = $rate / 100;
         $amount = round($request->bd_amount * $unit_rate, 3);
+        if (!check_recurrent_recharge($number)) {
+            return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
+        }
 
         if (!CheckRechargeAvail::check($amount, 'International')) {
             return ['status' => false, 'message' => 'Insufficient wallet & Limit. Please contact with admin'];
@@ -320,6 +309,9 @@ class DtOneController extends Controller
         // file_put_contents('test.txt',$country_code);
         //return;
         $number = $request->number;
+        if (!check_recurrent_recharge($number)) {
+            return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
+        }
         //  file_put_contents('test.txt',$request->bd_amount);
         //return;
         if (str_contains($number, '+880')) {

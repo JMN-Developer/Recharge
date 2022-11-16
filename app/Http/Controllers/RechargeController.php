@@ -480,11 +480,7 @@ class RechargeController extends Controller
     public function check_daily_duplicate(Request $request)
     {
         $number = $request->number;
-
-        $dt = Carbon::now();
-        $current_date = $dt->toDateString();
-
-        $avail = RechargeHistory::whereDate('created_at', '=', '2022-02-10')->where('number', $number)->first();
+        $avail = RechargeHistory::where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->where('number', $number)->first();
 
         if ($avail) {
             return '1';
@@ -499,7 +495,9 @@ class RechargeController extends Controller
 
         $change = [' ', '+'];
         $number = str_replace($change, '', $request->number);
-
+        if (!check_recurrent_recharge($number)) {
+            return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
+        }
         //  dd($number);
         $transaction = new GenerateTransactionId(a::user()->id, 10);
         $txid = $transaction->transaction_id();

@@ -99,7 +99,7 @@
                       <label for="inputAmount" class="form-label">Service Charge in EURO</label>
                       <input type="text" class="form-control" id="inputAmount" step="any" name="service" placeholder="Please Enter Service Charge">
                     </div> --}}
-                    <div class="mt-3">
+                    <div formclass="mt-3">
                       <input type="submit" class="btn btn-info" style="width: 100%;" value="Recharge">
                     </div>
 
@@ -173,37 +173,7 @@
 @endsection
 
 @section('js')
-{{-- <script>
-  $(function(){
-$('#test').click(function(){
-var empty = "";
-var value = $(this).val();
-var table = $('#offer');
-$.ajax({
- type: "POST",
- url: "/check-products", // url to request
- data:{
-            _token:'{{ csrf_token() }}',
-            id: value,
-        },
-  cache: false,
-  dataType: 'json',
- success : function(response){
-  $(response).each(function(){
-    var data = `<div class="col-sm-6 col-md-4 col-lg-3 mt-3">
-                        <div class="Recharge_package">
-                          <div class="recharge_tk" onclick="selectAmount(10)">
-                            <strong>`+response.amount+` Tk</strong>
-                          </div>
-                        </div>
-                      </div>`;
-                      console.log(response.amount);
-  })
- }
-});
-});
-});
-</script> --}}
+
 <script>
       let recent_domestic_recharge_url = '{{route("load_recent_domestic_recharge")}}';
 </script>
@@ -350,15 +320,46 @@ $.ajax({
                 }
                 else
                 {
-                    recharge_number()
+                  swal({
+                        title: "Are you sure to continue this rechagre?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                        if (willDelete) {
+                            recharge_number()
+                        } else {
+                           //location.reload()
+                        }
+                        });
+
                 }
 
             }
         });
    }
 
+   function recharge_alert(){
+                 swal({
+                        title: "Are you sure to continue this rechagre?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                        if (willDelete) {
+                            recharge_number()
+                        } else {
+                           //location.reload()
+                        }
+                        });
+
+   }
+
    function recharge_number()
    {
+
     var formdata = new FormData();
         formdata.append('amount',$('#amounts').val());
         formdata.append('number',$('#inputMobileNumber').val().split(' ').join(''));
@@ -408,6 +409,7 @@ $.ajax({
     $( "#domestic_recharge" ).submit(function( event ) {
         event.preventDefault();
         store_number($('#inputMobileNumber').val())
+        //recharge_alert();
         check_daily_duplicate($('#inputMobileNumber').val())
 
     });
