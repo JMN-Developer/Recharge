@@ -499,9 +499,7 @@ class RechargeController extends Controller
 
         $change = [' ', '+'];
         $number = str_replace($change, '', $request->number);
-        if (!check_recurrent_recharge($number)) {
-            return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
-        }
+
         //  dd($number);
         $transaction = new GenerateTransactionId(a::user()->id, 10);
         $txid = $transaction->transaction_id();
@@ -731,7 +729,9 @@ class RechargeController extends Controller
         $change = [' ', 'Mobile', 'mobile'];
         $operator = str_replace($change, '', $request->operator);
         // file_put_contents('test.txt',$request->amount);
-
+        if (!check_recurrent_recharge($request->number)) {
+            return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
+        }
         $sku_amount = explode(',', $request->amount);
         if (!CheckRechargeAvail::check($sku_amount['1'], 'Domestic')) {
             return ['status' => false, 'message' => 'Insufficient wallet & Limit. Please contact with admin'];
