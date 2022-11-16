@@ -12,6 +12,7 @@ use App\Services\GenerateTransactionId;
 use App\Services\UpdateWallet;
 use Auth;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as a;
 use Illuminate\Support\Facades\Log;
@@ -107,53 +108,56 @@ class DtOneController extends Controller
 
         $number = $request->number;
         $countryIso = $request->countryIso;
-
-        if (str_contains($number, '+880')) {
-            $change = [' ', '+'];
-            $number = str_replace($change, '', $number);
-            $rate = euro_rate_for_bd_recharge();
-            $unit_rate = $rate / 100;
-            $operator_details = $this->bangladeshi_recharge->operatorInfo($number);
-            $bd_offer_data = $this->bangladeshi_recharge->offer_details($operator_details['data']->operator_id);
-            $operator_name = $operator_details['data']->operator_name;
-            // file_put_contents('test.txt',$operator_details['data']->operator_name);
-            foreach ($bd_offer_data as $d) {
-                $d->update_amount = round($d->amount * $unit_rate, 4);
-                $d->operator_logo = DB::table('sim_operators')->where('operator', $operator_details['data']->operator_name)->first()->img;
-            }
-            return ['status' => true, 'operator_name' => $operator_name, 'exchange_rate' => $unit_rate, 'bd_offer_data' => $bd_offer_data];
-        } else {
-            $data = $this->dtone->lookup($number);
-            if ($data['status']) {
-                $data = $data['payload'];
-                $credit_data = [];
-                $internet_data = [];
-                $combo_data = [];
-                for ($i = 0; $i < sizeof($data); $i++) {
-                    if ($data[$i]->tags[0] == 'AIRTIME') {
-                        array_push($credit_data, $data[$i]);
-                    }
-
-                    if ($data[$i]->tags[0] == 'BUNDLE') {
-                        array_push($combo_data, $data[$i]);
-                    }
-
-                    if ($data[$i]->tags[0] == 'DATA') {
-                        array_push($internet_data, $data[$i]);
-                    }
-
+        try {
+            if (str_contains($number, '+880')) {
+                $change = [' ', '+'];
+                $number = str_replace($change, '', $number);
+                $rate = euro_rate_for_bd_recharge();
+                $unit_rate = $rate / 100;
+                $operator_details = $this->bangladeshi_recharge->operatorInfo($number);
+                $bd_offer_data = $this->bangladeshi_recharge->offer_details($operator_details['data']->operator_id);
+                $operator_name = $operator_details['data']->operator_name;
+                // file_put_contents('test.txt',$operator_details['data']->operator_name);
+                foreach ($bd_offer_data as $d) {
+                    $d->update_amount = round($d->amount * $unit_rate, 4);
+                    $d->operator_logo = DB::table('sim_operators')->where('operator', $operator_details['data']->operator_name)->first()->img;
                 }
-                // file_put_contents('test.txt',sizeof($credit_data));
-                $operator_name = $data[0]->operator->name;
-                $skus = $this->make_sku_list($credit_data);
-                $internet_data = $this->make_internet_data_list($internet_data);
-                $combo_data = $this->make_bundle_data_list($combo_data);
-                //file_put_contents('test.txt',json_encode($combo_data));
-                return ['status' => true, 'data' => $data, 'operator_name' => $operator_name, 'skus' => $skus, 'internet' => $internet_data, 'combo' => $combo_data];
+                return ['status' => true, 'operator_name' => $operator_name, 'exchange_rate' => $unit_rate, 'bd_offer_data' => $bd_offer_data];
             } else {
-                return ['status' => false, 'message' => $data['payload']->errors[0]->message];
-            }
+                $data = $this->dtone->lookup($number);
+                if ($data['status']) {
+                    $data = $data['payload'];
+                    $credit_data = [];
+                    $internet_data = [];
+                    $combo_data = [];
+                    for ($i = 0; $i < sizeof($data); $i++) {
+                        if ($data[$i]->tags[0] == 'AIRTIME') {
+                            array_push($credit_data, $data[$i]);
+                        }
 
+                        if ($data[$i]->tags[0] == 'BUNDLE') {
+                            array_push($combo_data, $data[$i]);
+                        }
+
+                        if ($data[$i]->tags[0] == 'DATA') {
+                            array_push($internet_data, $data[$i]);
+                        }
+
+                    }
+                    // file_put_contents('test.txt',sizeof($credit_data));
+                    $operator_name = $data[0]->operator->name;
+                    $skus = $this->make_sku_list($credit_data);
+                    $internet_data = $this->make_internet_data_list($internet_data);
+                    $combo_data = $this->make_bundle_data_list($combo_data);
+                    //file_put_contents('test.txt',json_encode($combo_data));
+                    return ['status' => true, 'data' => $data, 'operator_name' => $operator_name, 'skus' => $skus, 'internet' => $internet_data, 'combo' => $combo_data];
+                } else {
+                    return ['status' => false, 'message' => $data['payload']->errors[0]->message];
+                }
+
+            }
+        } catch (Exception $e) {
+            return ['status' => false, 'message' => 'Some error occured. Please try after sometimes'];
         }
 
     }
@@ -259,45 +263,50 @@ class DtOneController extends Controller
 
     public function bangladeshi_recharge($number, $request)
     {
-        $change = [' ', '+'];
-        $number = str_replace($change, '', $number);
-        $rate = euro_rate_for_bd_recharge();
-        $unit_rate = $rate / 100;
-        $amount = round($request->bd_amount * $unit_rate, 3);
-        if (!check_recurrent_recharge($number)) {
-            return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
-        }
+        try {
+            $change = [' ', '+'];
+            $number = str_replace($change, '', $number);
+            $rate = euro_rate_for_bd_recharge();
+            $unit_rate = $rate / 100;
+            $amount = round($request->bd_amount * $unit_rate, 3);
+            if (!check_recurrent_recharge($number)) {
+                return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
+            }
 
-        if (!CheckRechargeAvail::check($amount, 'International')) {
-            return ['status' => false, 'message' => 'Insufficient wallet & Limit. Please contact with admin'];
-        }
-        $operator_details = $this->bangladeshi_recharge->operatorInfo($number);
-        if ($operator_details['soap_exception_occured'] == false) {
+            if (!CheckRechargeAvail::check($amount, 'International')) {
+                return ['status' => false, 'message' => 'Insufficient wallet & Limit. Please contact with admin'];
+            }
+            $operator_details = $this->bangladeshi_recharge->operatorInfo($number);
+            if ($operator_details['soap_exception_occured'] == false) {
 
-            //file_put_contents('test.txt',$amount.);
+                //file_put_contents('test.txt',$amount.);
 
-            $operator_id = $operator_details['data']->operator_id;
-            $operator_name = $operator_details['data']->operator_name;
-            $guid = new GenerateTransactionId(Auth::user()->id, 13);
-            $guid = $guid->transaction_id();
+                $operator_id = $operator_details['data']->operator_id;
+                $operator_name = $operator_details['data']->operator_name;
+                $guid = new GenerateTransactionId(Auth::user()->id, 13);
+                $guid = $guid->transaction_id();
 
-            $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid, $operator_id, $number, $request->bd_amount);
-            if ($create_recharge['data']->recharge_status == 100) {
-                $init_recharge = $this->bangladeshi_recharge->InitRecharge($guid, $create_recharge['data']->vr_guid);
-                if ($init_recharge['data']->recharge_status == 200) {
-                    $recharge = $this->create_recharge_bangladesh($number, $amount, $request->bd_amount, $guid, $operator_name, $create_recharge['data']->vr_guid, $request->service_charge);
-                    UpdateWallet::update($recharge);
-                    $this->update_balance_bangladesh();
-                    return ['status' => true, 'message' => 'Recharge Successfull'];
+                $create_recharge = $this->bangladeshi_recharge->CreateRecharge($guid, $operator_id, $number, $request->bd_amount);
+                if ($create_recharge['data']->recharge_status == 100) {
+                    $init_recharge = $this->bangladeshi_recharge->InitRecharge($guid, $create_recharge['data']->vr_guid);
+                    if ($init_recharge['data']->recharge_status == 200) {
+                        $recharge = $this->create_recharge_bangladesh($number, $amount, $request->bd_amount, $guid, $operator_name, $create_recharge['data']->vr_guid, $request->service_charge);
+                        UpdateWallet::update($recharge);
+                        $this->update_balance_bangladesh();
+                        return ['status' => true, 'message' => 'Recharge Successfull'];
+                    } else {
+                        return ['status' => false, 'message' => $init_recharge['data']->message];
+                    }
                 } else {
-                    return ['status' => false, 'message' => $init_recharge['data']->message];
+                    return ['status' => false, 'message' => $create_recharge['data']->message];
                 }
             } else {
-                return ['status' => false, 'message' => $create_recharge['data']->message];
+                return ['status' => false, 'message' => $operator_details['exception']];
             }
-        } else {
-            return ['status' => false, 'message' => $operator_details['exception']];
+        } catch (Exception $e) {
+            return ['status' => false, 'message' => 'Some error occured. Please try again after sometimes'];
         }
+
     }
 
     public function recharge(Request $request)
