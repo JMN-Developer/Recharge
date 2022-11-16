@@ -414,8 +414,22 @@ $('.combo').append(offer_list)
                         });
                 }
                 else
-                {
-                    recharge_number()
+                {    
+                  swal({
+                     title: "Are you sure to continue this rechagre?",
+                     icon: "warning",
+                     buttons: true,
+                     dangerMode: true,
+                     })
+                     .then((willDelete) => {
+                     if (willDelete) {
+                         recharge_number()
+                     } else {
+                        //location.reload()
+                     }
+                     });
+
+                  
                 }
 
             }
