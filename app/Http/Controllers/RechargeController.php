@@ -479,7 +479,11 @@ class RechargeController extends Controller
 
     public function check_daily_duplicate(Request $request)
     {
+
         $number = $request->number;
+        $change = [' ', '+'];
+        $number = str_replace($change, '', $number);
+
         $avail = RechargeHistory::where('created_at', '>=', Carbon::now()->subDay()->toDateTimeString())->where('number', $number)->first();
 
         if ($avail) {
