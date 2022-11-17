@@ -198,11 +198,13 @@ if (!function_exists('check_recurrent_recharge')) {
     {
 
         $recharge_history = RechargeHistory::where('number', $number)->latest()->first();
-        $timeDiff = $recharge_history->created_at->diffInMinutes(Carbon::now());
-
-        if ($timeDiff <= 10) {
-            return false;
+        if ($recharge_history) {
+            $timeDiff = $recharge_history->created_at->diffInMinutes(Carbon::now());
+            if ($timeDiff <= 10) {
+                return false;
+            }
         }
+
         return true;
     }
 }
