@@ -23,7 +23,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Kreait\Firebase\Auth;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -858,7 +857,7 @@ class RechargeController extends Controller
                 $create->cost = $cost;
                 $create->company_name = 'Domestic1';
                 $create->sub_profit = $sub_profit;
-                $create->recharge_comission = Auth::user()->admin_recharge_commission;
+                $create->recharge_comission = a::user()->admin_recharge_commission;
                 $create->save();
                 UpdateWallet::update($create);
                 return ['status' => true, 'message' => 'Your Recharge Has Been Sucessfull!'];
