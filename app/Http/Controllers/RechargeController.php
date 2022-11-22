@@ -858,6 +858,7 @@ class RechargeController extends Controller
                 $create->cost = $cost;
                 $create->company_name = 'Domestic1';
                 $create->sub_profit = $sub_profit;
+                $create->recharge_comission = Auth::user()->admin_recharge_commission;
                 $create->save();
                 UpdateWallet::update($create);
                 return ['status' => true, 'message' => 'Your Recharge Has Been Sucessfull!'];

@@ -51,13 +51,14 @@ class CheckRechargeAvail
         }
 
         $user_info = User::where('id', auth()->user()->id)->first();
-        if ($type == 'International') {
+        if ($type == 'International' || $type == 'Bangladesh' || $type == 'White Calling') {
             $current_wallet = $user_info->wallet;
             $limit = $user_info->due;
             $limit_usage = $user_info->limit_usage;
             if (auth()->user()->parent->role == 'sub') {
                 $parent_current_wallet = auth()->user()->parent->wallet;
                 $parent_limit = auth()->user()->parent->due;
+                $parent_limit_usage = auth()->user()->parent->limit_usage;
             }
 
         } else {
@@ -67,12 +68,13 @@ class CheckRechargeAvail
             if (auth()->user()->parent->role == 'sub') {
                 $parent_current_wallet = auth()->user()->parent->domestic_wallet;
                 $parent_limit = auth()->user()->parent->domestic_due;
+                $parent_limit_usage = auth()->user()->parent->domestic_limit_usage;
             }
 
         }
         $due_limit = $limit - $limit_usage;
         if (auth()->user()->parent->role == 'sub') {
-            $parent_due_limit = $parent_limit - $limit_usage;
+            $parent_due_limit = $parent_limit - $parent_limit_usage;
         }
 
         if ($requested_amount > $current_wallet) {

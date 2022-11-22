@@ -170,6 +170,7 @@ class PinController extends Controller
 
                 $create->pin_product = $product->product;
                 $create->sub_profit = $sub_profit;
+                $create->recharge_comission = Auth::user()->admin_pin_commission;
 
                 $create->save();
 

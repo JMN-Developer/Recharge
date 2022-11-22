@@ -206,6 +206,7 @@ class DtOneController extends Controller
             'deliveredAmountCurrencyCode' => $data->benefits[0]->unit,
             'company_name' => 'International4',
             'sub_profit' => $sub_profit,
+            'recharge_comission' => Auth::user()->admin_international_recharge_commission,
 
         ]);
         return $recharge;
@@ -232,6 +233,7 @@ class DtOneController extends Controller
             'deliveredAmount' => $updated_amount,
             'deliveredAmountCurrencyCode' => 'BDT',
             'company_name' => 'Bangladesh1',
+            'recharge_comission' => Auth::user()->admin_international_recharge_commission,
 
         ]);
         return $recharge;
