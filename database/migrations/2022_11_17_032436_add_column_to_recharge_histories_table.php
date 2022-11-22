@@ -16,7 +16,7 @@ class AddColumnToRechargeHistoriesTable extends Migration
         Schema::table('recharge_histories', function (Blueprint $table) {
             //
             $table->float('recharge_comission')->nullable()->after('reseller_com');
-            $table->float('admin_white_calling_comission')->default(55)->after('admin_pin_comission');
+            $table->float('admin_white_calling_comission')->default(55);
         });
     }
 
