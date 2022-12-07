@@ -574,7 +574,7 @@ $total_due = $current_wallet + ($current_limit - $current_limit_usage);
                   @endif
 
                 </li>
-                @if (Auth::user()->reseller_permission == 1)
+                @if (Auth::user()->role != 'reseller')
                 <li class="nav-item">
                   <a href="/retailer/retailer-action" class="@if(Route::currentRouteName() == 'retailer-action') nav-link active @endif nav-link">
                     <i class="far fa-circle nav-icon"></i>
