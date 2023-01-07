@@ -41,8 +41,8 @@
           <div class="col-10 px-4">
             <div class="card">
               <div class="card-body ">
-                <!-- <p style = 'font-weight:bold'>CONTO POSTE:<span  >BHUIYAN MOHAMMAD MAHADI HASSAN <br>IT33G0760102600001035967742</span> </p>
-                <p style = 'font-weight:bold'>CONTO INTESA SAN PAOLO:<span>BHUIYAN MOHAMMAD MAHADI HASSAN <br> IT95O0306902609100000003684</span> </p> -->
+
+                <p style = 'font-weight:bold'>CONTO INTESA SAN PAOLO:<span>BHUIYAN MOHAMMAD MAHADI HASSAN <br> IT95O0306902609100000003684</span> </p>
               </div>
               <!-- /.card-body -->
             </div>
