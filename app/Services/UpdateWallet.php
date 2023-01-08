@@ -67,7 +67,7 @@ class UpdateWallet
             // file_put_contents('test.txt',$discount." ".$reseller_profit." ".$total_cost." ".$current_balance." ".$updated_balance);
             if ($current_balance < $total_cost) {
                 if ($current_balance <= 0) {
-                    $wallet_before_transaction = auth()->user()->limit_usage;
+                    $wallet_before_transaction = $user_info->limit_usage;
 
                     $user = User::find(auth()->user()->created_by);
                     $user->limit_usage = $current_limit_usage + $total_cost;
@@ -98,7 +98,7 @@ class UpdateWallet
             } else {
                 $updated_balance = $current_balance - $total_cost;
                 //   $user = User::where('id',auth()->user()->id)->updateOrCreate(['wallet'=>$updated_balance]);
-                $wallet_before_transaction = auth()->user()->wallet;
+                $wallet_before_transaction = $user_info->wallet;
 
                 $user = User::find(auth()->user()->created_by);
                 $user->wallet = $updated_balance;
