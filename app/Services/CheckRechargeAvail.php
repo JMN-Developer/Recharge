@@ -63,35 +63,38 @@ class CheckRechargeAvail
             }
 
         } else {
-            $current_wallet = $user_info->domestic_wallet;
-            $limit = $user_info->domestic_due;
-            $limit_usage = $user_info->domestic_limit_usage;
+            $current_wallet = $user_info->domestic_wallet; // 0
+            $limit = $user_info->domestic_due; //200.00
+            $limit_usage = $user_info->domestic_limit_usage; //4.17
             if (auth()->user()->parent->role == 'sub') {
-                $parent_current_wallet = auth()->user()->parent->domestic_wallet;
-                $parent_limit = auth()->user()->parent->domestic_due;
-                $parent_limit_usage = auth()->user()->parent->domestic_limit_usage;
+                $parent_current_wallet = auth()->user()->parent->domestic_wallet; // 0
+                $parent_limit = auth()->user()->parent->domestic_due; // 1000
+                $parent_limit_usage = auth()->user()->parent->domestic_limit_usage; //990.68
             }
 
         }
-        $due_limit = $limit - $limit_usage;
+        $due_limit = $limit - $limit_usage; // 200-4.17 =
         if (auth()->user()->parent->role == 'sub') {
-            $parent_due_limit = $parent_limit - $parent_limit_usage; //1000- 1100 = -100
+            $parent_due_limit = $parent_limit - $parent_limit_usage; //1000- 990.68 = 9.32
 
         }
-        Log::info($due_limit . ' ' . $current_wallet);
+
         if ($requested_amount > $current_wallet) {
             if ($requested_amount > $due_limit + $current_wallet) {
+                Log::channel('sumonLog')->info('First False ' . $requested_amount . ' ' . $type);
                 return false;
             } else {
                 if (auth()->user()->parent->role == 'sub') {
                     if ($requested_amount > $parent_due_limit + $parent_current_wallet) {
+                        Log::channel('sumonLog')->info('Second False ' . $requested_amount . ' ' . $type);
                         return false;
                     }
                 }
+                Log::channel('sumonLog')->info('First true ' . $requested_amount . ' ' . $type);
                 return true;
             }
         }
-
+        Log::channel('sumonLog')->info('Second true ' . $requested_amount . ' ' . $type);
         return true;
     }
 }

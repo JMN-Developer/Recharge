@@ -732,6 +732,7 @@ class RechargeController extends Controller
             return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
         }
         $sku_amount = explode(',', $request->amount);
+
         if (!CheckRechargeAvail::check($sku_amount['1'], 'Domestic')) {
             return ['status' => false, 'message' => 'Insufficient wallet & Limit. Please contact with admin'];
         }
