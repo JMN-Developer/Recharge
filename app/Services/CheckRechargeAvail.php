@@ -6,6 +6,7 @@ use App\Models\Balance;
 use App\Models\User;
 use App\Notifications\BalanceAlertNotification;
 use Illuminate\Support\Facades\Notification;
+use Log;
 
 /**
  * Class CheckRechargeAvail
@@ -74,8 +75,10 @@ class CheckRechargeAvail
         }
         $due_limit = $limit - $limit_usage;
         if (auth()->user()->parent->role == 'sub') {
-            $parent_due_limit = $parent_limit - $parent_limit_usage;
+            $parent_due_limit = $parent_limit - $parent_limit_usage; //1000- 1100 = -100
         }
+
+        Log::info($parent_due_limit . ' ' . $parent_current_wallet);
 
         if ($requested_amount > $current_wallet) {
             if ($requested_amount > $due_limit + $current_wallet) {
