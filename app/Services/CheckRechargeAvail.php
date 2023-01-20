@@ -6,7 +6,6 @@ use App\Models\Balance;
 use App\Models\User;
 use App\Notifications\BalanceAlertNotification;
 use Illuminate\Support\Facades\Notification;
-use Log;
 
 /**
  * Class CheckRechargeAvail
@@ -79,22 +78,38 @@ class CheckRechargeAvail
 
         }
 
-        if ($requested_amount > $current_wallet) {
-            if ($requested_amount > $due_limit + $current_wallet) {
-                Log::channel('sumonLog')->info('First False ' . $requested_amount . ' ' . $type);
-                return false;
-            } else {
-                if (auth()->user()->parent->role == 'sub') {
-                    if ($requested_amount > $parent_due_limit + $parent_current_wallet) {
-                        Log::channel('sumonLog')->info('Second False ' . $requested_amount . ' ' . $type);
-                        return false;
-                    }
-                }
-                Log::channel('sumonLog')->info('First true ' . $requested_amount . ' ' . $type);
-                return true;
-            }
+        // if ($requested_amount > $current_wallet) {
+        //     if ($requested_amount > $due_limit + $current_wallet) {
+        //         Log::channel('sumonLog')->info('First False ' . $requested_amount . ' ' . $type);
+        //         return false;
+        //     } else {
+        //         if (auth()->user()->parent->role == 'sub') {
+        //             if ($requested_amount > $parent_due_limit + $parent_current_wallet) {
+        //                 Log::channel('sumonLog')->info('Second False ' . $requested_amount . ' ' . $type);
+        //                 return false;
+        //             }
+        //         }
+        //         Log::channel('sumonLog')->info('First true ' . $requested_amount . ' ' . $type);
+        //         return true;
+        //     }
+        // }
+        // if (auth()->user()->parent->role == 'sub') {
+        //     if ($requested_amount > $parent_due_limit + $parent_current_wallet) {
+        //         Log::channel('sumonLog')->info('3rd False ' . $requested_amount . ' ' . $type);
+        //         return false;
+        //     }
+        // }
+        // Log::channel('sumonLog')->info('Second true ' . $requested_amount . ' ' . $type);
+        // return true;
+
+        if ($requested_amount > $current_wallet && $requested_amount > $due_limit + $current_wallet) {
+            return false;
         }
-        Log::channel('sumonLog')->info('Second true ' . $requested_amount . ' ' . $type);
+
+        if (auth()->user()->parent->role == 'sub' && $requested_amount > $parent_due_limit + $parent_current_wallet) {
+            return false;
+        }
+
         return true;
     }
 }
