@@ -25,7 +25,7 @@ class DtOneController extends Controller
     {
         $dtone = new DtOneProvider();
         $this->dtone = $dtone;
-        //$this->bangladeshi_recharge = new BangladeshiRecharge();
+        $this->bangladeshi_recharge = new BangladeshiRecharge();
     }
     public function index()
     {
