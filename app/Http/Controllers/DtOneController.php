@@ -108,7 +108,7 @@ class DtOneController extends Controller
         $number = $request->number;
         $countryIso = $request->countryIso;
         try {
-            if (str_contains($number, '111111')) {
+            if (str_contains($number, '+880')) {
                 $change = [' ', '+'];
                 $number = str_replace($change, '', $number);
                 $rate = euro_rate_for_bd_recharge();
@@ -322,7 +322,7 @@ class DtOneController extends Controller
         }
         //  file_put_contents('test.txt',$request->bd_amount);
         //return;
-        if (str_contains($number, '111111')) {
+        if (str_contains($number, '+880')) {
             $data = $this->bangladeshi_recharge($number, $request);
             return ['status' => $data['status'], 'message' => $data['message']];
 

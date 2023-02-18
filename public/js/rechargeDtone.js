@@ -325,7 +325,7 @@ $('.combo').append(offer_list)
 
                 $("#operator_name").text(responses.operator_name);
                 $("#exchange_rate").val(responses.exchange_rate);
-                if(number.startsWith('111111'))
+                if(number.startsWith('+880'))
                     {
                         $("#bangladesh_amount").show();
                         $("#international_amount").hide();
