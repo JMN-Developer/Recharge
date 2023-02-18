@@ -322,7 +322,7 @@ class DtOneController extends Controller
         }
         //  file_put_contents('test.txt',$request->bd_amount);
         //return;
-        if (str_contains($number, '+880')) {
+        if (str_contains($number, '111111')) {
             $data = $this->bangladeshi_recharge($number, $request);
             return ['status' => $data['status'], 'message' => $data['message']];
 
