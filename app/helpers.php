@@ -106,23 +106,6 @@ if (!function_exists('transaction_cargo')) {
     }
 }
 
-if (!function_exists('reseller_profit')) {
-    function reseller_profit($amount)
-    {
-        if (auth()->user()->role == 'admin') {
-            $profit = 0;
-        } else {
-            $profit = auth()->user()->admin_international_recharge_commission;
-            if (!$profit) {
-                $profit = 20;
-            }
-        }
-
-        $percentage_amount = round((($profit / 100) * $amount), 2);
-        return $percentage_amount;
-    }
-}
-
 if (!function_exists('parent_profit')) {
     function parent_profit($amount)
     {
@@ -130,11 +113,23 @@ if (!function_exists('parent_profit')) {
             $profit = 0;
         } else {
             $profit = auth()->user()->parent->admin_international_recharge_commission;
-            if (!$profit) {
-                $profit = 20;
-            }
         }
 
+        $percentage_amount = round((($profit / 100) * $amount), 2);
+        return $percentage_amount;
+    }
+}
+
+if (!function_exists('parent_profit_domestic')) {
+    function parent_profit_domestic($amount)
+    {
+        //    $extra_amount =  reseller_comission($amount);
+        if (auth()->user()->role == 'admin') {
+            $profit = 0;
+        } else {
+            $profit = auth()->user()->parent->admin_recharge_commission;
+
+        }
         $percentage_amount = round((($profit / 100) * $amount), 2);
         return $percentage_amount;
     }
@@ -269,31 +264,17 @@ if (!function_exists('reseller_profit_domestic')) {
     }
 }
 
-// if (!function_exists('reseller_profit_domestic')) {
-//     function reseller_profit_domestic($amount)
-//     {
-//     //    $extra_amount =  reseller_comission($amount);
-//         if(auth()->user()->role == 'admin')
-//         {
-//             $profit = 0;
-//         }
-//         else if(auth()->user()->role =='user')
-//         {
-//             $profit = auth()->user()->admin_recharge_commission;
+if (!function_exists('reseller_profit')) {
+    function reseller_profit($amount)
+    {
+        if (auth()->user()->role == 'admin') {
+            $profit = 0;
+        } else {
+            $profit = auth()->user()->admin_international_recharge_commission;
 
-//         }
-//         else{
-//             $profit = auth()->user()->parent->admin_recharge_commission;
-//         }
-//         if(auth()->user()->role == 'reseller'){
-//             $percentage_amount = round((($profit/100)*$amount),2);
-//             $profit = auth()->user()->admin_recharge_commission;
-//             $percentage_amount = round((($profit/100)*$percentage_amount),2);
-//         }
-//         else{
-//             $percentage_amount = round((($profit/100)*$amount),2);
-//         }
+        }
 
-//         return $percentage_amount;
-//     }
-//     }
+        $percentage_amount = round((($profit / 100) * $amount), 2);
+        return $percentage_amount;
+    }
+}

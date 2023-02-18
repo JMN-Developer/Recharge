@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Models\RechargeHistory;
-use App\Services\BangladeshiRecharge;
 use App\Services\CheckRechargeAvail;
 use App\Services\DtOneProvider;
 use App\Services\GenerateTransactionId;
@@ -26,7 +25,7 @@ class DtOneController extends Controller
     {
         $dtone = new DtOneProvider();
         $this->dtone = $dtone;
-        $this->bangladeshi_recharge = new BangladeshiRecharge();
+        //$this->bangladeshi_recharge = new BangladeshiRecharge();
     }
     public function index()
     {
@@ -54,11 +53,11 @@ class DtOneController extends Controller
         $data = array();
         foreach ($skus as $sku) {
             if (auth()->user()->parent->role == 'sub') {
-                $amount_text = $sku->prices->retail->amount + parent_comission($sku->prices->retail->amount) + reseller_comission($sku->prices->retail->amount + parent_comission($sku->prices->retail->amount)) . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
-                array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount + parent_comission($sku->prices->retail->amount) + reseller_comission($sku->prices->retail->amount + parent_comission($sku->prices->retail->amount)), 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
+                $amount_text = $sku->prices->retail->amount . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
+                array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount, 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
             } else {
-                $amount_text = $sku->prices->retail->amount + reseller_comission($sku->prices->retail->amount) . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
-                array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount + reseller_comission($sku->prices->retail->amount), 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
+                $amount_text = $sku->prices->retail->amount . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
+                array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount, 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
             }
 
         }
@@ -109,7 +108,7 @@ class DtOneController extends Controller
         $number = $request->number;
         $countryIso = $request->countryIso;
         try {
-            if (str_contains($number, '+880')) {
+            if (str_contains($number, '111111')) {
                 $change = [' ', '+'];
                 $number = str_replace($change, '', $number);
                 $rate = euro_rate_for_bd_recharge();
@@ -168,24 +167,22 @@ class DtOneController extends Controller
 
         if (auth()->user()->parent->role == 'sub') {
 
-            $parent_comission = parent_comission($data->prices->retail->amount);
-            $parent_profit = parent_profit($data->prices->retail->amount + $parent_comission);
-            $reseller_commission = reseller_comission($data->prices->retail->amount + $parent_comission);
-            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission + $parent_comission);
-            $admin_profit = $discount + $parent_comission - $parent_profit;
+            $parent_profit = parent_profit($discount);
+            $reseller_profit = reseller_profit($parent_profit);
+            $admin_profit = $discount - $parent_profit;
             $sub_profit = $parent_profit - $reseller_profit;
-            $total_amount = $data->prices->retail->amount + $parent_comission + $reseller_commission; //14.4
+            $total_amount = $data->prices->retail->amount; //14.4
 
         } else {
-            $reseller_commission = reseller_comission($data->prices->retail->amount); //1
-            $reseller_profit = reseller_profit($data->prices->retail->amount + $reseller_commission); //1.1
-            $admin_profit = $discount + $reseller_commission - $reseller_profit; //2+1-1.1 = 1.9
+
+            $reseller_profit = reseller_profit($discount); // (.26) = .13
+            $admin_profit = $discount - $reseller_profit; //2+1-1.1 = 1.9
             $sub_profit = 0;
-            $total_amount = $data->prices->retail->amount + $reseller_commission; //11 = 11-1.1 = 9.9
+            $total_amount = $data->prices->retail->amount; //11 = 11-1.1 = 9.9
 
         }
 
-        $log_data = 'Number = ' . $number . ' Amount = ' . $data->prices->retail->amount + $reseller_commission . ' R-Com = ' . $reseller_profit . ' A-Com = ' . $admin_profit . ' TXID = ' . $txid;
+        $log_data = 'Number = ' . $number . ' Amount = ' . $data->prices->retail->amount . ' R-Com = ' . $reseller_profit . ' A-Com = ' . $admin_profit . ' TXID = ' . $txid;
         Log::channel('rechargelog')->info($log_data);
         $recharge = RechargeHistory::create([
             'reseller_id' => a::user()->id,

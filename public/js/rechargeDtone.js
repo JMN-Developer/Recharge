@@ -317,9 +317,6 @@ $('.combo').append(offer_list)
             {
 
 
-
-
-
                 $("#check_number").hide();
 
                 $(".amount_input_field").show();
@@ -414,7 +411,7 @@ $('.combo').append(offer_list)
                         });
                 }
                 else
-                {    
+                {
                   swal({
                      title: "Are you sure to continue this rechagre?",
                      icon: "warning",
@@ -429,7 +426,7 @@ $('.combo').append(offer_list)
                      }
                      });
 
-                  
+
                 }
 
             }
