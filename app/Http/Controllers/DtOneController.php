@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Balance;
-use App\Models\RechargeHistory;
-use App\Services\BangladeshiRecharge;
-use App\Services\CheckRechargeAvail;
-use App\Services\DtOneProvider;
-use App\Services\GenerateTransactionId;
-use App\Services\UpdateWallet;
-use Auth;
 use DB;
+use Auth;
 use Exception;
+use App\Models\Balance;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth as a;
+use App\Services\UpdateWallet;
+use App\Models\RechargeHistory;
+use App\Services\DtOneProvider;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Services\CheckRechargeAvail;
+use App\Services\GenerateTransactionId;
+use Illuminate\Support\Facades\Auth as a;
 
 class DtOneController extends Controller
 {
@@ -50,17 +49,16 @@ class DtOneController extends Controller
     }
     public function make_sku_list($skus)
     {
-
         $data = array();
         foreach ($skus as $sku) {
+            $discount = $sku->prices->retail->amount - $sku->prices->wholesale->amount;
             if (auth()->user()->parent->role == 'sub') {
-                $amount_text = $sku->prices->retail->amount . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
-                array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount, 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
+                $amount_text = $sku->prices->retail->amount - reseller_profit(parent_profit($discount)) . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
+                array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount - reseller_profit(parent_profit($discount)), 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
             } else {
-                $amount_text = $sku->prices->retail->amount . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
-                array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount, 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
+                $amount_text = $sku->prices->retail->amount - reseller_profit($discount) . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
+                array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount - reseller_profit($discount), 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
             }
-
         }
         usort($data, function ($a, $b) {
             return $a['amount'] <=> $b['amount'];
@@ -75,7 +73,6 @@ class DtOneController extends Controller
             if (str_contains($d->creation_date, '2022-03-04') || str_contains($d->creation_date, '2022-03-05') || str_contains($d->creation_date, '2022-03-06')) {
                 array_push($record, ['date' => $d->creation_date, 'external_id' => $d->external_id, 'amount' => $d->prices->retail->amount]);
             }
-
         }
         return json_encode($record);
     }
@@ -84,7 +81,7 @@ class DtOneController extends Controller
     {
         $data = array();
         foreach ($list as $l) {
-            array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount + reseller_comission($l->prices->retail->amount), 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
+            array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount, 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
         }
         usort($data, function ($a, $b) {
             return $a['amount'] <=> $b['amount'];
@@ -96,7 +93,7 @@ class DtOneController extends Controller
     {
         $data = array();
         foreach ($list as $l) {
-            array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount + reseller_comission($l->prices->retail->amount), 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
+            array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount, 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
         }
         usort($data, function ($a, $b) {
             return $a['amount'] <=> $b['amount'];
@@ -105,7 +102,6 @@ class DtOneController extends Controller
     }
     public function mobile_number_details(Request $request)
     {
-
         $number = $request->number;
         $countryIso = $request->countryIso;
         try {
@@ -142,7 +138,6 @@ class DtOneController extends Controller
                         if ($data[$i]->tags[0] == 'DATA') {
                             array_push($internet_data, $data[$i]);
                         }
-
                     }
                     // file_put_contents('test.txt',sizeof($credit_data));
                     $operator_name = $data[0]->operator->name;
@@ -154,12 +149,10 @@ class DtOneController extends Controller
                 } else {
                     return ['status' => false, 'message' => $data['payload']->errors[0]->message];
                 }
-
             }
         } catch (Exception $e) {
             return ['status' => false, 'message' => 'Some error occured. Please try after sometimes'];
         }
-
     }
 
     public function create_recharge($data, $number, $txid, $country_code, $service = 0)
@@ -167,20 +160,16 @@ class DtOneController extends Controller
         $discount = $data->prices->retail->amount - $data->prices->wholesale->amount;
 
         if (auth()->user()->parent->role == 'sub') {
-
             $parent_profit = parent_profit($discount);
             $reseller_profit = reseller_profit($parent_profit);
             $admin_profit = $discount - $parent_profit;
             $sub_profit = $parent_profit - $reseller_profit;
             $total_amount = $data->prices->retail->amount; //14.4
-
         } else {
-
             $reseller_profit = reseller_profit($discount); // (.26) = .13
             $admin_profit = $discount - $reseller_profit; //2+1-1.1 = 1.9
             $sub_profit = 0;
             $total_amount = $data->prices->retail->amount; //11 = 11-1.1 = 9.9
-
         }
 
         $log_data = 'Number = ' . $number . ' Amount = ' . $data->prices->retail->amount . ' R-Com = ' . $reseller_profit . ' A-Com = ' . $admin_profit . ' TXID = ' . $txid;
@@ -211,7 +200,6 @@ class DtOneController extends Controller
     }
     public function create_recharge_bangladesh($number, $amount, $updated_amount, $txid, $operator_name, $transaction_id_company, $service = 0)
     {
-
         $admin_profit = $this->calculate_profit($amount);
         $cost = $amount - $admin_profit;
         $log_data = 'Number = ' . $number . ' Amount = ' . $amount . ' R-Com = ' . $service . ' A-Com = ' . $admin_profit . ' TXID = ' . $txid;
@@ -251,14 +239,12 @@ class DtOneController extends Controller
         $balance_info = Balance::where('type', 'dtone')->first();
         $current_balance = $balance_info->balance - $cost;
         Balance::where('type', 'dtone')->update(['balance' => $current_balance]);
-
     }
     public function update_balance_bangladesh()
     {
         $current_balance = $this->bangladeshi_recharge->balanceInfo();
 
         Balance::where('type', 'ssl')->update(['balance' => $current_balance['balance_info']]);
-
     }
 
     public function bangladeshi_recharge($number, $request)
@@ -278,7 +264,6 @@ class DtOneController extends Controller
             }
             $operator_details = $this->bangladeshi_recharge->operatorInfo($number);
             if ($operator_details['soap_exception_occured'] == false) {
-
                 //file_put_contents('test.txt',$amount.);
 
                 $operator_id = $operator_details['data']->operator_id;
@@ -306,7 +291,6 @@ class DtOneController extends Controller
         } catch (Exception $e) {
             return ['status' => false, 'message' => 'Some error occured. Please try again after sometimes'];
         }
-
     }
 
     public function recharge(Request $request)
@@ -326,7 +310,6 @@ class DtOneController extends Controller
         if (str_contains($number, '+880')) {
             $data = $this->bangladeshi_recharge($number, $request);
             return ['status' => $data['status'], 'message' => $data['message']];
-
         }
         if (!CheckRechargeAvail::check($request->amount, 'International')) {
             return ['status' => false, 'message' => 'Insufficient wallet & Limit. Please contact with admin'];
@@ -342,15 +325,12 @@ class DtOneController extends Controller
         //  //file_put_contents('test.txt',$tmp_data->responseCode);
 
         if ($data['status']) {
-
             $recharge = $this->create_recharge($data['payload'], $number, $txid, $country_code, $request->service_charge);
             UpdateWallet::update($recharge);
             $this->update_balance($data['payload']->prices->retail->amount, $data['payload']->prices->wholesale->amount);
             return ['status' => true, 'message' => 'Recharge Successfull'];
         } else {
-
             return ['status' => false, 'message' => $data['message']];
         }
-
     }
 }
