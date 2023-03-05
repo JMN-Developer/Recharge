@@ -28,7 +28,6 @@ class PpnController extends Controller
     }
     public function index()
     {
-
         if (a::user()->role != 'admin') {
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type', 'International')->latest()->take(10)->get();
         } else {
@@ -37,7 +36,6 @@ class PpnController extends Controller
                 ->latest()
                 ->take(10)
                 ->get();
-
         }
 
         return view('front.recharge-ppn', compact('data'));
@@ -80,7 +78,6 @@ class PpnController extends Controller
                 return ['status' => false, 'message' => 'Error in mobile number'];
             }
         } else {
-
             return ['status' => false, 'message' => $data['payload']->message];
         }
         //$data = (array) $data;
@@ -107,7 +104,6 @@ class PpnController extends Controller
         } catch (\Throwable$th) {
             //throw $th;
         }
-
     }
 
     public function create_recharge($data, $number, $txid, $country_code, $service)
@@ -181,12 +177,10 @@ class PpnController extends Controller
         $discount = $recharge_amount - $cost;
         $total_cost_reseller = $cost + ($discount / 2);
         Balance::where('type', 'ppn')->update(['balance' => $current_balance]);
-
     }
 
     public function recharge(Request $request)
     {
-
         //file_put_contents('test.txt',$test);
         if (!CheckRechargeAvail::check($request->amount, 'International')) {
             return ['status' => false, 'message' => 'Insufficient wallet & Limit. Please contact with admin'];
@@ -245,21 +239,18 @@ class PpnController extends Controller
         }
         //  file_put_contents('test.txt',json_encode($data));
         // file_put_contents('test.txt',$request->operatorId." ".$request->amount." ".$request->countryCode." ".$request->number);
-
     }
 
     public function calling_card_index()
     {
         if (a::user()->role != 'admin') {
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type', '=', 'White Calling')->latest()->take(10)->get();
-
         } else {
             $data = RechargeHistory::where('type', 'White Calling')->join('users', 'users.id', '=', 'recharge_histories.reseller_id')
                 ->select('recharge_histories.*', 'users.nationality')
                 ->latest()
                 ->take(10)
                 ->get();
-
         }
 
         return view('front.white-calling-ppn', compact('data'));
@@ -275,10 +266,8 @@ class PpnController extends Controller
                 ->latest()
                 ->take(10)
                 ->get();
-
         }
         return $data;
-
     }
 
     public function pin(Request $request)
@@ -323,15 +312,14 @@ class PpnController extends Controller
         // $data = json_decode($tmp_text);
         // $data = ['status'=>true,'payload'=>$data];
         if ($data['status']) {
-
             $recharge = $this->create_pin($data['payload']->payLoad, $txid);
             UpdateWallet::update($recharge);
             $this->update_balance($data['payload']->payLoad->faceValue, $data['payload']->payLoad->invoiceAmount);
             return ['status' => true, 'message' => 'Recharge Successfull', 'pin_number' => $data['payload']->payLoad->pins[0]->pinNumber, 'control_number' => $data['payload']->payLoad->pins[0]->controlNumber];
         } else {
             $data = $data['payload'];
+            Log::info($data);
             return ['status' => false, 'message' => $data->message];
         }
     }
-
 }
