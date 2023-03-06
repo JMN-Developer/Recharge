@@ -120,9 +120,6 @@
                                                 <p style="padding:5px;font-weight:bold;color:white;font-size:16px">Operator Name: <span id="operator_name"></span> </p>
                                             </div>
 
-                                            <div class="text-center" style="background:#C62604;width:84%;margin-bottom:10px">
-                                                <p style="padding:5px;font-weight:bold;color:white;font-size:16px">Profit : <span id="operator_name">{{ auth()->user()->admin_international_recharge_commission }}%</span> </p>
-                                            </div>
 
                                          </div>
                                     </div>
