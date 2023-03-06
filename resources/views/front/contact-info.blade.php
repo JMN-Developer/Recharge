@@ -42,7 +42,7 @@
             <div class="card">
               <div class="card-body ">
 
-                <p style = 'font-weight:bold'>CONTO INTESA SAN PAOLO:<span>BHUIYAN MOHAMMAD MAHADI HASSAN <br> IT98R0538702684000003767767</span> </p>
+                <p style = 'font-weight:bold'>CONTO INTESA SAN PAOLO:<span>AMICI BIGIOTTERIA DI BHUIYAN MOHAMMAD MAHADI HASSAN <br> IT98R0538702684000003767767</span> </p>
               </div>
               <!-- /.card-body -->
             </div>
