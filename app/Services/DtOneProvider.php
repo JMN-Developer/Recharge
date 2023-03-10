@@ -39,7 +39,6 @@ class DtOneProvider
 
     public function lookup($mobile)
     {
-
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
         $operator_request = $client->get('https://dvs-api.dtone.com/v1/lookup/mobile-number/' . $mobile, ['headers' => [
             'Authorization' => 'Basic ' . $this->access_token,
@@ -54,14 +53,28 @@ class DtOneProvider
         $operator_response = json_decode($operator_response);
 
         if ($status == 200) {
-
             $operator_id = $operator_response[0]->id;
+            $this->operator_details($operator_id);
             return ['payload' => $this->fetch_product($operator_id), 'status' => true];
         } else {
-
             return ['payload' => $operator_response, 'status' => false];
         }
+    }
 
+    public function operator_details($operator_id)
+    {
+        $client = new \GuzzleHttp\Client(['http_errors' => false]);
+        $operator_request = $client->get('https://dvs-api.dtone.com/v1/operators/' . $operator_id . '', ['headers' => [
+            'Authorization' => 'Basic ' . $this->access_token,
+            'Accept' => 'application/json',
+
+        ], 'verify' => false]);
+
+        $status = $operator_request->getStatusCode();
+        $operator_response = $operator_request->getBody();
+        Log::info($operator_response);
+        $operator_response = json_decode($operator_response);
+        return $operator_response;
     }
 
     public function transaction($transaction_id)
@@ -81,13 +94,10 @@ class DtOneProvider
         $operator_response = json_decode($operator_response);
 
         if ($status == 200) {
-
             return ['payload' => $operator_response, 'status' => true];
         } else {
-
             return ['payload' => $operator_response, 'status' => false];
         }
-
     }
 
     public function transaction_list()
@@ -110,7 +120,6 @@ class DtOneProvider
 
     public function recharge($sku_id, $txid, $mobile)
     {
-
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
         $response = $client->post('https://dvs-api.dtone.com/v1/async/transactions', [
             'headers' => [
@@ -137,16 +146,13 @@ class DtOneProvider
                 $transaction_report = $this->transaction($response->id);
                 if ($transaction_report['status'] == true) {
                     if ($transaction_report['payload']->status->class->message == 'COMPLETED' || $transaction_report['payload']->status->class->message == 'SUBMITTED') {
-
                         return ['payload' => $transaction_report['payload'], 'status' => true];
                     } else {
-
                         return ['message' => $transaction_report['payload']->status->message, 'status' => false];
                     }
                 } else {
                     return ['message' => $transaction_report['payload']->status->message, 'status' => false];
                 }
-
             }
 
             // file_put_contents('test.txt',json_encode($response));
@@ -170,7 +176,6 @@ class DtOneProvider
             //         return ['payload'=>$confirmation['message'],'status'=>false];
             //     }
         } else {
-
             return ['message' => 'Some Error Occured. Please try again after sometimes', 'status' => false];
         }
     }
@@ -199,7 +204,5 @@ class DtOneProvider
         } else {
             return ['status' => false, 'message' => $operator_response];
         }
-
     }
-
 }
