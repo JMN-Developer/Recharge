@@ -67,7 +67,7 @@ class DtOneProvider
     {
         // file_put_contents('test.txt', $operator_id);
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
-        $operator_request = $client->get('https://dvs-api.dtone.com/v1/products?country_iso_code=' . $iso_code, ['headers' => [
+        $operator_request = $client->get('https://dvs-api.dtone.com/v1/operators?country_iso_code=' . $iso_code, ['headers' => [
             'Authorization' => 'Basic ' . $this->access_token,
             'Accept' => 'application/json',
 
