@@ -50,7 +50,7 @@ class DtOneController extends Controller
     }
     public function make_sku_list($skus)
     {
-        Log::info($skus);
+        Log::info(json_encode($skus));
         $data = array();
         foreach ($skus as $sku) {
             $discount = $sku->prices->retail->amount - $sku->prices->wholesale->amount;
