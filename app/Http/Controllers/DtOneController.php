@@ -27,11 +27,8 @@ class DtOneController extends Controller
         $this->dtone = $dtone;
         //$this->bangladeshi_recharge = new BangladeshiRecharge();
     }
-    public function index(Request $request)
+    public function index()
     {
-        $ip = $request->ip();
-        Log::info($ip);
-
         if (a::user()->role == 'admin') {
             $data = RechargeHistory::where(function ($q) {
                 $q->where('type', 'International')

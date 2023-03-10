@@ -42,7 +42,6 @@ Route::get('/', [AuthController::class, 'index'])->name('/');
 Route::post('send_frontpage_email', [FrontController::class, 'send_frontpage_email'])->name('send_frontpage_email');
 
 Route::get('error-page', function () {
-
     return view('error.index');
 });
 
@@ -51,7 +50,6 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/l', function () {
-
 })->name('/a');
 
 Route::get('/recharge', function () {
@@ -63,13 +61,14 @@ Route::get('/recharge', function () {
 // });
 
 Route::group(['middleware' => ['auth', 'TransactionHistoryActive']], function () {
-
     Route::get('transaction-history', [TransactionController::class, 'index'])->name('transaction-history');
-
+});
+Route::get('/get-ip', function (Request $request) {
+    $ip = $request->ip();
+    return "Your IP address is: " . $ip;
 });
 
 Route::group(['middleware' => ['auth']], function () {
-
     Route::get('check_email', [Usercontroller::class, 'check_email']);
     Route::get('/sign-up', [UserController::class, 'index']);
 
@@ -106,12 +105,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::post('check-products', function (Request $request) {
-
         $offer_detail = DomesticProduct::where('product', 'like', '%' . $request->id . '%')->where('type', 'recharge')->get();
         return response()->json($offer_detail, 200);
     });
     Route::post('check-pins', function (Request $request) {
-
         if ($request->id == 'EA') {
             $offer_detail = DB::table('domestic_pins')->where('operator', $request->id)->where('type', 'pin')->get();
         } else {
@@ -174,13 +171,12 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::post('/domestic_product', function (Request $request) {
-        $add = new DomesticProfit;
+        $add = new DomesticProfit();
         $add->ean = $request->ean;
         $add->commission = $request->commission;
         $add->save();
 
         return back();
-
     });
 
     Route::get('contact-info', function () {
@@ -220,7 +216,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/change-phone-price', [BalanceController::class, 'PriceDiscount']);
 
     Route::post('/edit_wallet', [BalanceController::class, 'edit_wallet']);
-
 });
 
 Route::group(['prefix' => 'recharge', 'middleware' => ['auth', 'user']], function () {
@@ -285,11 +280,9 @@ Route::group(['prefix' => 'recharge', 'middleware' => ['auth', 'user']], functio
 
     Route::get('check_daily_duplicate', [RechargeController::class, 'check_daily_duplicate']);
     Route::get('bangladeshi_exchange_rate', [BangladeshRechargeController::class, 'bangladeshi_exchange_rate']);
-
 });
 
 Route::group(['prefix' => 'ticket', 'middleware' => ['auth', 'SupportActive']], function () {
-
     Route::get('/', [TicketController::class, 'index'])->name('ticket');
     Route::get('add', [TicketController::class, 'add_ticket_view'])->name('add-ticket-view');
     Route::post('ticket_submit', [TicketController::class, 'ticket_submit'])->name('ticket-submit');
@@ -299,7 +292,6 @@ Route::group(['prefix' => 'ticket', 'middleware' => ['auth', 'SupportActive']], 
     Route::post('ticket_reply', [TicketController::class, 'ticket_reply'])->name('ticket-reply');
     Route::get('update_ticket_status', [TicketController::class, 'update_ticket_status']);
     Route::get('reopen', [TicketController::class, 'ticket_reopen']);
-
 });
 
 Route::group(['prefix' => 'sim', 'middleware' => ['auth', 'user', 'SimActive']], function () {
@@ -313,11 +305,9 @@ Route::group(['prefix' => 'sim', 'middleware' => ['auth', 'user', 'SimActive']],
     Route::get('sim-download/{id}', [SimController::class, 'download']);
     Route::post('add-sim', [SimController::class, 'store']);
     Route::post('update-sim', [SimController::class, 'update_sim']);
-
 });
 
 Route::group(['prefix' => 'cargo', 'middleware' => ['auth', 'user', 'CargoActive']], function () {
-
     Route::GET('price-edit/{id}', [PricingController::class, 'EditPricing']);
     Route::POST('edit-new-pricing-for-real/{id}', [PricingController::class, 'EditPricingForReal'])->name('edit-new-pricing-for-real');
     Route::GET('price-delete/{id}', [PricingController::class, 'DeletePricing'])->name('price-delete');
@@ -347,22 +337,17 @@ Route::group(['prefix' => 'cargo', 'middleware' => ['auth', 'user', 'CargoActive
     Route::get('order-tracking-view', [CargoController::class, 'OrderTrackingView'])->name('order-tracking-view');
     Route::POST('add-new-order', [OrderController::class, 'AddOrder'])->name('add-new-order');
     Route::post('cargo_update', [OrderController::class, 'update_status']);
-
 });
 Route::group(['prefix' => 'notification', 'middleware' => ['auth']], function () {
-
     Route::get('create', [NotificationController::class, 'create_notification'])->name('create-notification');
     Route::post('send', [NotificationController::class, 'sendNotification'])->name('send_notification');
     Route::get('/', [NotificationController::class, 'index'])->name('GeneralNotification');
-
 });
 
 Route::group(['prefix' => 'phone', 'middleware' => ['auth']], function () {
-
     Route::get('phone-order', [PhoneController::class, 'PhoneOrder'])->name('phone-order');
     Route::get('selling-list', [PhoneController::class, 'SellingList'])->name('selling-list');
     Route::post('phone-order', [PhoneController::class, 'order'])->name('add-order');
-
 });
 
 Route::group(['prefix' => 'flights', 'middleware' => ['auth', 'FlightActive']], function () {
@@ -371,11 +356,9 @@ Route::group(['prefix' => 'flights', 'middleware' => ['auth', 'FlightActive']], 
     })->where('any', '.*');
 
     Route::get('/', [FlightController::class, 'add_flight'])->name('add-flight');
-
 });
 
 Route::group(['prefix' => 'retailer', 'middleware' => ['auth']], function () {
-
     Route::get('retailer-details', [RetailerController::class, 'RetailerDetail'])->name('retailer-details');
 
     Route::get('retailer-sign-up', [RetailerController::class, 'RetailerSignUp'])->name('retailer-sign-up');
@@ -398,24 +381,19 @@ Route::group(['prefix' => 'retailer', 'middleware' => ['auth']], function () {
     Route::post('add_com', [RetailerController::class, 'AddCom'])->name('AddCom');
 
     Route::get("retailer-details-admin", [RetailerController::class, 'retailer_details'])->name('retailer-details-admin')->middleware('admin');
-
 });
 
 Route::group(['middleware' => ['auth']], function () {
-
     Route::get('service-controler', [ServiceController::class, 'index'])->name('service-control');
     Route::get('service-status-update', [ServiceController::class, 'status_update'])->name('service-status-update');
     Route::post('approved_amount', [WalletController::class, 'approved_amount']);
-
 });
 
 Route::group(['prefix' => 'ApiControl', 'middleware' => ['auth', 'admin']], function () {
-
     Route::get('change_status', [ApiSettingsController::class, 'change_status'])->name('change_status');
     Route::get('update_euro_rate', [ApiSettingsController::class, 'update_euro_rate'])->name('update_euro_rate');
     Route::get('get_data', [ApiSettingsController::class, 'get_data'])->name('get_data');
     Route::get('api-activation', [ApiSettingsController::class, 'ApiActivation'])->name('api-activation');
-
 });
 
 //  RECHARGES END
@@ -432,7 +410,6 @@ Route::get('/logout', function () {
     if (Auth::check()) {
         Auth::logout();
     } else {
-
     }
     return redirect('/');
 });
