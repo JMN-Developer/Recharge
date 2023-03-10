@@ -56,17 +56,19 @@ class DtOneProvider
 
         if ($status == 200) {
             $operator_id = $operator_response[0]->id;
-            $this->operator_details($operator_id);
+            $iso_code = $operator_response[0]->country->iso_code;
+            $this->operator_details($iso_code);
             return ['payload' => $this->fetch_product($operator_id), 'status' => true];
         } else {
             return ['payload' => $operator_response, 'status' => false];
         }
     }
 
-    public function operator_details($operator_id)
+    public function operator_details($iso_code)
     {
+        // file_put_contents('test.txt', $operator_id);
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
-        $operator_request = $client->get('https://dvs-api.dtone.com/v1/operators/' . $operator_id . '', ['headers' => [
+        $operator_request = $client->get('https://dvs-api.dtone.com/v1/products?country_iso_code=' . $iso_code . '&type=FIXED_VALUE_RECHARGE', ['headers' => [
             'Authorization' => 'Basic ' . $this->access_token,
             'Accept' => 'application/json',
 
@@ -74,7 +76,10 @@ class DtOneProvider
 
         $status = $operator_request->getStatusCode();
         $operator_response = $operator_request->getBody();
+        Log::info($operator_response);
+        // file_put_contents('test.txt',$operator_response);
         $operator_response = json_decode($operator_response);
+        //file_put_contents('test.txt',sizeof($operator_response));
         return $operator_response;
     }
 
