@@ -50,15 +50,14 @@ class DtOneController extends Controller
     }
     public function make_sku_list($skus)
     {
-        Log::info(json_encode($skus));
         $data = array();
         foreach ($skus as $sku) {
             $discount = $sku->prices->retail->amount - $sku->prices->wholesale->amount;
             if (auth()->user()->parent->role == 'sub') {
-                $amount_text = $sku->prices->retail->amount - reseller_profit(parent_profit($discount)) . "Euro &nbsp(&nbsp" . $sku->name . ")";
+                $amount_text = $sku->prices->retail->amount - reseller_profit(parent_profit($discount)) . "Euro &nbsp(&nbsp" . $sku->benefits[0]->amount->total_including_tax . ' ' . $sku->benefits[0]->unit . " will be received )";
                 array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount - reseller_profit(parent_profit($discount)), 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
             } else {
-                $amount_text = $sku->prices->retail->amount - reseller_profit($discount) . "Euro &nbsp(&nbsp" . $sku->name . ")";
+                $amount_text = $sku->prices->retail->amount - reseller_profit($discount) . "Euro &nbsp(&nbsp" . $sku->benefits[0]->amount->total_including_tax . ' ' . $sku->benefits[0]->unit . " will be received )";
                 array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount - reseller_profit($discount), 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
             }
         }
