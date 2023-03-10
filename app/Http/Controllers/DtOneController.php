@@ -54,10 +54,10 @@ class DtOneController extends Controller
         foreach ($skus as $sku) {
             $discount = $sku->prices->retail->amount - $sku->prices->wholesale->amount;
             if (auth()->user()->parent->role == 'sub') {
-                $amount_text = $sku->prices->retail->amount - reseller_profit(parent_profit($discount)) . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
+                $amount_text = $sku->prices->retail->amount - reseller_profit(parent_profit($discount)) . "Euro &nbsp(&nbsp" . $sku->benefits . ")";
                 array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount - reseller_profit(parent_profit($discount)), 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
             } else {
-                $amount_text = $sku->prices->retail->amount - reseller_profit($discount) . "Euro &nbsp(&nbsp" . $sku->name . " will be received )";
+                $amount_text = $sku->prices->retail->amount - reseller_profit($discount) . "Euro &nbsp(&nbsp" . $sku->benefits . ")";
                 array_push($data, ['skuId' => $sku->id, 'amount' => $sku->prices->retail->amount - reseller_profit($discount), 'amount_text' => $amount_text, 'bd_amount' => $sku->destination->amount]);
             }
         }
