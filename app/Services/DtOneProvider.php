@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\SecretStore;
 use Illuminate\Support\Facades\Crypt;
+use Log;
 
 /**
  * Class DtOneProvider
