@@ -50,7 +50,6 @@ class DtOneProvider
         $status = $operator_request->getStatusCode();
 
         $operator_response = $operator_request->getBody();
-        Log::info($operator_response);
 
         $operator_response = json_decode($operator_response);
 
@@ -68,7 +67,7 @@ class DtOneProvider
     {
         // file_put_contents('test.txt', $operator_id);
         $client = new \GuzzleHttp\Client(['http_errors' => false]);
-        $operator_request = $client->get('https://dvs-api.dtone.com/v1/products?country_iso_code=' . $iso_code . '&type=FIXED_VALUE_RECHARGE', ['headers' => [
+        $operator_request = $client->get('https://dvs-api.dtone.com/v1/products?country_iso_code=' . $iso_code, ['headers' => [
             'Authorization' => 'Basic ' . $this->access_token,
             'Accept' => 'application/json',
 
