@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-use Auth;
-use Exception;
-use App\Models\Balance;
-use Illuminate\Http\Request;
-use App\Services\UpdateWallet;
-use App\Models\RechargeHistory;
-use App\Services\DtOneProvider;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Balance;
+use App\Models\RechargeHistory;
 use App\Services\CheckRechargeAvail;
-use App\Services\BangladeshiRecharge;
+use App\Services\DtOneProvider;
 use App\Services\GenerateTransactionId;
+use App\Services\UpdateWallet;
+use Auth;
+use DB;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth as a;
+use Illuminate\Support\Facades\Log;
 
 class DtOneController extends Controller
 {
@@ -26,10 +25,13 @@ class DtOneController extends Controller
     {
         $dtone = new DtOneProvider();
         $this->dtone = $dtone;
-        $this->bangladeshi_recharge = new BangladeshiRecharge();
+        //$this->bangladeshi_recharge = new BangladeshiRecharge();
     }
-    public function index()
+    public function index(Request $request)
     {
+        $ip = $request->ip();
+        Log::info($ip);
+
         if (a::user()->role == 'admin') {
             $data = RechargeHistory::where(function ($q) {
                 $q->where('type', 'International')
