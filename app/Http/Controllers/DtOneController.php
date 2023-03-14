@@ -82,7 +82,12 @@ class DtOneController extends Controller
     {
         $data = array();
         foreach ($list as $l) {
-            array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount, 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
+            $discount = $l->prices->retail->amount - $l->prices->wholesale->amount;
+            if (auth()->user()->parent->role == 'sub') {
+                array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount - reseller_profit(parent_profit($discount), 2)), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
+            } else {
+                array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount - reseller_profit($discount), 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
+            }
         }
         usort($data, function ($a, $b) {
             return $a['amount'] <=> $b['amount'];
@@ -94,7 +99,13 @@ class DtOneController extends Controller
     {
         $data = array();
         foreach ($list as $l) {
-            array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount, 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
+            $discount = $l->prices->retail->amount - $l->prices->wholesale->amount;
+            if (auth()->user()->parent->role == 'sub') {
+                array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount, reseller_profit(parent_profit($discount), 2)), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
+            } else {
+                array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount, reseller_profit($discount), 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
+            }
+
         }
         usort($data, function ($a, $b) {
             return $a['amount'] <=> $b['amount'];
@@ -165,12 +176,12 @@ class DtOneController extends Controller
             $reseller_profit = reseller_profit($parent_profit);
             $admin_profit = $discount - $parent_profit;
             $sub_profit = $parent_profit - $reseller_profit;
-            $total_amount = $data->prices->retail->amount; //14.4
+            $total_amount = $data->prices->retail->amount - reseller_profit(parent_profit($discount)); //14.4
         } else {
             $reseller_profit = reseller_profit($discount); // (.26) = .13
             $admin_profit = $discount - $reseller_profit; //2+1-1.1 = 1.9
             $sub_profit = 0;
-            $total_amount = $data->prices->retail->amount; //11 = 11-1.1 = 9.9
+            $total_amount = $data->prices->retail->amount - reseller_profit($discount); //11 = 11-1.1 = 9.9
         }
 
         $log_data = 'Number = ' . $number . ' Amount = ' . $data->prices->retail->amount . ' R-Com = ' . $reseller_profit . ' A-Com = ' . $admin_profit . ' TXID = ' . $txid;
