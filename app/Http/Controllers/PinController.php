@@ -134,7 +134,7 @@ class PinController extends Controller
 
                 $product = db::table('domestic_pins')->where('ean', $sku_amount['0'])->first();
 
-                $log_data = 'PIN = ' . $pin->PIN . ' Amount = ' . $sku_amount['1'] . ' R-Com = ' . $reseller_commission . ' A-Com = ' . $admin_commission . ' TXID = ' . $txid;
+                $log_data = 'PIN = ' . $pin->PIN . ' Amount = ' . $sku_amount['1'] . ' R-Com = ' . $reseller_commission . ' A-Com = ' . $admin_commission . ' TXID = ' . $txid . ' PIN = ' . $pin->PIN;
                 Log::channel('rechargelog')->info($log_data);
                 $create = new RechargeHistory();
 
