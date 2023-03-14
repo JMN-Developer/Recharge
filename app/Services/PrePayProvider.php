@@ -15,7 +15,7 @@ class PrePayProvider
     {
         $token = SecretStore::where('company_name', 'Prepay')->first()->content;
         //$this->access_token = Crypt::decrypt($token);
-        $this->access_token = 'cG9pbnQ6QmZ0cmQjJTRleTVyNw==';
+        $this->access_token = 'cG9pbnQxOkJmdHJkIyU0ZXk1cjc=';
     }
 
     public function lookup($mobile)
