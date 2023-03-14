@@ -49,7 +49,6 @@ class PinController extends Controller
         $sku_amount = explode(',', $request->amount);
         if (!CheckRechargeAvail::check($sku_amount[1], 'Domestic')) {
             return Redirect()->back()->with('error', 'Insufficient wallet & Limit. Please contact with admin');
-
         }
         $change = [' ', 'Mobile', 'mobile'];
         $operator = str_replace($change, '', $request->operator);
@@ -98,7 +97,6 @@ class PinController extends Controller
             $pin = $xml->PINCREDENTIALS;
 
             if ($xml->RESULT == 0) {
-
                 $balancequery = Balance::where('type', 'domestic')->first();
 
                 $prof = DomesticProfit::where('ean', $sku_amount['0'])->first();
@@ -127,7 +125,6 @@ class PinController extends Controller
                         $cost = $sku_amount['1'] - $commission;
                         $sub_profit = 0;
                     }
-
                 } else {
                     $reseller_commission = 0;
                     $admin_commission = 0;
@@ -139,7 +136,7 @@ class PinController extends Controller
 
                 $log_data = 'PIN = ' . $pin->PIN . ' Amount = ' . $sku_amount['1'] . ' R-Com = ' . $reseller_commission . ' A-Com = ' . $admin_commission . ' TXID = ' . $txid;
                 Log::channel('rechargelog')->info($log_data);
-                $create = new RechargeHistory;
+                $create = new RechargeHistory();
 
                 $create->reseller_id = a::user()->id;
 
@@ -170,22 +167,20 @@ class PinController extends Controller
 
                 $create->pin_product = $product->product;
                 $create->sub_profit = $sub_profit;
-                $create->recharge_comission = Auth::user()->admin_pin_commission;
+                $create->recharge_comission = auth()->user()->admin_pin_commission;
 
                 $create->save();
 
                 UpdateWallet::update($create);
 
                 return ['status' => true, 'message' => 'Your Pin Purchase Has Been Sucessfull! Here is your pin ' . $pin->PIN];
-                //return  Redirect('recharge/pin/')->with('status',);
-
+            //return  Redirect('recharge/pin/')->with('status',);
             } else {
                 return ['status' => false, 'message' => 'Error occured Please try again!'];
                 return Redirect()->back()->with('error', 'Error occured Please try again!');
             }
 
-            // $data = json_encode($bod,true);
-
+        // $data = json_encode($bod,true);
         } else {
             return ['status' => false, 'message' => 'Insufficient Balance'];
             // return  Redirect()->back()->with('error','Insufficient Balance');
@@ -203,7 +198,7 @@ class PinController extends Controller
         if (a::user()->role == 'admin') {
             $data = Pin::latest()->get();
             $cost = $data->sum('amount');
-            // $profit = $data->sum('admin_com');
+        // $profit = $data->sum('admin_com');
         } else {
             $data = Pin::where('reseller_id', a::user()->id)->latest()->get();
             $cost = $data->sum('cost');
@@ -243,5 +238,4 @@ class PinController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
 }
