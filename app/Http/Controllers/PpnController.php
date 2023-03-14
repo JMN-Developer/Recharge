@@ -317,6 +317,7 @@ class PpnController extends Controller
             $this->update_balance($data['payload']->payLoad->faceValue, $data['payload']->payLoad->invoiceAmount);
             return ['status' => true, 'message' => 'Recharge Successfull', 'pin_number' => $data['payload']->payLoad->pins[0]->pinNumber, 'control_number' => $data['payload']->payLoad->pins[0]->controlNumber];
         } else {
+            Log::info($data);
             $data = $data['payload'];
             return ['status' => false, 'message' => $data->message];
         }
