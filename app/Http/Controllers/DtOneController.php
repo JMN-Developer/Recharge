@@ -105,7 +105,6 @@ class DtOneController extends Controller
             } else {
                 array_push($data, ['description' => $l->description, 'skuId' => $l->id, 'amount' => round($l->prices->retail->amount, reseller_profit($discount), 2), 'validity' => $l->validity->quantity . ' ' . $l->validity->unit]);
             }
-
         }
         usort($data, function ($a, $b) {
             return $a['amount'] <=> $b['amount'];
@@ -133,6 +132,9 @@ class DtOneController extends Controller
                 return ['status' => true, 'operator_name' => $operator_name, 'exchange_rate' => $unit_rate, 'bd_offer_data' => $bd_offer_data];
             } else {
                 $data = $this->dtone->lookup($number);
+                $balance = $this->dtone->balance();
+                Log::info($balance['available']);
+                Log::info($balance['credit_limit']);
                 if ($data['status']) {
                     $data = $data['payload'];
                     $credit_data = [];
@@ -337,6 +339,7 @@ class DtOneController extends Controller
         //  //file_put_contents('test.txt',$tmp_data->responseCode);
 
         if ($data['status']) {
+            $balance = $this->dtone->balance();
             $recharge = $this->create_recharge($data['payload'], $number, $txid, $country_code, $request->service_charge);
             UpdateWallet::update($recharge);
             $this->update_balance($data['payload']->prices->retail->amount, $data['payload']->prices->wholesale->amount);

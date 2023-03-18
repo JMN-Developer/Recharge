@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\SecretStore;
 use Illuminate\Support\Facades\Crypt;
-use Log;
 
 /**
  * Class DtOneProvider
@@ -221,7 +220,6 @@ class DtOneProvider
 
         $status = $operator_request->getStatusCode();
         $operator_response = $operator_request->getBody();
-        Log::info($operator_response);
         $operator_response = json_decode($operator_response);
 
         return $operator_response;
