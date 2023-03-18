@@ -132,9 +132,6 @@ class DtOneController extends Controller
                 return ['status' => true, 'operator_name' => $operator_name, 'exchange_rate' => $unit_rate, 'bd_offer_data' => $bd_offer_data];
             } else {
                 $data = $this->dtone->lookup($number);
-                $balance = $this->dtone->balance();
-                Log::info($balance['available']);
-                Log::info($balance['credit_limit']);
                 if ($data['status']) {
                     $data = $data['payload'];
                     $credit_data = [];
@@ -248,11 +245,9 @@ class DtOneController extends Controller
         $admin_profit = $currency_profit + $api_profit;
         return $admin_profit;
     }
-    public function update_balance($recharge_amount, $cost)
+    public function update_balance($amount)
     {
-        $balance_info = Balance::where('type', 'dtone')->first();
-        $current_balance = $balance_info->balance - $cost;
-        Balance::where('type', 'dtone')->update(['balance' => $current_balance]);
+        Balance::where('type', 'dtone')->update(['balance' => $amount]);
     }
     public function update_balance_bangladesh()
     {
@@ -342,7 +337,7 @@ class DtOneController extends Controller
             $balance = $this->dtone->balance();
             $recharge = $this->create_recharge($data['payload'], $number, $txid, $country_code, $request->service_charge);
             UpdateWallet::update($recharge);
-            $this->update_balance($data['payload']->prices->retail->amount, $data['payload']->prices->wholesale->amount);
+            $this->update_balance($balance);
             return ['status' => true, 'message' => 'Recharge Successfull'];
         } else {
             return ['status' => false, 'message' => $data['message']];

@@ -222,6 +222,6 @@ class DtOneProvider
         $operator_response = $operator_request->getBody();
         $operator_response = json_decode($operator_response);
 
-        return $operator_response;
+        return $operator_response[0]->available;
     }
 }
