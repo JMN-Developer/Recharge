@@ -75,7 +75,6 @@ class DtOneProvider
 
         $status = $operator_request->getStatusCode();
         $operator_response = $operator_request->getBody();
-        Log::info($operator_response);
         // file_put_contents('test.txt',$operator_response);
         $operator_response = json_decode($operator_response);
         //file_put_contents('test.txt',sizeof($operator_response));
@@ -160,10 +159,10 @@ class DtOneProvider
                 }
             }
 
-            // file_put_contents('test.txt',json_encode($response));
+        // file_put_contents('test.txt',json_encode($response));
             //     $confirmation = $this->confirmation($response->id);
 
-            // //   file_put_contents('test.txt',json_encode($response));
+        // //   file_put_contents('test.txt',json_encode($response));
             //     if($confirmation['status']==true)
             //     {
             //        $transaction_report = $this->transaction($response->id);
@@ -209,5 +208,22 @@ class DtOneProvider
         } else {
             return ['status' => false, 'message' => $operator_response];
         }
+    }
+
+    public function balance()
+    {
+        $client = new \GuzzleHttp\Client(['http_errors' => false]);
+        $operator_request = $client->get('https://dvs-api.dtone.com/v1/balances', ['headers' => [
+            'Authorization' => 'Basic ' . $this->access_token,
+            'Accept' => 'application/json',
+
+        ], 'verify' => false]);
+
+        $status = $operator_request->getStatusCode();
+        $operator_response = $operator_request->getBody();
+        Log::info($operator_response);
+        $operator_response = json_decode($operator_response);
+
+        return $operator_response;
     }
 }
