@@ -34,6 +34,20 @@ class ApiTestController extends Controller
         return json_encode($profit);
     }
 
+    public function epay_transaction_cancel()
+    {
+        $xml = '<?xml version="1.0" ?>
+        <REQUEST TYPE="CANCEL">
+        <USERNAME>UPLIVE_AMICIBIGIOTTERIA</USERNAME>
+        <TXID>486465468465654654</TXID>
+        <TERMINALID RETAILERACC="PNTRCG" STOREID="3D001">IT028215</TERMINALID>
+        <CURRENCY></CURRENCY><LOCALDATETIME>2021-08-31 05:02:10</LOCALDATETIME>
+
+         <PASSWORD>' . $this->epay . '</PASSWORD>
+
+        </REQUEST>';
+    }
+
     public function epay_transaction_list()
     {
         // for($i=0;$i<=24;$i++){
