@@ -78,6 +78,13 @@ class DtOneController extends Controller
         return json_encode($record);
     }
 
+    public function transaction_details($transaction_id)
+    {
+        $data = $this->dtone->transaction($transaction_id);
+
+        return json_encode($data);
+    }
+
     public function make_bundle_data_list($list)
     {
         $data = array();
