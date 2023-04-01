@@ -66,7 +66,7 @@
                             @else
                               <td>Data Transazione</td>
                             @endif
-                            <td><strong>{{ Carbon\Carbon::parse($data->created_at)->format('d-m-Y') }}</strong></td>
+                            <td><strong>{{ Carbon\Carbon::parse($data->created_at)->timezone('Europe/Rome')->format('d-m-Y') }}</strong></td>
                           </tr>
                           <tr>
                             @if($data->type == 'International' || $data->type == 'Bangladesh')
@@ -74,7 +74,7 @@
                             @else
                               <td>Time Transazione</td>
                             @endif
-                            <td><strong>{{ Carbon\Carbon::parse($data->created_at)->format('H:i:s') }}</strong></td>
+                            <td><strong>{{ Carbon\Carbon::parse($data->created_at)->timezone('Europe/Rome')->format('H:i:s') }}</strong></td>
                           </tr>
                           @if($data->type == 'Domestic')
                           <tr>

@@ -31,7 +31,9 @@ use Kreait\Firebase\Messaging\Notification;
 class RechargeController extends Controller
 {
     // properties
-    protected $factory, $dingconnect, $epay;
+    protected $factory;
+    protected $dingconnect;
+    protected $epay;
 
     /**
      * Create a new controller instance.
@@ -45,12 +47,11 @@ class RechargeController extends Controller
         // $date = date("dmYHis");
         // $time = date('His');
         // echo $date;
-
     }
 
     public function __construct()
     {
-        $this->factory = (new Factory)->withServiceAccount(__DIR__ . '/FirebaseKey.json');
+        $this->factory = (new Factory())->withServiceAccount(__DIR__ . '/FirebaseKey.json');
         $this->dingconnect = SecretProvider::get_secret('Dingconnect');
         $this->epay = SecretProvider::get_secret('epay');
     }
@@ -73,7 +74,6 @@ class RechargeController extends Controller
 
                 ->take(10)
                 ->get();
-
         }
 
         return view('front.recharge-international', compact('stage', 'data'));
@@ -204,7 +204,6 @@ class RechargeController extends Controller
             ]);
             return $new;
         }
-
     }
 
     /**
@@ -478,7 +477,6 @@ class RechargeController extends Controller
 
     public function check_daily_duplicate(Request $request)
     {
-
         $number = $request->number;
         $change = [' ', '+'];
         $number = str_replace($change, '', $number);
@@ -490,12 +488,10 @@ class RechargeController extends Controller
         } else {
             return '0';
         }
-
     }
 
     public function recharge(Request $request)
     {
-
         $change = [' ', '+'];
         $number = str_replace($change, '', $request->number);
 
@@ -516,11 +512,9 @@ class RechargeController extends Controller
         if (count($sku_amount) > 1) {
             $SkuCode = $sku_amount['0'];
             $SendValue = $sku_amount['1'];
-
         } else {
             $SkuCode = $datas['Sku_Code'];
             $SendValue = $datas['amount'];
-
         }
 
         if (CheckRechargeAvail::check($SendValue, 'International')) {
@@ -583,18 +577,16 @@ class RechargeController extends Controller
                 $create->save();
                 UpdateWallet::update($create);
                 return ['status' => true, 'message' => 'Recharge Successful!'];
-                //return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
+            //return redirect('/recharge/recharge-int')->with('status','Recharge Successful!');
             } else {
                 $error = $prod['ErrorCodes']['0']['Code'];
                 return ['status' => false, 'message' => $error];
                 //return redirect('/recharge/recharge-int')->with('error',$error);
             }
-
         } else {
             return ['status' => false, 'message' => 'Insufficient Balance!'];
             //return redirect('/recharge/recharge-int')->with('error','Insufficient Balance!');
         }
-
     }
 
     public function estimate(Request $request)
@@ -603,7 +595,7 @@ class RechargeController extends Controller
 
         $Sku = $data['SkuCode'];
         $batch = $data['BatchItemRef'];
-        $send = (double) $data['SendValue'];
+        $send = (float) $data['SendValue'];
 
         $sent["SkuCode"] = $Sku;
 
@@ -679,7 +671,6 @@ class RechargeController extends Controller
         $prod = json_decode($response, true);
 
         return $prod;
-
     }
 
     public function check_domestic_repeat($number)
@@ -697,12 +688,10 @@ class RechargeController extends Controller
         } else {
             return false;
         }
-
     }
 
     public function load_recent_domestice_recharge()
     {
-
         if (a::user()->role != 'admin') {
             $data = RechargeHistory::where('reseller_id', a::user()->id)->where('type', 'Domestic')->take(10)->latest()->get();
         } else {
@@ -724,7 +713,6 @@ class RechargeController extends Controller
 
     public function domestic_recharge(Request $request)
     {
-
         $change = [' ', 'Mobile', 'mobile'];
         $operator = str_replace($change, '', $request->operator);
         // file_put_contents('test.txt',$request->amount);
@@ -820,7 +808,6 @@ class RechargeController extends Controller
                 'balance' => round(($xml2->LIMIT) / 100, 2),
             ]);
             if ($xml2->RESULT == 0) {
-
                 if (a::user()->role != 'admin') {
                     if (auth()->user()->parent->role == 'sub') {
                         $cost = $sku_amount['1'] - $prof->commission; // 9.74
@@ -828,14 +815,12 @@ class RechargeController extends Controller
                         $admin_commission = $prof->commission - $parent_commission; // .13
                         $reseller_commission = reseller_profit_domestic($parent_commission); //.09
                         $sub_profit = $parent_commission - $reseller_commission; // 0.13-0.09 = 0.04
-
                     } else {
                         $cost = $sku_amount['1'] - $prof->commission; //10- .26 = 9.74
                         $reseller_commission = reseller_profit_domestic($prof->commission); // (.26) = .13
                         $admin_commission = $prof->commission - $reseller_commission; //.26-.13 = .13
                         $sub_profit = 0;
                     }
-
                 } else {
                     $reseller_commission = 0;
                     $admin_commission = 0;
@@ -862,27 +847,21 @@ class RechargeController extends Controller
                 $create->save();
                 UpdateWallet::update($create);
                 return ['status' => true, 'message' => 'Your Recharge Has Been Sucessfull!'];
-                //return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
-
+            //return  Redirect()->back()->with('status','Your Recharge Has Been Sucessfull!');
             } else {
-
                 return ['status' => false, 'message' => "Recharge Incomplete, Please try again!"];
                 // echo "Recharge Incomplete, Please try again!";
                 //return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
             }
-
         } else {
-
             return ['status' => false, 'message' => "Recharge Incomplete, Please try again!"];
             //echo "Recharge Incomplete, Please try again!";
             // return  Redirect()->back()->with('error','Recharge Incomplete, Please try again!');
         }
-
     }
 
     public function get_all_invoice(Request $request)
     {
-
         $start_date = Carbon::parse($request->start_date)->toDateTimeString();
         $end_date = Carbon::parse($request->end_date)->addDays(1)->toDateTimeString();
         $total_cost = 0;
@@ -904,30 +883,25 @@ class RechargeController extends Controller
                     } else {
                         $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', '!=', 'International')->where('type', '!=', 'White Calling')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     }
-
                 } else {
                     if ($type == 'all') {
                         $data = RechargeHistory::whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
-
                     } elseif ($type == 'International') {
                         $data = RechargeHistory::where('type', '!=', 'Domestic')->where('type', '!=', 'pin')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     } else {
                         $data = RechargeHistory::where('type', '!=', 'International')->where('type', '!=', 'White Calling')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     }
-
                 }
 
-                // $total_cost = $data->sum('amount');
-                // foreach ($data as $value) {
+            // $total_cost = $data->sum('amount');
+            // foreach ($data as $value) {
                 //     if ($value->amount != 0) {
                 //         $total_profit += $value->admin_com;
                 //     } else {
                 //         $total_profit += $value->discount;
                 //     }
-                // }
-
-            } else if (a::user()->role == 'reseller') {
-
+            // }
+            } elseif (a::user()->role == 'reseller') {
                 if ($type == 'all') {
                     $data = RechargeHistory::where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 } elseif ($type == 'International') {
@@ -935,7 +909,6 @@ class RechargeController extends Controller
                 } else {
                     $data = RechargeHistory::where('type', '!=', 'International')->where('type', '!=', 'White Calling')->where('reseller_id', a::user()->id)->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                 }
-
             } else {
                 if ($reseller_id) {
                     //file_put_contents('test.txt',$request->retailer_id);
@@ -946,14 +919,12 @@ class RechargeController extends Controller
                     } else {
                         $data = RechargeHistory::where('reseller_id', $reseller_id)->where('type', '!=', 'International')->where('type', '!=', 'White Calling')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     }
-
                 } else {
                     if ($type == 'all') {
                         $data = RechargeHistory::whereHas('user', function ($query) {
                             $query->where('created_by', a::user()->id)
                                 ->orWhere('id', a::user()->id);
                         })->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
-
                     } elseif ($type == 'International') {
                         $data = RechargeHistory::whereHas('user', function ($query) {
                             $query->where('created_by', a::user()->id)
@@ -965,7 +936,6 @@ class RechargeController extends Controller
                                 ->orWhere('id', a::user()->id);
                         })->where('type', '!=', 'International')->where('type', '!=', 'White Calling')->whereBetween('created_at', [$start_date, $end_date])->latest()->get(['*']);
                     }
-
                 }
             }
 
@@ -1008,7 +978,6 @@ class RechargeController extends Controller
                     } else {
                         return $data->pin_number;
                     }
-
                 })
 
             //  ->addColumn('total_cost', function($data){
@@ -1017,12 +986,10 @@ class RechargeController extends Controller
             //  })
 
                 ->addColumn('date', function ($data) {
-                    return Carbon::parse($data->created_at)->format('d-m-Y H:i:s');
-
+                    return Carbon::parse($data->created_at)->timezone('Europe/Rome')->format('d-m-Y H:i:s');
                 })
                 ->addColumn('reseller_name', function ($data) {
                     return $data->user ? $data->user->first_name . " " . $data->user->last_name . "(" . $data->user->user_id . ")" : '';
-
                 })
 
                 ->addColumn('recharge_type', function ($data) {
@@ -1069,7 +1036,6 @@ class RechargeController extends Controller
                     $profit += $value->discount;
                 }
             }
-
         } else {
             $data = RechargeHistory::where('reseller_id', a::user()->id)->latest()->get();
             $cost = $data->sum('amount') + $data->sum('service');
