@@ -1,5 +1,6 @@
 <?php
 use Carbon\Carbon;
+
 $admin_profit = App\Models\RechargeHistory::whereYear('created_at', Carbon::now()->year)
     ->whereMonth('created_at', Carbon::now()->month)
     ->where('type', 'International')
@@ -790,9 +791,9 @@ $total_due = $current_wallet + ($current_limit - $current_limit_usage);
 <script src="{{asset('js/moment.min.js')}}"></script>
 <script src="{{asset('js/admin.js')}}"></script>
 <script src="{{asset('js/autocomplete.js')}}"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://unpkg.com/izitoast/dist/js/iziToast.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" type="text/javascript"></script>
 <script src="{{asset('js/custom.js')}}"></script>
 <script src="{{asset('js')}}/home.js?{{time()}}"></script>
   @yield('scripts')

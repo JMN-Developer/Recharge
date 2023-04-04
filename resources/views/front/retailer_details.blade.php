@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="{{asset('css/style.css')}}">
   <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
         {{-- datatable css --}}
     <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel='stylesheet'>
 </head>

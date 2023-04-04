@@ -17,7 +17,7 @@
    <link rel="stylesheet" href="{{asset('css/style.css')}}">
    <link rel="stylesheet" href="{{asset('css/autocomplete.css')}}">
    <link rel="stylesheet" href="{{asset('css/loader/index.css')}}">
-   <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
    <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
 
 
@@ -313,7 +313,7 @@ var s_character = document.getElementById("s_character");
                 }
         });
         $("#registration_form").submit(function(event){
-                
+
                event.preventDefault();
                 var first_name = $("#first_name").val();
                 var last_name = $("#last_name").val();
@@ -366,4 +366,3 @@ var s_character = document.getElementById("s_character");
 </script>
 
 @endsection
-

@@ -16,7 +16,7 @@
    <meta name="csrf-token" content="{{ csrf_token() }}" />
    <link rel="stylesheet" href="{{asset('css/style.css')}}">
    <link rel="stylesheet" href="{{asset('css/loader/index.css')}}">
-   <link rel="stylesheet" href="https://unpkg.com/izitoast/dist/css/iziToast.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png"></head>
 @endsection
 @section('content')
@@ -78,8 +78,8 @@
                                           @foreach ($prods as $item)
                                           <?php
 $admin_international_com = ($item['Maximum']['SendValue'] / 100) * Auth::user()->admin_international_recharge_commission;
-// $reseller_international_com = ($admin_international_com/100)*Auth::user()->reseller_profit->international_recharge_profit
-?>
+                                          // $reseller_international_com = ($admin_international_com/100)*Auth::user()->reseller_profit->international_recharge_profit
+                                          ?>
                                           <option value="{{ $item['SkuCode'] }},{{ $item['Maximum']['SendValue']}}">
                                              {{ $item['Maximum']['SendValue'] +$admin_international_com }} Euro
                                              <h7 style="font-size: 10px;">({{ $item['Maximum']['ReceiveValueExcludingTax'] }} {{ $item['Maximum']['ReceiveCurrencyIso'] }} will be received)</h7>
