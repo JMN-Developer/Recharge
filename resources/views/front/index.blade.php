@@ -17,6 +17,36 @@
   <link rel="icon" href="{{ asset('images/jm-transparent-logo.png') }}">
 <link rel="icon" href="https://jmnation.com/images/jm-transparent-logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<style>
+  .container {
+  overflow: hidden;
+}
+
+.text-container {
+  color: red;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.moving-text {
+  position: relative;
+  left: 100%;
+  animation: moveText 20s linear infinite;
+}
+
+@keyframes moveText {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: -100%;
+  }
+}
+
+</style>
 </head>
 
 @endsection
@@ -34,7 +64,14 @@
               <span class="brand-text"><strong>JM</strong> NATION</span>
             </h2>
           </div>
+          <div class="col-10 text-center">
+          <div class="text-container">
+              <h1 class="moving-text">Domestic recharge services will not be available until Tuesday </h1>
+            </div>
+          </div>
+
           <div class="col-2 text-center">
+
             @if(Auth::user()->role == 'admin')
             <a class="btn btn-success" href="{{ route('add-sldier-view') }}">Add Slider</a>
             <a class="btn btn-success" href="{{ route('sldier-view') }}">All Slider</a>
@@ -608,7 +645,14 @@
   REQUIRED SCRIPTS
 =======================
 -->
+<script>
+  // optional: add a delay before the animation starts
+setTimeout(function() {
+  // add a class to the text container to start the animation
+  document.querySelector('.text-container').classList.add('animate');
+}, 1000);
 
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
   <script>
