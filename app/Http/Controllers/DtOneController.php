@@ -272,7 +272,7 @@ class DtOneController extends Controller
             $unit_rate = $rate / 100;
             $amount = round($request->bd_amount * $unit_rate, 3);
             if (!check_recurrent_recharge($number)) {
-                return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
+                return ['status' => false, 'message' => 'You can not recharge with same number within 10 seconds'];
             }
 
             if (!CheckRechargeAvail::check($amount, 'International')) {
@@ -319,7 +319,7 @@ class DtOneController extends Controller
         //return;
         $number = $request->number;
         if (!check_recurrent_recharge($number)) {
-            return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
+            return ['status' => false, 'message' => 'You can not recharge with same number within 10 seconds!'];
         }
         //  file_put_contents('test.txt',$request->bd_amount);
         //return;

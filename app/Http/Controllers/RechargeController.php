@@ -343,8 +343,8 @@ class RechargeController extends Controller
         $title = $recharge_id;
         $body = "*999*" . $request->number . "*" . $request->amount . "*1985#";
 
-//         $title = $request->title;
-//         $body = $request->body;
+        //         $title = $request->title;
+        //         $body = $request->body;
 
         $notification = Notification::create($title, $body);
 
@@ -377,13 +377,13 @@ class RechargeController extends Controller
             ->withData($data)
             ->withAndroidConfig($config);
 
-//         try {
-//             $messaging->validate($message);
-//             // or
-//             return $messaging->send($message, $validateOnly = true);
-//         } catch (InvalidMessage $e) {
-//             print_r($e->errors());
-//         }
+        //         try {
+        //             $messaging->validate($message);
+        //             // or
+        //             return $messaging->send($message, $validateOnly = true);
+        //         } catch (InvalidMessage $e) {
+        //             print_r($e->errors());
+        //         }
         $messaging->send($message);
 
         a::login($user);
@@ -717,7 +717,7 @@ class RechargeController extends Controller
         $operator = str_replace($change, '', $request->operator);
         // file_put_contents('test.txt',$request->amount);
         if (!check_recurrent_recharge($request->number)) {
-            return ['status' => false, 'message' => 'You can not recharge with same number within 10 minutes!'];
+            return ['status' => false, 'message' => 'You can not recharge with same number within 10 seconds!'];
         }
         $sku_amount = explode(',', $request->amount);
 
@@ -895,11 +895,11 @@ class RechargeController extends Controller
 
             // $total_cost = $data->sum('amount');
             // foreach ($data as $value) {
-                //     if ($value->amount != 0) {
-                //         $total_profit += $value->admin_com;
-                //     } else {
-                //         $total_profit += $value->discount;
-                //     }
+            //     if ($value->amount != 0) {
+            //         $total_profit += $value->admin_com;
+            //     } else {
+            //         $total_profit += $value->discount;
+            //     }
             // }
             } elseif (a::user()->role == 'reseller') {
                 if ($type == 'all') {
