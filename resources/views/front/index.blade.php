@@ -66,7 +66,7 @@
           </div>
           <div class="col-10 text-center">
           <div class="text-container">
-              <h1 class="moving-text">Domestic recharge services will not be available until Tuesday </h1>
+              <!-- <h1 class="moving-text">Domestic recharge services will not be available until Tuesday </h1> -->
             </div>
           </div>
 
