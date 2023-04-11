@@ -550,7 +550,7 @@ $('.combo').append(offer_list)
          var countryCode = $('.iti__selected-flag').attr('title');
          var countryCode = countryCode.replace(/[^0-9]/g,'')
          $('#receiverMobile').val("");
-         $('#receiverMobile').val("+"+countryCode+" "+ $('#receiverMobile').val());
+         $('#receiverMobile').val("+"+countryCode+""+ $('#receiverMobile').val());
       });
    });
 
