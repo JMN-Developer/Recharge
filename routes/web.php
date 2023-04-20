@@ -38,6 +38,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/data/export', [RechargeController::class, 'exportToExcel'])->name('data.export');
+
 Route::get('/', [AuthController::class, 'index'])->name('/');
 Route::post('send_frontpage_email', [FrontController::class, 'send_frontpage_email'])->name('send_frontpage_email');
 

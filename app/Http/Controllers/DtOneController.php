@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Models\RechargeHistory;
-use App\Services\BangladeshiRecharge;
 use App\Services\CheckRechargeAvail;
 use App\Services\DtOneProvider;
 use App\Services\GenerateTransactionId;
@@ -26,7 +25,7 @@ class DtOneController extends Controller
     {
         $dtone = new DtOneProvider();
         $this->dtone = $dtone;
-        $this->bangladeshi_recharge = new BangladeshiRecharge();
+        //$this->bangladeshi_recharge = new BangladeshiRecharge();
     }
     public function index()
     {

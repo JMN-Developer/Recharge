@@ -52,6 +52,9 @@ table.dataTable thead .sorting_asc{
                 <h3 class="card-title"><i class="fas fa-list" style="margin-right: 10px;"></i>
                   <strong>Invoice List</strong>
                 </h3>
+
+                  <a id="download-btn" class="btn btn-primary"  style="float:right" href="{{ route('data.export') }}" >Download as excel</a>
+
               </div>
 
               <div class="row" style="margin-left:10px;margin-top:20px">
@@ -97,7 +100,11 @@ table.dataTable thead .sorting_asc{
                   <div class="col-md-2">
                     <input type="button"  onclick="filter()" value="Search" class="btn btn-success" style="margin-top:30px">
                   </div>
+
+
+
               </div>
+
 
 
               <!-- /.card-header -->
@@ -255,25 +262,26 @@ $(function() {
 
      fetch_table($(".start_date").val(),$(".end_date").val());
 
-
-   // $('.invoice_table').DataTable().ajax.reload(null,false);
-    // $("#start_date").val(start.format('YYYY-MM-DD'));
-    // $("#end_date").val(end.format('YYYY-MM-DD'));
-    //   var url = '/recharge/filebydate/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD');
-      //window.location = url;
-       //console.log('/filebydate/'+start.format('YYYY-MM-DD')+'/'+end.format('YYYY-MM-DD'));
-    //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
   });
-
-
-    // var formdata = new FormData();
-    // formdata.append('')
 
 
     fetch_table($(".start_date").val(),$(".end_date").val())
 
 
 });
+
+document.getElementById('download-btn').addEventListener('click', function(event) {
+        event.preventDefault(); // prevent default link behavior
+        // get value from input field with ID 'param-input'
+
+        var downloadLink = this.getAttribute('href') + '?start_date=' +$(".start_date").val() + '&end_date=' + $(".end_date").val()+ '&type=' + $('#ExampleSelect option:selected').val() ; // append parameter value to download link
+        window.location.href = downloadLink; // trigger download
+    });
+
+
+
+
+
 
 function filter()
 {
@@ -292,7 +300,7 @@ function fetch_table(start_date,end_date)
 
     var table = $('.invoice_table').DataTable({
 
-
+      dom: 'Plfrtip',
         processing: true,
         serverSide: true,
 
@@ -300,7 +308,7 @@ function fetch_table(start_date,end_date)
         searchPanes: {
             orderable: false
         },
-        dom: 'Plfrtip',
+
         language: {
         processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>'
         },
@@ -341,6 +349,10 @@ function fetch_table(start_date,end_date)
 
 
             },
+
+
+
+
         deferRender: true,
         columns: [
             //   {data: 'sl_no'},
@@ -370,6 +382,7 @@ function fetch_table(start_date,end_date)
 
   ],
 
+  buttons: ['excel'],
 
   drawCallback: function () {
             var api = this.api();
@@ -424,6 +437,39 @@ function fetch_table(start_date,end_date)
 
 
     });
+    function exportToExcel() {
+  // Retrieve the data from the server using AJAX
+  $.ajax({
+    url: '/data',
+    type: 'POST',
+    data: {
+      draw: 1, // This should match the current draw value of the datatable
+      start: 0, // This should be the starting index of the current page
+      length: -1, // This should retrieve all the data (i.e. no pagination)
+      // Add any additional parameters required by your server-side script
+    },
+    success: function(data) {
+      // Convert the data to an array of arrays for use with xlsx
+      var dataArray = [];
+      var columns = Object.keys(data.data[0]);
+      dataArray.push(columns);
+      for (var i = 0; i < data.data.length; i++) {
+        var row = [];
+        for (var j = 0; j < columns.length; j++) {
+          row.push(data.data[i][columns[j]]);
+        }
+        dataArray.push(row);
+      }
+      // Create the workbook and worksheet using xlsx
+      var wb = XLSX.utils.book_new();
+      var ws = XLSX.utils.aoa_to_sheet(dataArray);
+      XLSX.utils.book_append_sheet(wb, ws, 'Data');
+      // Download the Excel file
+      XLSX.writeFile(wb, 'data.xlsx');
+    }
+  });
+}
+
 
 
 }

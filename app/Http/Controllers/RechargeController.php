@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RechargeExport;
 use App\Models\Balance;
 use App\Models\DomesticProfit;
 use App\Models\Operator;
@@ -17,9 +18,9 @@ use Auth as a;
 use Carbon\Carbon;
 use DataTables;
 use DB;
-use Illuminate\Http\Request;
 
 // edit by shuvo
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -27,6 +28,7 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RechargeController extends Controller
 {
@@ -40,6 +42,13 @@ class RechargeController extends Controller
      *
      * @return void
      */
+    public function exportToExcel(Request $request)
+    {
+
+        return Excel::download(new RechargeExport($request->start_date, $request->end_date, $request->type), 'invoices.xlsx');
+        // return Excel::download(new RechargeExport(), 'data.xlsx');
+
+    }
 
     public function data_test()
     {
