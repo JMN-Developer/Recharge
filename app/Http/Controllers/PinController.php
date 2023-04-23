@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Balance;
-use App\Models\DomesticProfit;
 use App\Models\Pin;
 use App\Models\RechargeHistory;
 use App\Models\User;
@@ -99,7 +98,7 @@ class PinController extends Controller
             if ($xml->RESULT == 0) {
                 $balancequery = Balance::where('type', 'domestic')->first();
 
-                $prof = DomesticProfit::where('ean', $sku_amount['0'])->first();
+                $prof = DB::table('domestic_pins')->where('ean', $sku_amount['0'])->first();
 
                 $noted = json_encode($xml->RECEIPT->LINE);
 
