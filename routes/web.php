@@ -8,6 +8,7 @@ use App\Http\Controllers\CargoController;
 use App\Http\Controllers\DingConnectController;
 use App\Http\Controllers\DtOneController;
 use App\Http\Controllers\FlightController;
+use App\Http\Controllers\FlixBusController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\InternationalApiController;
 use App\Http\Controllers\NotificationController;
@@ -418,6 +419,10 @@ Route::get('/logout', function () {
 
 // edit by shuvo
 Route::get('/fcm', [RechargeController::class, 'fcmSend']);
+Route::get('bus', [FlixBusController::class, 'index']);
+
+Route::get('bus-ticket-list', [FlixBusController::class, 'busTicketList']);
+Route::post('reservation', [FlixBusController::class, 'submitTicket']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

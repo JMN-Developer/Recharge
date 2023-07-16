@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiTestController;
 use App\Http\Controllers\BangladeshRechargeController;
 use App\Http\Controllers\DtOneController;
+use App\Http\Controllers\FlixBusController;
 use App\Http\Controllers\RechargeController;
 use App\Models\Offer;
 use Illuminate\Http\Request;
@@ -48,3 +49,12 @@ Route::post('bd_query_recharge', [BangladeshRechargeController::class, 'query_re
 Route::get('test', [ApiTestController::class, 'test']);
 Route::get('bangladeshi_balance', [BangladeshRechargeController::class, 'check_balance']);
 Route::get('epay_transaction_cancel', [ApiTestController::class, 'epay_transaction_cancel']);
+
+/**
+ * Route for flixbus
+ */
+Route::get('search-trip', [FlixBusController::class, 'searchTrip']);
+Route::get('get-cities', [FlixBusController::class, 'getCities']);
+Route::post('reservation', [FlixBusController::class, 'submitTicket']);
+Route::post('initiate-payment', [FlixBusController::class, 'initiatePayment']);
+Route::post('add-passanger', [FlixBusController::class, 'addPassanger']);

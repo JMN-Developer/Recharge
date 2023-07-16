@@ -105,7 +105,7 @@ class WalletController extends Controller
         ]);
         try {
             event(new DueRequest());
-        } catch (\Throwable$th) {
+        } catch (\Throwable $th) {
             Log::error("Wallet Event Error: " . $th);
         }
 
@@ -173,20 +173,28 @@ class WalletController extends Controller
         if ($previous_record->wallet_type == "International") {
             $limit_usage = $user->limit_usage;
             $wallet = $user->wallet;
-        } else {
+        } else if ($previous_record->wallet_type == "Domestic") {
             $limit_usage = $user->domestic_limit_usage;
             $wallet = $user->domestic_wallet;
-        }
-        if ($approved_amount >= $limit_usage) {
-            $approved_amount = $approved_amount - $limit_usage;
-            $this->update_limit($previous_record->reseller_id, 0, $previous_record->wallet_type);
-
-            $this->update_balance($previous_record->reseller_id, $approved_amount, $previous_record->wallet_type);
         } else {
-            $approved_amount = $limit_usage - $approved_amount;
-            $this->update_limit($previous_record->reseller_id, $approved_amount, $previous_record->wallet_type);
+            $limit_usage = 0;
+            $user = User::find($previous_record->reseller_id);
+            $current_balance = $user->bus_credit;
+            User::where('id', $previous_record->reseller_id)->update([
+                'bus_credit' => $current_balance + $approved_amount,
+            ]);
         }
+        if ($previous_record->wallet_type != "Bus") {
+            if ($approved_amount >= $limit_usage) {
+                $approved_amount = $approved_amount - $limit_usage;
+                $this->update_limit($previous_record->reseller_id, 0, $previous_record->wallet_type);
 
+                $this->update_balance($previous_record->reseller_id, $approved_amount, $previous_record->wallet_type);
+            } else {
+                $approved_amount = $limit_usage - $approved_amount;
+                $this->update_limit($previous_record->reseller_id, $approved_amount, $previous_record->wallet_type);
+            }
+        }
         if ($previous_record->status == "declined") {
             if ($status == "declined") {
                 DueControl::where("id", $id)->update([
@@ -238,20 +246,23 @@ class WalletController extends Controller
             }
 
         }
-        if ($limit_usage > 0) {
 
-            $wallet_before_transaction = $limit_usage;
-            $wallet_after_transaction = 0;
-            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $limit_usage, 'limit', $previous_record->reseller_id, Auth::user()->parent->id);
-            $wallet_before_transaction = $wallet;
-            $wallet_after_transaction = $approved_amount + $wallet;
-            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, 'wallet', $previous_record->reseller_id, Auth::user()->parent->id);
+        if ($previous_record->wallet_type != "Bus") {
+            if ($limit_usage > 0) {
 
-        } else {
-            $wallet_before_transaction = $wallet;
-            $wallet_after_transaction = $approved_amount + $wallet;
-            $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, 'wallet', $previous_record->reseller_id, Auth::user()->parent->id);
+                $wallet_before_transaction = $limit_usage;
+                $wallet_after_transaction = 0;
+                $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $limit_usage, 'limit', $previous_record->reseller_id, Auth::user()->parent->id);
+                $wallet_before_transaction = $wallet;
+                $wallet_after_transaction = $approved_amount + $wallet;
+                $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, 'wallet', $previous_record->reseller_id, Auth::user()->parent->id);
 
+            } else {
+                $wallet_before_transaction = $wallet;
+                $wallet_after_transaction = $approved_amount + $wallet;
+                $this->create_transaction($id, $previous_record->wallet_type, $wallet_before_transaction, $wallet_after_transaction, $approved_amount, 'wallet', $previous_record->reseller_id, Auth::user()->parent->id);
+
+            }
         }
         // if($approved_amount>=$limit_usage){
         // $this->update_limit($previous_record->reseller_id,0,$previous_record->wallet_type);

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\RechargeHistory;
@@ -17,23 +18,23 @@ class UpdateWallet
         if ($transaction_source == 'International') {
             $service_code = 1;
             $transaction_wallet = 'International';
-        } else if ($transaction_source == 'Domestic') {
+        } elseif ($transaction_source == 'Domestic') {
             $service_code = 2;
             $transaction_wallet = 'Domestic';
-        } else if ($transaction_source == 'pin') {
+        } elseif ($transaction_source == 'pin') {
             $service_code = 3;
             $transaction_wallet = 'Domestic';
-        } else if ($transaction_source == 'White Calling') {
+        } elseif ($transaction_source == 'White Calling') {
             $service_code = 4;
             $transaction_wallet = 'International';
-        } else if ($transaction_source == 'Sim') {
+        } elseif ($transaction_source == 'Sim') {
             $service_code = 5;
 
             $transaction_wallet = 'Sim';
-        } else if ($transaction_source == 'Cargo') {
+        } elseif ($transaction_source == 'Cargo') {
             $service_code = 6;
             $transaction_wallet = 'Cargo';
-        } else if ($transaction_source == 'Bangladesh') {
+        } elseif ($transaction_source == 'Bangladesh') {
             $service_code = 7;
             $transaction_wallet = 'International';
         }
@@ -296,6 +297,19 @@ class UpdateWallet
 
         }
 
+    }
+
+    public static function updateBusCredit($data)
+    {
+        $user = User::find(Auth::user()->id); // Assuming you have the user object available
+
+        $totalPrice = $data['total_price'];
+        $busCreditProfit = $user->bus_credit_profit / 100; // Divide by 100 to get the decimal value
+        $busCredit = $user->bus_credit - ($totalPrice * 0.07) + (($totalPrice * 0.07) * $busCreditProfit);
+
+        $user->update([
+            'bus_credit' => $busCredit,
+        ]);
     }
 
 }
