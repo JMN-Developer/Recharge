@@ -78,6 +78,7 @@
                             <option value="" disabled selected >Please Select Wallet Type</option>
                             <option value="International">International</option>
                             <option value="Domestic">Domestic</option>
+                            <option value="Bus">Bus</option>
                           </select>
                       </div>
                       <div class="form-group col-md-2">
