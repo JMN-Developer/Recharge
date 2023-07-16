@@ -219,6 +219,7 @@ $total_due = $current_wallet + ($current_limit - $current_limit_usage);
 
             <p style="color: #b9ff38;"><b class="mr-2">Sim:</b><span>{{ Auth()->user()->sim_wallet }}</span></p>
             <p style="color: #b9ff38;"><b class="mr-2">Cargo:</b><span>{{ Auth()->user()->cargo_wallet }}</span></p>
+            <p style="color: #b9ff38;"><b class="mr-2">Bus Credit:</b><span>{{ Auth()->user()->bus_credit }}</span></p>
 
 
             {{-- <p style="color: #b9ff38;"><b class="mr-2">Profit:</b><span>{{ $reseller_profit }}</span></p> --}}
