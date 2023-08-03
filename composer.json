@@ -8,6 +8,7 @@
         "php": "^7.3|^8.0",
         "arielmejiadev/larapex-charts": "^3.0",
         "ashallendesign/short-url": "^5.2",
+        "barryvdh/laravel-ide-helper": "^2.13",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "getsolaris/laravel-make-service": "^1.0",

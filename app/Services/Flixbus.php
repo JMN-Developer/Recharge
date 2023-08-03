@@ -18,8 +18,8 @@ class Flixbus
 
     public function __construct()
     {
-        $this->base_url = 'https://global.api-dev.flixbus.com';
-        $this->api_authentication = 'DEV_TEST_TOKEN_STAGING';
+        $this->base_url = 'https://global.api.flixbus.com';
+        $this->api_authentication = '71e58a0166101b4a87f90548a26defb0';
         $this->api_session = $this->fetchSessionToken();
     }
 
@@ -35,8 +35,8 @@ class Flixbus
                 'X-API-Authentication' => $this->api_authentication,
             ],
             'form_params' => [
-                'email' => 'DEV_TEST_STAGING@mail.com',
-                'password' => 'DEV_TEST_STAGING',
+                'email' => 'JM Nation - 155093',
+                'password' => '71e58a0166101b4a87f90548a26defb0',
             ],
         ]);
 
@@ -365,6 +365,88 @@ class Flixbus
             $errorDetails = json_decode($responseBody->getContents(), true);
             Log::error("API request failed", ['details' => $errorDetails]);
             return $errorDetails; // return error details or consider throwing an exception here
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e; // re-throw the exception to be handled by global exception handler
+        }
+    }
+
+    public function cancelOrder($order_id, $order_hash)
+    {
+        $client = new Client();
+
+        $url = 'https://global.api-dev.flixbus.com/public/v2/orders/' . $order_id . '/cancel';
+
+        $queryParams = [
+            'order_hash' => $order_hash,
+            'refund_type' => 'none',
+        ];
+
+        try {
+            $response = $client->request('PUT', $url, [
+                'headers' => [
+                    'Accept-Language' => 'en',
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'X-API-Authentication' => $this->api_authentication,
+                    'X-API-Session' => $this->api_session,
+                    'User-Agent' => 'JM Nation',
+                ],
+                'query' => $queryParams,
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $responseData = json_decode($response->getBody(), true);
+            Log::info($responseData);
+
+            return $responseData; // return the response data
+
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $responseBody = $e->getResponse()->getBody();
+            $errorDetails = json_decode($responseBody->getContents(), true);
+            Log::error("API request failed", ['details' => $errorDetails]);
+            return $errorDetails; // return error details or consider throwing an exception here
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e; // re-throw the exception to be handled by global exception handler
+        }
+    }
+
+    public function cancelInvoice($order_id, $order_hash)
+    {
+        $client = new Client();
+        $url = 'https://global.api-dev.flixbus.com/public/v2/orders/' . $order_id . '/cancellation.json';
+
+        $queryParams = [
+            'order_hash' => $order_hash,
+        ];
+
+        try {
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Accept-Language' => 'en',
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'X-API-Authentication' => $this->api_authentication,
+                    'X-API-Session' => $this->api_session,
+                    'User-Agent' => 'JM Nation',
+                ],
+                'query' => $queryParams,
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $responseData = json_decode($response->getBody(), true);
+            Log::info($responseData);
+
+            return $responseData; // return the response data
+
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $responseBody = $e->getResponse()->getBody();
+            $errorDetails = json_decode($responseBody->getContents(), true);
+            Log::error("API request failed", ['details' => $errorDetails]);
+            return $errorDetails; // return error details or consider throwing an exception here
+
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler

@@ -145,7 +145,9 @@
             </div>
         </div>
     </section>
-
+    <div id="loading-overlay" class="overlay">
+                <div class="loader"></div>
+            </div>
 </div>
 
 @endsection
@@ -163,6 +165,7 @@
 <script>
     var passengerContainer = $('#passengerContainer');
     var ticketInfoContainer = $('#ticketInfoContainer');
+    const loadingOverlay = document.getElementById('loading-overlay');
 
     function showTicketForm(uid,from,to,price) {
 
@@ -206,7 +209,7 @@ ticketInfoContainer.append(ticketInfo);
 
     function submitFormData() {
     var formData = new FormData($('#passengerForm')[0]);
-
+    loadingOverlay.style.display = 'flex';
     $.ajax({
         type: 'POST',
         url: '/reservation',
@@ -218,7 +221,7 @@ ticketInfoContainer.append(ticketInfo);
          },
         success: function (response) {
             // handle success
-
+            loadingOverlay.style.display = 'none';
             if(response.code == 200){
                 alert('Ticket purchase successfully');
                 $("#ticketForm").modal('hide')
@@ -285,7 +288,7 @@ ticketInfoContainer.append(ticketInfo);
             var departureDate = $('#departureDate').val();
             var adultCount = $('#adultCount').val();
             var childCount = $('#childCount').val();
-
+            loadingOverlay.style.display = 'flex';
             // Make the AJAX request
             $.ajax({
                 url: '/api/search-trip',
@@ -377,10 +380,12 @@ ticketInfoContainer.append(ticketInfo);
                             $('.bus-list').append(listItemHtml);
                         });
                     });
+                    loadingOverlay.style.display = 'none';
                 },
 
 
                 error: function (error) {
+                    loadingOverlay.style.display = 'none';
                     console.error(error);
                 }
             });

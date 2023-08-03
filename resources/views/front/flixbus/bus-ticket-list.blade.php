@@ -109,8 +109,14 @@
                                                         <a class="dropdown-item" target="_blank"
                                                             href="{{ $busTicket['booking_confirmation'] }}"><i
                                                                 class="fas fa-eye"></i> Ticket</a>
-                                                        <a class="dropdown-item" href="#"><i class="fas fa-times"></i>
-                                                            Cancel</a>
+                                                                @if( $busTicket['cancel_available_status'])
+                            <!-- Update this part of the code -->
+<a class="dropdown-item cancel-ticket-btn" href="#" data-ticket-id="{{ $busTicket['id'] }}"><i class="fas fa-times"></i> Cancel Ticket</a>
+
+                        @else
+
+                            <a class="dropdown-item disabled" href="#"><i class="fas fa-times"></i> Cancel  Ticket</a>
+                        @endif
                                                     </div>
                                                 </div>
                                             </td>
@@ -186,24 +192,28 @@
 
 <script>
     $(function () {
+        $('.cancel-ticket-btn').click(function (e) {
+            e.preventDefault();
 
-        $(".cost_input").hide();
-        //  var id = $('#status').find(':selected').data('id')
-        $(".status").change(function () {
+            var ticketId = $(this).data('ticket-id');
+            console.log(ticketId)
+            var cancelUrl = "/cancel-ticket/" + ticketId;
 
-            let value = $(this).find(':selected').val();
-            var id = $(this).find(':selected').data('id')
-            // alert(value)
-            if (value == 'confirmed') {
-                $('#cost_input' + id).show()
-                $("#cost_input" + id).attr('required', true);
+            $.ajax({
+                url: cancelUrl,
+                type: 'GET',
+                success: function (response) {
 
-                // $("#cost_input"+order_id).show();
-            } else {
-                $('#cost_input' + id).hide()
-                $("#cost_input" + id).attr('required', false);
-            }
-        })
+                    console.log('Ticket canceled successfully.');
+                    // Optionally, you can update the table or perform any other action to indicate that the ticket was canceled.
+                },
+                error: function (error) {
+                    // Handle the error response here, if needed
+                    console.error('Error canceling the ticket.');
+                }
+            });
+        });
+
     })
 
 </script>

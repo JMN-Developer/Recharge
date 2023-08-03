@@ -72,6 +72,11 @@ Route::get('/get-ip', function (Request $request) {
 });
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('bus', [FlixBusController::class, 'index']);
+
+    Route::get('bus-ticket-list', [FlixBusController::class, 'busTicketList']);
+    Route::post('reservation', [FlixBusController::class, 'submitTicket']);
+    Route::get('cancel-ticket/{id}', [FlixBusController::class, 'cancelTicket'])->name('cancel-ticket');
     Route::get('check_email', [Usercontroller::class, 'check_email']);
     Route::get('/sign-up', [UserController::class, 'index']);
 
@@ -419,10 +424,6 @@ Route::get('/logout', function () {
 
 // edit by shuvo
 Route::get('/fcm', [RechargeController::class, 'fcmSend']);
-Route::get('bus', [FlixBusController::class, 'index']);
-
-Route::get('bus-ticket-list', [FlixBusController::class, 'busTicketList']);
-Route::post('reservation', [FlixBusController::class, 'submitTicket']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
