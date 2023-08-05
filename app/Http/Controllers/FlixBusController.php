@@ -118,59 +118,261 @@ class FlixBusController extends Controller
         ]);
 
         $user = auth()->user();
-        $parent = $user->parent;
+        $userBusCredit = $user->bus_credit;
 
-        if ($parent->role == 'sub') {
+        if ($user->parent && $user->parent->role === 'sub') {
+            $parent = $user->parent;
             $parentBusCredit = $parent->bus_credit;
             if ($parentBusCredit < $data['ticket_price']) {
-                return response()->json('error');
+                return response()->json('error: Insufficient parent bus credit');
             }
-
-            $userBusCredit = $user->bus_credit;
             if ($userBusCredit < $data['ticket_price']) {
-                return response()->json('error');
+                return response()->json('error: Insufficient user bus credit');
             }
         } else {
-            $userBusCredit = $user->bus_credit;
             if ($userBusCredit < $data['ticket_price']) {
-                return response()->json('error');
+                return response()->json('error: Insufficient user bus credit');
             }
         }
 
-        $this->flixbus->updateReservationItems(
-            $data['trip_uid'],
-            $data['adult'],
-            $data['children'] ?? 0,
-            'EUR',
-            $request->passengers,
-            $request->email
+        // $this->flixbus->updateReservationItems(
+        //     $data['trip_uid'],
+        //     $data['adult'],
+        //     $data['children'] ?? 0,
+        //     'EUR',
+        //     $request->passengers,
+        //     $request->email
+        // );
+        // $result = $this->flixbus->responseData;
+
+        $result = array(
+            'code' => 200,
+            'message' => 'OK',
+            'order_uid' => '9000000157-jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+            'order' => array(
+                'id' => '9000000157',
+                'download_hash' => 'jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                'trips' => array(
+                    0 => array(
+                        'ride_uuid' => 'd1a88ff5-de4d-4bee-b3df-9eda0623d6ef',
+                        'departure_station' => array(
+                            'id' => 1,
+                            'uuid' => 'dcbaaee6-9603-11e6-9066-549f350fcb0c',
+                            'name' => 'Berlin central bus station',
+                            'address' => 'Masurenallee 4-6',
+                            'full_address' => 'Masurenallee 4-6, 14057 Berlin, Germany',
+                            'coordinates' => array(
+                                'latitude' => 52.507171,
+                                'longitude' => 13.279399,
+                            ),
+                            'country' => array(
+                                'name' => 'Germany',
+                                'alpha2_code' => 'DE',
+                            ),
+                            'warnings' => 'Gate information available here: https://zob.berlin/en/guests-visitors#departures',
+                        ),
+                        'arrival_station' => array(
+                            'id' => 10,
+                            'uuid' => 'dcbabbfa-9603-11e6-9066-549f350fcb0c',
+                            'name' => 'Munich central bus station',
+                            'address' => 'Arnulfstraße 21',
+                            'full_address' => 'Arnulfstraße 21, 80335 München, Germany',
+                            'coordinates' => array(
+                                'latitude' => 48.14248,
+                                'longitude' => 11.55001,
+                            ),
+                            'country' => array(
+                                'name' => 'Germany',
+                                'alpha2_code' => 'DE',
+                            ),
+                            'warnings' => 'Gate information available here: https://www.muenchen-zob.de/en/connections',
+                        ),
+                        'departure' => array(
+                            'timestamp' => 1691214000,
+                            'tz' => 'GMT+02:00',
+                        ),
+                        'arrival' => array(
+                            'timestamp' => 1691245500,
+                            'tz' => 'GMT+02:00',
+                        ),
+                        'passengers' => array(
+                            0 => array(
+                                'type' => 'adult',
+                                'uuid' => 'cfc22dbf-a2f5-4ca2-8afe-af03fb46eba2',
+                                'firstname' => 'tt',
+                                'lastname' => 'tt',
+                                'phone' => '',
+                            ),
+                        ),
+                        'transfers' => array(
+                        ),
+                        'line_direction' => 'Route 141 direction St. Gallen',
+                        'line' => array(
+                            'number' => '141',
+                            'direction' => 'St. Gallen',
+                            'brand' => array(
+                                'id' => 'a18f138c-68fa-4b45-a42f-adb0378e10d3',
+                                'name' => 'FlixBus',
+                                'color' => '73d700',
+                                'color_light' => 'e5f9c0',
+                                'color_dark' => '187d00',
+                                'type' => 'core',
+                            ),
+                        ),
+                        'bike_slots_count' => 0,
+                        'passbook_url' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/passbook/get/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/9000000157-direct:206679253:1:10.pkpass',
+                        'order_status' => 'paid',
+                        'push_channel_uid' => '/passengers/4386025413',
+                        'warnings' => array(
+                        ),
+                        'trip_uid' => 'direct:206679253:1:10',
+                        'products_description' => 'tt tt (Adult)',
+                        'products_description_html' => '<b>tt tt</b> <i>(Adult)</i>',
+                        'real_time_info_available' => true,
+                        'seats_per_relation' => array(
+                            0 => array(
+                                'from' => 1,
+                                'to' => 10,
+                                'seats' => array(
+                                    0 => array(
+                                        'label' => '20D',
+                                        'deck' => '0',
+                                        'vehicle' => 'bus',
+                                        'category' => 'reserved_seat_mobile',
+                                        'is_auto_assigned' => false,
+                                    ),
+                                ),
+                            ),
+                        ),
+                        'operated_by' => array(
+                            0 => array(
+                                'key' => '',
+                                'label' => 'FlixBus DACH GmbH',
+                                'url' => '',
+                                'address' => 'Karl-Liebknecht-Straße 33',
+                            ),
+                        ),
+                        'self_checkin_available' => true,
+                        'transfer_type' => 'direct',
+                    ),
+                ),
+                'invoices' => array(
+                    0 => array(
+                        'ticket_id' => 'mfb-9000000143',
+                    ),
+                    1 => array(
+                        'ticket_id' => 'mfb-9000000144',
+                    ),
+                ),
+                'info_blocks' => array(
+                    0 => array(
+                        'name' => 'time',
+                        'html' => 'Please be at the stop 15 minutes prior to departure.<br />Your ticket expires at departure time and will be available for purchase again.',
+                        'title' => '',
+                    ),
+                    1 => array(
+                        'name' => 'suitcase',
+                        'html' => 'pdf-luggage-info',
+                        'title' => '',
+                    ),
+                    2 => array(
+                        'name' => 'rebooking',
+                        'html' => 'To change your reservation, please visit <a href="https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking/mobile/auth?orderId=9000000157&downloadHash=jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei">https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking</a>',
+                        'title' => '',
+                    ),
+                    3 => array(
+                        'name' => 'help',
+                        'html' => 'FAQ: <a href="https://help.flixbus.com">https://help.flixbus.com</a><br/><em>* (Please note, that fees for calls from landlines as well as from mobile phones depend on individual provider‘s rates.)</em>',
+                        'title' => '',
+                    ),
+                    4 => array(
+                        'name' => 'cabotage-note',
+                        'html' => 'This ticket allows the passenger to travel between the start location and destination indicated on the ticket. Boarding later or exiting early is not permitted due to legal requirements.',
+                        'title' => '',
+                    ),
+                    5 => array(
+                        'name' => 'invoice',
+                        'html' => 'To download your invoice, please visit <a href="https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking">%rebooking_text_url%</a>.',
+                        'title' => '',
+                    ),
+                ),
+                'order_uid' => '9000000157-jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                'reminder_link' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/Ticket-Berlin-Muenchen-9000000157.pdf',
+                'invoice_link' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/Invoice-9000000157.pdf',
+                'qr_data' => 'https://shop-de.stg1.staging.greensystems-dev.flixtech.io/pdfqr/9000000157/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                'qr_image' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/qrcode/en/9000000157/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                'attachments' => array(
+                    0 => array(
+                        'title' => 'Passenger rights',
+                        'rel' => 'booking:passengers-rights',
+                        'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/passenger-rights/en_fb_rights.pdf',
+                        'type' => 'application/pdf',
+                    ),
+                    1 => array(
+                        'title' => 'QR Code URL',
+                        'rel' => 'booking:qr:image',
+                        'href' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/qrcode/en/9000000157/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                        'type' => 'image/png',
+                    ),
+                    2 => array(
+                        'title' => 'QR Code Data',
+                        'rel' => 'booking:qr:data',
+                        'href' => 'https://shop-de.stg1.staging.greensystems-dev.flixtech.io/pdfqr/9000000157/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                        'type' => 'text/plain',
+                    ),
+                    3 => array(
+                        'title' => 'Invoice',
+                        'rel' => 'booking:invoice',
+                        'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/Invoice-9000000157.pdf',
+                        'type' => 'application/pdf',
+                    ),
+                    4 => array(
+                        'title' => 'Booking Confirmation',
+                        'rel' => 'booking:confirmation',
+                        'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/Ticket-Berlin-Muenchen-9000000157.pdf',
+                        'type' => 'application/pdf',
+                    ),
+                    5 => array(
+                        'title' => 'Rebooking',
+                        'rel' => 'shop:rebooking',
+                        'href' => 'https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking/mobile/auth?orderId=9000000157&downloadHash=jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                        'type' => 'text/plain',
+                    ),
+                ),
+            ),
+            '_links' => array(
+                'self' => array(
+                    'href' => 'http://staging-stg1-mfb-api-web-webc-green-dev.origin-api-gw.ew1d2.k8s-dev.flix.tech/mobile/v2/orders/9000000157/info?download_hash=jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                ),
+                'cancel' => array(
+                    'href' => 'http://staging-stg1-mfb-api-web-webc-green-dev.origin-api-gw.ew1d2.k8s-dev.flix.tech/public/v2/orders/9000000157/cancel',
+                ),
+            ),
         );
 
-        $result = $this->flixbus->responseData;
-
-        $totalPassengers = $data['adult'] + $data['children'];
-        $totalPrice = $data['ticket_price'] * $totalPassengers;
-
-        $busData = [
+        $totalPrice = $data['ticket_price'] * ($data['adult'] + $data['children']);
+        $trip = bus::create([
             'reseller_id' => $user->id,
             'departure_date' => $data['departure_date'],
-            'total_passenger' => $totalPassengers,
+            'total_passenger' => $data['adult'] + $data['children'],
             'total_price' => $totalPrice,
             'user_email' => $request->email,
             'meta_data' => json_encode($result),
-        ];
-        $trip = bus::create($busData);
+        ]);
 
-        $busCreditProfit = ($user->bus_credit_profit / 100) * $totalPrice;
-        $busCredit = $user->bus_credit - $totalPrice + $busCreditProfit;
+        if ($user->parent && $user->parent->role === 'sub') {
+            $parent = $user->parent;
+            $parentbusCreditProfit = $parent->bus_credit_profit / 100;
+            $parentDiscount = $totalPrice * 0.07 * $parentbusCreditProfit;
+            $userBusCreditProfit = $user->bus_credit_profit / 100;
+            $userDiscount = $parentDiscount * $userBusCreditProfit;
+            $busCredit = $userBusCredit - $totalPrice + $userDiscount;
 
-        if ($parent->role == 'sub') {
-            $parentbusCreditProfit = ($parent->bus_credit_profit / 100) * $totalPrice;
-            $userDiscount = $parentbusCreditProfit * ($user->bus_credit_profit / 100);
-            $busCredit = $user->bus_credit - $totalPrice + $userDiscount;
-
+            Log::info($totalPrice);
+            Log::info($userDiscount);
+            Log::info($parentDiscount);
             $transaction_id = date('dmyHis') . str_pad($user->id, 4, "0", STR_PAD_LEFT) . str_pad(8, 2, "0", STR_PAD_LEFT);
-            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $userDiscount) . ' Tx-Type = ' . 'Debit' . ' WBT = ' . $user->bus_credit . ' WAT = ' . $busCredit . ' Wallet Type = ' . 'Wallet' . ' Type = ' . 'Bus';
+            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $userDiscount) . ' Tx-Type = Debit WBT = ' . $userBusCredit . ' WAT = ' . $busCredit . ' Wallet Type = Wallet Type = Bus';
             Log::channel('transactionlog')->info($log_data);
             TransactionHistory::create([
                 'reseller_id' => $user->id,
@@ -179,40 +381,43 @@ class FlixBusController extends Controller
                 'transaction_type' => 'Debit',
                 'transaction_source' => 'Bus',
                 'amount' => ($totalPrice - $userDiscount),
-                'transaction_wallet' => 'Wallet',
-                'wallet_before_transaction' => $user->bus_credit,
+                'transaction_wallet' => 'Bus',
+                'wallet_before_transaction' => $userBusCredit,
                 'wallet_after_transaction' => $busCredit,
                 'wallet_type' => 'Wallet',
-                'parent_id' => $parent->id,
+                'parent_id' => $user->parent->id,
             ]);
 
-            $transaction_id = date('dmyHis') . str_pad($parent->id, 4, "0", STR_PAD_LEFT) . str_pad(8, 2, "0", STR_PAD_LEFT);
-            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $parentbusCreditProfit + $userDiscount) . ' Tx-Type = ' . 'Debit' . ' WBT = ' . $parent->bus_credit . ' WAT = ' . ($parent->bus_credit - $totalPrice + ($parentbusCreditProfit - $userDiscount)) . ' Wallet Type = ' . 'Wallet' . ' Type = ' . 'Bus';
+            $user->update([
+                'bus_credit' => $busCredit,
+            ]);
+
+            $transaction_id = date('dmyHis') . str_pad($user->parent->id, 4, "0", STR_PAD_LEFT) . str_pad(8, 2, "0", STR_PAD_LEFT);
+            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $parentDiscount + $userDiscount) . ' Tx-Type = Debit WBT = ' . $parent->bus_credit . ' WAT = ' . ($parent->bus_credit - $totalPrice + ($parentDiscount - $userDiscount)) . ' Wallet Type = Wallet Type = Bus';
             Log::channel('transactionlog')->info($log_data);
             TransactionHistory::create([
-                'reseller_id' => $user->id,
+                'reseller_id' => $parent->id,
                 'transaction_id' => $transaction_id,
                 'transaction_source_id' => $trip->id,
                 'transaction_type' => 'Debit',
                 'transaction_source' => 'Bus',
-                'amount' => ($totalPrice - $parentbusCreditProfit + $userDiscount),
-                'transaction_wallet' => 'Wallet',
+                'amount' => ($totalPrice - $parentDiscount + $userDiscount),
+                'transaction_wallet' => 'Bus',
                 'wallet_before_transaction' => $parent->bus_credit,
-                'wallet_after_transaction' => ($parent->bus_credit - $totalPrice + ($parentbusCreditProfit - $userDiscount)),
+                'wallet_after_transaction' => ($parent->bus_credit - $totalPrice + ($parentDiscount - $userDiscount)),
                 'wallet_type' => 'Wallet',
-                'parent_id' => $parent->id,
+                'parent_id' => $parent->parent->id,
             ]);
-
             $parent->update([
-                'bus_credit' => $parent->bus_credit - $totalPrice + ($parentbusCreditProfit - $userDiscount),
+                'bus_credit' => ($parent->bus_credit - $totalPrice + ($parentDiscount - $userDiscount)),
             ]);
-
         } else {
-            $userDiscount = $busCreditProfit * ($user->bus_credit_profit / 100);
-            $busCredit = $user->bus_credit - $totalPrice + $userDiscount;
+            $busCreditProfit = $user->bus_credit_profit / 100;
+            $userDiscount = $totalPrice * 0.07 * $busCreditProfit;
+            $busCredit = $userBusCredit - $totalPrice + $userDiscount;
 
             $transaction_id = date('dmyHis') . str_pad($user->id, 4, "0", STR_PAD_LEFT) . str_pad(8, 2, "0", STR_PAD_LEFT);
-            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $userDiscount) . ' Tx-Type = ' . 'Debit' . ' WBT = ' . $user->bus_credit . ' WAT = ' . $busCredit . ' Wallet Type = ' . 'Wallet' . ' Type = ' . 'Bus';
+            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $userDiscount) . ' Tx-Type = Debit WBT = ' . $userBusCredit . ' WAT = ' . $busCredit . ' Wallet Type = Wallet Type = Bus';
             Log::channel('transactionlog')->info($log_data);
             TransactionHistory::create([
                 'reseller_id' => $user->id,
@@ -221,17 +426,17 @@ class FlixBusController extends Controller
                 'transaction_type' => 'Debit',
                 'transaction_source' => 'Bus',
                 'amount' => ($totalPrice - $userDiscount),
-                'transaction_wallet' => 'Wallet',
-                'wallet_before_transaction' => $user->bus_credit,
+                'transaction_wallet' => 'Bus',
+                'wallet_before_transaction' => $userBusCredit,
                 'wallet_after_transaction' => $busCredit,
                 'wallet_type' => 'Wallet',
-                'parent_id' => $parent->id,
+                'parent_id' => $user->parent->id,
+            ]);
+
+            $user->update([
+                'bus_credit' => $busCredit,
             ]);
         }
-
-        $user->update([
-            'bus_credit' => $busCredit,
-        ]);
 
         return response()->json($result);
     }

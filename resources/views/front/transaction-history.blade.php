@@ -171,6 +171,10 @@ table.dataTable thead .sorting_asc{
                         <li>
                             <a href="#tab-cargo" data-toggle="tab">Cargo</a>
                         </li>
+
+                        <li>
+                            <a href="#tab-bus" data-toggle="tab">Bus</a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tab-all">
@@ -471,6 +475,47 @@ table.dataTable thead .sorting_asc{
                               </table>
                         </div>
 
+                        <div class="tab-pane" id="tab-bus">
+                            <table  id="tab-table-bus" class="table table-info table-sm table-bordered table-hover table-head-fixed text-nowrap invoice_table table-striped">
+                                <thead>
+                                  <tr>
+                                    @if(auth()->user()->role != 'reseller')
+                                    <th style="background-color: black;color:white" >Reseller Name</th>
+                                    @endif
+                                    <th style="background-color: black;color:white"  >Transaction No</th>
+                                    <th style="background-color: black;color:white" >Service</th>
+                                    <th style="background-color: black;color:white">Description</th>
+                                    <th style="background-color: black;color:white">Before Transaction</th>
+                                    <th  style="background-color: black;color:white">After Transaction</th>
+                                    <th  style="background-color: black;color:white">Amount</th>
+
+
+                                  </tr>
+                                </thead>
+                                <tbody  id='change'>
+
+                                </tbody>
+
+                                <tfoot class="thead-dark" style="background-color: black" >
+                                    <tr>
+
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+
+
+
+                                      </tr>
+
+                                </tfoot>
+
+                              </table>
+                        </div>
+
+
 
 
 
@@ -634,7 +679,7 @@ function fetch_table(start_date,end_date,retailer = 'all')
                 'retailer':retailer
 
             },
-           
+
 
 
             },
@@ -661,7 +706,7 @@ function fetch_table(start_date,end_date,retailer = 'all')
     $('#tab-table-white-calling').DataTable().search( 'White Calling' ).draw();
     $('#tab-table-sim').DataTable().search( 'Sim' ).draw();
     $('#tab-table-cargo').DataTable().search( 'Cargo' ).draw();
-    
+
 
 }
 </script>

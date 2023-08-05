@@ -18,8 +18,8 @@ class Flixbus
 
     public function __construct()
     {
-        $this->base_url = 'https://global.api.flixbus.com';
-        $this->api_authentication = '71e58a0166101b4a87f90548a26defb0';
+        $this->base_url = 'https://global.api-dev.flixbus.com';
+        $this->api_authentication = 'DEV_TEST_TOKEN_STAGING';
         $this->api_session = $this->fetchSessionToken();
     }
 
@@ -35,8 +35,8 @@ class Flixbus
                 'X-API-Authentication' => $this->api_authentication,
             ],
             'form_params' => [
-                'email' => 'JM Nation - 155093',
-                'password' => '71e58a0166101b4a87f90548a26defb0',
+                'email' => 'DEV_TEST_STAGING@mail.com',
+                'password' => 'DEV_TEST_STAGING',
             ],
         ]);
 
