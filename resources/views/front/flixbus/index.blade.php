@@ -164,6 +164,7 @@
     var passengerContainer = $('#passengerContainer');
     var ticketInfoContainer = $('#ticketInfoContainer');
 
+
     function showTicketForm(uid,from,to,price) {
 
         $("#trip_uid").val(uid)
@@ -190,10 +191,10 @@
 `;
 ticketInfoContainer.append(ticketInfo);
         for (var j = 1; j <= adultCount; j++) {
-            generatePassengerForm(j, 'adult');
+            generatePassengerForm(j, 'adult','Adult');
         }
-        for (var j = 1; j <= childCount; j++) {
-            generatePassengerForm(j, 'child');
+        for (var j = adultCount+1; j <= childCount+adultCount; j++) {
+            generatePassengerForm(j, 'children','Children');
         }
         var passengerEmailHtml = '<div class="form-group">' +
             '<label for="email">Email</label>' +
@@ -241,18 +242,26 @@ ticketInfoContainer.append(ticketInfo);
         $("#ticketForm").modal('hide')
     }
 
-    function generatePassengerForm(index, passengerType) {
+    function generatePassengerForm(index, passengerType, type) {
     var passengerHtml = '<div class="form-group">' +
-        '<label for="firstName' + index + '">Passenger ' + index + ' First Name</label>' +
+        '<label for="firstName' + index + '">'+type+' Passenger ' + index + ' First Name</label>' +
         '<input type="text" class="form-control" name="passengers[' + (index - 1) + '][firstname]" id="firstName' + index +
         '" placeholder="Enter first name">' +
         '</div>' +
         '<div class="form-group">' +
-        '<label for="lastName' + index + '">Passenger ' + index + ' Last Name</label>' +
+        '<label for="lastName' + index + '">'+type+' Passenger ' + index + ' Last Name</label>' +
         '<input type="text" class="form-control" name="passengers[' + (index - 1) + '][lastname]" id="lastName' + index +
         '" placeholder="Enter last name">' +
-        '</div>' +
-        '<input type="hidden" name="passengers[' + (index - 1) + '][type]" value="' + passengerType + '">';
+        '</div>';
+
+    if (passengerType === 'children') {
+        passengerHtml += '<div class="form-group">' +
+            '<label for="dob' + index + '">Date of Birth Children Passenger ' + index + '</label>' +
+            '<input type="date" class="form-control" name="passengers[' + (index - 1) + '][birthdate]" id="dob' + index + '">' +
+            '</div>';
+    }
+
+    passengerHtml += '<input type="hidden" name="passengers[' + (index - 1) + '][type]" value="' + passengerType + '">';
 
     passengerContainer.append(passengerHtml);
 }

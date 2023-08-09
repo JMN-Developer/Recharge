@@ -18,8 +18,8 @@ class Flixbus
 
     public function __construct()
     {
-        $this->base_url = 'https://global.api-dev.flixbus.com';
-        $this->api_authentication = 'DEV_TEST_TOKEN_STAGING';
+        $this->base_url = env('FLIXBUS_SANDBOX_URL');
+        $this->api_authentication = env('FLIXBUS_SANDBOX_API_KEY');
         $this->api_session = $this->fetchSessionToken();
     }
 
@@ -35,8 +35,8 @@ class Flixbus
                 'X-API-Authentication' => $this->api_authentication,
             ],
             'form_params' => [
-                'email' => 'DEV_TEST_STAGING@mail.com',
-                'password' => 'DEV_TEST_STAGING',
+                'email' => env('FLIXBUS_SANDBOX_EMAIL'),
+                'password' => env('FLIXBUS_SANDBOX_PASSWORD'),
             ],
         ]);
 
@@ -102,6 +102,7 @@ class Flixbus
         $formParams = [
             'trip_uid' => $trip_uid,
             'adult' => $adult,
+            'children' => $children,
             'currency' => $currency,
         ];
 
@@ -189,13 +190,11 @@ class Flixbus
 
             $statusCode = $response->getStatusCode();
             $responseData = json_decode($response->getBody(), true);
-            Log::info($responseData);
+
             if ($responseData['result'] == true) {
                 $result = $this->commitPayment($reservation, $reservation_token, $responseData['payment_id']);
                 //return $result;
             }
-
-            //Log::info($responseData);
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
@@ -217,11 +216,11 @@ class Flixbus
 
         $formParams = [
             'reservation_token' => $reservationToken,
-            'with_donation' => true,
+            'with_donation' => false,
             'donation_partner' => 'atmosfair',
             'passengers' => $passengers,
         ];
-
+        Log::info($passengers);
         try {
             $response = $client->request('PUT', $url, [
                 'headers' => [
@@ -235,18 +234,21 @@ class Flixbus
 
             $statusCode = $response->getStatusCode();
             $responseData = json_decode($response->getBody(), true);
-
+            //Log::info($responseData);
             if ($responseData['result'] == true) {
                 $result = $this->startPayment($reservationId, $reservationToken, $email);
+                Log::info($result);
                 //return $result;
             }
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
             $errorDetails = json_decode($responseBody->getContents(), true);
-            Log::error("API request failed", ['details' => $errorDetails]);
+            Log::error("API request failed2", ['details' => $errorDetails]);
+            Log::error("API request failed2");
             return $errorDetails; // return error details or consider throwing an exception here
         } catch (\Exception $e) {
+            Log::error("API request failed3");
             Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
@@ -274,12 +276,11 @@ class Flixbus
 
             $statusCode = $response->getStatusCode();
             $responseData = json_decode($response->getBody(), true);
+            // Log::info($responseData);
 
             foreach ($responseData['trips'] as $trip) {
                 foreach ($trip['passengers'] as $index => $passenger) {
-                    if (isset($passengers[$index])) { // check if the passenger exists in the request data
-                        $passengers[$index]['reference_id'] = $passenger['reference_id']; // add the reference_id
-                    }
+                    $passengers[$index]['reference_id'] = $passenger['reference_id'];
                 }
             }
             $result = $this->addPassanger($reservation_id, $reservation_token, $passengers, $email);
@@ -356,6 +357,7 @@ class Flixbus
             ]);
 
             $statusCode = $response->getStatusCode();
+            Log::info($response->getBody());
             $this->responseData = json_decode($response->getBody(), true);
 
             Log::info($this->responseData);

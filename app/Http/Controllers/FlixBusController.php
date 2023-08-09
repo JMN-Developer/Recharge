@@ -107,6 +107,19 @@ class FlixBusController extends Controller
 
     public function submitTicket(Request $request)
     {
+        $modifiedPassengers = [];
+        if ($request->has('passengers')) {
+            foreach ($request->passengers as $passenger) {
+                if (isset($passenger['birthdate'])) {
+
+                    $passenger['birthdate'] = date("d.m.Y", strtotime($passenger['birthdate']));
+
+                }
+
+                $modifiedPassengers[] = $passenger;
+
+            }
+        }
 
         $data = $request->validate([
             'trip_uid' => 'required|string',
@@ -122,11 +135,12 @@ class FlixBusController extends Controller
             $data['adult'],
             $data['children'] ?? 0,
             'EUR',
-            $request->passengers,
+            $modifiedPassengers,
             $request->email
         );
+
         $result = $this->flixbus->responseData;
-        // $result = array(
+
         //     'code' => 200,
         //     'message' => 'OK',
         //     'order_uid' => '9000000208-8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
