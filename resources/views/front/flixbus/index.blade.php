@@ -144,7 +144,31 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="tranferList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="ticket-info">
+
+                        </div>
+
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="hideForm()">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
+    <div id="loading-overlay" class="overlay">
+                <div class="loader"></div>
+            </div>
 
 </div>
 
@@ -164,7 +188,8 @@
     var passengerContainer = $('#passengerContainer');
     var ticketInfoContainer = $('#ticketInfoContainer');
 
-
+    const loadingOverlay = document.getElementById('loading-overlay');
+    loadingOverlay.style.display = 'none';
     function showTicketForm(uid,from,to,price) {
 
         $("#trip_uid").val(uid)
@@ -206,32 +231,50 @@ ticketInfoContainer.append(ticketInfo);
     }
 
     function submitFormData() {
-    var formData = new FormData($('#passengerForm')[0]);
+        loadingOverlay.style.display = 'flex';
+
+var form = $('#passengerForm')[0];
+var inputs = form.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"]');
+var isValid = true;
+var formData = new FormData($('#passengerForm')[0]);
+for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].value.trim() === '') {
+        isValid = false;
+        break; // Exit the loop on the first empty field
+    }
+}
+
+if (!isValid) {
+    alert("Please fill in all fields.");
+    loadingOverlay.style.display = 'none';
+    return;
+}
 
     $.ajax({
         type: 'POST',
         url: '/reservation',
         data: formData,
-        processData: false,  // Important!
-        contentType: false,  // Important!
+        processData: false,
+        contentType: false,
         headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-         },
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         success: function (response) {
-            // handle success
+            loadingOverlay.style.display = 'none';
+            if (response.code == 200) {
 
-            if(response.code == 200){
                 alert('Ticket purchase successfully');
-                $("#ticketForm").modal('hide')
+                $("#ticketForm").modal('hide');
                 window.location.href = '/bus-ticket-list';
-            }
-            else{
-                alert("Error occurred while purchasing ticket");
+            } else {
+                console.log(response)
+                alert("Error occurred while purchasing ticket. " + response);
             }
         },
-        error: function (response) {
-            // handle error
-            console.log(response);
+        error: function (xhr, status, error) {
+            loadingOverlay.style.display = 'none';
+            alert("An error occurred: ");
+
         }
     });
 }
@@ -289,6 +332,7 @@ ticketInfoContainer.append(ticketInfo);
         // Search button click event
         $('.search-button').on('click', function () {
             // Retrieve the search parameters
+            loadingOverlay.style.display = 'flex';
             var from = $('#fromDropdown').val();
             var destination = $('#destinationDropdown').val();
             var departureDate = $('#departureDate').val();
@@ -322,6 +366,7 @@ ticketInfoContainer.append(ticketInfo);
                             var arrivalTimestamp = item.arrival.timestamp;
                             var seatsAvailable = item.available.seats;
                             var price = item.price_average;
+                            var tranferType = item.transfer_type
                             var uid = item.uid;
 
                             // Format the departure and arrival times
@@ -371,9 +416,19 @@ ticketInfoContainer.append(ticketInfo);
                                         <p>${seatsAvailable}</p>
                                     </div>
                                 </li>
+                                <li>
+                                    <div class="search_item-content__ydL0p">
+                                        <h6>Transfer Type</h6>
+                                        <p>${tranferType}</p>
+
+                                    </div>
+                                </li>
                                 <li class="search_price-detail-action__gb7Rh">
     <h3 class="search_price__lHdmm search_purple__ypyVN">€${price}</h3>
-    <div class="search_detail-action__RxciC"><button onclick="showTicketForm ('${uid}','${from}','${to}','${price}')" class="btn btn-primary" style="font-family: Montserrat, Bangla600, sans-serif;">Continue</button></div>
+    <div class="search_detail-action__RxciC">
+
+    <button onclick="showTicketForm ('${uid}','${from}','${to}','${price}')" class="btn btn-primary" style="font-family: Montserrat, Bangla600, sans-serif;">Continue</button>
+    </div>
 </li>
 
                             </ul>
@@ -386,6 +441,7 @@ ticketInfoContainer.append(ticketInfo);
                             $('.bus-list').append(listItemHtml);
                         });
                     });
+                    loadingOverlay.style.display = 'none';
                 },
 
 

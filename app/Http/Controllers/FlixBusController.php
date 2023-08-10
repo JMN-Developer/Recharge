@@ -90,23 +90,9 @@ class FlixBusController extends Controller
         }
     }
 
-    public function addPassanger(Request $request)
-    {
-
-        try {
-            $response = $this->flixbus->addPassanger();
-
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'There was an error while trying to add passanger',
-                'message' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
     public function submitTicket(Request $request)
     {
+
         $modifiedPassengers = [];
         if ($request->has('passengers')) {
             foreach ($request->passengers as $passenger) {
@@ -129,6 +115,24 @@ class FlixBusController extends Controller
             'ticket_price' => 'required',
 
         ]);
+        if (auth()->user()->parent->role == 'sub') {
+            $parent = User::find(auth()->user()->parent->id);
+            $parentBusCredit = $parent->bus_credit;
+            if ($parentBusCredit < $data['ticket_price']) {
+                return response()->json('Insufficient wallet');
+            }
+            $user = User::find(auth()->user()->id);
+            $userBusCredit = $user->bus_credit;
+            if ($userBusCredit < $data['ticket_price']) {
+                return response()->json('Insufficient wallet');
+            }
+        } else {
+            $user = User::find(auth()->user()->id);
+            $userBusCredit = $user->bus_credit;
+            if ($userBusCredit < $data['ticket_price']) {
+                return response()->json('Insufficient wallet');
+            }
+        }
 
         $this->flixbus->updateReservationItems(
             $data['trip_uid'],
