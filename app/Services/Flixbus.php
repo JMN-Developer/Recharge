@@ -212,15 +212,15 @@ class Flixbus
 
         $client = new Client();
 
-        $url = "https://global.api-dev.flixbus.com/public/v1/reservations/{$reservationId}/passengers.json";
+        $url = $this->base_url . '/public/v1/reservations/' . $reservationId . '/passengers.json';
 
         $formParams = [
             'reservation_token' => $reservationToken,
-            'with_donation' => false,
+            'with_donation' => true,
             'donation_partner' => 'atmosfair',
             'passengers' => $passengers,
         ];
-        Log::info($passengers);
+
         try {
             $response = $client->request('PUT', $url, [
                 'headers' => [
@@ -367,6 +367,88 @@ class Flixbus
             $errorDetails = json_decode($responseBody->getContents(), true);
             Log::error("API request failed", ['details' => $errorDetails]);
             return $errorDetails; // return error details or consider throwing an exception here
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e; // re-throw the exception to be handled by global exception handler
+        }
+    }
+
+    public function cancelOrder($order_id, $order_hash)
+    {
+        $client = new Client();
+
+        $url = $this->base_url . '/public/v2/orders/' . $order_id . '/cancel';
+
+        $queryParams = [
+            'order_hash' => $order_hash,
+            'refund_type' => 'cash',
+        ];
+
+        try {
+            $response = $client->request('PUT', $url, [
+                'headers' => [
+                    'Accept-Language' => 'en',
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'X-API-Authentication' => $this->api_authentication,
+                    'X-API-Session' => $this->api_session,
+                    'User-Agent' => 'JM Nation',
+                ],
+                'query' => $queryParams,
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $responseData = json_decode($response->getBody(), true);
+            Log::info($responseData);
+
+            return $responseData; // return the response data
+
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $responseBody = $e->getResponse()->getBody();
+            $errorDetails = json_decode($responseBody->getContents(), true);
+            Log::error("API request failed", ['details' => $errorDetails]);
+            return $errorDetails; // return error details or consider throwing an exception here
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            throw $e; // re-throw the exception to be handled by global exception handler
+        }
+    }
+
+    public function cancelInvoice($order_id, $order_hash)
+    {
+        $client = new Client();
+        $url = $this->base_url . '/public/v2/orders/' . $order_id . '/cancellation.json';
+
+        $queryParams = [
+            'order_hash' => $order_hash,
+        ];
+
+        try {
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'Accept-Language' => 'en',
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'X-API-Authentication' => $this->api_authentication,
+                    'X-API-Session' => $this->api_session,
+                    'User-Agent' => 'JM Nation',
+                ],
+                'query' => $queryParams,
+            ]);
+
+            $statusCode = $response->getStatusCode();
+            $responseData = json_decode($response->getBody(), true);
+            Log::info($responseData);
+
+            return $responseData; // return the response data
+
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $responseBody = $e->getResponse()->getBody();
+            $errorDetails = json_decode($responseBody->getContents(), true);
+            Log::error("API request failed", ['details' => $errorDetails]);
+            return $errorDetails; // return error details or consider throwing an exception here
+
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler

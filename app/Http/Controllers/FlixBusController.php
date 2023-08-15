@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\bus;
 use App\Models\BusCity;
+use App\Models\TransactionHistory;
 use App\Models\User;
 use App\Services\Flixbus;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Log;
 
 class FlixBusController extends Controller
 {
@@ -134,239 +136,311 @@ class FlixBusController extends Controller
             }
         }
 
-        $this->flixbus->updateReservationItems(
-            $data['trip_uid'],
-            $data['adult'],
-            $data['children'] ?? 0,
-            'EUR',
-            $modifiedPassengers,
-            $request->email
-        );
-
-        $result = $this->flixbus->responseData;
-
-        //     'code' => 200,
-        //     'message' => 'OK',
-        //     'order_uid' => '9000000208-8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //     'order' => array(
-        //         'id' => '9000000208',
-        //         'download_hash' => '8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //         'trips' => array(
-        //             0 => array(
-        //                 'ride_uuid' => '69b65137-abd5-46ab-b704-c72010936f21',
-        //                 'departure_station' => array(
-        //                     'id' => 1,
-        //                     'uuid' => 'dcbaaee6-9603-11e6-9066-549f350fcb0c',
-        //                     'name' => 'Berlin central bus station',
-        //                     'address' => 'Masurenallee 4-6',
-        //                     'full_address' => 'Masurenallee 4-6, 14057 Berlin, Germany',
-        //                     'coordinates' => array(
-        //                         'latitude' => 52.507171,
-        //                         'longitude' => 13.279399,
-        //                     ),
-        //                     'country' => array(
-        //                         'name' => 'Germany',
-        //                         'alpha2_code' => 'DE',
-        //                     ),
-        //                     'warnings' => 'Gate information available here: https://zob.berlin/en/guests-visitors#departures',
-        //                 ),
-        //                 'arrival_station' => array(
-        //                     'id' => 10,
-        //                     'uuid' => 'dcbabbfa-9603-11e6-9066-549f350fcb0c',
-        //                     'name' => 'Munich central bus station',
-        //                     'address' => 'Arnulfstraße 21',
-        //                     'full_address' => 'Arnulfstraße 21, 80335 München, Germany',
-        //                     'coordinates' => array(
-        //                         'latitude' => 48.14248,
-        //                         'longitude' => 11.55001,
-        //                     ),
-        //                     'country' => array(
-        //                         'name' => 'Germany',
-        //                         'alpha2_code' => 'DE',
-        //                     ),
-        //                     'warnings' => 'Gate information available here: https://www.muenchen-zob.de/en/connections',
-        //                 ),
-        //                 'departure' => array(
-        //                     'timestamp' => 1689573600,
-        //                     'tz' => 'GMT+02:00',
-        //                 ),
-        //                 'arrival' => array(
-        //                     'timestamp' => 1689600600,
-        //                     'tz' => 'GMT+02:00',
-        //                 ),
-        //                 'passengers' => array(
-        //                     0 => array(
-        //                         'type' => 'adult',
-        //                         'uuid' => '8b91a891-2b5e-497e-8162-7193cd499134',
-        //                         'firstname' => 'TES',
-        //                         'lastname' => 'TEST2',
-        //                         'phone' => '',
-        //                     ),
-        //                 ),
-        //                 'transfers' => array(
-        //                 ),
-        //                 'line_direction' => 'Route 234 direction Zurich',
-        //                 'line' => array(
-        //                     'number' => '234',
-        //                     'direction' => 'Zurich',
-        //                     'brand' => array(
-        //                         'id' => 'a18f138c-68fa-4b45-a42f-adb0378e10d3',
-        //                         'name' => 'FlixBus',
-        //                         'color' => '73d700',
-        //                         'color_light' => 'e5f9c0',
-        //                         'color_dark' => '187d00',
-        //                         'type' => 'core',
-        //                     ),
-        //                 ),
-        //                 'bike_slots_count' => 0,
-        //                 'passbook_url' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/passbook/get/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v/9000000208-direct:201263293:1:10.pkpass',
-        //                 'order_status' => 'paid',
-        //                 'push_channel_uid' => '/passengers/4292949713',
-        //                 'warnings' => array(
-        //                 ),
-        //                 'trip_uid' => 'direct:201263293:1:10',
-        //                 'products_description' => 'TES TEST2 (Adult)',
-        //                 'products_description_html' => '<b>TES TEST2</b> <i>(Adult)</i>',
-        //                 'real_time_info_available' => true,
-        //                 'seats_per_relation' => array(
-        //                     0 => array(
-        //                         'from' => 1,
-        //                         'to' => 10,
-        //                         'seats' => array(
-        //                             0 => array(
-        //                                 'category' => 'free_seat',
-        //                                 'is_auto_assigned' => false,
-        //                             ),
-        //                         ),
-        //                     ),
-        //                 ),
-        //                 'operated_by' => array(
-        //                     0 => array(
-        //                         'key' => '',
-        //                         'label' => 'FlixBus DACH GmbH',
-        //                         'url' => '',
-        //                         'address' => 'Karl-Liebknecht-Straße 33',
-        //                     ),
-        //                 ),
-        //                 'self_checkin_available' => true,
-        //                 'transfer_type' => 'direct',
-        //             ),
-        //         ),
-        //         'invoices' => array(
-        //             0 => array(
-        //                 'ticket_id' => 'mfb-9000000214',
-        //             ),
-        //         ),
-        //         'info_blocks' => array(
-        //             0 => array(
-        //                 'name' => 'time',
-        //                 'html' => 'Please be at the stop 15 minutes prior to departure.<br />Your ticket expires at departure time and will be available for purchase again.',
-        //                 'title' => '',
-        //             ),
-        //             1 => array(
-        //                 'name' => 'suitcase',
-        //                 'html' => 'pdf-luggage-info',
-        //                 'title' => '',
-        //             ),
-        //             2 => array(
-        //                 'name' => 'rebooking',
-        //                 'html' => 'To change your reservation, please visit <a href="https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking/mobile/auth?orderId=9000000208&downloadHash=8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v">https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking</a>',
-        //                 'title' => '',
-        //             ),
-        //             3 => array(
-        //                 'name' => 'help',
-        //                 'html' => 'FAQ: <a href="https://help.flixbus.com">https://help.flixbus.com</a><br/><em>* (Please note, that fees for calls from landlines as well as from mobile phones depend on individual provider‘s rates.)</em>',
-        //                 'title' => '',
-        //             ),
-        //             4 => array(
-        //                 'name' => 'cabotage-note',
-        //                 'html' => 'This ticket allows the passenger to travel between the start location and destination indicated on the ticket. Boarding later or exiting early is not permitted due to legal requirements.',
-        //                 'title' => '',
-        //             ),
-        //             5 => array(
-        //                 'name' => 'invoice',
-        //                 'html' => 'To download your invoice, please visit <a href="https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking">%rebooking_text_url%</a>.',
-        //                 'title' => '',
-        //             ),
-        //         ),
-        //         'order_uid' => '9000000208-8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //         'reminder_link' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v/Ticket-Berlin-Muenchen-9000000208.pdf',
-        //         'invoice_link' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v/Invoice-9000000208.pdf',
-        //         'qr_data' => 'https://shop-de.stg1.staging.greensystems-dev.flixtech.io/pdfqr/9000000208/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //         'qr_image' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/qrcode/en/9000000208/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //         'attachments' => array(
-        //             0 => array(
-        //                 'title' => 'Passenger rights',
-        //                 'rel' => 'booking:passengers-rights',
-        //                 'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/passenger-rights/en_fb_rights.pdf',
-        //                 'type' => 'application/pdf',
-        //             ),
-        //             1 => array(
-        //                 'title' => 'QR Code URL',
-        //                 'rel' => 'booking:qr:image',
-        //                 'href' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/qrcode/en/9000000208/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //                 'type' => 'image/png',
-        //             ),
-        //             2 => array(
-        //                 'title' => 'QR Code Data',
-        //                 'rel' => 'booking:qr:data',
-        //                 'href' => 'https://shop-de.stg1.staging.greensystems-dev.flixtech.io/pdfqr/9000000208/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //                 'type' => 'text/plain',
-        //             ),
-        //             3 => array(
-        //                 'title' => 'Invoice',
-        //                 'rel' => 'booking:invoice',
-        //                 'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v/Invoice-9000000208.pdf',
-        //                 'type' => 'application/pdf',
-        //             ),
-        //             4 => array(
-        //                 'title' => 'Booking Confirmation',
-        //                 'rel' => 'booking:confirmation',
-        //                 'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v/Ticket-Berlin-Muenchen-9000000208.pdf',
-        //                 'type' => 'application/pdf',
-        //             ),
-        //             5 => array(
-        //                 'title' => 'Rebooking',
-        //                 'rel' => 'shop:rebooking',
-        //                 'href' => 'https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking/mobile/auth?orderId=9000000208&downloadHash=8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //                 'type' => 'text/plain',
-        //             ),
-        //         ),
-        //     ),
-        //     '_links' => array(
-        //         'self' => array(
-        //             'href' => 'http://staging-stg1-mfb-api-web-webc-green-dev.origin-api-gw.ew1d2.k8s-dev.flix.tech/mobile/v2/orders/9000000208/info?download_hash=8cr5hgq7roxd9dlgt2ih446z9a1g1g0t2jy3t4k8gos6ahlt2v',
-        //         ),
-        //         'cancel' => array(
-        //             'href' => 'http://staging-stg1-mfb-api-web-webc-green-dev.origin-api-gw.ew1d2.k8s-dev.flix.tech/public/v2/orders/9000000208/cancel',
-        //         ),
-        //     ),
+        // $this->flixbus->updateReservationItems(
+        //     $data['trip_uid'],
+        //     $data['adult'],
+        //     $data['children'] ?? 0,
+        //     'EUR',
+        //     $modifiedPassengers,
+        //     $request->email
         // );
+
+        // $result = $this->flixbus->responseData;
+
+        $result = array(
+            'code' => 200,
+            'message' => 'OK',
+            'order_uid' => '9000000157-jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+            'order' => array(
+                'id' => '9000000157',
+                'download_hash' => 'jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                'trips' => array(
+                    0 => array(
+                        'ride_uuid' => 'd1a88ff5-de4d-4bee-b3df-9eda0623d6ef',
+                        'departure_station' => array(
+                            'id' => 1,
+                            'uuid' => 'dcbaaee6-9603-11e6-9066-549f350fcb0c',
+                            'name' => 'Berlin central bus station',
+                            'address' => 'Masurenallee 4-6',
+                            'full_address' => 'Masurenallee 4-6, 14057 Berlin, Germany',
+                            'coordinates' => array(
+                                'latitude' => 52.507171,
+                                'longitude' => 13.279399,
+                            ),
+                            'country' => array(
+                                'name' => 'Germany',
+                                'alpha2_code' => 'DE',
+                            ),
+                            'warnings' => 'Gate information available here: https://zob.berlin/en/guests-visitors#departures',
+                        ),
+                        'arrival_station' => array(
+                            'id' => 10,
+                            'uuid' => 'dcbabbfa-9603-11e6-9066-549f350fcb0c',
+                            'name' => 'Munich central bus station',
+                            'address' => 'Arnulfstraße 21',
+                            'full_address' => 'Arnulfstraße 21, 80335 München, Germany',
+                            'coordinates' => array(
+                                'latitude' => 48.14248,
+                                'longitude' => 11.55001,
+                            ),
+                            'country' => array(
+                                'name' => 'Germany',
+                                'alpha2_code' => 'DE',
+                            ),
+                            'warnings' => 'Gate information available here: https://www.muenchen-zob.de/en/connections',
+                        ),
+                        'departure' => array(
+                            'timestamp' => 1691214000,
+                            'tz' => 'GMT+02:00',
+                        ),
+                        'arrival' => array(
+                            'timestamp' => 1691245500,
+                            'tz' => 'GMT+02:00',
+                        ),
+                        'passengers' => array(
+                            0 => array(
+                                'type' => 'adult',
+                                'uuid' => 'cfc22dbf-a2f5-4ca2-8afe-af03fb46eba2',
+                                'firstname' => 'tt',
+                                'lastname' => 'tt',
+                                'phone' => '',
+                            ),
+                        ),
+                        'transfers' => array(
+                        ),
+                        'line_direction' => 'Route 141 direction St. Gallen',
+                        'line' => array(
+                            'number' => '141',
+                            'direction' => 'St. Gallen',
+                            'brand' => array(
+                                'id' => 'a18f138c-68fa-4b45-a42f-adb0378e10d3',
+                                'name' => 'FlixBus',
+                                'color' => '73d700',
+                                'color_light' => 'e5f9c0',
+                                'color_dark' => '187d00',
+                                'type' => 'core',
+                            ),
+                        ),
+                        'bike_slots_count' => 0,
+                        'passbook_url' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/passbook/get/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/9000000157-direct:206679253:1:10.pkpass',
+                        'order_status' => 'paid',
+                        'push_channel_uid' => '/passengers/4386025413',
+                        'warnings' => array(
+                        ),
+                        'trip_uid' => 'direct:206679253:1:10',
+                        'products_description' => 'tt tt (Adult)',
+                        'products_description_html' => '<b>tt tt</b> <i>(Adult)</i>',
+                        'real_time_info_available' => true,
+                        'seats_per_relation' => array(
+                            0 => array(
+                                'from' => 1,
+                                'to' => 10,
+                                'seats' => array(
+                                    0 => array(
+                                        'label' => '20D',
+                                        'deck' => '0',
+                                        'vehicle' => 'bus',
+                                        'category' => 'reserved_seat_mobile',
+                                        'is_auto_assigned' => false,
+                                    ),
+                                ),
+                            ),
+                        ),
+                        'operated_by' => array(
+                            0 => array(
+                                'key' => '',
+                                'label' => 'FlixBus DACH GmbH',
+                                'url' => '',
+                                'address' => 'Karl-Liebknecht-Straße 33',
+                            ),
+                        ),
+                        'self_checkin_available' => true,
+                        'transfer_type' => 'direct',
+                    ),
+                ),
+                'invoices' => array(
+                    0 => array(
+                        'ticket_id' => 'mfb-9000000143',
+                    ),
+                    1 => array(
+                        'ticket_id' => 'mfb-9000000144',
+                    ),
+                ),
+                'info_blocks' => array(
+                    0 => array(
+                        'name' => 'time',
+                        'html' => 'Please be at the stop 15 minutes prior to departure.<br />Your ticket expires at departure time and will be available for purchase again.',
+                        'title' => '',
+                    ),
+                    1 => array(
+                        'name' => 'suitcase',
+                        'html' => 'pdf-luggage-info',
+                        'title' => '',
+                    ),
+                    2 => array(
+                        'name' => 'rebooking',
+                        'html' => 'To change your reservation, please visit <a href="https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking/mobile/auth?orderId=9000000157&downloadHash=jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei">https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking</a>',
+                        'title' => '',
+                    ),
+                    3 => array(
+                        'name' => 'help',
+                        'html' => 'FAQ: <a href="https://help.flixbus.com">https://help.flixbus.com</a><br/><em>* (Please note, that fees for calls from landlines as well as from mobile phones depend on individual provider‘s rates.)</em>',
+                        'title' => '',
+                    ),
+                    4 => array(
+                        'name' => 'cabotage-note',
+                        'html' => 'This ticket allows the passenger to travel between the start location and destination indicated on the ticket. Boarding later or exiting early is not permitted due to legal requirements.',
+                        'title' => '',
+                    ),
+                    5 => array(
+                        'name' => 'invoice',
+                        'html' => 'To download your invoice, please visit <a href="https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking">%rebooking_text_url%</a>.',
+                        'title' => '',
+                    ),
+                ),
+                'order_uid' => '9000000157-jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                'reminder_link' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/Ticket-Berlin-Muenchen-9000000157.pdf',
+                'invoice_link' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/Invoice-9000000157.pdf',
+                'qr_data' => 'https://shop-de.stg1.staging.greensystems-dev.flixtech.io/pdfqr/9000000157/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                'qr_image' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/qrcode/en/9000000157/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                'attachments' => array(
+                    0 => array(
+                        'title' => 'Passenger rights',
+                        'rel' => 'booking:passengers-rights',
+                        'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/passenger-rights/en_fb_rights.pdf',
+                        'type' => 'application/pdf',
+                    ),
+                    1 => array(
+                        'title' => 'QR Code URL',
+                        'rel' => 'booking:qr:image',
+                        'href' => 'https://api.stg1.staging.greensystems-dev.flixtech.io/qrcode/en/9000000157/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                        'type' => 'image/png',
+                    ),
+                    2 => array(
+                        'title' => 'QR Code Data',
+                        'rel' => 'booking:qr:data',
+                        'href' => 'https://shop-de.stg1.staging.greensystems-dev.flixtech.io/pdfqr/9000000157/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                        'type' => 'text/plain',
+                    ),
+                    3 => array(
+                        'title' => 'Invoice',
+                        'rel' => 'booking:invoice',
+                        'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/Invoice-9000000157.pdf',
+                        'type' => 'application/pdf',
+                    ),
+                    4 => array(
+                        'title' => 'Booking Confirmation',
+                        'rel' => 'booking:confirmation',
+                        'href' => 'https://mfb-fb-pdf-staging-stg1-323878168362.s3.eu-west-1.amazonaws.com/jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei/Ticket-Berlin-Muenchen-9000000157.pdf',
+                        'type' => 'application/pdf',
+                    ),
+                    5 => array(
+                        'title' => 'Rebooking',
+                        'rel' => 'shop:rebooking',
+                        'href' => 'https://shop-en.stg1.staging.greensystems-dev.flixtech.io/rebooking/mobile/auth?orderId=9000000157&downloadHash=jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                        'type' => 'text/plain',
+                    ),
+                ),
+            ),
+            '_links' => array(
+                'self' => array(
+                    'href' => 'http://staging-stg1-mfb-api-web-webc-green-dev.origin-api-gw.ew1d2.k8s-dev.flix.tech/mobile/v2/orders/9000000157/info?download_hash=jhj1ocsuv4bgv1tj0fgl2ixxrlbf180iujlnalpu7hh96xkhei',
+                ),
+                'cancel' => array(
+                    'href' => 'http://staging-stg1-mfb-api-web-webc-green-dev.origin-api-gw.ew1d2.k8s-dev.flix.tech/public/v2/orders/9000000157/cancel',
+                ),
+            ),
+        );
+        $totalPrice = $data['ticket_price'] * ($data['adult'] + $data['children']);
         $trip = bus::create([
-            'reseller_id' => auth()->user()->id,
+            'reseller_id' => $user->id,
             'departure_date' => $data['departure_date'],
             'total_passenger' => $data['adult'] + $data['children'],
-            'total_price' => $data['ticket_price'] * ($data['adult'] + $data['children']),
+            'total_price' => $totalPrice,
             'user_email' => $request->email,
-            'meta_data' => json_encode($result), // Storing entire result data as JSON in 'meta_data' column
+            'meta_data' => json_encode($result),
         ]);
-        $user = User::find($trip->reseller_id); // Assuming you have the user object available
+        if ($user->parent && $user->parent->role === 'sub') {
+            $parent = $user->parent;
+            $parentbusCreditProfit = $parent->bus_credit_profit / 100;
+            $parentDiscount = $totalPrice * 0.07 * $parentbusCreditProfit;
+            $userBusCreditProfit = $user->bus_credit_profit / 100;
+            $userDiscount = $parentDiscount * $userBusCreditProfit;
+            $busCredit = $userBusCredit - $totalPrice + $userDiscount;
 
-        $totalPrice = $trip->total_price;
-        $busCreditProfit = $user->bus_credit_profit / 100; // Divide by 100 to get the decimal value
+            $transaction_id = date('dmyHis') . str_pad($user->id, 4, "0", STR_PAD_LEFT) . str_pad(8, 2, "0", STR_PAD_LEFT);
+            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $userDiscount) . ' Tx-Type = Debit WBT = ' . $userBusCredit . ' WAT = ' . $busCredit . ' Wallet Type = Wallet Type = Bus';
+            Log::channel('transactionlog')->info($log_data);
+            TransactionHistory::create([
+                'reseller_id' => $user->id,
+                'transaction_id' => $transaction_id,
+                'transaction_source_id' => $trip->id,
+                'transaction_type' => 'Debit',
+                'transaction_source' => 'Bus',
+                'amount' => ($totalPrice - $userDiscount),
+                'transaction_wallet' => 'Bus',
+                'wallet_before_transaction' => $userBusCredit,
+                'wallet_after_transaction' => $busCredit,
+                'wallet_type' => 'Wallet',
+                'parent_id' => $user->parent->id,
+            ]);
 
-        $userDiscount = $totalPrice * 0.07 * $busCreditProfit;
-        $busCredit = $user->bus_credit - $totalPrice + $userDiscount;
+            $user->update([
+                'bus_credit' => $busCredit,
+            ]);
 
-        $user->update([
-            'bus_credit' => $busCredit,
-        ]);
+            $transaction_id = date('dmyHis') . str_pad($user->parent->id, 4, "0", STR_PAD_LEFT) . str_pad(8, 2, "0", STR_PAD_LEFT);
+            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $parentDiscount + $userDiscount) . ' Tx-Type = Debit WBT = ' . $parent->bus_credit . ' WAT = ' . ($parent->bus_credit - $totalPrice + ($parentDiscount - $userDiscount)) . ' Wallet Type = Wallet Type = Bus';
+            Log::channel('transactionlog')->info($log_data);
+            TransactionHistory::create([
+                'reseller_id' => $parent->id,
+                'transaction_id' => $transaction_id,
+                'transaction_source_id' => $trip->id,
+                'transaction_type' => 'Debit',
+                'transaction_source' => 'Bus',
+                'amount' => ($totalPrice - $parentDiscount + $userDiscount),
+                'transaction_wallet' => 'Bus',
+                'wallet_before_transaction' => $parent->bus_credit,
+                'wallet_after_transaction' => ($parent->bus_credit - $totalPrice + ($parentDiscount - $userDiscount)),
+                'wallet_type' => 'Wallet',
+                'parent_id' => $parent->parent->id,
+            ]);
+            $parent->update([
+                'bus_credit' => ($parent->bus_credit - $totalPrice + ($parentDiscount - $userDiscount)),
+            ]);
+        } else {
+            $busCreditProfit = $user->bus_credit_profit / 100;
+            $userDiscount = $totalPrice * 0.07 * $busCreditProfit;
+            $busCredit = $userBusCredit - $totalPrice + $userDiscount;
+
+            $transaction_id = date('dmyHis') . str_pad($user->id, 4, "0", STR_PAD_LEFT) . str_pad(8, 2, "0", STR_PAD_LEFT);
+            $log_data = 'TXID = ' . $transaction_id . ' Amount = ' . ($totalPrice - $userDiscount) . ' Tx-Type = Debit WBT = ' . $userBusCredit . ' WAT = ' . $busCredit . ' Wallet Type = Wallet Type = Bus';
+            Log::channel('transactionlog')->info($log_data);
+            TransactionHistory::create([
+                'reseller_id' => $user->id,
+                'transaction_id' => $transaction_id,
+                'transaction_source_id' => $trip->id,
+                'transaction_type' => 'Debit',
+                'transaction_source' => 'Bus',
+                'amount' => ($totalPrice - $userDiscount),
+                'transaction_wallet' => 'Bus',
+                'wallet_before_transaction' => $userBusCredit,
+                'wallet_after_transaction' => $busCredit,
+                'wallet_type' => 'Wallet',
+                'parent_id' => $user->parent->id,
+            ]);
+
+            $user->update([
+                'bus_credit' => $busCredit,
+            ]);
+        }
+
         return response()->json($result);
     }
     public function busTicketList()
     {
         $reseller_id = auth()->user()->id;
-        $busTickets = Bus::where('reseller_id', $reseller_id)->get();
+        $busTickets = Bus::where('reseller_id', $reseller_id)->orderBY('created_at', 'DESC')->get();
 
         $data = [];
         foreach ($busTickets as $busTicket) {
@@ -374,8 +448,9 @@ class FlixBusController extends Controller
             $departureStationName = $metaData['order']['trips'][0]['departure_station']['name'];
             $arrivalStationName = $metaData['order']['trips'][0]['arrival_station']['name'];
             $totalPassengers = sizeof($metaData['order']['trips'][0]['passengers']);
-
+            $cancelAvailableStatus = $this->isTicketCancelable($busTicket->created_at);
             $data[] = [
+                'id' => $busTicket->id,
                 'user_email' => $busTicket->user_email,
                 'departure_station_name' => $departureStationName,
                 'arrival_station_name' => $arrivalStationName,
@@ -391,6 +466,7 @@ class FlixBusController extends Controller
                 'qr_code_data' => $metaData['order']['attachments'][2]['href'],
                 'invoice' => $metaData['order']['attachments'][3]['href'],
                 'booking_confirmation' => $metaData['order']['attachments'][4]['href'],
+                'cancel_available_status' => $cancelAvailableStatus,
 
             ];
         }
@@ -398,4 +474,42 @@ class FlixBusController extends Controller
         return view('front.flixbus.bus-ticket-list', ['busTickets' => $data]);
     }
 
+    public function getOrderDetails()
+    {
+        return $this->flixbus->getOrderInfo('9000000019', 'q3dp5ap7p56jiw5wxbzlqwnhaoauyfjuxi0a9t4hfy466z5f3x');
+    }
+    private function isTicketCancelable($purchaseDateTime)
+    {
+        return true;
+
+        // $cancelationWindow = 15 * 60;
+        // $currentTime = time();
+        // $purchaseTime = strtotime($purchaseDateTime);
+        // $timeDifference = $currentTime - $purchaseTime;
+
+        // // If the time difference is within the cancelation window, the ticket can be canceled.
+        // return $timeDifference <= $cancelationWindow;
+    }
+
+    public function cancelTicket(Request $request)
+    {
+        $id = $request->id;
+        $reseller_id = auth()->user()->id;
+        Log::info($id);
+        $busTicket = Bus::where('id', $id)->first();
+        $metaData = json_decode($busTicket->meta_data, true);
+        $order_hash = $metaData['order']['download_hash'];
+        $order_id = $metaData['order']['id'];
+        $this->flixbus->cancelOrder($order_id, $order_hash);
+        $cancelData = $this->cancelInvoice($order_id, $order_hash);
+    }
+
+    public function cancelInvoice($order_id, $order_hash)
+    {
+
+        Log::info($order_id);
+        Log::info($order_hash);
+
+        return $this->flixbus->cancelInvoice($order_id, $order_hash);
+    }
 }

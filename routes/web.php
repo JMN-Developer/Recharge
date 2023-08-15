@@ -76,7 +76,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/sign-up', [UserController::class, 'index']);
 
     Route::post('/create', [UserController::class, 'create'])->name('create');
-
+    Route::get('cancel-ticket/{id}', [FlixBusController::class, 'cancelTicket'])->name('cancel-ticket');
     Route::get('/add-reseller', function () {
         return view('front.add-reseller');
     });
@@ -422,6 +422,7 @@ Route::get('/fcm', [RechargeController::class, 'fcmSend']);
 Route::get('bus', [FlixBusController::class, 'index']);
 
 Route::get('bus-ticket-list', [FlixBusController::class, 'busTicketList']);
+Route::post('bus-ticket-list', [FlixBusController::class, 'busTicketList']);
 Route::post('reservation', [FlixBusController::class, 'submitTicket']);
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

@@ -58,3 +58,5 @@ Route::get('get-cities', [FlixBusController::class, 'getCities']);
 Route::post('reservation', [FlixBusController::class, 'submitTicket']);
 Route::post('initiate-payment', [FlixBusController::class, 'initiatePayment']);
 Route::post('add-passanger', [FlixBusController::class, 'addPassanger']);
+
+Route::get('test-order-info', [FlixBusController::class, 'getOrderDetails']);
