@@ -73,6 +73,7 @@
                                 class="table-info table table-sm table-bordered table-hover table-head-fixed text-nowrap">
                                 <thead>
                                     <tr>
+                                    <th style="background: #faaeae;">#</th>
                                         <th style="background: #faaeae;">User Email</th>
                                         <th style="background: #faaeae;">Departure Station</th>
                                         <th style="background: #faaeae;">Arrival Station</th>
@@ -81,13 +82,16 @@
                                         <th style="background: #faaeae;">Ticket Unit Price</th>
                                         <th style="background: #faaeae;">Total Price</th>
                                         <th style="background: #faaeae;">Ticket Purchase Date</th>
+                                        <th style="background: #faaeae;">Status</th>
                                         <!-- <th style="background: #faaeae;">Status</th> -->
                                         <th style="background: #faaeae;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($busTickets as $busTicket)
+
                                         <tr>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $busTicket['user_email'] }}</td>
                                             <td>{{ $busTicket['departure_station_name'] }}</td>
                                             <td>{{ $busTicket['arrival_station_name'] }}</td>
@@ -96,8 +100,15 @@
                                             <td>{{ $busTicket['ticket_unit_price'] }}</td>
                                             <td>{{ $busTicket['ticket_total_price'] }}</td>
                                             <td>{{ $busTicket['ticket_purchase_date'] }}</td>
-                                            <!-- <td>{{ $busTicket['status'] }}</td> -->
                                             <td>
+            @if ($busTicket['status'] == 0)
+                <span style="color: green;">Available</span>
+            @else
+                <span style="color: red;">Cancelled</span>
+            @endif
+        </td>
+                                            <td>
+                                            @if ($busTicket['status'] == 0)
                                                 <div class="btn-group cargo_t-action_btn">
                                                     <button type="button"
                                                         class="btn btn-info dropdown-toggle dropdown-icon"
@@ -119,6 +130,22 @@
                         @endif
                                                     </div>
                                                 </div>
+                                                @else
+                                                <div class="btn-group cargo_t-action_btn">
+                                                    <button type="button"
+                                                        class="btn btn-info dropdown-toggle dropdown-icon"
+                                                        data-toggle="dropdown"></button>
+                                                    <div class="dropdown-menu" role="menu">
+                                                        <a class="dropdown-item" target="_blank"
+                                                            href="{{ $busTicket['cancel_meta']['documents'][0]['href'] }}"><i
+                                                                class="fas fa-print"></i> Voucher</a>
+                                                        <a class="dropdown-item" target="_blank"
+                                                            href="{{ $busTicket['cancel_meta']['documents'][1]['href'] }}"><i
+                                                                class="fas fa-eye"></i> Invoice</a>
+
+                                                    </div>
+                                                </div>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -196,15 +223,21 @@
             e.preventDefault();
 
             var ticketId = $(this).data('ticket-id');
-            console.log(ticketId)
+
             var cancelUrl = "/cancel-ticket/" + ticketId;
 
             $.ajax({
                 url: cancelUrl,
                 type: 'GET',
                 success: function (response) {
+                    if(response.status){
+                        alert('Ticket cancel successfully')
+                        window.location.reload()
+                    }
+                    else{
+                        alert('Some error occured during cancel ticket.')
+                    }
 
-                    console.log('Ticket canceled successfully.');
                     // Optionally, you can update the table or perform any other action to indicate that the ticket was canceled.
                 },
                 error: function (error) {

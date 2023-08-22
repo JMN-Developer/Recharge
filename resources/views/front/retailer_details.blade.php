@@ -73,8 +73,10 @@
                     <th scope="col">Email</th>
                     <th scope="col">International Balance</th>
                     <th scope="col">Domestic Balance</th>
+                    <th scope="col">Bus Balance</th>
                     <th scope="col" style="width: 12%">International Limit</th>
                     <th scope="col" style="width: 12%">Domestic Limit</th>
+                    <th scope="col" style="width: 12%">Bus Limit</th>
                     <th scope="col">Comission</th>
                     <th scope="col">Sim Due</th>
                     <th scope="col">Cargo Due</th>
@@ -102,6 +104,7 @@
                         <td>{{ $item->email }}</td>
                         <td class="text-center font-weight-bold">{{ $item->wallet }}</td>
                         <td class="text-center font-weight-bold">{{ $item->domestic_wallet }}</td>
+                        <td class="text-center font-weight-bold">{{ $item->bus_credit }}</td>
                         <td class="text-center font-weight-bold">{{ $item->limit_usage }}/{{ $item->due }}
                             <br>
                               <span>
@@ -111,6 +114,20 @@
                               </span>
                         </td>
                         <td class="text-center font-weight-bold">{{ $item->domestic_limit_usage }}/{{ $item->domestic_due }}
+                            <br>
+                              <span>
+                                <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#boom_domestic{{$item->id}}" class="btn btn-sm btn-info mt-1">
+                                    <i class="fas fa-edit"></i>
+                                  </button>
+                              </span>
+                        </td>
+
+                        <td class="text-center font-weight-bold">
+                        @if($item->bus_credit > 0)
+        0/{{ $item->bus_credit_limit }}
+    @else
+        {{ $item->bus_credit }}/{{ $item->bus_credit_limit }}
+    @endif
                             <br>
                               <span>
                                 <button type="button" data-toggle="modal" id="{{$item->id}}modal_id" data-target="#boom_domestic{{$item->id}}" class="btn btn-sm btn-info mt-1">
@@ -303,6 +320,10 @@
                                            <label for="">Pin Commission :</label><br>
                                           <small>Default Admin Commission is {{ $item->admin_pin_commission }}</small>
                                           <input class="form-control"  value="{{$item->admin_pin_commission}}" type="number" step="0.01" name="pin"> <br>
+
+                                          <label for="">Bus Profit :</label><br>
+                                          <small>Default profit is 0</small>
+                                          <input class="form-control"  value="{{$item->bus_credit_profit}}" type="number" step="0.01" name="bus_credit_profit"> <br>
                                           <button class="btn btn-success btn-sm"  type="submit">Set Commission For {{$item->first_name}}</button>
                                         </div>
                                       </form>

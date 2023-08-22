@@ -381,7 +381,7 @@ class Flixbus
 
         $queryParams = [
             'order_hash' => $order_hash,
-            'refund_type' => 'cash',
+            'refund_type' => 'credit',
         ];
 
         try {

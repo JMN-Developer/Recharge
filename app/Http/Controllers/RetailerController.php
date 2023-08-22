@@ -106,6 +106,7 @@ class RetailerController extends Controller
             'admin_recharge_commission' => $request->domestic_recharge_profit,
             'admin_international_recharge_commission' => $request->international_recharge,
             'admin_pin_commission' => $request->pin,
+            'bus_credit_profit' => $request->bus_credit_profit,
         ]);
 
         return back()->with('status', 'Commission Set Suucessfully!');
