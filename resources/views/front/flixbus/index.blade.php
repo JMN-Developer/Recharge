@@ -222,9 +222,13 @@ ticketInfoContainer.append(ticketInfo);
             generatePassengerForm(j, 'children','Children');
         }
         var passengerEmailHtml = '<div class="form-group">' +
-            '<label for="email">Email</label>' +
-            '<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">' +
-            '</div>';
+    '<label for="email">Email</label>' +
+    '<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">' +
+    '</div>' +
+    '<div class="form-group">' +
+    '<label for="serviceCharge">Service Charge</label>' +
+    '<input type="number" class="form-control" id="serviceCharge" name="serviceCharge" placeholder="Enter service charge (optional)">' +
+    '</div>';
         passengerContainer.append(passengerEmailHtml);
         $("#ticketForm").modal('show')
 

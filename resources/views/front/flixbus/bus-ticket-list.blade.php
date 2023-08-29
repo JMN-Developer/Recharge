@@ -81,6 +81,7 @@
                                         <th style="background: #faaeae;">Total Passengers</th>
                                         <th style="background: #faaeae;">Ticket Unit Price</th>
                                         <th style="background: #faaeae;">Total Price</th>
+                                        <th style="background: #faaeae;">Service Charge</th>
                                         <th style="background: #faaeae;">Ticket Purchase Date</th>
                                         <th style="background: #faaeae;">Status</th>
                                         <!-- <th style="background: #faaeae;">Status</th> -->
@@ -88,8 +89,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                @php
+                                $totalSum = 0;
+                                @endphp
                                     @foreach($busTickets as $busTicket)
-
+                                    @php
+        $totalSum += ($busTicket['ticket_total_price'] + $busTicket['service_charge']);
+        @endphp
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $busTicket['user_email'] }}</td>
@@ -99,6 +105,7 @@
                                             <td>{{ $busTicket['total_passengers'] }}</td>
                                             <td>{{ $busTicket['ticket_unit_price'] }}</td>
                                             <td>{{ $busTicket['ticket_total_price'] }}</td>
+                                            <td>{{ $busTicket['service_charge'] }}</td>
                                             <td>{{ $busTicket['ticket_purchase_date'] }}</td>
                                             <td>
             @if ($busTicket['status'] == 0)
@@ -149,6 +156,10 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                       <td colspan="7" style="color: red;font-weight:bold">Total</td>
+                                       <td style="color: red;font-weight:bold">{{$totalSum}}</td>
+                                    </tr>
                                 </tbody>
 
                             </table>

@@ -464,6 +464,20 @@
 
             for (var i = 0; i < item.length; i++){
                 var status = item[i].status;
+                var transactionSource = item[i].wallet_type
+                console.log(item[i])
+                if(transactionSource == 'Bus'){
+                  if(item[i].reseller.bus_credit < 0){
+                    var previous_due = item[i].reseller.bus_credit
+                  }
+                  else{
+                    var previous_due = 0
+                  }
+
+                  }
+                else{
+                  var previous_due = item[i].limit_usage
+                }
                 var url = '{{ URL::asset('/storage//') }}'
                 var image = "<a href=\"" + url+'/'+item[i].document + "\"  download>File</a>"
             let class_name = '';
@@ -486,7 +500,7 @@
         if(user_role != 'reseller')
         {
             added_row+='<td>' + item[i].reseller_name +  '</td>'
-            +'<td>' + item[i].limit_usage +  '</td>'
+            +'<td>' + previous_due +  '</td>'
              +'<td>'+image+'</td>'
         }
         else
