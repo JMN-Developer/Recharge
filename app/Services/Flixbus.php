@@ -76,7 +76,7 @@ class Flixbus
 
             $statusCode = $response->getStatusCode();
             $responseData = json_decode($response->getBody(), true);
-            Log::info($responseData);
+
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
