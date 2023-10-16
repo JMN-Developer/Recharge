@@ -427,40 +427,53 @@ class FlixBusController extends Controller
     public function busTicketList()
     {
         $reseller_id = auth()->user()->id;
-        $busTickets = Bus::where('reseller_id', $reseller_id)->orderBY('created_at', 'DESC')->get();
 
-        $data = [];
-        foreach ($busTickets as $busTicket) {
-            $metaData = json_decode($busTicket->meta_data, true);
-            $departureStationName = $metaData['order']['trips'][0]['departure_station']['name'];
-            $arrivalStationName = $metaData['order']['trips'][0]['arrival_station']['name'];
-            $totalPassengers = sizeof($metaData['order']['trips'][0]['passengers']);
-            $cancelAvailableStatus = $this->isTicketCancelable($busTicket->created_at);
-            $data[] = [
-                'id' => $busTicket->id,
-                'user_email' => $busTicket->user_email,
-                'departure_station_name' => $departureStationName,
-                'arrival_station_name' => $arrivalStationName,
-                'departure_date' => $busTicket->departure_date,
-                'total_passengers' => $totalPassengers,
-                'ticket_unit_price' => $busTicket->total_price / $totalPassengers,
-                'ticket_total_price' => $busTicket->total_price,
-                'ticket_purchase_date' => $busTicket->created_at,
-                'status' => $busTicket->cancel_status,
-                'service_charge' => $busTicket->service_charge,
-                'passenger_rights' => $metaData['order']['attachments'][0]['href'],
-                'qr_code_url' => $metaData['order']['attachments'][1]['href'],
-                'qr_code_data' => $metaData['order']['attachments'][2]['href'],
-                'invoice' => $metaData['order']['attachments'][3]['href'],
-                'booking_confirmation' => $metaData['order']['attachments'][4]['href'],
-                'cancel_available_status' => $cancelAvailableStatus,
-                'cancel_meta' => $busTicket->cancel_status == 1 ? json_decode($busTicket->cancel_meta_data, true) : null,
+        $buses = Bus::select('id', 'user_email', 'departure_date', 'total_price', 'created_at', 'cancel_status', 'service_charge', 'meta_data', 'cancel_meta_data')
+                    ->where('reseller_id', $reseller_id)
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
 
-            ];
-        }
+        $tickets = $buses->map(function ($bus) {
+            return $this->transformBusToTicketData($bus);
+        });
 
-        return view('front.flixbus.bus-ticket-list', ['busTickets' => $data]);
+        return view('front.flixbus.bus-ticket-list', ['busTickets' => $tickets]);
     }
+
+    private function transformBusToTicketData($bus)
+    {
+        $metaData = json_decode($bus->meta_data, true);
+
+        // Ensure the necessary data exists to avoid errors
+        $trip = $metaData['order']['trips'][0] ?? null;
+        $attachments = $metaData['order']['attachments'] ?? [];
+
+        $departureStationName = $trip['departure_station']['name'] ?? '';
+        $arrivalStationName = $trip['arrival_station']['name'] ?? '';
+        $totalPassengers = sizeof($trip['passengers'] ?? []);
+
+        return [
+            'id' => $bus->id,
+            'user_email' => $bus->user_email,
+            'departure_station_name' => $departureStationName,
+            'arrival_station_name' => $arrivalStationName,
+            'departure_date' => $bus->departure_date,
+            'total_passengers' => $totalPassengers,
+            'ticket_unit_price' => $totalPassengers ? $bus->total_price / $totalPassengers : 0,
+            'ticket_total_price' => $bus->total_price,
+            'ticket_purchase_date' => $bus->created_at,
+            'status' => $bus->cancel_status,
+            'service_charge' => $bus->service_charge,
+            'passenger_rights' => $attachments[0]['href'] ?? '',
+            'qr_code_url' => $attachments[1]['href'] ?? '',
+            'qr_code_data' => $attachments[2]['href'] ?? '',
+            'invoice' => $attachments[3]['href'] ?? '',
+            'booking_confirmation' => $attachments[4]['href'] ?? '',
+            'cancel_available_status' => $this->isTicketCancelable($bus->created_at),
+            'cancel_meta' => $bus->cancel_status == 1 ? json_decode($bus->cancel_meta_data, true) : null,
+        ];
+    }
+
 
     public function getOrderDetails()
     {

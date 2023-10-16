@@ -9,6 +9,8 @@ use Log;
  * Class DtOneProvider
  * @package App\Services
  */
+
+
 class Flixbus
 {
     private $api_authentication;
@@ -81,9 +83,9 @@ class Flixbus
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
                 $responseData = json_decode($response->getBody()->getContents(), true);
-                Log::error('Request failed', ['status' => $response->getStatusCode(), 'response' => $responseData]);
+                //Log::error('Request failed', ['status' => $response->getStatusCode(), 'response' => $responseData]);
             } else {
-                Log::error('Request failed with no response', ['exception' => $e]);
+                //Log::error('Request failed with no response', ['exception' => $e]);
             }
             throw $e; // Optionally re-throw the exception if you want it to bubble up.
         }
@@ -128,37 +130,14 @@ class Flixbus
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
             $errorDetails = json_decode($responseBody->getContents(), true);
-            Log::error("API request failed", ['details' => $errorDetails]);
+            //Log::error("API request failed", ['details' => $errorDetails]);
             return $errorDetails; // return error details or consider throwing an exception here
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            //Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
     }
-    public function getCities()
-    {
-        $client = new Client();
 
-        $url = $this->base_url . '/public/v1/network.json';
-        $query = [
-            'name' => 'New',
-            'countryName' => 'Italy',
-        ];
-        $response = $client->request('GET', $url, [
-            'headers' => [
-                'Accept-Language' => 'en',
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'X-API-Authentication' => $this->api_authentication,
-            ],
-            'query' => $query,
-        ]);
-
-        $statusCode = $response->getStatusCode();
-        $responseData = json_decode($response->getBody(), true);
-
-        return $responseData;
-    }
 
     public function startPayment($reservation, $reservation_token, $email)
     {
@@ -199,10 +178,10 @@ class Flixbus
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
             $errorDetails = json_decode($responseBody->getContents(), true);
-            Log::error("API request failed", ['details' => $errorDetails]);
+            //Log::error("API request failed", ['details' => $errorDetails]);
             return $errorDetails; // return error details or consider throwing an exception here
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            //Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
     }
@@ -234,7 +213,7 @@ class Flixbus
 
             $statusCode = $response->getStatusCode();
             $responseData = json_decode($response->getBody(), true);
-            //Log::info($responseData);
+            Log::info($responseData);
             if ($responseData['result'] == true) {
                 $result = $this->startPayment($reservationId, $reservationToken, $email);
                 Log::info($result);
@@ -244,12 +223,12 @@ class Flixbus
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
             $errorDetails = json_decode($responseBody->getContents(), true);
-            Log::error("API request failed2", ['details' => $errorDetails]);
-            Log::error("API request failed2");
+            //Log::error("API request failed2", ['details' => $errorDetails]);
+            //Log::error("API request failed2");
             return $errorDetails; // return error details or consider throwing an exception here
         } catch (\Exception $e) {
-            Log::error("API request failed3");
-            Log::error($e->getMessage());
+            //Log::error("API request failed3");
+            //Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
     }
@@ -289,10 +268,10 @@ class Flixbus
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
             $errorDetails = json_decode($responseBody->getContents(), true);
-            Log::error("API request failed", ['details' => $errorDetails]);
+            //Log::error("API request failed", ['details' => $errorDetails]);
             return $errorDetails; // return error details or consider throwing an exception here
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            //Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
     }
@@ -330,10 +309,10 @@ class Flixbus
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
             $errorDetails = json_decode($responseBody->getContents(), true);
-            Log::error("API request failed", ['details' => $errorDetails]);
+            //Log::error("API request failed", ['details' => $errorDetails]);
             return $errorDetails; // return error details or consider throwing an exception here
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            //Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
     }
@@ -357,18 +336,18 @@ class Flixbus
             ]);
 
             $statusCode = $response->getStatusCode();
-            Log::info($response->getBody());
+            //Log::info($response->getBody());
             $this->responseData = json_decode($response->getBody(), true);
 
-            Log::info($this->responseData);
+            //Log::info($this->responseData);
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
             $errorDetails = json_decode($responseBody->getContents(), true);
-            Log::error("API request failed", ['details' => $errorDetails]);
+            //Log::error("API request failed", ['details' => $errorDetails]);
             return $errorDetails; // return error details or consider throwing an exception here
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            //Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
     }
@@ -399,18 +378,18 @@ class Flixbus
 
             $statusCode = $response->getStatusCode();
             $responseData = json_decode($response->getBody(), true);
-            Log::info($responseData);
+            //Log::info($responseData);
 
             return $responseData; // return the response data
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $responseBody = $e->getResponse()->getBody();
             $errorDetails = json_decode($responseBody->getContents(), true);
-            Log::error("API request failed", ['details' => $errorDetails]);
+            //Log::error("API request failed", ['details' => $errorDetails]);
             return $errorDetails; // return error details or consider throwing an exception here
 
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            //Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
     }
@@ -453,6 +432,31 @@ class Flixbus
             Log::error($e->getMessage());
             throw $e; // re-throw the exception to be handled by global exception handler
         }
+    }
+
+    public function getCities()
+    {
+        $client = new Client();
+
+        $url = $this->base_url . '/public/v1/network.json';
+        $query = [
+            'name' => 'New',
+            'countryName' => 'Italy',
+        ];
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'Accept-Language' => 'en',
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'X-API-Authentication' => $this->api_authentication,
+            ],
+            'query' => $query,
+        ]);
+
+        $statusCode = $response->getStatusCode();
+        $responseData = json_decode($response->getBody(), true);
+
+        return $responseData;
     }
 
 }
