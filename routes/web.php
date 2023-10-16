@@ -52,8 +52,7 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
     Route::get('/', [SettingsController::class, 'index'])->name('setting');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/l', function () {
-})->name('/a');
+Route::middleware(['auth:sanctum', 'verified'])->get('/l', function () {})->name('/a');
 
 Route::get('/recharge', function () {
     return view('front.recharge');
@@ -419,9 +418,9 @@ Route::get('/logout', function () {
 
 // edit by shuvo
 Route::get('/fcm', [RechargeController::class, 'fcmSend']);
-Route::get('bus', [FlixBusController::class, 'index']);
+Route::get('bus', [FlixBusController::class, 'index'])->name('bus');
 
-Route::get('bus-ticket-list', [FlixBusController::class, 'busTicketList']);
+Route::get('bus-ticket-list', [FlixBusController::class, 'busTicketList'])->name('bus-ticket-list');
 Route::post('bus-ticket-list', [FlixBusController::class, 'busTicketList']);
 Route::post('reservation', [FlixBusController::class, 'submitTicket']);
 

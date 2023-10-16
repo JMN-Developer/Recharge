@@ -20,8 +20,8 @@ class Flixbus
 
     public function __construct()
     {
-        $this->base_url = env('FLIXBUS_SANDBOX_URL');
-        $this->api_authentication = env('FLIXBUS_SANDBOX_API_KEY');
+        $this->base_url = env('FLIXBUS_PRODUCTION_URL');
+        $this->api_authentication = env('FLIXBUS_PRODUCTION_API_KEY');
         $this->api_session = $this->fetchSessionToken();
     }
 
@@ -37,8 +37,8 @@ class Flixbus
                 'X-API-Authentication' => $this->api_authentication,
             ],
             'form_params' => [
-                'email' => env('FLIXBUS_SANDBOX_EMAIL'),
-                'password' => env('FLIXBUS_SANDBOX_PASSWORD'),
+                'email' => env('FLIXBUS_PRODUCTION_EMAIL'),
+                'password' => env('FLIXBUS_PRODUCTION_PASSWORD'),
             ],
         ]);
 

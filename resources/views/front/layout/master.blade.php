@@ -554,6 +554,33 @@ $total_due = $current_wallet + ($current_limit - $current_limit_usage);
           </li>
 
 
+          <li class="@if(Route::currentRouteName() == 'bus' || Route::currentRouteName() == 'bus-ticket-list' ) nav-item menu-open @endif nav-item">
+              <a href="#" class="@if(Route::currentRouteName() == 'bus' || Route::currentRouteName() == 'bus-ticket-list') nav-link active @endif nav-link">
+                <i class="nav-icon fas fa-truck"></i>
+                <p>
+                  Bus
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('bus') }}" class="@if(Route::currentRouteName() == 'bus') nav-link active @endif nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Buy Ticket</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('bus-ticket-list') }}" class="@if(Route::currentRouteName() == 'bus-ticket-list') nav-link active @endif nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Ticket List</p>
+                  </a>
+                </li>
+
+
+              </ul>
+            </li>
+
+
             @if(auth()->user()->role !='reseller')
             <li class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-item menu-open @endif nav-item">
               <a href="#" class="@if(Route::currentRouteName() == 'retailer-details' || Route::currentRouteName() == 'retailer-details-admin' || Route::currentRouteName() == 'retailer-action' || Route::currentRouteName() == 'retailer-sign-up') nav-link active @endif nav-link">
