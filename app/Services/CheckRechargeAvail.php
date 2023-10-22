@@ -102,7 +102,7 @@ class CheckRechargeAvail
         // Log::channel('sumonLog')->info('Second true ' . $requested_amount . ' ' . $type);
         // return true;
 
-        if ($requested_amount > $current_wallet && $requested_amount > $due_limit + $current_wallet) {
+        if ($requested_amount > $due_limit + $current_wallet) {
             return false;
         }
 
